@@ -1,0 +1,1767 @@
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import JSZip from "jszip";
+import FREQ from "./data/freq3500.json";
+import MWE from "./data/mwe.json";
+
+/* ============================================================
+   Right Reader — EPUB reading for a young English-as-L2 reader
+   (10 y/o, German L1, English A2-B1)
+
+   Architecture, and why:
+
+   NO SERVER. Calls go straight from the browser to api.anthropic.com
+   using the anthropic-dangerous-direct-browser-access header. The key
+   lives in localStorage on this one iPad, entered once via the parent
+   screen. It is never in the repo. The blast radius is financial, not
+   technical: use a dedicated key with a small prepaid balance and
+   auto-reload OFF, and the worst case is that balance.
+
+   NO IFRAME. Chapters are parsed out of the EPUB zip and rendered into
+   native DOM. epub.js renders into an iframe with CSS columns, and tap
+   coordinate precision inside an iframe is the one thing this app
+   cannot afford to get wrong, because tapping a word IS the app.
+
+   Books  -> IndexedDB (raw .epub bytes, re-parsed on open)
+   Everything else -> localStorage under "rr_"
+   ============================================================ */
+
+const DAY = 86400000;
+const IDLE_MS = 90000;          // no scroll/tap this long = not reading
+const POPUP_CREDIT_CAP = 45000; // most one lookup can count toward reading time
+const WCACHE_MAX = 4000;
+
+/* ---------------- scheduling (FSRS-4.5) ----------------
+   Ported unchanged from Story Time so both apps grade memory the same
+   way. Nothing in this app reviews words yet - she only collects them -
+   but every saved word is written with the fields the scheduler needs,
+   so the practice game can be switched on later without a migration. */
+const FSRS_W=[0.4872,1.4003,3.7145,13.8206,5.1618,1.2298,0.8975,0.0310,
+              1.6474,0.1367,1.0461,2.1072,0.0793,0.3246,1.5870,0.2272,2.8755];
+const FSRS_DECAY=-0.5;
+const FSRS_FACTOR=Math.pow(0.9,1/FSRS_DECAY)-1;
+const TARGET_R=0.9;
+function clampD(d){ return Math.min(10,Math.max(1,d)); }
+function initS(g){ return Math.max(0.1,FSRS_W[g-1]); }
+function initD(g){ return clampD(FSRS_W[4]-(g-3)*FSRS_W[5]); }
+function retrievability(days,s){ return Math.pow(1+FSRS_FACTOR*days/Math.max(0.1,s),FSRS_DECAY); }
+function nextD(d,g){ const dd=d-FSRS_W[6]*(g-3); return clampD(FSRS_W[7]*initD(4)+(1-FSRS_W[7])*dd); }
+function nextS(s,d,r,g){
+  const hard=g===2?FSRS_W[15]:1, easy=g===4?FSRS_W[16]:1;
+  if(g===1) return Math.max(0.1,FSRS_W[11]*Math.pow(d,-FSRS_W[12])*(Math.pow(s+1,FSRS_W[13])-1)*Math.exp((1-r)*FSRS_W[14]));
+  return Math.max(0.1,s*(1+Math.exp(FSRS_W[8])*(11-d)*Math.pow(s,-FSRS_W[9])*(Math.exp((1-r)*FSRS_W[10])-1)*hard*easy));
+}
+function intervalFor(s){
+  const i=(s/FSRS_FACTOR)*(Math.pow(TARGET_R,1/FSRS_DECAY)-1);
+  return Math.max(1,Math.round(i));
+}
+function schedule(entry,grade,now){
+  const fresh=!entry||entry.s==null;
+  let s,d;
+  if(fresh){ s=initS(grade); d=initD(grade); }
+  else{
+    const days=Math.max(0,(now-(entry.last||now))/DAY);
+    const r=retrievability(days,entry.s);
+    s=nextS(entry.s,entry.d==null?5:entry.d,r,grade);
+    d=nextD(entry.d==null?5:entry.d,grade);
+  }
+  return {...entry,s,d,last:now,due:now+intervalFor(s)*DAY,
+    reps:((entry&&entry.reps)||0)+1,
+    lapses:((entry&&entry.lapses)||0)+(grade===1?1:0)};
+}
+const STRENGTH_BANDS=[1,4,14,45];
+const STRENGTH_NAMES=["Just met","Getting there","Sticking","Strong","Known"];
+function strengthOf(e){
+  if(!e||e.s==null) return 0;
+  let i=0; while(i<STRENGTH_BANDS.length&&e.s>=STRENGTH_BANDS[i]) i++;
+  return i;
+}
+
+/* ---------------- localStorage ---------------- */
+function lsGet(key,fb){
+  try{ const v=localStorage.getItem("rr_"+key); return v?JSON.parse(v):fb; }
+  catch(e){ return fb; }
+}
+function lsSet(key,val){
+  try{ localStorage.setItem("rr_"+key,JSON.stringify(val)); return true; }
+  catch(e){ return false; }
+}
+
+/* ---------------- IndexedDB (book files only) ----------------
+   Books are stored as the original bytes and re-parsed on open. Storing
+   parsed chapters instead would be faster to open and far more fragile:
+   any change to the parser would leave old books rendered by old rules. */
+const DB_NAME="rightreader", DB_STORE="books";
+let dbP=null;
+function db(){
+  if(dbP) return dbP;
+  dbP=new Promise((res,rej)=>{
+    const r=indexedDB.open(DB_NAME,1);
+    r.onupgradeneeded=()=>{
+      const d=r.result;
+      if(!d.objectStoreNames.contains(DB_STORE)) d.createObjectStore(DB_STORE,{keyPath:"id"});
+    };
+    r.onsuccess=()=>res(r.result);
+    r.onerror=()=>rej(r.error);
+  });
+  return dbP;
+}
+async function dbPut(rec){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const t=d.transaction(DB_STORE,"readwrite");
+    t.objectStore(DB_STORE).put(rec);
+    t.oncomplete=()=>res(true); t.onerror=()=>rej(t.error);
+  });
+}
+async function dbGet(id){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const t=d.transaction(DB_STORE,"readonly");
+    const q=t.objectStore(DB_STORE).get(id);
+    q.onsuccess=()=>res(q.result||null); q.onerror=()=>rej(q.error);
+  });
+}
+async function dbAll(){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const t=d.transaction(DB_STORE,"readonly");
+    const q=t.objectStore(DB_STORE).getAll();
+    q.onsuccess=()=>res(q.result||[]); q.onerror=()=>rej(q.error);
+  });
+}
+async function dbDel(id){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const t=d.transaction(DB_STORE,"readwrite");
+    t.objectStore(DB_STORE).delete(id);
+    t.oncomplete=()=>res(true); t.onerror=()=>rej(t.error);
+  });
+}
+
+/* Safari clears script-writable storage aggressively. This asks it not
+   to. Support is uneven, which is exactly why the parent screen also
+   has a one-tap export - the request is a mitigation, not a guarantee. */
+async function askPersist(){
+  try{
+    if(navigator.storage&&navigator.storage.persist){
+      const already=await navigator.storage.persisted();
+      if(!already) return await navigator.storage.persist();
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+/* ============================================================
+   EPUB parsing
+   ============================================================ */
+
+const XMLNS_OPF="http://www.idpf.org/2007/opf";
+
+function pathJoin(base,rel){
+  if(/^[a-z]+:/i.test(rel)) return rel;
+  const b=base.split("/").slice(0,-1);
+  for(const part of rel.split("/")){
+    if(part===".") continue;
+    if(part==="..") b.pop();
+    else b.push(part);
+  }
+  return b.join("/");
+}
+function dirOf(p){ const i=p.lastIndexOf("/"); return i<0?"":p.slice(0,i+1); }
+function stripFrag(p){ const i=p.indexOf("#"); return i<0?p:p.slice(0,i); }
+
+function xml(text){
+  const d=new DOMParser().parseFromString(text,"application/xml");
+  if(d.querySelector("parsererror")){
+    /* Some publishers ship XHTML that isn't well-formed XML. Retrying as
+       HTML recovers most of them rather than rejecting the whole book. */
+    return new DOMParser().parseFromString(text,"text/html");
+  }
+  return d;
+}
+
+/* Reads the container, the OPF and whichever table of contents the book
+   happens to carry. EPUB 3 books have a nav document; EPUB 2 books (like
+   most published children's fiction) have an NCX. Both are handled, and
+   a book with neither still opens - the spine alone is enough to read. */
+async function parseEpub(buf){
+  const zip=await JSZip.loadAsync(buf);
+  const files={};
+  zip.forEach((p,f)=>{ if(!f.dir) files[p]=f; });
+
+  const containerFile=files["META-INF/container.xml"];
+  if(!containerFile) throw new Error("Not a valid EPUB: no META-INF/container.xml");
+  if(files["META-INF/encryption.xml"])
+    throw new Error("This book is copy-protected (DRM) and can't be opened.");
+
+  const cdoc=xml(await containerFile.async("string"));
+  const rootEl=cdoc.querySelector("rootfile");
+  const opfPath=rootEl&&rootEl.getAttribute("full-path");
+  if(!opfPath||!files[opfPath]) throw new Error("Not a valid EPUB: package file missing");
+
+  const odoc=xml(await files[opfPath].async("string"));
+  const opfDir=dirOf(opfPath);
+
+  const get=(tag)=>{
+    const el=odoc.getElementsByTagNameNS("*",tag)[0];
+    return el?(el.textContent||"").trim():"";
+  };
+  const title=get("title")||"Untitled";
+  const author=get("creator")||"";
+  const language=get("language")||"en";
+
+  const manifest={};
+  Array.from(odoc.getElementsByTagNameNS("*","item")).forEach(it=>{
+    const id=it.getAttribute("id");
+    const href=it.getAttribute("href");
+    if(!id||!href) return;
+    manifest[id]={
+      href:pathJoin(opfPath,decodeURIComponent(href)),
+      type:it.getAttribute("media-type")||"",
+      props:it.getAttribute("properties")||""
+    };
+  });
+
+  const spine=[];
+  Array.from(odoc.getElementsByTagNameNS("*","itemref")).forEach(ir=>{
+    const idref=ir.getAttribute("idref");
+    const m=manifest[idref];
+    if(!m) return;
+    if(!/xhtml|html/i.test(m.type)) return;
+    spine.push({id:idref,href:m.href,linear:ir.getAttribute("linear")!=="no"});
+  });
+  if(!spine.length) throw new Error("This EPUB has no readable chapters.");
+
+  /* cover: the OPF meta pointer first, then a manifest item that says so,
+     then anything called cover. Books disagree about which they use. */
+  let coverHref=null;
+  const metaCover=Array.from(odoc.getElementsByTagNameNS("*","meta"))
+    .find(m=>(m.getAttribute("name")||"").toLowerCase()==="cover");
+  if(metaCover){
+    const cid=metaCover.getAttribute("content");
+    if(cid&&manifest[cid]&&/image/i.test(manifest[cid].type)) coverHref=manifest[cid].href;
+  }
+  if(!coverHref){
+    const byProp=Object.values(manifest).find(m=>/cover-image/.test(m.props));
+    if(byProp) coverHref=byProp.href;
+  }
+  if(!coverHref){
+    const byName=Object.entries(manifest).find(([id,m])=>/image/i.test(m.type)&&/cover/i.test(id+m.href));
+    if(byName) coverHref=byName[1].href;
+  }
+
+  /* Table of contents */
+  const toc={};
+  try{
+    const navItem=Object.values(manifest).find(m=>/\bnav\b/.test(m.props));
+    if(navItem&&files[navItem.href]){
+      const nd=new DOMParser().parseFromString(await files[navItem.href].async("string"),"text/html");
+      const list=nd.querySelector('nav[*|type="toc"], nav#toc, nav');
+      if(list) list.querySelectorAll("a[href]").forEach(a=>{
+        const h=stripFrag(pathJoin(navItem.href,decodeURIComponent(a.getAttribute("href"))));
+        if(!toc[h]) toc[h]=(a.textContent||"").trim();
+      });
+    }
+    if(!Object.keys(toc).length){
+      const ncxId=(odoc.getElementsByTagNameNS("*","spine")[0]||{getAttribute:()=>null}).getAttribute("toc");
+      const ncx=(ncxId&&manifest[ncxId])||Object.values(manifest).find(m=>/dtbncx/.test(m.type));
+      if(ncx&&files[ncx.href]){
+        const nd=xml(await files[ncx.href].async("string"));
+        Array.from(nd.getElementsByTagNameNS("*","navPoint")).forEach(np=>{
+          const lbl=np.getElementsByTagNameNS("*","text")[0];
+          const con=np.getElementsByTagNameNS("*","content")[0];
+          if(!lbl||!con) return;
+          const h=stripFrag(pathJoin(ncx.href,decodeURIComponent(con.getAttribute("src")||"")));
+          if(h&&!toc[h]) toc[h]=(lbl.textContent||"").trim();
+        });
+      }
+    }
+  }catch(e){ /* a missing TOC is cosmetic, never fatal */ }
+
+  return {zip,files,manifest,spine,toc,title,author,language,coverHref,opfDir};
+}
+
+async function readCover(parsed){
+  if(!parsed.coverHref||!parsed.files[parsed.coverHref]) return null;
+  try{
+    const blob=await parsed.files[parsed.coverHref].async("blob");
+    return await new Promise(res=>{
+      const fr=new FileReader();
+      fr.onload=()=>res(fr.result);
+      fr.onerror=()=>res(null);
+      fr.readAsDataURL(blob);
+    });
+  }catch(e){ return null; }
+}
+
+/* ============================================================
+   Chapter rendering + word tokenising
+
+   Two passes, and the reason for two is phrasal verbs. A tap target has
+   to be a real element, but "put up with" can be split across inline
+   markup - "put <em>up</em> with" is one expression and three text
+   nodes. So pass one wraps every word and records the token order for
+   the whole paragraph; pass two matches expressions against that flat
+   token list and marks the members. Doing it in one pass would only
+   ever find expressions that happen to sit inside a single text node.
+   ============================================================ */
+
+const WORD_RE=/[A-Za-zÀ-ÖØ-öø-ÿ]+(?:['’‘-][A-Za-zÀ-ÖØ-öø-ÿ]+)*/g;
+const CONTRACTION_RE=/^[a-zà-öø-ÿ]+['’](t|s|d|ll|re|ve|m)$/i;
+const DROP_TAGS=new Set(["SCRIPT","STYLE","LINK","META","TITLE","IFRAME","OBJECT","EMBED","FORM","INPUT","BUTTON","SVG","NOSCRIPT","AUDIO","VIDEO","BASE"]);
+const BLOCKISH=new Set(["P","DIV","H1","H2","H3","H4","H5","H6","BLOCKQUOTE","LI","TD","TH","DD","DT","FIGCAPTION","PRE"]);
+
+const FREQ_SET=new Set(FREQ);
+
+/* Suffix-stripping so "shouted", "cages" and "crying" are recognised as
+   known if their base is. Deliberately crude: a false "known" costs one
+   live lookup with a two-second wait, a false "unknown" costs a
+   thousandth of a dollar. Both are cheap, so precision isn't worth
+   dragging a real morphology library into the bundle for. */
+function isCommon(lw){
+  if(FREQ_SET.has(lw)) return true;
+  const tries=[["s",1],["es",2],["ed",2],["d",1],["ing",3],["er",2],["est",3],["ly",2],["ies",3]];
+  for(const [suf,cut] of tries){
+    if(lw.length>cut+2&&lw.endsWith(suf)){
+      const b=lw.slice(0,-cut);
+      if(FREQ_SET.has(b)) return true;
+      if(FREQ_SET.has(b+"e")) return true;
+      if(suf==="ies"&&FREQ_SET.has(b+"y")) return true;
+      if(b.length>2&&b[b.length-1]===b[b.length-2]&&FREQ_SET.has(b.slice(0,-1))) return true;
+    }
+  }
+  return false;
+}
+
+/* verb form -> candidate expressions starting with it */
+const MWE_MAP=(()=>{
+  const m=new Map();
+  const add=(k,v)=>{ if(!m.has(k)) m.set(k,[]); m.get(k).push(v); };
+  for(const [pat,e] of Object.entries(MWE.phrasal)) for(const f of e.v) add(f,[pat,e.rest]);
+  for(const parts of MWE.idiom) add(parts[0],[parts.join(" "),parts.slice(1)]);
+  return m;
+})();
+
+function normTok(w){ return w.toLowerCase().replace(/[’‘]/g,"'"); }
+
+/* Longest match wins, so "put up with" beats "put up". */
+function tagMwe(words){
+  const out=new Array(words.length).fill(null);
+  let i=0;
+  while(i<words.length){
+    const cands=MWE_MAP.get(words[i]);
+    let best=null;
+    if(cands) for(const [pat,rest] of cands){
+      if(rest.length&&i+rest.length<words.length+0){
+        let ok=true;
+        for(let k=0;k<rest.length;k++) if(words[i+1+k]!==rest[k]){ ok=false; break; }
+        if(ok&&(!best||rest.length>best[1].length)) best=[pat,rest];
+      }
+    }
+    if(best){
+      for(let k=0;k<=best[1].length;k++) out[i+k]=best[0];
+      i+=best[1].length+1;
+    } else i++;
+  }
+  return out;
+}
+
+function sanitize(root){
+  const walker=[];
+  (function collect(n){
+    for(const c of Array.from(n.childNodes)){
+      if(c.nodeType===1){ walker.push(c); collect(c); }
+    }
+  })(root);
+  for(const el of walker){
+    if(DROP_TAGS.has(el.tagName)){ el.remove(); continue; }
+    for(const a of Array.from(el.attributes)){
+      const n=a.name.toLowerCase();
+      if(n.startsWith("on")||n==="style"&&/expression|javascript:/i.test(a.value)) el.removeAttribute(a.name);
+    }
+    /* Neutralise links: an external tap would drop her out of the app,
+       and an internal one would jump past the reading-position tracking. */
+    if(el.tagName==="A"){ el.removeAttribute("href"); el.removeAttribute("target"); }
+  }
+}
+
+/* XHTML is XML, so <a id="page_1"/> is a complete, empty element. HTML is
+   not: it ignores self-closing syntax on anything that isn't a void tag,
+   leaves the anchor open, and then the adoption-agency algorithm
+   restructures every following paragraph inside it. Published EPUB 2
+   fiction is full of these - they are the print page markers - and the
+   damage is silent: the chapter still renders, it just loses a third of
+   its paragraphs. Parsing as XML instead trades one breakage for another
+   (any book whose XHTML isn't well-formed would fail outright), so the
+   fix is to close the tags in the source string and stay in HTML, which
+   is forgiving about everything else publishers do. */
+const VOID_TAGS=new Set(["area","base","br","col","embed","hr","img","input","link","meta","param","source","track","wbr"]);
+function closeSelfClosing(html){
+  return html.replace(/<([a-zA-Z][a-zA-Z0-9]*)((?:"[^"]*"|'[^']*'|[^>"'])*?)\/>/g,
+    (m,tag,attrs)=>VOID_TAGS.has(tag.toLowerCase())?m:`<${tag}${attrs}></${tag}>`);
+}
+
+async function renderChapter(parsed,href,objectUrls){
+  const f=parsed.files[href];
+  if(!f) return {html:"",paras:[],nWords:0};
+  const raw=await f.async("string");
+  const doc=new DOMParser().parseFromString(closeSelfClosing(raw),"text/html");
+  const body=doc.body||doc.documentElement;
+  sanitize(body);
+
+  /* images: pull the bytes out of the zip and hand the DOM a blob URL */
+  const imgs=Array.from(body.querySelectorAll("img, image"));
+  for(const im of imgs){
+    const src=im.getAttribute("src")||im.getAttribute("xlink:href")||im.getAttribute("href");
+    if(!src||/^data:/.test(src)) continue;
+    const p=stripFrag(pathJoin(href,decodeURIComponent(src)));
+    const zf=parsed.files[p];
+    if(!zf){ im.remove(); continue; }
+    try{
+      const blob=await zf.async("blob");
+      const url=URL.createObjectURL(blob);
+      objectUrls.push(url);
+      im.setAttribute("src",url);
+      im.removeAttribute("xlink:href");
+      im.setAttribute("loading","lazy");
+    }catch(e){ im.remove(); }
+  }
+
+  /* Pass 1 — wrap words, paragraph by paragraph */
+  const paras=[];
+  let gi=0;   // global word index within the chapter
+
+  const blocks=[];
+  (function findBlocks(n){
+    let hasBlockChild=false;
+    for(const c of Array.from(n.children)) if(BLOCKISH.has(c.tagName)){ hasBlockChild=true; findBlocks(c); }
+    if(!hasBlockChild&&BLOCKISH.has(n.tagName)) blocks.push(n);
+  })(body);
+  if(!blocks.length) blocks.push(body);
+
+  for(const blk of blocks){
+    const pIdx=paras.length;
+    const inHeading=/^H[1-6]$/.test(blk.tagName);
+    const texts=[];
+    const tokenEls=[], tokenWords=[];
+    const tw=document.createTreeWalker(blk,NodeFilter.SHOW_TEXT,null);
+    const nodes=[];
+    let tn; while((tn=tw.nextNode())) nodes.push(tn);
+
+    /* Whether a capital letter means "name" or just "start of sentence"
+       is decided here, by remembering the last non-space character seen
+       anywhere in the paragraph. Without it every sentence-opening word
+       looks like a proper noun and gets skipped by the prefetcher. */
+    let prevSig="";
+    for(const node of nodes){
+      const s=node.nodeValue;
+      if(!s||!s.trim()){ texts.push(s||""); continue; }
+      texts.push(s);
+      WORD_RE.lastIndex=0;
+      const frag=document.createDocumentFragment();
+      let last=0, m;
+      while((m=WORD_RE.exec(s))){
+        if(m.index>last) frag.appendChild(document.createTextNode(s.slice(last,m.index)));
+        const before=(s.slice(last,m.index).replace(/\s+$/,"").slice(-1))||prevSig;
+        const sentInitial=!before||/[.!?…:;“‘"(]/.test(before);
+        const sp=document.createElement("span");
+        sp.className="w";
+        sp.setAttribute("data-i",String(gi));
+        sp.setAttribute("data-p",String(pIdx));
+        if(sentInitial) sp.setAttribute("data-si","1");
+        if(inHeading) sp.setAttribute("data-h","1");
+        sp.textContent=m[0];
+        prevSig=m[0].slice(-1);
+        frag.appendChild(sp);
+        tokenEls.push(sp);
+        tokenWords.push(normTok(m[0]));
+        gi++;
+        last=m.index+m[0].length;
+      }
+      if(last<s.length){
+        const tail=s.slice(last).replace(/\s+$/,"").slice(-1);
+        if(tail) prevSig=tail;
+        frag.appendChild(document.createTextNode(s.slice(last)));
+      }
+      node.parentNode.replaceChild(frag,node);
+    }
+
+    /* Pass 2 — expressions across the whole paragraph's token stream */
+    if(tokenWords.length){
+      const tags=tagMwe(tokenWords);
+      for(let k=0;k<tags.length;k++){
+        if(tags[k]){
+          tokenEls[k].setAttribute("data-mwe",tags[k]);
+          if(k===0||tags[k-1]!==tags[k]) tokenEls[k].setAttribute("data-mwe-start","1");
+        }
+      }
+    }
+    paras.push(texts.join("").replace(/\s+/g," ").trim());
+  }
+
+  return {html:body.innerHTML,paras,nWords:gi};
+}
+
+/* The sentence a tapped word sits in, for the model's context. Falls
+   back to the paragraph when the split is unclear. */
+function sentenceFor(paraText,word){
+  const t=String(paraText||"");
+  if(!t) return "";
+  const parts=t.split(/(?<=[.!?…][\"'”’)]*)\s+/);
+  const w=String(word||"").split(/\s+/)[0];
+  const re=new RegExp("\\b"+w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&").replace(/'/g,"['’]")+"\\b","i");
+  const hit=parts.find(p=>re.test(p));
+  const out=(hit||t).trim();
+  return out.length>420?out.slice(0,420)+"…":out;
+}
+
+function isProperNounish(surface,sentInitial,lowerSeen){
+  if(!/^[A-ZÀ-Ö]/.test(surface)) return false;
+  if(surface===surface.toUpperCase()&&surface.length>1) return false;  // ALL CAPS is emphasis
+  if(sentInitial) return false;
+  return !lowerSeen.has(normTok(surface));
+}
+
+/* ============================================================
+   Anthropic API — straight from the browser, no proxy
+
+   api.anthropic.com only answers cross-origin requests that carry
+   anthropic-dangerous-direct-browser-access. The name is the warning:
+   the key travels in a request anyone with dev tools can read. That is
+   acceptable here and only here, because the key belongs to the person
+   holding the device. Guard rails below are financial and behavioural:
+   a per-day request ceiling, a hard max_tokens, and running token
+   accounting surfaced on the parent screen the same day it happens.
+   ============================================================ */
+
+const API_URL="https://api.anthropic.com/v1/messages";
+const CFG=(typeof window!=="undefined"&&window.APP_CONFIG)||{};
+const MODEL_FAST=CFG.MODEL_FAST||"claude-haiku-4-5-20251001";
+const MODEL_GOOD=CFG.MODEL_GOOD||"claude-sonnet-5";
+const DAILY_CALL_CAP=CFG.DAILY_CALL_CAP||1200;
+
+/* $ per million tokens, only used for the estimate shown to you. */
+const PRICES={
+  "claude-haiku-4-5-20251001":{in:1.00,out:5.00},
+  "claude-sonnet-5":{in:3.00,out:15.00}
+};
+
+function today(){ return new Date().toISOString().slice(0,10); }
+
+function noteUsage(model,u){
+  if(!u) return;
+  const sp=lsGet("spend",{});
+  const d=today();
+  const row=sp[d]||{calls:0,in:0,out:0,usd:0};
+  const p=PRICES[model]||PRICES[MODEL_GOOD];
+  row.calls+=1;
+  row.in+=u.input_tokens||0;
+  row.out+=u.output_tokens||0;
+  row.usd+=((u.input_tokens||0)*p.in+(u.output_tokens||0)*p.out)/1e6;
+  sp[d]=row;
+  /* keep 120 days, drop the rest */
+  const keys=Object.keys(sp).sort();
+  while(keys.length>120) delete sp[keys.shift()];
+  lsSet("spend",sp);
+}
+function callsToday(){ const r=lsGet("spend",{})[today()]; return r?r.calls:0; }
+
+const inFlight=new Set();
+function abortAll(){ for(const c of inFlight){ try{ c.abort(); }catch(e){} } inFlight.clear(); }
+
+class NeedsKey extends Error{}
+class CapReached extends Error{}
+
+async function callClaude(prompt,{model=MODEL_GOOD,maxTokens=1400,timeoutMs=60000}={}){
+  const key=lsGet("apikey","");
+  if(!key) throw new NeedsKey("No API key set yet.");
+  if(callsToday()>=DAILY_CALL_CAP) throw new CapReached("Daily request limit reached.");
+  const ctrl=new AbortController();
+  inFlight.add(ctrl);
+  const timer=setTimeout(()=>ctrl.abort(),timeoutMs);
+  let res;
+  try{
+    res=await fetch(API_URL,{
+      method:"POST",
+      signal:ctrl.signal,
+      headers:{
+        "content-type":"application/json",
+        "x-api-key":key,
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
+      },
+      body:JSON.stringify({model,max_tokens:maxTokens,messages:[{role:"user",content:prompt}]})
+    });
+  }catch(e){
+    if(ctrl.signal.aborted) throw new Error("timed out");
+    throw new Error("network");
+  }finally{ clearTimeout(timer); inFlight.delete(ctrl); }
+
+  const txt=await res.text();
+  if(!res.ok){
+    let msg=txt.slice(0,200);
+    try{ msg=(JSON.parse(txt).error||{}).message||msg; }catch(e){}
+    if(res.status===401) throw new NeedsKey(msg);
+    throw new Error("HTTP "+res.status+": "+msg);
+  }
+  let data;
+  try{ data=JSON.parse(txt); }catch(e){ throw new Error("bad response"); }
+  noteUsage(model,data.usage);
+  if(data.error) throw new Error(data.error.message||"api error");
+  return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+}
+
+function parseLoose(raw){
+  let t=(raw||"").replace(/```json/gi,"").replace(/```/g,"").trim();
+  const a=t.indexOf("{"), b=t.lastIndexOf("}");
+  if(a>=0&&b>a) t=t.slice(a,b+1);
+  try{ return JSON.parse(t); }catch(e){}
+  return JSON.parse(t.replace(/[\u0000-\u001F]+/g," "));
+}
+const BACKOFF=[0,3000,9000];
+async function askJson(prompt,opts){
+  let last;
+  for(let i=0;i<3;i++){
+    if(i>0) await new Promise(r=>setTimeout(r,BACKOFF[i]+Math.random()*1500));
+    try{ return parseLoose(await callClaude(prompt+(i?"\nReply with ONLY the JSON object, one line, nothing else.":""),opts)); }
+    catch(e){
+      last=e;
+      if(e instanceof NeedsKey||e instanceof CapReached) break;
+    }
+  }
+  throw last;
+}
+
+/* ---------------- prompts ---------------- */
+
+const LEMMA_RULE="Give \"lemma\" as the plain dictionary headword: reduce adverbs to their root ( \"admiringly\" -> \"admire\" ), comparatives and superlatives to the plain adjective, plurals to singular, and any inflected form to the simplest version a beginner would look up.";
+
+const SHAPE='{"span":"...","lemma":"...","sense":"a 1-3 word label for which meaning this is","also":["0-2 short English phrases naming OTHER common, clearly different meanings; empty array if not ambiguous"],"alsoDe":["German for each phrase in also, same order and count"],"en":"one very simple English sentence, max 14 easy words, explaining what it means HERE","de":"the German translation as used here, 1-3 words","deDesc":"one simple German sentence, max 14 words, explaining it"}';
+
+/* The candidate expression comes from a local list that cannot tell
+   idiomatic use from literal use - "look at the cat" and "look after
+   the cat" both match a pattern. So the list only ever proposes, and
+   the model decides, in the same call that does the explaining. This
+   costs nothing extra and is the only way to get "put up with" right
+   while leaving "go into the kitchen" alone. */
+function spanRule(cand){
+  if(!cand) return `Set "span" to just the word itself.`;
+  return `The words "${cand}" in this sentence MIGHT be a single expression with a meaning of its own. Decide from the sentence. If they are used together as one unit with a meaning you could not work out from the separate words, set "span" to "${cand}" and explain the whole expression. If the words just happen to sit next to each other with their ordinary literal meanings, set "span" to only the tapped word and explain that word alone.`;
+}
+
+function wordPrompt(word,sentence,cand){
+  return [
+    `A 10-year-old German child (English level A2/B1) is reading an English story and tapped the word "${word}" in this sentence: "${sentence}"`,
+    spanRule(cand),
+    `Explain ONLY the meaning it has in THIS sentence, even if that is not its most common meaning. ${LEMMA_RULE}`,
+    `Reply with ONLY one single-line JSON object, no markdown:`,
+    SHAPE
+  ].join("\n");
+}
+
+function nestedPrompt(word,explanation){
+  return [
+    `A 10-year-old German child (English level A2/B1) is reading a simple English explanation and did not understand one word in it.`,
+    `The explanation was: "${explanation}"`,
+    `She tapped the word "${word}".`,
+    `Explain that word as simply as you possibly can, simpler than the sentence it came from, using only very easy words. ${LEMMA_RULE}`,
+    `Set "span" to just the word.`,
+    `Reply with ONLY one single-line JSON object, no markdown:`,
+    SHAPE
+  ].join("\n");
+}
+
+function batchPrompt(items){
+  const list=items.map((it,i)=>`${i+1}) "${it.w}" in: "${it.s}"`).join("  ");
+  return [
+    `A 10-year-old German child (English level A2/B1) is reading an English story. Explain each word below very simply, using ONLY the meaning it has in ITS OWN given sentence. ${LEMMA_RULE}`,
+    `WORDS: ${list}`,
+    `For each give: "word" (exactly as listed), "lemma", "sense" (1-3 word label), "also" (0-2 short English phrases naming other common, clearly different meanings; empty array if not ambiguous), "alsoDe" (German for each, same order and count), "en" (one very simple English sentence, max 14 easy words), "de" (German translation, 1-3 words), "deDesc" (one simple German sentence, max 14 words).`,
+    `Reply with ONLY one single-line JSON object, no markdown, no line breaks:`,
+    `{"words":[{"word":"...","lemma":"...","sense":"...","also":[],"alsoDe":[],"en":"...","de":"...","deDesc":"..."}]}`
+  ].join("\n");
+}
+
+/* ---------------- speech ---------------- */
+function speak(text){
+  try{
+    if(!window.speechSynthesis) return;
+    const u=new SpeechSynthesisUtterance(String(text));
+    u.lang="en-GB"; u.rate=0.85;
+    const vs=window.speechSynthesis.getVoices()||[];
+    const v=vs.find(x=>/^en[-_]GB/i.test(x.lang||""))||vs.find(x=>/^en/i.test(x.lang||""));
+    if(v) u.voice=v;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+function senseKey(lemma,sense){
+  return String(lemma||"").toLowerCase().trim()+"|"+String(sense||"").toLowerCase().trim().slice(0,24);
+}
+
+/* ============================================================
+   Styles
+   ============================================================ */
+const CSS=`
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --paper:#FBF6EC; --paper2:#F3EADA; --ink:#241F1A; --ink2:#5B5148;
+  --accent:#B4551F; --accent-soft:#F4E2D3; --line:#E2D5C1;
+  --good:#3D7A4E; --warn:#B4551F;
+}
+html,body,#root{height:100%;margin:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+.serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+
+.topbar{position:sticky;top:0;z-index:20;background:rgba(251,246,236,.94);
+  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;gap:10px;padding:10px 0;min-height:52px}
+.tb-title{flex:1;min-width:0;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.icon-btn{border:none;background:transparent;font-size:20px;line-height:1;padding:9px 10px;
+  border-radius:12px;cursor:pointer;color:var(--ink)}
+.icon-btn:active{background:var(--paper2)}
+
+.btn{border:none;border-radius:14px;padding:13px 18px;font-size:16px;font-weight:650;
+  cursor:pointer;font-family:inherit;transition:transform .06s}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-ghost{background:var(--accent-soft);color:var(--accent)}
+.btn-plain{background:var(--paper2);color:var(--ink2)}
+.btn[disabled]{opacity:.5}
+
+/* ---- library ---- */
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:18px;padding:18px 0 40px}
+.bookcard{cursor:pointer;position:relative}
+.bookcover{width:100%;aspect-ratio:2/3;border-radius:8px;object-fit:cover;
+  background:var(--paper2);box-shadow:0 6px 18px rgba(60,40,20,.18);display:flex;
+  align-items:center;justify-content:center;text-align:center;padding:12px;
+  font-weight:700;font-size:14px;color:var(--ink2);overflow:hidden}
+.bookmeta{margin-top:8px;font-size:13px;font-weight:650;line-height:1.3}
+.bookauth{font-size:12px;color:var(--ink2);margin-top:2px}
+.progbar{height:4px;background:var(--line);border-radius:3px;margin-top:6px;overflow:hidden}
+.progbar i{display:block;height:100%;background:var(--accent)}
+.addcard{border:2px dashed var(--line);border-radius:8px;aspect-ratio:2/3;display:flex;
+  flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--ink2);
+  font-weight:650;font-size:14px;cursor:pointer}
+
+/* ---- reading ---- */
+.reader{padding:6px 0 120px;font-size:20px;line-height:1.68}
+.reader p{margin:0 0 1.05em}
+.reader h1,.reader h2,.reader h3{line-height:1.25;margin:1.6em 0 .7em;font-weight:700}
+.reader img{max-width:100%;height:auto;display:block;margin:1.2em auto;border-radius:6px}
+.reader .sidebar,.reader blockquote{background:var(--paper2);border-left:3px solid var(--line);
+  padding:12px 16px;border-radius:0 10px 10px 0;margin:1.2em 0}
+.w{cursor:pointer;border-radius:4px;padding:1px 0;transition:background .12s}
+.w:active{background:var(--accent-soft)}
+.w.known{background:linear-gradient(transparent 68%,#CFE6D3 68%)}
+.w.seen{background:linear-gradient(transparent 72%,#EFE0C6 72%)}
+.w.lit{background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent-soft)}
+
+.chapnav{display:flex;gap:10px;align-items:center;justify-content:space-between;
+  padding:22px 0 10px;border-top:1px solid var(--line);margin-top:30px}
+
+.hud{position:fixed;left:0;right:0;bottom:0;z-index:15;
+  background:rgba(251,246,236,.95);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);padding:8px 0 max(8px,env(safe-area-inset-bottom))}
+.hud-in{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--ink2);font-weight:600}
+.ring{width:30px;height:30px;flex:none;border-radius:50%;display:grid;place-items:center;
+  font-size:10px;font-weight:800;color:var(--accent)}
+.pill{background:var(--paper2);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700}
+.pill.on{background:#D8EBDC;color:var(--good)}
+
+/* ---- popup ---- */
+.scrim{position:fixed;inset:0;z-index:60;background:rgba(30,22,14,.34);
+  display:flex;align-items:flex-end;justify-content:center}
+@media(min-width:640px){.scrim{align-items:center}}
+.sheet{background:var(--paper);width:100%;max-width:560px;border-radius:22px 22px 0 0;
+  padding:20px 20px max(20px,env(safe-area-inset-bottom));max-height:86vh;overflow:auto;
+  box-shadow:0 -8px 40px rgba(40,25,10,.25);animation:up .2s ease-out}
+@media(min-width:640px){.sheet{border-radius:22px}}
+@keyframes up{from{transform:translateY(18px);opacity:.4}to{transform:none;opacity:1}}
+.sheet-head{display:flex;align-items:flex-start;gap:8px}
+.headword{font-size:30px;font-weight:800;flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.15}
+.ctx{color:var(--ink2);font-size:14px;font-style:italic;margin:10px 0 2px;line-height:1.5}
+.ctx b{background:var(--accent-soft);font-style:normal;font-weight:700;border-radius:4px;padding:0 3px}
+.expl{font-size:19px;line-height:1.6;margin-top:14px}
+.expl .w{cursor:pointer;border-bottom:1px dotted var(--line)}
+.de-box{background:var(--paper2);border-radius:14px;padding:13px 15px;margin-top:14px}
+.chip{display:inline-block;background:var(--accent-soft);color:var(--accent);
+  border-radius:999px;padding:4px 11px;font-size:12px;font-weight:750;margin-top:10px}
+.nudge{background:#FBEFD6;border-radius:12px;padding:10px 13px;margin-top:12px;
+  font-size:14px;font-weight:600;color:#8A5A12;line-height:1.45}
+.spin{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--accent);
+  border-radius:50%;animation:sp .8s linear infinite;margin:26px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* ---- parent ---- */
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card h3{margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2)}
+.bigstat{font-size:34px;font-weight:800;line-height:1}
+.bars{display:flex;align-items:flex-end;gap:5px;height:76px;margin-top:12px}
+.bars .b{flex:1;background:var(--paper2);border-radius:4px 4px 0 0;position:relative;min-height:3px}
+.bars .b.hit{background:var(--good)}
+.bars .b.part{background:var(--accent)}
+.blab{font-size:9px;color:var(--ink2);text-align:center;margin-top:4px}
+.wrow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--paper2);font-size:15px}
+.wrow:last-child{border-bottom:none}
+.wrow .lw{font-weight:700;min-width:0;overflow-wrap:anywhere}
+.wrow .lt{color:var(--ink2);font-size:13px;flex:1;min-width:0}
+input[type=text],input[type=password],input[type=number]{
+  width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+  font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
+.hint{color:var(--ink2);font-size:13px;line-height:1.5;margin-top:8px}
+.err{background:#FBE4DC;color:#9A3412;border-radius:12px;padding:11px 14px;font-size:14px;
+  font-weight:600;margin-top:12px;line-height:1.45}
+.tabs{display:flex;gap:6px;margin:14px 0}
+.tabs button{flex:1;border:none;background:var(--paper2);color:var(--ink2);padding:10px;
+  border-radius:11px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
+.tabs button.on{background:var(--accent);color:#fff}
+.empty{text-align:center;color:var(--ink2);padding:44px 20px;line-height:1.6}
+`;
+
+/* ============================================================
+   The word sheet
+
+   Two levels, no more. Level 0 is the word she tapped in the book.
+   Level 1 is a word inside that explanation she also didn't know,
+   which is the whole reason the first app existed: an explanation
+   made of unknown words explains nothing. Level 1 words are recorded
+   as seen but never offered for saving - the thing she is reading is
+   the book, and a vocabulary list that fills up with the machinery of
+   definitions is a list about definitions.
+   ============================================================ */
+
+function TapExplain({text,onWord,knownSet}){
+  const parts=useMemo(()=>String(text||"").split(/(\s+)/),[text]);
+  return parts.map((p,i)=>{
+    if(!p) return null;
+    if(/^\s+$/.test(p)) return <span key={i}>{p}</span>;
+    const m=p.match(/[A-Za-zÀ-ÖØ-öø-ÿ]+(?:['’-][A-Za-zÀ-ÖØ-öø-ÿ]+)*/);
+    if(!m) return <span key={i}>{p}</span>;
+    const clean=m[0];
+    if(clean.length<3||FREQ_SET.has(clean.toLowerCase())&&clean.length<5) return <span key={i}>{p}</span>;
+    return <span key={i} className={"w"+(knownSet.has(normTok(clean))?" known":"")}
+      onClick={e=>{e.stopPropagation();onWord(clean,String(text));}}>{p}</span>;
+  });
+}
+
+function Ctx({sentence,span}){
+  if(!sentence) return null;
+  const sp=String(span||"").trim();
+  if(!sp) return <div className="ctx">“{sentence}”</div>;
+  const re=new RegExp("("+sp.split(/\s+/).map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")).join("\\s+")+")","i");
+  const bits=String(sentence).split(re);
+  return (
+    <div className="ctx">“{bits.map((b,i)=>re.test(b)&&i%2===1?<b key={i}>{b}</b>:<span key={i}>{b}</span>)}”</div>
+  );
+}
+
+function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime}){
+  const top=stack[stack.length-1];
+  const openedAt=useRef(Date.now());
+  useEffect(()=>{
+    openedAt.current=Date.now();
+    return ()=>{ onPopupTime(Date.now()-openedAt.current); };
+  },[]);
+  if(!top) return null;
+  const d=top.data;
+  const head=(d&&d.span)||top.word;
+  return (
+    <div className="scrim" onClick={onClose}>
+      <div className="sheet" onClick={e=>e.stopPropagation()}>
+        <div className="sheet-head">
+          {stack.length>1&&<button className="icon-btn" aria-label="Back" onClick={onNested.back}>‹</button>}
+          <div className={"headword serif"}>{head}</div>
+          <button className="icon-btn" aria-label="Say it" onClick={()=>speak(head)}>🔊</button>
+          <button className="icon-btn" aria-label="Close" onClick={onClose}>✕</button>
+        </div>
+
+        {top.level===0
+          ? <Ctx sentence={top.sentence} span={d?d.span:top.word}/>
+          : <div className="ctx">aus der Erklärung</div>}
+
+        {top.loading&&<div className="spin"/>}
+
+        {top.error&&(
+          <>
+            <div className="err">{top.error}</div>
+            {top.canRetry&&<button className="btn btn-plain" style={{width:"100%",marginTop:12}}
+              onClick={onRetry}>Nochmal versuchen</button>}
+          </>
+        )}
+
+        {d&&!top.loading&&(
+          <>
+            {d.span&&normTok(d.span)!==normTok(top.word)&&(
+              <div className="chip">🔗 These {d.span.split(/\s+/).length} words go together</div>
+            )}
+            <div className="expl">
+              <TapExplain text={d.en} knownSet={knownSet}
+                onWord={top.level===0?onNested.open:()=>{}}/>
+            </div>
+
+            {d.also&&d.also.length>0&&(
+              <div className="chip">🔀 Can also mean: {d.also.join(", ")}
+                {top.showDe&&d.alsoDe&&d.alsoDe.length>0&&<> ({d.alsoDe.join(", ")})</>}
+              </div>
+            )}
+
+            {!top.showDe
+              ? <button className="btn btn-ghost" style={{width:"100%",marginTop:16}}
+                  onClick={onNested.german}>Auf Deutsch 🇩🇪</button>
+              : <div className="de-box">
+                  <div style={{fontWeight:800,fontSize:20}}>{d.de||"—"}</div>
+                  {d.deDesc&&<div style={{fontSize:15,marginTop:5,color:"var(--ink2)",lineHeight:1.5}}>{d.deDesc}</div>}
+                </div>}
+
+            {top.level===0&&(
+              top.saved
+                ? <div className="chip" style={{background:"#D8EBDC",color:"var(--good)"}}>✓ In deiner Wortliste</div>
+                : <>
+                    {top.seenCount>=3&&(
+                      <div className="nudge">
+                        Du hast dieses Wort schon {top.seenCount}× nachgeschaut. Vielleicht doch merken?
+                      </div>
+                    )}
+                    <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
+                      onClick={onSave}>＋ Neues Wort</button>
+                  </>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Reading clock
+
+   Elapsed time is not reading time. Two ways it lies: the app sits open
+   on a table, and she sits on one page. Both are handled by capping
+   what a stretch of time can earn against how much text has actually
+   gone past.
+
+     earned = words scrolled past / floor_wpm   +   time in word popups
+     credited = min(elapsed, earned)
+
+   The popup term matters more than it looks. Six lookups on a page is
+   two minutes of real work and no scrolling at all, so a pure
+   words-per-minute cap would punish exactly the behaviour this whole
+   app exists to encourage. Capped per lookup so an abandoned popup
+   can't run the clock either.
+
+   floor_wpm is measured, not guessed. A number for a German ten-year-old
+   reading English would be a guess, and she gets faster over a year
+   anyway. Until there are three real sessions to learn from it sits at
+   a permissive 50, then settles at 40% of her own observed median.
+   ============================================================ */
+function floorWpmFrom(sessions){
+  const rows=Object.values(sessions).filter(r=>r&&r.words>=300&&r.raw>120000);
+  if(rows.length<3) return 50;
+  const w=rows.map(r=>r.words/(r.raw/60000)).sort((a,b)=>a-b);
+  const med=w[Math.floor(w.length/2)];
+  return Math.min(120,Math.max(25,Math.round(med*0.4)));
+}
+const TARGET_MIN=20, TARGET_DAYS=5;
+
+function fmtMin(ms){
+  const m=Math.floor(ms/60000), s=Math.floor((ms%60000)/1000);
+  return m+":"+String(s).padStart(2,"0");
+}
+function lastNDays(n){
+  const out=[];
+  for(let i=n-1;i>=0;i--){
+    const d=new Date(Date.now()-i*DAY);
+    out.push(d.toISOString().slice(0,10));
+  }
+  return out;
+}
+function streakOf(sessions){
+  /* consecutive weeks is the wrong unit for "5 days a week"; this is the
+     simpler thing she can actually see: days hit in the last 7. */
+  return lastNDays(7).filter(d=>(sessions[d]||{}).ms>=TARGET_MIN*60000).length;
+}
+
+/* ============================================================
+   App
+   ============================================================ */
+
+export default function App(){
+  const [view,setView]=useState("library");
+  const [books,setBooks]=useState([]);
+  const [busy,setBusy]=useState("");
+  const [fatal,setFatal]=useState("");
+
+  const [vocab,setVocab]=useState(()=>lsGet("vocab",{}));
+  const [seen,setSeen]=useState(()=>lsGet("seen",{}));
+  const [wcache,setWcache]=useState(()=>lsGet("wcache",{}));
+  const [sessions,setSessions]=useState(()=>lsGet("sessions",{}));
+  const [positions,setPositions]=useState(()=>lsGet("pos",{}));
+
+  const [book,setBook]=useState(null);          // {meta, parsed}
+  const [chapIdx,setChapIdx]=useState(0);
+  const [chap,setChap]=useState(null);          // {html,paras,nWords}
+  const [stack,setStack]=useState([]);          // word sheet levels
+  const [hud,setHud]=useState({credited:0,elapsed:0,active:false});
+
+  const bodyRef=useRef(null);
+  const urlsRef=useRef([]);
+  const fileRef=useRef(null);
+  const clock=useRef({elapsed:0,popup:0,words:0,base:0,flushed:0,last:Date.now(),bookId:null});
+  const spansRef=useRef([]);
+  const prefetchRef=useRef({busy:false,done:new Set()});
+
+  useEffect(()=>{ const s=document.createElement("style"); s.textContent=CSS;
+    document.head.appendChild(s); askPersist(); },[]);
+
+  /* ---- persistence helpers ---- */
+  const saveVocab=useCallback(v=>{ setVocab(v); if(!lsSet("vocab",v)) setFatal("Speicher voll — bitte im Eltern-Bereich exportieren."); },[]);
+  const saveSeen =useCallback(v=>{ setSeen(v); lsSet("seen",v); },[]);
+  const saveCache=useCallback(v=>{
+    let out=v;
+    const keys=Object.keys(v);
+    if(keys.length>WCACHE_MAX){
+      keys.sort((a,b)=>(v[a].ts||0)-(v[b].ts||0));
+      out={...v};
+      for(const k of keys.slice(0,keys.length-WCACHE_MAX)) delete out[k];
+    }
+    setWcache(out); lsSet("wcache",out);
+  },[]);
+
+  /* ---- derived sets used for underlining in the text ---- */
+  const knownSet=useMemo(()=>{
+    const s=new Set();
+    for(const e of Object.values(vocab)){
+      if(e.w) s.add(normTok(e.w));
+      if(e.span) s.add(normTok(e.span));
+      for(const f of e.forms||[]) s.add(normTok(f));
+    }
+    return s;
+  },[vocab]);
+  const seenSet=useMemo(()=>new Set(Object.keys(seen)),[seen]);
+
+  /* ---- library ---- */
+  const refreshBooks=useCallback(async()=>{
+    try{
+      const all=await dbAll();
+      all.sort((a,b)=>(b.opened||b.added||0)-(a.opened||a.added||0));
+      setBooks(all.map(({file,...m})=>m));
+    }catch(e){ setFatal("Bibliothek konnte nicht geladen werden."); }
+  },[]);
+  useEffect(()=>{ refreshBooks(); },[refreshBooks]);
+
+  async function importFiles(list){
+    for(const file of Array.from(list||[])){
+      setBusy("Öffne „"+file.name+"“ …");
+      try{
+        const buf=await file.arrayBuffer();
+        const parsed=await parseEpub(buf);
+        const cover=await readCover(parsed);
+        const id="b_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7);
+        await dbPut({id,file:buf,title:parsed.title,author:parsed.author,
+          language:parsed.language,cover,nChapters:parsed.spine.length,
+          added:Date.now(),opened:0,words:0});
+        await refreshBooks();
+      }catch(e){
+        setFatal("„"+file.name+"“: "+(e&&e.message||"konnte nicht gelesen werden"));
+      }
+    }
+    setBusy("");
+    if(fileRef.current) fileRef.current.value="";
+  }
+
+  async function openBook(id){
+    setBusy("Öffne Buch …");
+    try{
+      const rec=await dbGet(id);
+      if(!rec) throw new Error("nicht gefunden");
+      const parsed=await parseEpub(rec.file);
+      await dbPut({...rec,opened:Date.now()});
+      const {file,...meta}=rec;
+      setBook({meta:{...meta,id},parsed});
+      const pos=positions[id]||{};
+      const start=Number.isInteger(pos.chapter)?pos.chapter:firstTextChapter(parsed);
+      setChapIdx(start);
+      clock.current={elapsed:0,popup:0,words:0,base:0,flushed:0,last:Date.now(),bookId:id};
+      prefetchRef.current.done=new Set();
+      setView("read");
+    }catch(e){ setFatal("Buch konnte nicht geöffnet werden: "+(e&&e.message||"")); }
+    setBusy("");
+  }
+
+  /* Front matter is copyright pages and half-titles; opening a new book
+     on chapter one is what she expects and what Books does. */
+  function firstTextChapter(parsed){
+    const i=parsed.spine.findIndex(s=>/ch\d|chapter|part|prologue/i.test(s.id+s.href));
+    return i>=0?i:(parsed.spine.findIndex(s=>s.linear)||0);
+  }
+
+  function closeBook(){
+    flushClock(true);
+    abortAll();
+    for(const u of urlsRef.current) URL.revokeObjectURL(u);
+    urlsRef.current=[];
+    setBook(null); setChap(null); setStack([]);
+    setView("library");
+    refreshBooks();
+  }
+
+  /* ---- chapter loading ---- */
+  useEffect(()=>{
+    if(!book) return;
+    let cancelled=false;
+    (async()=>{
+      setChap(null);
+      for(const u of urlsRef.current) URL.revokeObjectURL(u);
+      urlsRef.current=[];
+      const item=book.parsed.spine[chapIdx];
+      if(!item) return;
+      try{
+        const urls=[];
+        const c=await renderChapter(book.parsed,item.href,urls);
+        if(cancelled){ for(const u of urls) URL.revokeObjectURL(u); return; }
+        urlsRef.current=urls;
+        setChap(c);
+      }catch(e){
+        if(!cancelled) setChap({html:"<p>Dieses Kapitel konnte nicht angezeigt werden.</p>",paras:[],nWords:0});
+      }
+    })();
+    return ()=>{ cancelled=true; };
+  },[book,chapIdx]);
+
+  /* words already banked from chapters before this one */
+  useEffect(()=>{
+    if(!book) return;
+    let base=0;
+    const counted=(positions[book.meta.id]||{}).counted||{};
+    for(let i=0;i<chapIdx;i++) base+=counted[i]||0;
+    clock.current.base=base;
+    clock.current.words=Math.max(clock.current.words,base);
+  },[book,chapIdx]);
+
+  /* after a chapter paints: index the tap targets, mark known words,
+     restore the scroll position, and start filling the word cache */
+  useEffect(()=>{
+    if(!chap||!bodyRef.current) return;
+    const spans=Array.from(bodyRef.current.querySelectorAll(".w"));
+    spansRef.current=spans;
+    paintKnown(spans);
+    const pos=(positions[(book&&book.meta.id)||""]||{});
+    const pct=(pos.chapter===chapIdx&&pos.pct)||0;
+    requestAnimationFrame(()=>{
+      const h=document.documentElement.scrollHeight-window.innerHeight;
+      window.scrollTo(0,Math.max(0,Math.round(h*pct)));
+    });
+    prefetchChapter(spans);
+    // eslint-disable-next-line
+  },[chap]);
+
+  function paintKnown(spans){
+    for(const sp of spans||spansRef.current){
+      const w=normTok(sp.textContent);
+      sp.classList.toggle("known",knownSet.has(w));
+      sp.classList.toggle("seen",!knownSet.has(w)&&seenSet.has(w));
+    }
+  }
+  useEffect(()=>{ paintKnown(); /* eslint-disable-next-line */ },[knownSet,seenSet]);
+
+  /* ---- prefetch ----
+     Everything worth explaining in this chapter, resolved in the
+     background in batches of twelve on the cheap model, so a tap is
+     instant. Three filters keep the bill honest and the results useful:
+     words she has already met, words in the commonest 3,500 English
+     words, and proper nouns. On a real children's novel this leaves
+     about 3% of the running text, and explaining "Rotherham" to her
+     would have been noise as well as cost. */
+  async function prefetchChapter(spans){
+    if(prefetchRef.current.busy) return;
+    if(!lsGet("apikey","")) return;
+    /* Copyright pages and half-titles are not reading. Explaining
+       "cataloging-in-publication" to a ten-year-old is money spent on
+       a page she will scroll past once. */
+    const href=((book&&book.parsed.spine[chapIdx])||{}).href||"";
+    if(/copyright|halftitle|title|cover|toc|contents|dedication|acknowledg|back-?cover|colophon|imprint/i.test(href)) return;
+    const lowerSeen=new Set();
+    for(const sp of spans) if(/^[a-zà-öø-ÿ]/.test(sp.textContent)) lowerSeen.add(normTok(sp.textContent));
+
+    const queue=[]; const picked=new Set();
+    for(const sp of spans){
+      const surface=sp.textContent;
+      const cand=sp.getAttribute("data-mwe");
+      const key=normTok(cand||surface);
+      if(picked.has(key)||prefetchRef.current.done.has(key)) continue;
+      if(wcache[key]||knownSet.has(key)) continue;
+      if(!cand){
+        const lw=normTok(surface);
+        if(lw.length<4) continue;
+        /* Chapter titles are Title Case, so inside a heading every word
+           looks like a proper noun and the name filter throws them all
+           away. Skip headings entirely instead: a word in a chapter
+           title almost always appears in the chapter body too, in
+           lower case, where it is judged properly. */
+        if(sp.getAttribute("data-h")==="1") continue;
+        if(CONTRACTION_RE.test(lw)) continue;
+        if(isCommon(lw)) continue;
+        if(isProperNounish(surface,sp.getAttribute("data-si")==="1",lowerSeen)) continue;
+      } else {
+        /* expressions are always worth one look: the local list can only
+           propose, and whether it is idiomatic here is the model's call */
+        if(wcache[key]) continue;
+      }
+      const p=Number(sp.getAttribute("data-p"))||0;
+      picked.add(key);
+      queue.push({w:cand||surface,s:sentenceFor(chap.paras[p],surface),key});
+      if(queue.length>=180) break;
+    }
+    if(!queue.length) return;
+
+    prefetchRef.current.busy=true;
+    try{
+      for(let i=0;i<queue.length;i+=12){
+        const batch=queue.slice(i,i+12);
+        try{
+          const j=await askJson(batchPrompt(batch),{model:MODEL_FAST,maxTokens:2600,timeoutMs:70000});
+          const got=Array.isArray(j.words)?j.words:[];
+          const add={};
+          for(const r of got){
+            const m=batch.find(b=>normTok(b.w)===normTok(r.word||""))||null;
+            if(!m) continue;
+            add[m.key]={span:m.w,lemma:String(r.lemma||m.w),sense:String(r.sense||""),
+              en:String(r.en||""),de:String(r.de||""),deDesc:String(r.deDesc||""),
+              also:Array.isArray(r.also)?r.also.slice(0,2):[],
+              alsoDe:Array.isArray(r.alsoDe)?r.alsoDe.slice(0,2):[],ts:Date.now()};
+            prefetchRef.current.done.add(m.key);
+          }
+          if(Object.keys(add).length){
+            setWcache(cur=>{ const nc={...cur,...add}; lsSet("wcache",nc); return nc; });
+          }
+        }catch(e){
+          if(e instanceof NeedsKey||e instanceof CapReached) break;
+        }
+        await new Promise(r=>setTimeout(r,400));
+      }
+    } finally { prefetchRef.current.busy=false; }
+  }
+
+  /* ---- tapping a word ---- */
+  function onTap(e){
+    const el=e.target.closest&&e.target.closest(".w");
+    touch();
+    if(!el||!bodyRef.current||!bodyRef.current.contains(el)) return;
+    const surface=el.textContent;
+    const cand=el.getAttribute("data-mwe");
+    const p=Number(el.getAttribute("data-p"))||0;
+    const sentence=sentenceFor((chap&&chap.paras[p])||"",surface);
+    openWord(surface,sentence,cand);
+    if(cand){
+      /* show her the whole expression is one unit before the sheet even
+         answers - the highlight is half the lesson */
+      const all=Array.from(bodyRef.current.querySelectorAll('[data-mwe="'+cand.replace(/"/g,'\\"')+'"]'));
+      const near=all.filter(x=>Math.abs(Number(x.getAttribute("data-i"))-Number(el.getAttribute("data-i")))<6);
+      near.forEach(x=>x.classList.add("lit"));
+      setTimeout(()=>near.forEach(x=>x.classList.remove("lit")),2400);
+    }
+  }
+
+  function vocabKeyFor(cacheKey,d){
+    const k=senseKey(d.lemma||d.span||cacheKey,d.sense||"");
+    return vocab[k]?k:(Object.keys(vocab).find(x=>x===k)||k);
+  }
+
+  function bump(cacheKey){
+    setSeen(cur=>{
+      const n={...cur,[cacheKey]:{n:((cur[cacheKey]||{}).n||0)+1,last:Date.now()}};
+      lsSet("seen",n); return n;
+    });
+    return ((seen[cacheKey]||{}).n||0)+1;
+  }
+
+  function openWord(surface,sentence,cand){
+    const cacheKey=normTok(cand||surface);
+    const hit=wcache[cacheKey];
+    const count=bump(cacheKey);
+    const vk=hit?senseKey(hit.lemma||hit.span,hit.sense):null;
+    if(hit){
+      setStack([{level:0,word:surface,sentence,cand,cacheKey,data:hit,
+        loading:false,showDe:false,saved:!!(vk&&vocab[vk]),seenCount:count}]);
+      return;
+    }
+    setStack([{level:0,word:surface,sentence,cand,cacheKey,data:null,
+      loading:true,showDe:false,saved:false,seenCount:count}]);
+    liveLookup(surface,sentence,cand,cacheKey);
+  }
+
+  async function liveLookup(surface,sentence,cand,cacheKey){
+    try{
+      const j=await askJson(wordPrompt(surface,sentence,cand),{model:MODEL_GOOD,maxTokens:700,timeoutMs:45000});
+      const d={span:String(j.span||surface),lemma:String(j.lemma||surface),sense:String(j.sense||""),
+        en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
+        also:Array.isArray(j.also)?j.also.slice(0,2):[],
+        alsoDe:Array.isArray(j.alsoDe)?j.alsoDe.slice(0,2):[],ts:Date.now()};
+      setWcache(cur=>{ const n={...cur,[cacheKey]:d}; lsSet("wcache",n); return n; });
+      const vk=senseKey(d.lemma,d.sense);
+      setStack(s=>s.length&&s[0].cacheKey===cacheKey
+        ?[{...s[0],loading:false,data:d,saved:!!vocab[vk]},...s.slice(1)]:s);
+    }catch(e){
+      const msg=e instanceof NeedsKey
+        ?"Es ist noch kein API-Schlüssel eingetragen (Eltern-Bereich)."
+        :e instanceof CapReached
+          ?"Heute schon sehr viele Nachschläge — morgen wieder."
+          :"Das hat leider nicht geklappt.";
+      setStack(s=>s.length?[{...s[0],loading:false,error:msg,canRetry:!(e instanceof NeedsKey)},...s.slice(1)]:s);
+    }
+  }
+
+  const nested={
+    open:(word,explanation)=>{
+      if(stack.length>=2) return;             // two levels, deliberately
+      const cacheKey="x:"+normTok(word);
+      bump(normTok(word));
+      const hit=wcache[cacheKey];
+      if(hit){ setStack(s=>[...s,{level:1,word,sentence:explanation,cacheKey,data:hit,loading:false,showDe:false}]); return; }
+      setStack(s=>[...s,{level:1,word,sentence:explanation,cacheKey,data:null,loading:true,showDe:false}]);
+      (async()=>{
+        try{
+          const j=await askJson(nestedPrompt(word,explanation),{model:MODEL_GOOD,maxTokens:600,timeoutMs:45000});
+          const d={span:String(j.span||word),lemma:String(j.lemma||word),sense:String(j.sense||""),
+            en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
+            also:[],alsoDe:[],ts:Date.now()};
+          setWcache(cur=>{ const n={...cur,[cacheKey]:d}; lsSet("wcache",n); return n; });
+          setStack(s=>s.map((x,i)=>i===s.length-1&&x.cacheKey===cacheKey?{...x,loading:false,data:d}:x));
+        }catch(e){
+          setStack(s=>s.map((x,i)=>i===s.length-1?{...x,loading:false,error:"Das hat leider nicht geklappt.",canRetry:true}:x));
+        }
+      })();
+    },
+    back:()=>setStack(s=>s.slice(0,-1)),
+    german:()=>setStack(s=>s.map((x,i)=>i===s.length-1?{...x,showDe:true}:x))
+  };
+
+  function saveWord(){
+    const top=stack[0];
+    if(!top||!top.data) return;
+    const d=top.data;
+    const k=senseKey(d.lemma||d.span,d.sense);
+    const now=Date.now();
+    const prev=vocab[k];
+    const entry=prev
+      ?{...prev,forms:[...new Set([...(prev.forms||[]),normTok(top.word),normTok(d.span)])]}
+      :{w:d.lemma||d.span,span:d.span,sense:d.sense,
+        forms:[...new Set([normTok(top.word),normTok(d.span)])],
+        ctx:top.sentence,en:d.en,de:d.de,dd:d.deDesc,
+        also:d.also,alsoDe:d.alsoDe,
+        src:{book:(book&&book.meta.title)||"",chapter:chapIdx},
+        added:now,s:null,d:null,reps:0,lapses:0,due:now,last:null};
+    saveVocab({...vocab,[k]:entry});
+    setStack(s=>s.map((x,i)=>i===0?{...x,saved:true}:x));
+  }
+
+  /* ---- the clock ---- */
+  const floorWpm=useMemo(()=>floorWpmFrom(sessions),[sessions]);
+
+  function touch(){ clock.current.last=Date.now(); }
+
+  const measureWords=useCallback(()=>{
+    const spans=spansRef.current;
+    if(!spans.length) return;
+    const limit=window.innerHeight;
+    let lo=0,hi=spans.length-1,best=-1;
+    while(lo<=hi){
+      const mid=(lo+hi)>>1;
+      if(spans[mid].getBoundingClientRect().top<limit){ best=mid; lo=mid+1; }
+      else hi=mid-1;
+    }
+    if(best>=0){
+      const n=Number(spans[best].getAttribute("data-i"))+1;
+      clock.current.words=Math.max(clock.current.words,clock.current.base+n);
+    }
+  },[]);
+
+  function flushClock(final){
+    const c=clock.current;
+    const earned=(c.words-0)/Math.max(1,floorWpm)*60000+c.popup;
+    const credited=Math.max(0,Math.min(c.elapsed,earned));
+    const delta=credited-c.flushed;
+    if(delta<1000&&!final) return credited;
+    c.flushed=credited;
+    if(delta>0){
+      setSessions(cur=>{
+        const d=today();
+        const row=cur[d]||{ms:0,raw:0,words:0,lookups:0,saves:0};
+        const n={...cur,[d]:{...row,ms:row.ms+delta,raw:row.raw+delta,words:Math.max(row.words,c.words)}};
+        lsSet("sessions",n); return n;
+      });
+    }
+    return credited;
+  }
+
+  useEffect(()=>{
+    if(view!=="read"){ return; }
+    const iv=setInterval(()=>{
+      const c=clock.current;
+      const now=Date.now();
+      const idle=now-c.last>IDLE_MS;
+      const hidden=document.visibilityState!=="visible";
+      const active=!idle&&!hidden;
+      if(active) c.elapsed+=1000;
+      measureWords();
+      const credited=flushClock(false);
+      setHud({credited,elapsed:c.elapsed,active});
+    },1000);
+    return ()=>{ clearInterval(iv); flushClock(true); };
+    // eslint-disable-next-line
+  },[view,floorWpm]);
+
+  /* scroll position + interaction, throttled */
+  useEffect(()=>{
+    if(view!=="read") return;
+    let t=0;
+    const onScroll=()=>{
+      touch();
+      const now=Date.now();
+      if(now-t<800) return;
+      t=now;
+      measureWords();
+      if(book){
+        const h=document.documentElement.scrollHeight-window.innerHeight;
+        const pct=h>0?window.scrollY/h:0;
+        setPositions(cur=>{
+          const b=cur[book.meta.id]||{counted:{}};
+          const counted={...(b.counted||{}),[chapIdx]:(chap&&chap.nWords)||b.counted&&b.counted[chapIdx]||0};
+          const n={...cur,[book.meta.id]:{chapter:chapIdx,pct,counted,ts:Date.now()}};
+          lsSet("pos",n); return n;
+        });
+      }
+    };
+    const onTouchStart=()=>touch();
+    window.addEventListener("scroll",onScroll,{passive:true});
+    window.addEventListener("touchstart",onTouchStart,{passive:true});
+    window.addEventListener("keydown",onTouchStart);
+    document.addEventListener("visibilitychange",()=>{ touch(); if(document.visibilityState!=="visible") flushClock(true); });
+    return ()=>{
+      window.removeEventListener("scroll",onScroll);
+      window.removeEventListener("touchstart",onTouchStart);
+      window.removeEventListener("keydown",onTouchStart);
+    };
+    // eslint-disable-next-line
+  },[view,book,chapIdx,chap]);
+
+  function onPopupTime(ms){
+    clock.current.popup+=Math.min(ms,POPUP_CREDIT_CAP);
+    touch();
+    setSessions(cur=>{
+      const d=today();
+      const row=cur[d]||{ms:0,raw:0,words:0,lookups:0,saves:0};
+      const n={...cur,[d]:{...row,lookups:(row.lookups||0)+1}};
+      lsSet("sessions",n); return n;
+    });
+  }
+
+  /* ============================================================
+     Views
+     ============================================================ */
+
+  function Library(){
+    const todayMs=(sessions[today()]||{}).ms||0;
+    const hit=todayMs>=TARGET_MIN*60000;
+    return (
+      <>
+        <div className="topbar"><div className="wrap topbar-in">
+          <div className="tb-title serif" style={{fontSize:19}}>Right Reader</div>
+          <span className={"pill"+(hit?" on":"")}>
+            {Math.floor(todayMs/60000)} / {TARGET_MIN} min
+          </span>
+          <button className="icon-btn" aria-label="Eltern" onClick={()=>setView("parent")}>{"⚙︎"}</button>
+        </div></div>
+        <div className="wrap">
+          {busy&&<div className="hint" style={{paddingTop:14}}>{busy}</div>}
+          {fatal&&<div className="err" style={{marginTop:14}}>{fatal}
+            <button className="btn btn-plain" style={{marginTop:10,width:"100%"}} onClick={()=>setFatal("")}>OK</button></div>}
+          <div className="shelf">
+            {books.map(b=>{
+              const p=positions[b.id];
+              const frac=p&&b.nChapters?Math.min(1,(p.chapter+(p.pct||0))/b.nChapters):0;
+              return (
+                <div className="bookcard" key={b.id} onClick={()=>openBook(b.id)}>
+                  {b.cover
+                    ? <img className="bookcover" src={b.cover} alt=""/>
+                    : <div className="bookcover serif">{b.title}</div>}
+                  <div className="bookmeta">{b.title}</div>
+                  {b.author&&<div className="bookauth">{b.author}</div>}
+                  {frac>0.005&&<div className="progbar"><i style={{width:Math.round(frac*100)+"%"}}/></div>}
+                </div>
+              );
+            })}
+            <div className="addcard" onClick={()=>fileRef.current&&fileRef.current.click()}>
+              <div style={{fontSize:30}}>+</div><div>Buch hinzufügen</div>
+            </div>
+          </div>
+          {!books.length&&(
+            <div className="empty">
+              Noch keine Bücher.<br/>
+              Tippe auf <b>+</b> und such die .epub-Datei in <b>Dateien</b> — zum Beispiel in iCloud Drive.
+            </div>
+          )}
+          <input ref={fileRef} type="file" accept=".epub,application/epub+zip" multiple
+            style={{display:"none"}} onChange={e=>importFiles(e.target.files)}/>
+        </div>
+      </>
+    );
+  }
+
+  function Reader(){
+    const item=book.parsed.spine[chapIdx];
+    const label=(item&&book.parsed.toc[item.href])||("Kapitel "+(chapIdx+1));
+    const goal=TARGET_MIN*60000;
+    const todayMs=((sessions[today()]||{}).ms||0);
+    const pct=Math.min(1,todayMs/goal);
+    return (
+      <>
+        <div className="topbar"><div className="wrap topbar-in">
+          <button className="icon-btn" aria-label="Bibliothek" onClick={closeBook}>{"‹"}</button>
+          <div className="tb-title">{label}</div>
+          <button className="icon-btn" aria-label="Vorheriges" disabled={chapIdx<=0}
+            onClick={()=>{ if(chapIdx>0){ flushClock(true); setChapIdx(chapIdx-1); window.scrollTo(0,0);} }}>{"←"}</button>
+          <button className="icon-btn" aria-label="Nächstes" disabled={chapIdx>=book.parsed.spine.length-1}
+            onClick={()=>{ if(chapIdx<book.parsed.spine.length-1){ flushClock(true); setChapIdx(chapIdx+1); window.scrollTo(0,0);} }}>{"→"}</button>
+        </div></div>
+
+        <div className="wrap">
+          {!chap
+            ? <div className="spin"/>
+            : <div className="reader serif" ref={bodyRef} onClick={onTap}
+                dangerouslySetInnerHTML={{__html:chap.html}}/>}
+          {chap&&(
+            <div className="chapnav">
+              <button className="btn btn-plain" disabled={chapIdx<=0}
+                onClick={()=>{ flushClock(true); setChapIdx(chapIdx-1); window.scrollTo(0,0); }}>{"← Zurück"}</button>
+              <button className="btn btn-primary" disabled={chapIdx>=book.parsed.spine.length-1}
+                onClick={()=>{ flushClock(true); setChapIdx(chapIdx+1); window.scrollTo(0,0); }}>{"Weiter →"}</button>
+            </div>
+          )}
+        </div>
+
+        <div className="hud"><div className="wrap hud-in">
+          <div className="ring" style={{background:`conic-gradient(var(--accent) ${pct*360}deg, var(--paper2) 0)`}}>
+            <span style={{background:"var(--paper)",width:22,height:22,borderRadius:"50%",
+              display:"grid",placeItems:"center"}}>{Math.floor(todayMs/60000)}</span>
+          </div>
+          <span>{fmtMin(todayMs)} heute</span>
+          <span style={{flex:1}}/>
+          <span className={"pill"+(hud.active?" on":"")}>{hud.active?"läuft":"pausiert"}</span>
+        </div></div>
+      </>
+    );
+  }
+
+  function Parent(){
+    const [tab,setTab]=useState("time");
+    const [key,setKey]=useState(lsGet("apikey",""));
+    const [msg,setMsg]=useState("");
+    const days=lastNDays(14);
+    const goal=TARGET_MIN*60000;
+    const spend=lsGet("spend",{});
+    const spend30=lastNDays(30).reduce((a,d)=>a+((spend[d]||{}).usd||0),0);
+    const streak=streakOf(sessions);
+
+    const learning=Object.entries(vocab).sort((a,b)=>(b[1].added||0)-(a[1].added||0));
+    const seenList=Object.entries(seen)
+      .filter(([k,v])=>v.n>=2&&wcache[k]&&!Object.values(vocab).some(e=>(e.forms||[]).includes(k)))
+      .sort((a,b)=>b[1].n-a[1].n).slice(0,60);
+
+    function exportAll(){
+      const blob=new Blob([JSON.stringify({
+        v:1,exported:new Date().toISOString(),
+        vocab,seen,wcache,sessions,positions,spend
+      },null,1)],{type:"application/json"});
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download="right-reader-backup-"+today()+".json";
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    }
+    function importAll(file){
+      const fr=new FileReader();
+      fr.onload=()=>{
+        try{
+          const j=JSON.parse(fr.result);
+          if(j.vocab) saveVocab({...vocab,...j.vocab});
+          if(j.seen) saveSeen({...seen,...j.seen});
+          if(j.wcache) saveCache({...wcache,...j.wcache});
+          if(j.sessions){ const n={...sessions,...j.sessions}; setSessions(n); lsSet("sessions",n); }
+          if(j.positions){ const n={...positions,...j.positions}; setPositions(n); lsSet("pos",n); }
+          setMsg("Wiederhergestellt.");
+        }catch(e){ setMsg("Datei konnte nicht gelesen werden."); }
+      };
+      fr.readAsText(file);
+    }
+    function promote(k){
+      const c=wcache[k]; if(!c) return;
+      const vk=senseKey(c.lemma||c.span,c.sense||"");
+      const now=Date.now();
+      saveVocab({...vocab,[vk]:{w:c.lemma||c.span,span:c.span,sense:c.sense,
+        forms:[...new Set([k,normTok(c.span||"")])],ctx:"",en:c.en,de:c.de,dd:c.deDesc,
+        also:c.also||[],alsoDe:c.alsoDe||[],src:{book:"",chapter:0},
+        added:now,s:null,d:null,reps:0,lapses:0,due:now,last:null}});
+    }
+    function forget(k){
+      const n={...vocab}; delete n[k]; saveVocab(n);
+    }
+
+    return (
+      <>
+        <div className="topbar"><div className="wrap topbar-in">
+          <button className="icon-btn" onClick={()=>setView(book?"read":"library")}>{"‹"}</button>
+          <div className="tb-title">Eltern-Bereich</div>
+        </div></div>
+        <div className="wrap" style={{paddingBottom:60}}>
+          <div className="tabs">
+            <button className={tab==="time"?"on":""} onClick={()=>setTab("time")}>Lesezeit</button>
+            <button className={tab==="words"?"on":""} onClick={()=>setTab("words")}>Wörter</button>
+            <button className={tab==="set"?"on":""} onClick={()=>setTab("set")}>Einstellungen</button>
+          </div>
+
+          {tab==="time"&&(<>
+            <div className="card">
+              <h3>Heute</h3>
+              <div className="bigstat">{Math.floor(((sessions[today()]||{}).ms||0)/60000)}
+                <span style={{fontSize:16,fontWeight:600,color:"var(--ink2)"}}> / {TARGET_MIN} min</span></div>
+              <div className="hint">{streak} von {TARGET_DAYS} Tagen diese Woche geschafft.</div>
+            </div>
+            <div className="card">
+              <h3>Letzte 14 Tage</h3>
+              <div className="bars">
+                {days.map(d=>{
+                  const ms=(sessions[d]||{}).ms||0;
+                  const h=Math.min(1,ms/(goal*1.5));
+                  return <div key={d} className={"b "+(ms>=goal?"hit":ms>0?"part":"")}
+                    style={{height:Math.max(3,h*76)+"px"}} title={d}/>;
+                })}
+              </div>
+              <div style={{display:"flex",gap:5}}>
+                {days.map(d=><div key={d} className="blab" style={{flex:1}}>{d.slice(8)}</div>)}
+              </div>
+            </div>
+            <div className="card">
+              <h3>Wie gezählt wird</h3>
+              <div className="hint">
+                Die Uhr läuft nur, wenn die App vorne ist und in den letzten 90 Sekunden
+                gescrollt oder getippt wurde. Zusätzlich kann eine Seite höchstens so viel Zeit
+                verdienen, wie {floorWpm} Wörter pro Minute erlauben — plus die Zeit in
+                Wort-Erklärungen (max. 45 s pro Wort). Auf einer Seite sitzen bringt also nichts.
+                Der Wert {floorWpm} ist {Object.keys(sessions).length<3?"noch ein Startwert":"aus ihrem eigenen bisherigen Tempo berechnet"}.
+              </div>
+            </div>
+          </>)}
+
+          {tab==="words"&&(<>
+            <div className="card">
+              <h3>Gespeichert ({learning.length})</h3>
+              {!learning.length&&<div className="hint">Noch keine. Sie tippt beim Lesen auf {"＋ Neues Wort"}.</div>}
+              {learning.slice(0,80).map(([k,e])=>(
+                <div className="wrow" key={k}>
+                  <span className="lw">{e.span||e.w}</span>
+                  <span className="lt">{e.de||e.en}</span>
+                  <span style={{fontSize:11,color:"var(--ink2)",fontWeight:700}}>{STRENGTH_NAMES[strengthOf(e)]}</span>
+                  <button className="icon-btn" style={{fontSize:14}} onClick={()=>forget(k)}>{"✕"}</button>
+                </div>
+              ))}
+            </div>
+            <div className="card">
+              <h3>Mehrfach nachgeschaut, nicht gespeichert</h3>
+              <div className="hint" style={{marginTop:0,marginBottom:10}}>
+                Die Wörter, bei denen sie gezweifelt hat, aber nicht auf {"＋"} getippt hat.
+                Meist genau die, die sich lohnen.
+              </div>
+              {!seenList.length&&<div className="hint">Noch nichts.</div>}
+              {seenList.map(([k,v])=>(
+                <div className="wrow" key={k}>
+                  <span className="lw">{(wcache[k]||{}).span||k}</span>
+                  <span className="lt">{(wcache[k]||{}).de||""}</span>
+                  <span style={{fontSize:11,color:"var(--ink2)",fontWeight:700}}>{v.n}×</span>
+                  <button className="btn btn-ghost" style={{padding:"6px 11px",fontSize:13}}
+                    onClick={()=>promote(k)}>{"＋"}</button>
+                </div>
+              ))}
+            </div>
+          </>)}
+
+          {tab==="set"&&(<>
+            <div className="card">
+              <h3>API-Schlüssel</h3>
+              <input type="password" value={key} placeholder="sk-ant-…"
+                onChange={e=>setKey(e.target.value)}/>
+              <button className="btn btn-primary" style={{width:"100%",marginTop:10}}
+                onClick={()=>{ lsSet("apikey",key.trim()); setMsg("Gespeichert."); }}>Speichern</button>
+              <div className="hint">
+                Bleibt nur auf diesem iPad, nie im Repository. Nimm einen eigenen Schlüssel
+                nur für diese App, lade ein kleines Guthaben und schalte Auto-Reload aus —
+                dann ist dieses Guthaben die Obergrenze für alles, was schiefgehen kann.
+              </div>
+            </div>
+            <div className="card">
+              <h3>Kosten (30 Tage)</h3>
+              <div className="bigstat">${spend30.toFixed(2)}</div>
+              <div className="hint">Geschätzt aus den zurückgemeldeten Tokens.
+                Heute {callsToday()} von max. {DAILY_CALL_CAP} Anfragen.</div>
+            </div>
+            <div className="card">
+              <h3>Sicherung</h3>
+              <button className="btn btn-plain" style={{width:"100%"}} onClick={exportAll}>Alles exportieren</button>
+              <label className="btn btn-plain" style={{width:"100%",marginTop:8,display:"block",textAlign:"center"}}>
+                Wiederherstellen
+                <input type="file" accept="application/json,.json" style={{display:"none"}}
+                  onChange={e=>e.target.files[0]&&importAll(e.target.files[0])}/>
+              </label>
+              <div className="hint">
+                Safari räumt Browser-Speicher gelegentlich auf. Bücher lassen sich neu laden,
+                Wortliste und Lesezeit nicht — also ab und zu exportieren.
+              </div>
+            </div>
+            <div className="card">
+              <h3>Bücher ({books.length})</h3>
+              {books.map(b=>(
+                <div className="wrow" key={b.id}>
+                  <span className="lt" style={{fontWeight:650,color:"var(--ink)"}}>{b.title}</span>
+                  <button className="icon-btn" style={{fontSize:14}}
+                    onClick={async()=>{ await dbDel(b.id); refreshBooks(); }}>{"✕"}</button>
+                </div>
+              ))}
+            </div>
+            {msg&&<div className="chip">{msg}</div>}
+          </>)}
+        </div>
+      </>
+    );
+  }
+
+  /* ---- root ---- */
+  return (
+    <>
+      {view==="library"&&<Library/>}
+      {view==="read"&&book&&<Reader/>}
+      {view==="parent"&&<Parent/>}
+      {stack.length>0&&(
+        <WordSheet stack={stack} knownSet={knownSet}
+          onClose={()=>setStack([])}
+          onNested={nested}
+          onSave={saveWord}
+          onPopupTime={onPopupTime}
+          onRetry={()=>{
+            const t=stack[stack.length-1];
+            if(t.level===0){ setStack([{...t,loading:true,error:null}]); liveLookup(t.word,t.sentence,t.cand,t.cacheKey); }
+            else { setStack(s=>s.slice(0,-1)); setTimeout(()=>nested.open(t.word,t.sentence),0); }
+          }}/>
+      )}
+    </>
+  );
+}
