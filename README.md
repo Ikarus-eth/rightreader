@@ -129,6 +129,26 @@ then settles at 40% of her own observed median.
 Target is 20 minutes on 5 days a week; the ring in the reading view and
 the bars on the parent screen both track it.
 
+### Display and read-aloud
+
+**Aa** in the reading view: font size 16–30, three line spacings, serif or
+sans, and paper / light / night backgrounds. All persisted.
+
+**☰** opens the table of contents so she can jump to any chapter instead
+of stepping through one at a time.
+
+**Long-press any paragraph to hear it read aloud.** A tap already means
+"explain this word", so listening is a press. The paragraph highlights
+while it speaks. Being read to is the single most-praised feature of
+Epic for second-language readers, and a sentence she can decode word by
+word is still a sentence she cannot hear the shape of.
+
+### Her word list
+
+The 📓 on the library screen. Every word she saved, with the German, the
+simple English, and the sentence from the book it came from, each with a
+speaker button. Without it the ＋ button was a request with no reply.
+
 ### Parent screen
 
 The ⚙︎ in the top right. Reading time by day, the 5×20 target, the saved
@@ -175,7 +195,10 @@ from the device. A runaway loop stops there rather than at your balance.
 ## Storage, and the one real risk
 
 Books live in IndexedDB, everything else in `localStorage` under `rr_`.
-Nothing leaves the iPad.
+Nothing leaves the iPad. A service worker (`sw.js`) caches the app shell,
+so reading works with no connection at all; only word lookups need one.
+Bump `VERSION` in `sw.js` on any deploy that changes `index.html` or
+`app.js`, or the old version keeps being served.
 
 Safari clears script-writable storage more aggressively than other
 browsers, and home-screen web apps are treated differently from tabs in

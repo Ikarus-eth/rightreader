@@ -710,7 +710,22 @@ const CSS=`
   --paper:#FBF6EC; --paper2:#F3EADA; --ink:#241F1A; --ink2:#5B5148;
   --accent:#B4551F; --accent-soft:#F4E2D3; --line:#E2D5C1;
   --good:#3D7A4E; --warn:#B4551F;
+  --rsize:20px; --rlead:1.68;
 }
+html[data-theme="light"]{
+  --paper:#FFFFFF; --paper2:#F2F2F0; --ink:#1B1B19; --ink2:#5E5E5A;
+  --accent:#A8481A; --accent-soft:#F6E4D8; --line:#E4E4E0;
+}
+html[data-theme="night"]{
+  --paper:#15161A; --paper2:#22242A; --ink:#E4E2DC; --ink2:#9A968D;
+  --accent:#E2884A; --accent-soft:#38291D; --line:#2E3138;
+  --good:#7FB88C;
+}
+html[data-theme="night"] .card{background:#1C1E23}
+html[data-theme="night"] input{background:#1C1E23;color:var(--ink)}
+html[data-theme="night"] .reader img{filter:brightness(.9)}
+html[data-theme="night"] .w.known{background:linear-gradient(transparent 68%,#2C4433 68%)}
+html[data-theme="night"] .w.seen{background:linear-gradient(transparent 72%,#43371F 72%)}
 html,body,#root{height:100%;margin:0}
 body{
   background:var(--paper); color:var(--ink);
@@ -753,7 +768,10 @@ body{
   font-weight:650;font-size:14px;cursor:pointer}
 
 /* ---- reading ---- */
-.reader{padding:6px 0 120px;font-size:20px;line-height:1.68}
+.reader{padding:6px 0 132px;font-size:var(--rsize);line-height:var(--rlead)}
+.reader.sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.reader p.speaking{background:var(--accent-soft);border-radius:8px;
+  box-shadow:0 0 0 6px var(--accent-soft);transition:background .2s}
 .reader p{margin:0 0 1.05em}
 .reader h1,.reader h2,.reader h3{line-height:1.25;margin:1.6em 0 .7em;font-weight:700}
 .reader img{max-width:100%;height:auto;display:block;margin:1.2em auto;border-radius:6px}
@@ -820,6 +838,27 @@ input[type=text],input[type=password],input[type=number]{
 .hint{color:var(--ink2);font-size:13px;line-height:1.5;margin-top:8px}
 .err{background:#FBE4DC;color:#9A3412;border-radius:12px;padding:11px 14px;font-size:14px;
   font-weight:600;margin-top:12px;line-height:1.45}
+.toc-row{display:flex;align-items:center;gap:10px;padding:13px 4px;border-bottom:1px solid var(--paper2);
+  cursor:pointer;font-size:16px}
+.toc-row.cur{font-weight:800;color:var(--accent)}
+.toc-row .n{font-size:12px;color:var(--ink2);font-weight:700;min-width:26px}
+.seg{display:flex;gap:6px;margin-top:8px}
+.seg button{flex:1;border:1px solid var(--line);background:transparent;color:var(--ink2);
+  padding:11px 6px;border-radius:11px;font-weight:700;font-size:14px;font-family:inherit;cursor:pointer}
+.seg button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.steprow{display:flex;align-items:center;gap:12px;margin-top:8px}
+.steprow button{width:52px;height:44px;border:1px solid var(--line);background:transparent;
+  border-radius:12px;font-size:18px;font-weight:700;color:var(--ink);cursor:pointer}
+.steprow .val{flex:1;text-align:center;font-weight:700;color:var(--ink2);font-size:14px}
+.setlab{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);
+  font-weight:700;margin-top:18px}
+.setlab:first-child{margin-top:0}
+.wcard{background:var(--paper2);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.wcard .h{display:flex;align-items:center;gap:8px}
+.wcard .hw{font-size:21px;font-weight:800;flex:1;min-width:0;overflow-wrap:anywhere}
+.wcard .de{color:var(--accent);font-weight:700;font-size:15px;margin-top:2px}
+.wcard .en{font-size:15px;margin-top:5px;line-height:1.5}
+.wcard .src{font-size:12px;color:var(--ink2);margin-top:7px;font-style:italic;line-height:1.45}
 .tabs{display:flex;gap:6px;margin:14px 0}
 .tabs button{flex:1;border:none;background:var(--paper2);color:var(--ink2);padding:10px;
   border-radius:11px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
@@ -1012,6 +1051,11 @@ export default function App(){
   const [chap,setChap]=useState(null);          // {html,paras,nWords}
   const [stack,setStack]=useState([]);          // word sheet levels
   const [hud,setHud]=useState({credited:0,elapsed:0,active:false});
+  const [tab,setTab]=useState("time");
+  const [key,setKey]=useState(()=>lsGet("apikey",""));
+  const [msg,setMsg]=useState("");
+  const [prefs,setPrefs]=useState(()=>lsGet("prefs",{size:20,lead:1.68,theme:"paper",serif:true}));
+  const [sheet,setSheet]=useState(null);   // "toc" | "type" | null
 
   const bodyRef=useRef(null);
   const urlsRef=useRef([]);
@@ -1022,6 +1066,16 @@ export default function App(){
 
   useEffect(()=>{ const s=document.createElement("style"); s.textContent=CSS;
     document.head.appendChild(s); askPersist(); },[]);
+
+  useEffect(()=>{
+    const r=document.documentElement;
+    r.setAttribute("data-theme",prefs.theme);
+    r.style.setProperty("--rsize",prefs.size+"px");
+    r.style.setProperty("--rlead",String(prefs.lead));
+    const meta=document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.setAttribute("content",prefs.theme==="night"?"#15161A":prefs.theme==="light"?"#FFFFFF":"#FBF6EC");
+    lsSet("prefs",prefs);
+  },[prefs]);
 
   /* ---- persistence helpers ---- */
   const saveVocab=useCallback(v=>{ setVocab(v); if(!lsSet("vocab",v)) setFatal("Speicher voll — bitte im Eltern-Bereich exportieren."); },[]);
@@ -1252,8 +1306,41 @@ export default function App(){
     } finally { prefetchRef.current.busy=false; }
   }
 
+  /* ---- hearing a sentence ----
+     Epic's most praised feature for second-language readers is being read
+     to, because a sentence she can decode word by word is still a sentence
+     she cannot hear the shape of. A tap already means "explain this word",
+     so hearing is a long press: 550ms on any paragraph reads that sentence
+     aloud and highlights it. The press also suppresses the click that
+     would otherwise follow, or every listen would open a word sheet. */
+  const press=useRef({t:null,el:null,fired:false});
+  function onPressStart(e){
+    touch();
+    const el=e.target.closest&&e.target.closest("p,div,h1,h2,h3,li,blockquote");
+    if(!el||!bodyRef.current||!bodyRef.current.contains(el)) return;
+    press.current.fired=false;
+    press.current.el=el;
+    press.current.t=setTimeout(()=>{
+      press.current.fired=true;
+      const wordEl=e.target.closest&&e.target.closest(".w");
+      const p=Number((wordEl||el).getAttribute&&(wordEl||el).getAttribute("data-p"));
+      const text=Number.isInteger(p)&&chap?chap.paras[p]:(el.textContent||"");
+      const say=wordEl?sentenceFor(text,wordEl.textContent):text;
+      if(!say) return;
+      el.classList.add("speaking");
+      speak(say);
+      const clear=()=>el.classList.remove("speaking");
+      if(window.speechSynthesis){
+        const iv=setInterval(()=>{ if(!window.speechSynthesis.speaking){ clearInterval(iv); clear(); } },400);
+        setTimeout(()=>{ clearInterval(iv); clear(); },90000);
+      } else setTimeout(clear,1200);
+    },550);
+  }
+  function onPressEnd(){ clearTimeout(press.current.t); }
+
   /* ---- tapping a word ---- */
   function onTap(e){
+    if(press.current.fired){ press.current.fired=false; return; }
     const el=e.target.closest&&e.target.closest(".w");
     touch();
     if(!el||!bodyRef.current||!bodyRef.current.contains(el)) return;
@@ -1480,6 +1567,9 @@ export default function App(){
           <span className={"pill"+(hit?" on":"")}>
             {Math.floor(todayMs/60000)} / {TARGET_MIN} min
           </span>
+          <button className="icon-btn" aria-label="Meine Wörter" onClick={()=>setView("words")}>
+            {"📓"}<span style={{fontSize:11,fontWeight:800,verticalAlign:"super"}}>{Object.keys(vocab).length||""}</span>
+          </button>
           <button className="icon-btn" aria-label="Eltern" onClick={()=>setView("parent")}>{"⚙︎"}</button>
         </div></div>
         <div className="wrap">
@@ -1529,16 +1619,19 @@ export default function App(){
         <div className="topbar"><div className="wrap topbar-in">
           <button className="icon-btn" aria-label="Bibliothek" onClick={closeBook}>{"‹"}</button>
           <div className="tb-title">{label}</div>
-          <button className="icon-btn" aria-label="Vorheriges" disabled={chapIdx<=0}
-            onClick={()=>{ if(chapIdx>0){ flushClock(true); setChapIdx(chapIdx-1); window.scrollTo(0,0);} }}>{"←"}</button>
-          <button className="icon-btn" aria-label="Nächstes" disabled={chapIdx>=book.parsed.spine.length-1}
-            onClick={()=>{ if(chapIdx<book.parsed.spine.length-1){ flushClock(true); setChapIdx(chapIdx+1); window.scrollTo(0,0);} }}>{"→"}</button>
+          <button className="icon-btn" aria-label="Inhalt" onClick={()=>setSheet("toc")}>{"☰"}</button>
+          <button className="icon-btn" aria-label="Schrift" style={{fontWeight:800,fontSize:17}}
+            onClick={()=>setSheet("type")}>Aa</button>
         </div></div>
 
         <div className="wrap">
           {!chap
             ? <div className="spin"/>
-            : <div className="reader serif" ref={bodyRef} onClick={onTap}
+            : <div className={"reader"+(prefs.serif?" serif":" sans")} ref={bodyRef}
+                onClick={onTap}
+                onPointerDown={onPressStart} onPointerUp={onPressEnd}
+                onPointerCancel={onPressEnd} onPointerMove={onPressEnd}
+                onContextMenu={e=>e.preventDefault()}
                 dangerouslySetInnerHTML={{__html:chap.html}}/>}
           {chap&&(
             <div className="chapnav">
@@ -1557,6 +1650,7 @@ export default function App(){
           </div>
           <span>{fmtMin(todayMs)} heute</span>
           <span style={{flex:1}}/>
+          <span className="pill" style={{fontWeight:600}}>lang drücken = vorlesen</span>
           <span className={"pill"+(hud.active?" on":"")}>{hud.active?"läuft":"pausiert"}</span>
         </div></div>
       </>
@@ -1564,9 +1658,6 @@ export default function App(){
   }
 
   function Parent(){
-    const [tab,setTab]=useState("time");
-    const [key,setKey]=useState(lsGet("apikey",""));
-    const [msg,setMsg]=useState("");
     const days=lastNDays(14);
     const goal=TARGET_MIN*60000;
     const spend=lsGet("spend",{});
@@ -1744,12 +1835,123 @@ export default function App(){
     );
   }
 
+  function TocSheet(){
+    const sp=book.parsed.spine;
+    return (
+      <div className="scrim" onClick={()=>setSheet(null)}>
+        <div className="sheet" onClick={e=>e.stopPropagation()}>
+          <div className="sheet-head">
+            <div className="headword serif" style={{fontSize:22}}>Inhalt</div>
+            <button className="icon-btn" onClick={()=>setSheet(null)}>{"✕"}</button>
+          </div>
+          <div style={{marginTop:8}}>
+            {sp.map((it,i)=>{
+              const t=book.parsed.toc[it.href];
+              if(!t&&!it.linear) return null;
+              return (
+                <div key={it.id+i} className={"toc-row"+(i===chapIdx?" cur":"")}
+                  onClick={()=>{ flushClock(true); setSheet(null); setChapIdx(i); window.scrollTo(0,0); }}>
+                  <span className="n">{i+1}</span>
+                  <span style={{flex:1}}>{t||("Abschnitt "+(i+1))}</span>
+                  {i===chapIdx&&<span>{"●"}</span>}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function TypeSheet(){
+    const set=(k,v)=>setPrefs(p=>({...p,[k]:v}));
+    return (
+      <div className="scrim" onClick={()=>setSheet(null)}>
+        <div className="sheet" onClick={e=>e.stopPropagation()}>
+          <div className="sheet-head">
+            <div className="headword serif" style={{fontSize:22}}>Darstellung</div>
+            <button className="icon-btn" onClick={()=>setSheet(null)}>{"✕"}</button>
+          </div>
+
+          <div className="setlab">Schriftgröße</div>
+          <div className="steprow">
+            <button onClick={()=>set("size",Math.max(16,prefs.size-1))}>A−</button>
+            <span className="val">{prefs.size} px</span>
+            <button onClick={()=>set("size",Math.min(30,prefs.size+1))}>A+</button>
+          </div>
+
+          <div className="setlab">Zeilenabstand</div>
+          <div className="seg">
+            {[["eng",1.45],["normal",1.68],["weit",2.0]].map(([l,v])=>(
+              <button key={l} className={Math.abs(prefs.lead-v)<0.02?"on":""}
+                onClick={()=>set("lead",v)}>{l}</button>
+            ))}
+          </div>
+
+          <div className="setlab">Schrift</div>
+          <div className="seg">
+            <button className={prefs.serif?"on":""} onClick={()=>set("serif",true)}>Serife</button>
+            <button className={!prefs.serif?"on":""} onClick={()=>set("serif",false)}>Ohne Serife</button>
+          </div>
+
+          <div className="setlab">Hintergrund</div>
+          <div className="seg">
+            {[["Papier","paper"],["Hell","light"],["Nacht","night"]].map(([l,v])=>(
+              <button key={v} className={prefs.theme===v?"on":""} onClick={()=>set("theme",v)}>{l}</button>
+            ))}
+          </div>
+
+          <div className="hint">
+            Lange auf einen Absatz drücken, um ihn vorlesen zu lassen.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* Her own list. She collects words and until now had nowhere to see
+     them, which makes the ＋ button a request with no reply. */
+  function WordList(){
+    const rows=Object.entries(vocab).sort((a,b)=>(b[1].added||0)-(a[1].added||0));
+    return (
+      <>
+        <div className="topbar"><div className="wrap topbar-in">
+          <button className="icon-btn" onClick={()=>setView(book?"read":"library")}>{"‹"}</button>
+          <div className="tb-title serif" style={{fontSize:19}}>Meine Wörter</div>
+          <span className="pill">{rows.length}</span>
+        </div></div>
+        <div className="wrap" style={{paddingTop:16,paddingBottom:60}}>
+          {!rows.length&&(
+            <div className="empty">
+              Noch keine Wörter.<br/>
+              Tippe beim Lesen auf ein Wort und dann auf <b>＋ Neues Wort</b>.
+            </div>
+          )}
+          {rows.map(([k,e])=>(
+            <div className="wcard" key={k}>
+              <div className="h">
+                <div className="hw serif">{e.span||e.w}</div>
+                <button className="icon-btn" onClick={()=>speak(e.span||e.w)}>{"🔊"}</button>
+              </div>
+              {e.de&&<div className="de">{e.de}</div>}
+              {e.en&&<div className="en">{e.en}</div>}
+              {e.ctx&&<div className="src">„{e.ctx}“{e.src&&e.src.book?" — "+e.src.book:""}</div>}
+            </div>
+          ))}
+        </div>
+      </>
+    );
+  }
+
   /* ---- root ---- */
   return (
     <>
-      {view==="library"&&<Library/>}
-      {view==="read"&&book&&<Reader/>}
-      {view==="parent"&&<Parent/>}
+      {view==="library"&&Library()}
+      {view==="read"&&book&&Reader()}
+      {view==="parent"&&Parent()}
+      {view==="words"&&WordList()}
+      {view==="read"&&book&&sheet==="toc"&&TocSheet()}
+      {view==="read"&&book&&sheet==="type"&&TypeSheet()}
       {stack.length>0&&(
         <WordSheet stack={stack} knownSet={knownSet}
           onClose={()=>setStack([])}
