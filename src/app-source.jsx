@@ -728,7 +728,7 @@ async function askJson(prompt,opts){
 
 const LEMMA_RULE="Give \"lemma\" as the plain dictionary headword: reduce adverbs to their root ( \"admiringly\" -> \"admire\" ), comparatives and superlatives to the plain adjective, plurals to singular, and any inflected form to the simplest version a beginner would look up.";
 
-const SHAPE='{"span":"...","lemma":"...","sense":"a 1-3 word label for which meaning this is","also":["0-2 short English phrases naming OTHER common, clearly different meanings; empty array if not ambiguous"],"alsoDe":["German for each phrase in also, same order and count"],"en":"one very simple English sentence, max 14 easy words, explaining what it means HERE","de":"the German translation as used here, 1-3 words","deDesc":"one simple German sentence, max 14 words, explaining it"}';
+const SHAPE='{"span":"...","lemma":"...","sense":"a 1-3 word label for which meaning this is","ipa":"British English IPA for span, between /slashes/, one pronunciation only","also":["0-2 short English phrases naming OTHER common, clearly different meanings; empty array if not ambiguous"],"alsoDe":["German for each phrase in also, same order and count"],"en":"one very simple English sentence, max 14 easy words, explaining what it means HERE","de":"the German translation as used here, 1-3 words","deDesc":"one simple German sentence, max 14 words, explaining it"}';
 
 /* The candidate expression comes from a local list that cannot tell
    idiomatic use from literal use - "look at the cat" and "look after
@@ -768,9 +768,9 @@ function batchPrompt(items){
   return [
     `A 10-year-old German child (English level A2/B1) is reading an English story. Explain each word below very simply, using ONLY the meaning it has in ITS OWN given sentence. ${LEMMA_RULE}`,
     `WORDS: ${list}`,
-    `For each give: "word" (exactly as listed), "lemma", "sense" (1-3 word label), "also" (0-2 short English phrases naming other common, clearly different meanings; empty array if not ambiguous), "alsoDe" (German for each, same order and count), "en" (one very simple English sentence, max 14 easy words), "de" (German translation, 1-3 words), "deDesc" (one simple German sentence, max 14 words).`,
+    `For each give: "word" (exactly as listed), "lemma", "sense" (1-3 word label), "ipa" (British English IPA for the word, between /slashes/, one pronunciation only), "also" (0-2 short English phrases naming other common, clearly different meanings; empty array if not ambiguous), "alsoDe" (German for each, same order and count), "en" (one very simple English sentence, max 14 easy words), "de" (German translation, 1-3 words), "deDesc" (one simple German sentence, max 14 words).`,
     `Reply with ONLY one single-line JSON object, no markdown, no line breaks:`,
-    `{"words":[{"word":"...","lemma":"...","sense":"...","also":[],"alsoDe":[],"en":"...","de":"...","deDesc":"..."}]}`
+    `{"words":[{"word":"...","lemma":"...","sense":"...","ipa":"/.../","also":[],"alsoDe":[],"en":"...","de":"...","deDesc":"..."}]}`
   ].join("\n");
 }
 
@@ -962,7 +962,11 @@ body{
   font-weight:650;font-size:14px;cursor:pointer}
 
 /* ---- reading ---- */
-.reader-shell{position:relative;height:calc(100dvh - 73px);overflow:hidden;touch-action:manipulation}
+.reader-shell{position:relative;height:100dvh;overflow:hidden;touch-action:manipulation}
+.reader-topbar{position:absolute;left:0;right:0;top:0;z-index:12;background:rgba(255,248,227,.96);
+  backdrop-filter:saturate(135%) blur(14px);border-bottom:1px solid rgba(211,185,126,.55);
+  box-shadow:0 3px 14px rgba(81,68,35,.08);transition:opacity .16s ease,transform .16s ease}
+.reader-topbar.hidden{opacity:0;transform:translateY(-18px);pointer-events:none}
 .reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 38px;font-size:var(--rsize);line-height:var(--rlead);
   letter-spacing:.003em;overflow:hidden;column-fill:auto;scroll-behavior:auto}
 body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
@@ -1008,6 +1012,7 @@ body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
 @keyframes up{from{transform:translateY(18px);opacity:.4}to{transform:none;opacity:1}}
 .sheet-head{display:flex;align-items:flex-start;gap:8px}
 .headword{font-size:31px;font-weight:800;flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.15;color:#20392D}
+.ipa{font-family:"Charis SIL","Doulos SIL","Times New Roman",serif;color:var(--ink2);font-size:17px;letter-spacing:.02em;margin:3px 0 8px}
 .ctx{color:var(--ink2);font-size:14px;font-style:italic;margin:10px 0 2px;line-height:1.5}
 .ctx b{background:var(--accent-soft);font-style:normal;font-weight:700;border-radius:4px;padding:0 3px}
 .expl{font-size:19px;line-height:1.6;margin-top:14px}
@@ -1134,6 +1139,7 @@ function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime})
           <button className="icon-btn" aria-label="Close" onClick={onClose}>✕</button>
         </div>
 
+        {d&&d.ipa&&<div className="ipa">{d.ipa}</div>}
         {top.level===0
           ? <Ctx sentence={top.sentence} span={d?d.span:top.word}/>
           : <div className="ctx">from the explanation</div>}
@@ -1262,6 +1268,7 @@ export default function App(){
   const [prefs,setPrefs]=useState(()=>lsGet("prefs",{size:20,lead:1.68,theme:"paper",serif:true}));
   const [sheet,setSheet]=useState(null);   // "toc" | "type" | null
   const [showReaderTip,setShowReaderTip]=useState(()=>!lsGet("readerTipSeen",false));
+  const [readerMenuOpen,setReaderMenuOpen]=useState(false);
   const [pageInfo,setPageInfo]=useState({page:0,total:1});
 
   const bodyRef=useRef(null);
@@ -1279,6 +1286,7 @@ export default function App(){
     document.body.classList.toggle("reading-mode",view==="read");
     return ()=>document.body.classList.remove("reading-mode");
   },[view]);
+  useEffect(()=>{ if(view!=="read") setReaderMenuOpen(false); },[view,chapIdx,book?book.meta.id:null]);
 
   useEffect(()=>{
     const r=document.documentElement;
@@ -1536,7 +1544,8 @@ export default function App(){
       const key=normTok(cand||surface);
       if(picked.has(key)||prefetchRef.current.done.has(key)) continue;
       const have=normalizeEntry(wcache[key]);
-      if((have&&have.senses.length)||knownSet.has(key)) continue;
+      const haveIpa=!!(have&&have.senses.length&&have.senses.every(x=>String(x.ipa||"").trim()));
+      if(haveIpa||knownSet.has(key)) continue;
       if(!cand){
         const lw=normTok(surface);
         if(lw.length<4) continue;
@@ -1552,7 +1561,7 @@ export default function App(){
       } else {
         /* expressions are always worth one look: the local list can only
            propose, and whether it is idiomatic here is the model's call */
-        if(have&&have.senses.length) continue;
+        if(haveIpa) continue;
       }
       const p=Number(sp.getAttribute("data-p"))||0;
       picked.add(key);
@@ -1574,7 +1583,7 @@ export default function App(){
             const m=batch.find(b=>normTok(b.w)===normTok(r.word||""))||null;
             if(!m) continue;
             add.push([m.key,{span:m.w,lemma:String(r.lemma||m.w),sense:String(r.sense||""),
-              en:String(r.en||""),de:String(r.de||""),deDesc:String(r.deDesc||""),
+              ipa:String(r.ipa||""),en:String(r.en||""),de:String(r.de||""),deDesc:String(r.deDesc||""),
               also:Array.isArray(r.also)?r.also.slice(0,2):[],
               alsoDe:Array.isArray(r.alsoDe)?r.alsoDe.slice(0,2):[],ctx:m.s,ts:Date.now()},
               sentHash(m.s)]);
@@ -1648,6 +1657,7 @@ export default function App(){
     if(!bodyRef.current) return;
     if(!el||!bodyRef.current.contains(el)) return;
     dismissReaderTip();
+    if(readerMenuOpen) setReaderMenuOpen(false);
     const surface=el.textContent;
     const cand=el.getAttribute("data-mwe");
     const p=Number(el.getAttribute("data-p"))||0;
@@ -1665,8 +1675,12 @@ export default function App(){
 
   function onPageTap(e){
     if(press.current.fired) return;
-    if(e.target.closest&&e.target.closest(".w,.reader-tip,button")) return;
+    if(e.target.closest&&e.target.closest(".w,.reader-tip,.reader-topbar,button")) return;
     const shell=e.currentTarget.getBoundingClientRect();
+    const y=e.clientY-shell.top;
+    const topZone=Math.min(100,Math.max(58,shell.height*.14));
+    if(y<topZone){ dismissReaderTip(); setReaderMenuOpen(v=>!v); return; }
+    if(readerMenuOpen) setReaderMenuOpen(false);
     const x=e.clientX-shell.left;
     /* Wide edge zones, but the text column itself is inset so ordinary page
        turns do not compete with word lookup taps. */
@@ -1713,9 +1727,13 @@ export default function App(){
     const cacheKey=normTok(cand||surface);
     const h=sentHash(sentence);
     const entry=normalizeEntry(wcache[cacheKey]);
+    const missingIpa=!!(entry&&entry.senses.some(x=>!String(x.ipa||"").trim()));
     bump(cacheKey);
 
-    if(!entry||!entry.senses.length){
+    /* Cache entries created before IPA support are still useful for meaning,
+       but they cannot satisfy the pronunciation UI. Refresh them once on tap;
+       mergeSense updates the existing sense rather than duplicating it. */
+    if(!entry||!entry.senses.length||missingIpa){
       setStack([{level:0,word:surface,sentence,cand,cacheKey,h,data:null,
         loading:true,showDe:false,saved:false,seenCount:((seen[cacheKey]||{}).n||0)+1}]);
       liveLookup(surface,sentence,cand,cacheKey,h);
@@ -1789,7 +1807,7 @@ export default function App(){
     try{
       const j=await askJson(wordPrompt(surface,sentence,cand),{model:models().good,maxTokens:700,timeoutMs:45000});
       const d={span:String(j.span||surface),lemma:String(j.lemma||surface),sense:String(j.sense||""),
-        en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
+        ipa:String(j.ipa||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
         also:Array.isArray(j.also)?j.also.slice(0,2):[],
         alsoDe:Array.isArray(j.alsoDe)?j.alsoDe.slice(0,2):[],ctx:sentence,ts:Date.now()};
       setWcache(cur=>{
@@ -1825,7 +1843,7 @@ export default function App(){
         try{
           const j=await askJson(nestedPrompt(word,explanation),{model:models().good,maxTokens:600,timeoutMs:45000});
           const d={span:String(j.span||word),lemma:String(j.lemma||word),sense:String(j.sense||""),
-            en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
+            ipa:String(j.ipa||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
             also:[],alsoDe:[],ts:Date.now()};
           setWcache(cur=>{ const [e]=mergeSense(normalizeEntry(cur[cacheKey]),d);
             const n={...cur,[cacheKey]:e}; return persistCache(n); });
@@ -1850,7 +1868,7 @@ export default function App(){
       ?{...prev,forms:[...new Set([...(prev.forms||[]),normTok(top.word),normTok(d.span)])]}
       :{w:d.lemma||d.span,span:d.span,sense:d.sense,
         forms:[...new Set([normTok(top.word),normTok(d.span)])],
-        ctx:top.sentence,en:d.en,de:d.de,dd:d.deDesc,
+        ctx:top.sentence,ipa:d.ipa,en:d.en,de:d.de,dd:d.deDesc,
         also:d.also,alsoDe:d.alsoDe,
         src:{book:(book&&book.meta.title)||"",chapter:chapIdx},
         added:now,s:null,d:null,reps:0,lapses:0,due:now,last:null};
@@ -2095,19 +2113,20 @@ export default function App(){
     const label=(item&&book.parsed.toc[item.href])||("Chapter "+(chapIdx+1));
     return (
       <>
-        <div className="topbar"><div className="wrap topbar-in">
-          <button className="icon-btn" aria-label="Books" onClick={closeBook}>{"‹"}</button>
-          <div className="tb-title">{label}</div>
-          <button className="icon-btn" aria-label="Contents" onClick={()=>setSheet("toc")}>{"☰"}</button>
-          <button className="icon-btn" aria-label="Text settings" style={{fontWeight:800,fontSize:17}}
-            onClick={()=>setSheet("type")}>Aa</button>
-        </div></div>
-
         <div className="wrap">
           <div className="reader-shell" onClick={onPageTap}>
+            <div className={"reader-topbar"+(readerMenuOpen?"":" hidden")}>
+              <div className="wrap topbar-in">
+                <button className="icon-btn" aria-label="Books" onClick={closeBook}>{"‹"}</button>
+                <div className="tb-title">{label}</div>
+                <button className="icon-btn" aria-label="Contents" onClick={()=>setSheet("toc")}>{"☰"}</button>
+                <button className="icon-btn" aria-label="Text settings" style={{fontWeight:800,fontSize:17}}
+                  onClick={()=>setSheet("type")}>Aa</button>
+              </div>
+            </div>
             {showReaderTip&&(
               <div className="reader-tip">
-                <div><b>Tap a word</b> to explain it.<br/><b>Tap the sides</b> to turn the page.<br/><b>Hold a sentence</b> to hear it.</div>
+                <div><b>Tap a word</b> to explain it.<br/><b>Tap the sides</b> to turn the page.<br/><b>Tap the top</b> to show the menu.<br/><b>Hold a sentence</b> to hear it.</div>
                 <button className="btn btn-ghost" onClick={dismissReaderTip}>Got it</button>
               </div>
             )}
@@ -2454,6 +2473,7 @@ export default function App(){
                 <div className="hw serif">{e.span||e.w}</div>
                 <button className="icon-btn" aria-label="Say it" onClick={()=>speak(e.span||e.w)}>{"🔊"}</button>
               </div>
+              {e.ipa&&<div className="ipa">{e.ipa}</div>}
               {e.en&&<div className="en">{e.en}</div>}
               {e.de&&(
                 <details className="translation">
