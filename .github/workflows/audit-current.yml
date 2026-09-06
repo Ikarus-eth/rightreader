@@ -1,0 +1,19 @@
+name: Audit current Right Reader UI
+
+on:
+  push:
+    branches: [fix/juna-first-run]
+    paths:
+      - .github/workflows/audit-current.yml
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/juna-first-run
+      - name: Find likely German UI strings
+        run: |
+          echo '--- likely German strings ---'
+          grep -nE 'Buch|Bücher|Wörter|Deutsch|Speicher|Eltern|Lese|Heute|Modell|Schlüssel|Verbind|Zurück|Weiter|Inhalt|Schrift|Hintergrund|Papier|Hell|Nacht|Wieder|Laden|konnte|Anfragen|gespeichert|gelöscht|löschen|Vorablesen|Antippen|Datei|Kosten|Sicherung|vorlesen|Erklärung|Bedeutung|gemeinsame|noch|Bitte|Fehler' src/app-source.jsx || true
