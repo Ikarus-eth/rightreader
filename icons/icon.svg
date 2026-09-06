@@ -1,9 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="113" fill="#FBF6EC"/>
-  <rect x="87" y="120" width="338" height="27" rx="13" fill="#241F1A"/>
-  <rect x="87" y="179" width="277" height="27" rx="13" fill="#241F1A"/>
-  <rect x="76" y="224" width="235" height="63" rx="15" fill="#F4E2D3"/>
-  <rect x="87" y="238" width="212" height="27" rx="13" fill="#B4551F"/>
-  <rect x="87" y="297" width="314" height="27" rx="13" fill="#E2D5C1"/>
-  <rect x="87" y="356" width="152" height="27" rx="13" fill="#E2D5C1"/>
+  <defs>
+    <radialGradient id="paper" cx="30%" cy="22%" r="85%">
+      <stop offset="0" stop-color="#FFF6C9"/>
+      <stop offset="0.55" stop-color="#F7C65A"/>
+      <stop offset="1" stop-color="#D8872D"/>
+    </radialGradient>
+    <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#183E31"/>
+      <stop offset="1" stop-color="#315F4D"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#paper)"/>
+  <path d="M30 48C91 9 140 14 166 70c23 50-12 101-66 116-45 13-86-12-100-51V75c8-9 18-18 30-27Z" fill="#F5E7A8" opacity=".7"/>
+  <ellipse cx="174" cy="185" rx="118" ry="108" fill="url(#leaf)"/>
+  <ellipse cx="340" cy="179" rx="115" ry="105" fill="url(#leaf)"/>
+  <ellipse cx="121" cy="364" rx="121" ry="92" fill="url(#leaf)" transform="rotate(21 121 364)"/>
+  <ellipse cx="388" cy="354" rx="124" ry="94" fill="url(#leaf)" transform="rotate(-18 388 354)"/>
+  <ellipse cx="259" cy="427" rx="75" ry="63" fill="#16392E"/>
+
+  <!-- kitten -->
+  <path d="M167 199 187 123l58 47c17-9 36-13 56-11l55-43 12 82c25 19 40 48 40 80 0 66-62 119-138 119s-138-53-138-119c0-32 13-60 35-79Z" fill="#8F6643" stroke="#513A2A" stroke-width="8" stroke-linejoin="round"/>
+  <path d="m186 138 12 55-39-16Z" fill="#F6B29B"/>
+  <path d="m345 133 5 58 39-22Z" fill="#F6B29B"/>
+  <path d="M214 173c9-14 21-25 34-32M244 165c6-15 13-25 24-36M276 163c3-13 8-24 16-34" fill="none" stroke="#5A3427" stroke-width="10" stroke-linecap="round"/>
+  <ellipse cx="268" cy="274" rx="97" ry="84" fill="#FFF9EC"/>
+  <ellipse cx="229" cy="257" rx="17" ry="22" fill="#2A211B"/>
+  <ellipse cx="307" cy="257" rx="17" ry="22" fill="#2A211B"/>
+  <circle cx="235" cy="250" r="6" fill="#fff"/>
+  <circle cx="313" cy="250" r="6" fill="#fff"/>
+  <path d="m267 279 10 7-10 8-10-8Z" fill="#E98D6E"/>
+  <path d="M267 294c-4 13-16 17-26 11m26-11c5 13 17 17 27 11" fill="none" stroke="#6B4030" stroke-width="5" stroke-linecap="round"/>
+  <path d="M196 285c-22-5-42-4-59 3m62 11c-25 2-43 9-56 18m193-32c22-5 42-4 59 3m-62 11c25 2 43 9 56 18" fill="none" stroke="#FFF9EC" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- butterfly book -->
+  <path d="M203 325c-24 0-48 14-58 34 25 0 50 9 68 25l43 39v-72c-12-17-32-26-53-26Z" fill="#E7F3F0" stroke="#D59B2E" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M309 325c24 0 48 14 58 34-25 0-50 9-68 25l-43 39v-72c12-17 32-26 53-26Z" fill="#E7F3F0" stroke="#D59B2E" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M256 349v74" stroke="#D59B2E" stroke-width="6"/>
+  <path d="M256 354c-8-22-24-35-38-41m38 41c8-22 24-35 38-41" fill="none" stroke="#D59B2E" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="218" cy="311" r="6" fill="#F7C65A"/>
+  <circle cx="294" cy="311" r="6" fill="#F7C65A"/>
+
+  <!-- little magical butterflies -->
+  <g fill="#FFF3A2">
+    <path d="M86 245c-23-11-35 8-19 23-15 18 1 34 20 17 14 20 34 7 23-14 22-9 17-30-7-27-3-24-26-23-17 1Z"/>
+    <path d="M420 222c-18-9-28 7-15 19-12 14 1 28 17 14 11 16 27 5 18-12 18-8 14-24-5-22-2-19-21-18-15 1Z"/>
+  </g>
+  <circle cx="406" cy="130" r="7" fill="#FFF3A2"/>
+  <circle cx="97" cy="122" r="5" fill="#FFF3A2"/>
 </svg>
