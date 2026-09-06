@@ -697,6 +697,86 @@ function speak(text){
   }catch(e){}
 }
 
+/* ============================================================
+   Senses
+
+   The first version cached one explanation per word, keyed by the word.
+   So the first time "shut" appeared the app learned one meaning, and
+   every later "shut" got that meaning whether it fitted or not. In a
+   children's novel that is not an edge case: "shut the door", "shut up",
+   "shut in".
+
+   The cache now holds a list of senses per word plus a memo of which
+   sense won for which sentence, so a re-tap of the same sentence is
+   free. What decides between them:
+
+     no senses yet         -> full lookup
+     one sense, not
+       flagged ambiguous   -> serve it, no call at all
+     one sense, flagged
+       ambiguous           -> serve it immediately, verify in the
+                              background, replace only if it was wrong
+     two or more senses    -> must choose, so a short pick call first
+
+   The ambiguity flag is free: the explanation prompt already returns
+   "also", the other common meanings of the word, and an empty "also" is
+   the model saying this word only means one thing. Most words come back
+   empty, which is why most taps never trigger a check.
+
+   Serving first and verifying after is the deliberate part. A spinner on
+   every ambiguous word would tax a lot of correct answers to catch a few
+   wrong ones; showing the wrong meaning permanently is worse than a
+   rare, labelled correction.
+   ============================================================ */
+function sentHash(s){
+  const t=String(s||"").toLowerCase().replace(/[^a-z0-9 ]+/g,"").trim().slice(0,300);
+  let h=5381;
+  for(let i=0;i<t.length;i++) h=((h<<5)+h+t.charCodeAt(i))>>>0;
+  return h.toString(36);
+}
+function emptyEntry(){ return {senses:[],picks:{},ts:Date.now()}; }
+/* Old flat entries become a one-sense entry, so an existing cache keeps
+   working instead of being thrown away on upgrade. */
+function normalizeEntry(e){
+  if(!e) return null;
+  if(Array.isArray(e.senses)) return e;
+  if(e.en||e.de) return {senses:[{...e}],picks:{},ts:e.ts||Date.now()};
+  return null;
+}
+function migrateCache(c){
+  let changed=false;
+  const out={};
+  for(const [k,v] of Object.entries(c||{})){
+    const n=normalizeEntry(v);
+    if(!n) { changed=true; continue; }
+    if(n!==v) changed=true;
+    out[k]=n;
+  }
+  return changed?out:c;
+}
+function mergeSense(entry,d){
+  const e=entry||emptyEntry();
+  const label=String(d.sense||"").toLowerCase().trim();
+  const i=e.senses.findIndex(x=>String(x.sense||"").toLowerCase().trim()===label);
+  const senses=e.senses.slice();
+  if(i>=0) senses[i]={...senses[i],...d};
+  else senses.push(d);
+  return [{...e,senses,ts:Date.now()},i>=0?i:senses.length-1];
+}
+
+function disambigPrompt(word,sentence,senses){
+  const list=senses.map((x,i)=>`${i+1}) ${x.sense||"?"} — ${x.en}`).join("\n");
+  return [
+    `Which meaning of "${word}" is used in this sentence?`,
+    `SENTENCE: "${sentence}"`,
+    `MEANINGS:`,
+    list,
+    `Answer with the number of the meaning that is used in this sentence.`,
+    `If none of them fit the sentence, answer 0.`,
+    `Reply with ONLY this JSON and nothing else: {"pick":N}`
+  ].join("\n");
+}
+
 function senseKey(lemma,sense){
   return String(lemma||"").toLowerCase().trim()+"|"+String(sense||"").toLowerCase().trim().slice(0,24);
 }
@@ -815,6 +895,9 @@ body{
   border-radius:999px;padding:4px 11px;font-size:12px;font-weight:750;margin-top:10px}
 .nudge{background:#FBEFD6;border-radius:12px;padding:10px 13px;margin-top:12px;
   font-size:14px;font-weight:600;color:#8A5A12;line-height:1.45}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);
+  margin-right:6px;animation:pulse 1.1s ease-in-out infinite;vertical-align:middle}
+@keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
 .spin{width:22px;height:22px;border:3px solid var(--line);border-top-color:var(--accent);
   border-radius:50%;animation:sp .8s linear infinite;margin:26px auto}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -927,7 +1010,15 @@ function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime})
           ? <Ctx sentence={top.sentence} span={d?d.span:top.word}/>
           : <div className="ctx">aus der Erklärung</div>}
 
-        {top.loading&&<div className="spin"/>}
+        {top.loading&&(
+          <>
+            <div className="spin"/>
+            {top.choosing&&<div className="hint" style={{textAlign:"center",marginTop:-14}}>
+              Welche Bedeutung ist hier gemeint?</div>}
+            {top.changed&&!top.choosing&&<div className="hint" style={{textAlign:"center",marginTop:-14}}>
+              Hier heißt es etwas anderes …</div>}
+          </>
+        )}
 
         {top.error&&(
           <>
@@ -939,6 +1030,16 @@ function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime})
 
         {d&&!top.loading&&(
           <>
+            {top.changed&&(
+              <div className="chip" style={{background:"#FBEFD6",color:"#8A5A12"}}>
+                ✓ In diesem Satz heißt es das hier
+              </div>
+            )}
+            {top.checking&&(
+              <div className="chip" style={{background:"var(--paper2)",color:"var(--ink2)"}}>
+                <span className="dot"/> prüfe die Bedeutung …
+              </div>
+            )}
             {d.span&&normTok(d.span)!==normTok(top.word)&&(
               <div className="chip">🔗 These {d.span.split(/\s+/).length} words go together</div>
             )}
@@ -1042,7 +1143,7 @@ export default function App(){
 
   const [vocab,setVocab]=useState(()=>lsGet("vocab",{}));
   const [seen,setSeen]=useState(()=>lsGet("seen",{}));
-  const [wcache,setWcache]=useState(()=>lsGet("wcache",{}));
+  const [wcache,setWcache]=useState(()=>migrateCache(lsGet("wcache",{})));
   const [sessions,setSessions]=useState(()=>lsGet("sessions",{}));
   const [positions,setPositions]=useState(()=>lsGet("pos",{}));
 
@@ -1084,7 +1185,7 @@ export default function App(){
     let out=v;
     const keys=Object.keys(v);
     if(keys.length>WCACHE_MAX){
-      keys.sort((a,b)=>(v[a].ts||0)-(v[b].ts||0));
+      keys.sort((a,b)=>((v[a]||{}).ts||0)-((v[b]||{}).ts||0));
       out={...v};
       for(const k of keys.slice(0,keys.length-WCACHE_MAX)) delete out[k];
     }
@@ -1202,10 +1303,20 @@ export default function App(){
     clock.current.words=Math.max(clock.current.words,base);
   },[book,chapIdx]);
 
-  /* after a chapter paints: index the tap targets, mark known words,
-     restore the scroll position, and start filling the word cache */
+  /* The chapter is written into the DOM here rather than through
+     dangerouslySetInnerHTML, because React re-applies that prop on every
+     render: it replaced all 31 nodes of the chapter once a second (the
+     reading clock re-renders that often). Two things broke. The span list
+     used to measure how far she has scrolled pointed at detached nodes,
+     whose getBoundingClientRect is all zeros, so the measurement jumped
+     to the end of the chapter and the anti-idling cap quietly stopped
+     capping anything. And 20KB of HTML was being re-parsed every second
+     on an iPad. Writing it once per chapter and leaving React out of this
+     subtree fixes both. */
   useEffect(()=>{
-    if(!chap||!bodyRef.current) return;
+    if(!bodyRef.current) return;
+    bodyRef.current.innerHTML=chap?chap.html:"";
+    if(!chap){ spansRef.current=[]; return; }
     const spans=Array.from(bodyRef.current.querySelectorAll(".w"));
     spansRef.current=spans;
     paintKnown(spans);
@@ -1253,7 +1364,8 @@ export default function App(){
       const cand=sp.getAttribute("data-mwe");
       const key=normTok(cand||surface);
       if(picked.has(key)||prefetchRef.current.done.has(key)) continue;
-      if(wcache[key]||knownSet.has(key)) continue;
+      const have=normalizeEntry(wcache[key]);
+      if((have&&have.senses.length)||knownSet.has(key)) continue;
       if(!cand){
         const lw=normTok(surface);
         if(lw.length<4) continue;
@@ -1269,7 +1381,7 @@ export default function App(){
       } else {
         /* expressions are always worth one look: the local list can only
            propose, and whether it is idiomatic here is the model's call */
-        if(wcache[key]) continue;
+        if(have&&have.senses.length) continue;
       }
       const p=Number(sp.getAttribute("data-p"))||0;
       picked.add(key);
@@ -1285,18 +1397,28 @@ export default function App(){
         try{
           const j=await askJson(batchPrompt(batch),{model:MODEL_FAST,maxTokens:2600,timeoutMs:70000});
           const got=Array.isArray(j.words)?j.words:[];
-          const add={};
+          const add=[];
           for(const r of got){
             const m=batch.find(b=>normTok(b.w)===normTok(r.word||""))||null;
             if(!m) continue;
-            add[m.key]={span:m.w,lemma:String(r.lemma||m.w),sense:String(r.sense||""),
+            add.push([m.key,{span:m.w,lemma:String(r.lemma||m.w),sense:String(r.sense||""),
               en:String(r.en||""),de:String(r.de||""),deDesc:String(r.deDesc||""),
               also:Array.isArray(r.also)?r.also.slice(0,2):[],
-              alsoDe:Array.isArray(r.alsoDe)?r.alsoDe.slice(0,2):[],ts:Date.now()};
+              alsoDe:Array.isArray(r.alsoDe)?r.alsoDe.slice(0,2):[],ctx:m.s,ts:Date.now()},
+              sentHash(m.s)]);
             prefetchRef.current.done.add(m.key);
           }
-          if(Object.keys(add).length){
-            setWcache(cur=>{ const nc={...cur,...add}; lsSet("wcache",nc); return nc; });
+          if(add.length){
+            setWcache(cur=>{
+              const nc={...cur};
+              /* the sentence the prefetcher used is pinned to this sense,
+                 so tapping that exact sentence never re-checks anything */
+              for(const [k,d,h] of add){
+                const [entry,idx]=mergeSense(normalizeEntry(nc[k]),d);
+                nc[k]={...entry,picks:{...(entry.picks||{}),[h]:idx}};
+              }
+              lsSet("wcache",nc); return nc;
+            });
           }
         }catch(e){
           if(e instanceof NeedsKey||e instanceof CapReached) break;
@@ -1372,39 +1494,128 @@ export default function App(){
     return ((seen[cacheKey]||{}).n||0)+1;
   }
 
-  function openWord(surface,sentence,cand){
-    const cacheKey=normTok(cand||surface);
-    const hit=wcache[cacheKey];
-    const count=bump(cacheKey);
-    const vk=hit?senseKey(hit.lemma||hit.span,hit.sense):null;
-    if(hit){
-      setStack([{level:0,word:surface,sentence,cand,cacheKey,data:hit,
-        loading:false,showDe:false,saved:!!(vk&&vocab[vk]),seenCount:count}]);
-      return;
-    }
-    setStack([{level:0,word:surface,sentence,cand,cacheKey,data:null,
-      loading:true,showDe:false,saved:false,seenCount:count}]);
-    liveLookup(surface,sentence,cand,cacheKey);
+  function putEntry(cacheKey,entry){
+    setWcache(cur=>{ const n={...cur,[cacheKey]:entry}; lsSet("wcache",n); return n; });
+  }
+  function pinPick(cacheKey,h,idx){
+    setWcache(cur=>{
+      const e=normalizeEntry(cur[cacheKey])||emptyEntry();
+      const picks={...(e.picks||{}),[h]:idx};
+      /* the memo is per sentence, so it only ever grows with the text she
+         has actually read; trimming the oldest keeps it from unbounded */
+      const ks=Object.keys(picks);
+      if(ks.length>400) delete picks[ks[0]];
+      const n={...cur,[cacheKey]:{...e,picks}};
+      lsSet("wcache",n); return n;
+    });
+  }
+  function showSense(surface,sentence,cand,cacheKey,h,d,extra){
+    const vk=senseKey(d.lemma||d.span,d.sense);
+    setStack([{level:0,word:surface,sentence,cand,cacheKey,h,data:d,
+      loading:false,showDe:false,saved:!!vocab[vk],
+      seenCount:((seen[cacheKey]||{}).n||0)+1,...(extra||{})}]);
   }
 
-  async function liveLookup(surface,sentence,cand,cacheKey){
+  function openWord(surface,sentence,cand){
+    const cacheKey=normTok(cand||surface);
+    const h=sentHash(sentence);
+    const entry=normalizeEntry(wcache[cacheKey]);
+    bump(cacheKey);
+
+    if(!entry||!entry.senses.length){
+      setStack([{level:0,word:surface,sentence,cand,cacheKey,h,data:null,
+        loading:true,showDe:false,saved:false,seenCount:((seen[cacheKey]||{}).n||0)+1}]);
+      liveLookup(surface,sentence,cand,cacheKey,h);
+      return;
+    }
+
+    const pinned=(entry.picks||{})[h];
+    if(Number.isInteger(pinned)&&entry.senses[pinned]){
+      showSense(surface,sentence,cand,cacheKey,h,entry.senses[pinned]);
+      return;
+    }
+
+    if(entry.senses.length===1){
+      const d=entry.senses[0];
+      const ambiguous=(d.also||[]).length>0;
+      showSense(surface,sentence,cand,cacheKey,h,d,{checking:ambiguous});
+      if(ambiguous) verifySense(surface,sentence,cand,cacheKey,h,entry);
+      else pinPick(cacheKey,h,0);
+      return;
+    }
+
+    setStack([{level:0,word:surface,sentence,cand,cacheKey,h,data:null,
+      loading:true,choosing:true,showDe:false,saved:false,
+      seenCount:((seen[cacheKey]||{}).n||0)+1}]);
+    chooseSense(surface,sentence,cand,cacheKey,h,entry);
+  }
+
+  async function askPick(word,sentence,senses){
+    const j=await askJson(disambigPrompt(word,sentence,senses),
+      {model:MODEL_FAST,maxTokens:24,timeoutMs:20000});
+    const n=Number(j&&j.pick);
+    return Number.isFinite(n)?n:1;
+  }
+
+  /* two or more senses on file: she waits for the pick, but it is a
+     Haiku call returning a single digit, not a full explanation */
+  async function chooseSense(surface,sentence,cand,cacheKey,h,entry){
+    try{
+      const pick=await askPick(cand||surface,sentence,entry.senses);
+      if(pick>=1&&entry.senses[pick-1]){
+        pinPick(cacheKey,h,pick-1);
+        showSense(surface,sentence,cand,cacheKey,h,entry.senses[pick-1]);
+      } else {
+        await liveLookup(surface,sentence,cand,cacheKey,h);
+      }
+    }catch(e){
+      /* if the pick fails, the first sense beats an error message */
+      showSense(surface,sentence,cand,cacheKey,h,entry.senses[0]);
+    }
+  }
+
+  /* one sense on file but the word is known to have others: she already
+     has an answer on screen, so this runs behind it and only interrupts
+     if the answer was actually wrong for this sentence */
+  async function verifySense(surface,sentence,cand,cacheKey,h,entry){
+    try{
+      const pick=await askPick(cand||surface,sentence,entry.senses);
+      if(pick===1){
+        pinPick(cacheKey,h,0);
+        setStack(st=>st.length&&st[0].h===h?[{...st[0],checking:false},...st.slice(1)]:st);
+        return;
+      }
+      setStack(st=>st.length&&st[0].h===h?[{...st[0],checking:false,loading:true,changed:true},...st.slice(1)]:st);
+      await liveLookup(surface,sentence,cand,cacheKey,h,true);
+    }catch(e){
+      setStack(st=>st.length&&st[0].h===h?[{...st[0],checking:false},...st.slice(1)]:st);
+    }
+  }
+
+  async function liveLookup(surface,sentence,cand,cacheKey,h,changed){
     try{
       const j=await askJson(wordPrompt(surface,sentence,cand),{model:MODEL_GOOD,maxTokens:700,timeoutMs:45000});
       const d={span:String(j.span||surface),lemma:String(j.lemma||surface),sense:String(j.sense||""),
         en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
         also:Array.isArray(j.also)?j.also.slice(0,2):[],
-        alsoDe:Array.isArray(j.alsoDe)?j.alsoDe.slice(0,2):[],ts:Date.now()};
-      setWcache(cur=>{ const n={...cur,[cacheKey]:d}; lsSet("wcache",n); return n; });
+        alsoDe:Array.isArray(j.alsoDe)?j.alsoDe.slice(0,2):[],ctx:sentence,ts:Date.now()};
+      setWcache(cur=>{
+        const [entry,idx]=mergeSense(normalizeEntry(cur[cacheKey]),d);
+        const picks={...(entry.picks||{}),[h]:idx};
+        const n={...cur,[cacheKey]:{...entry,picks}};
+        lsSet("wcache",n); return n;
+      });
       const vk=senseKey(d.lemma,d.sense);
-      setStack(s=>s.length&&s[0].cacheKey===cacheKey
-        ?[{...s[0],loading:false,data:d,saved:!!vocab[vk]},...s.slice(1)]:s);
+      setStack(st=>st.length&&st[0].cacheKey===cacheKey
+        ?[{...st[0],loading:false,checking:false,choosing:false,data:d,saved:!!vocab[vk],changed:!!changed},...st.slice(1)]:st);
     }catch(e){
       const msg=e instanceof NeedsKey
         ?"Es ist noch kein API-Schlüssel eingetragen (Eltern-Bereich)."
         :e instanceof CapReached
           ?"Heute schon sehr viele Nachschläge — morgen wieder."
           :"Das hat leider nicht geklappt.";
-      setStack(s=>s.length?[{...s[0],loading:false,error:msg,canRetry:!(e instanceof NeedsKey)},...s.slice(1)]:s);
+      setStack(st=>st.length?[{...st[0],loading:false,checking:false,choosing:false,
+        error:msg,canRetry:!(e instanceof NeedsKey)},...st.slice(1)]:st);
     }
   }
 
@@ -1413,7 +1624,8 @@ export default function App(){
       if(stack.length>=2) return;             // two levels, deliberately
       const cacheKey="x:"+normTok(word);
       bump(normTok(word));
-      const hit=wcache[cacheKey];
+      const hitE=normalizeEntry(wcache[cacheKey]);
+      const hit=hitE&&hitE.senses[0];
       if(hit){ setStack(s=>[...s,{level:1,word,sentence:explanation,cacheKey,data:hit,loading:false,showDe:false}]); return; }
       setStack(s=>[...s,{level:1,word,sentence:explanation,cacheKey,data:null,loading:true,showDe:false}]);
       (async()=>{
@@ -1422,7 +1634,8 @@ export default function App(){
           const d={span:String(j.span||word),lemma:String(j.lemma||word),sense:String(j.sense||""),
             en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
             also:[],alsoDe:[],ts:Date.now()};
-          setWcache(cur=>{ const n={...cur,[cacheKey]:d}; lsSet("wcache",n); return n; });
+          setWcache(cur=>{ const [e]=mergeSense(normalizeEntry(cur[cacheKey]),d);
+            const n={...cur,[cacheKey]:e}; lsSet("wcache",n); return n; });
           setStack(s=>s.map((x,i)=>i===s.length-1&&x.cacheKey===cacheKey?{...x,loading:false,data:d}:x));
         }catch(e){
           setStack(s=>s.map((x,i)=>i===s.length-1?{...x,loading:false,error:"Das hat leider nicht geklappt.",canRetry:true}:x));
@@ -1625,14 +1838,12 @@ export default function App(){
         </div></div>
 
         <div className="wrap">
-          {!chap
-            ? <div className="spin"/>
-            : <div className={"reader"+(prefs.serif?" serif":" sans")} ref={bodyRef}
-                onClick={onTap}
-                onPointerDown={onPressStart} onPointerUp={onPressEnd}
-                onPointerCancel={onPressEnd} onPointerMove={onPressEnd}
-                onContextMenu={e=>e.preventDefault()}
-                dangerouslySetInnerHTML={{__html:chap.html}}/>}
+          {!chap&&<div className="spin"/>}
+          <div className={"reader"+(prefs.serif?" serif":" sans")} ref={bodyRef}
+            onClick={onTap}
+            onPointerDown={onPressStart} onPointerUp={onPressEnd}
+            onPointerCancel={onPressEnd} onPointerMove={onPressEnd}
+            onContextMenu={e=>e.preventDefault()}/>
           {chap&&(
             <div className="chapnav">
               <button className="btn btn-plain" disabled={chapIdx<=0}
@@ -1666,7 +1877,8 @@ export default function App(){
 
     const learning=Object.entries(vocab).sort((a,b)=>(b[1].added||0)-(a[1].added||0));
     const seenList=Object.entries(seen)
-      .filter(([k,v])=>v.n>=2&&wcache[k]&&!Object.values(vocab).some(e=>(e.forms||[]).includes(k)))
+      .filter(([k,v])=>v.n>=2&&(normalizeEntry(wcache[k])||{senses:[]}).senses.length
+        &&!Object.values(vocab).some(e=>(e.forms||[]).includes(k)))
       .sort((a,b)=>b[1].n-a[1].n).slice(0,60);
 
     function exportAll(){
@@ -1696,7 +1908,7 @@ export default function App(){
       fr.readAsText(file);
     }
     function promote(k){
-      const c=wcache[k]; if(!c) return;
+      const c=((normalizeEntry(wcache[k])||{senses:[]}).senses||[])[0]; if(!c) return;
       const vk=senseKey(c.lemma||c.span,c.sense||"");
       const now=Date.now();
       saveVocab({...vocab,[vk]:{w:c.lemma||c.span,span:c.span,sense:c.sense,
@@ -1776,8 +1988,8 @@ export default function App(){
               {!seenList.length&&<div className="hint">Noch nichts.</div>}
               {seenList.map(([k,v])=>(
                 <div className="wrow" key={k}>
-                  <span className="lw">{(wcache[k]||{}).span||k}</span>
-                  <span className="lt">{(wcache[k]||{}).de||""}</span>
+                  <span className="lw">{((normalizeEntry(wcache[k])||{senses:[]}).senses[0]||{}).span||k}</span>
+                  <span className="lt">{((normalizeEntry(wcache[k])||{senses:[]}).senses[0]||{}).de||""}</span>
                   <span style={{fontSize:11,color:"var(--ink2)",fontWeight:700}}>{v.n}×</span>
                   <button className="btn btn-ghost" style={{padding:"6px 11px",fontSize:13}}
                     onClick={()=>promote(k)}>{"＋"}</button>
@@ -1960,7 +2172,7 @@ export default function App(){
           onPopupTime={onPopupTime}
           onRetry={()=>{
             const t=stack[stack.length-1];
-            if(t.level===0){ setStack([{...t,loading:true,error:null}]); liveLookup(t.word,t.sentence,t.cand,t.cacheKey); }
+            if(t.level===0){ setStack([{...t,loading:true,error:null}]); liveLookup(t.word,t.sentence,t.cand,t.cacheKey,t.h); }
             else { setStack(s=>s.slice(0,-1)); setTimeout(()=>nested.open(t.word,t.sentence),0); }
           }}/>
       )}

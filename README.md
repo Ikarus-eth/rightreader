@@ -76,6 +76,30 @@ Two paths, chosen by cost:
 Explanations are cached across books, so the second book costs
 noticeably less than the first.
 
+### Which meaning
+
+The cache holds a list of senses per word, not one explanation per word,
+plus a memo of which sense won for which sentence. Otherwise the first
+time "point" appeared the app learned one meaning and every later
+"point" got it, right or wrong. What decides:
+
+| on file | what happens |
+|---|---|
+| nothing yet | full lookup |
+| one sense, not ambiguous | served instantly, no call |
+| one sense, flagged ambiguous | served instantly, verified behind her, replaced only if wrong |
+| two or more senses | short pick call first, then the right one |
+
+The ambiguity flag costs nothing: the explanation already returns the
+word's *other* common meanings, and an empty list is the model saying
+this word only means one thing. Most words come back empty, which is why
+most taps never trigger a check.
+
+Serving first and verifying after is deliberate. A spinner on every
+ambiguous word would tax a lot of correct answers to catch a few wrong
+ones. When a correction does happen she sees a marked "in this sentence
+it means this" rather than a silent swap.
+
 ### Phrasal verbs
 
 Tapping "put" in "put up with" and being told what "put" means is worse
@@ -216,6 +240,16 @@ table of contents, cover extraction, all 20 chapters rendered, 20,316
 tap targets tokenised, 393 phrasal-verb spans marked, contractions kept
 whole, images rewritten to blob URLs, links neutralised, prefetch triage.
 The built bundle mounts and renders.
+
+Two bugs found by testing rather than by reading, both silent:
+
+React re-applies `dangerouslySetInnerHTML` on every render, and the
+reading clock re-renders once a second. All 31 chapter nodes were being
+replaced every second, which detached the span list used to measure
+scroll progress. `getBoundingClientRect` on a detached node returns
+zeros, so the measurement pinned itself to the end of the chapter and
+the anti-idling cap stopped capping. The chapter is now written into the
+DOM once per chapter and React is kept out of that subtree.
 
 That EPUB writes `<a id="page_1"/>` self-closing. HTML parsing ignores
 self-closing syntax on non-void elements, so those anchors stayed open
