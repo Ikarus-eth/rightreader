@@ -1,346 +1,145 @@
 # Right Reader
 
-An EPUB reader for a ten-year-old reading English as a second language,
-with German as her first. Tap any word and get a very simple English
-explanation; tap a word inside that explanation and get that explained
-too; press one button for the German. Words she decides are new go into
-a list that is already shaped for spaced repetition.
+Right Reader is a deliberately simple EPUB reader for a 10-year-old German native speaker reading English at about A2/B1. The product idea is not “study vocabulary”; it is “English books cannot trap you.”
 
-No server. No Cloudflare Worker. The site is static files on GitHub
-Pages and it calls the OpenAI API straight from the browser.
+Tap a word and get a very short, contextual explanation in easy English. Tap a harder word inside that explanation and get one more level of explanation. German is available only on request. A word can be saved explicitly for later spaced-repetition work.
 
----
+## Architecture
 
-## Setup
+- Static GitHub Pages site. No backend or proxy.
+- Calls the OpenAI API directly from the browser.
+- The API key is entered once in Parent settings and stored only in that iPad's localStorage.
+- EPUBs are parsed with JSZip and rendered into native DOM, not an iframe, so word taps are exact.
+- Raw EPUB bytes live in IndexedDB. Other state lives under `rr_` keys in localStorage.
+- A local list proposes phrasal verbs/idioms; the model decides whether the phrase is actually idiomatic in that sentence.
+- Reading time is capped by text actually scrolled past plus time spent in word explanations. Sitting on one page does not earn reading time.
 
-Three steps, about ten minutes, most of it waiting for Pages to build.
+The browser-held API key is a conscious security tradeoff for a single-family prototype. Use a dedicated OpenAI project/key, a small prepaid balance, and no automatic recharge. Do not distribute this architecture to other families as a production service.
 
-### 1. Turn on GitHub Pages
+## First setup on the iPad
 
-Settings → Pages → Build and deployment → Source: **Deploy from a
-branch** → Branch: **main**, folder: **/ (root)** → Save.
+1. Open the GitHub Pages site in Safari and add it to the Home Screen.
+2. Open **Parent → Settings**.
+3. Paste the dedicated OpenAI API key and tap **Save & test**.
+4. The key is saved only if the API test succeeds.
+5. Keep the default models unless there is a reason to change them:
+   - `gpt-5.6-luna` for high-volume background prefetch.
+   - `gpt-5.6-terra` for live contextual lookups.
 
-Wait a minute or two, then open
-`https://ikarus-eth.github.io/rightreader/` in a browser to check it
-loads. It will show an empty library. That is correct.
+## Mac → iPad book workflow
 
-### 2. Get an API key, and cap it
+The clean setup is a shared iCloud Drive folder named **Juna Books**.
 
-1. platform.openai.com → **API keys** → *Create new secret key*. Name it
-   `right-reader`. Copy it now, it is shown once. It starts with `sk-`.
-2. **Billing** → add a payment method → add **$10** of credit.
-3. **Turn auto-recharge OFF.** This is the actual safety net. With it off
-   you cannot spend more than what you loaded, whatever happens to the
-   key. Nothing technical protects you as well as this does.
+### One time
 
-Use a key that only this app ever uses, so you can revoke it without
-breaking anything else.
+1. On the Mac, create **iCloud Drive/Juna Books**.
+2. If Juna's iPad uses a different Apple Account, share that folder with her account.
+3. On the iPad, accept the shared folder once and make sure iCloud Drive is enabled.
 
-### 3. Put it on the iPad
+### For every new book
 
-1. Open the site in **Safari** on her iPad. Must be Safari.
-2. Share icon → **Add to Home Screen** → Add.
-3. Open it from the home screen. Tap **⚙︎** (top right) → **Einstellungen**
-   → paste the API key → **Speichern & testen**.
+On the Mac, drag a DRM-free `.epub` into **Juna Books**.
 
-That button does more than save. It calls the API and pulls back the list
-of models your account can actually use, then lets you pick the two the
-app uses from a dropdown. The names in `config.js` are my best guess at
-current model IDs and may well be wrong; this is how you fix them without
-guessing again.
+On the iPad, Juna opens Right Reader and taps:
 
-The key lives in that iPad's browser storage and nowhere else. It is
-never in this repository.
+**Add a book → iCloud Drive → Juna Books → book**
 
-### 4. Add books
+Do not open the `.epub` from Files or AirDrop it as the normal workflow. iOS will typically hand it to Apple Books. Right Reader needs the file to be chosen from inside its own document picker. After import, Right Reader keeps its own copy in IndexedDB.
 
-On your Mac, make a folder inside **iCloud Drive** called `Junas Bücher`
-and put DRM-free `.epub` files in it. It appears in **Files** on her iPad
-within a minute or two.
+The file input intentionally has no `accept=.epub` filter. iOS has historically mapped EPUB type identifiers inconsistently and can otherwise show the file while greying it out. Right Reader validates the extension after selection instead.
 
-Then, on the iPad, **inside Right Reader**: **+ Buch hinzufügen** →
-*Datei auswählen* → iCloud Drive → Junas Bücher → tap the book. Once
-imported it lives on the device and is never picked again.
+## Child experience
 
-**Do not tap the .epub in the Files app.** iOS hands `.epub` to Apple
-Books, Books copies it into a container no other app can read, and the
-file is then invisible to this one. Same for AirDrop, and for Mail
-attachments. The book has to be *sitting in Files* and *chosen from
-inside the app*. There is no way around this: iOS has no mechanism for
-sharing a file into a web app, because Web Share Target is Android only.
+The reading UI is intentionally quiet:
 
-Any Files provider works, not just iCloud — Dropbox and Google Drive
-show up in the same picker if their apps are installed.
+- No live `running / paused` status.
+- No exact minute counter while reading.
+- The library only shows **Reading done** once the daily target is reached.
+- First reading session shows one small hint: **Tap a word to explain it. Hold a sentence to hear it.**
+- Normal lookup sheet shows the word, its easy-English explanation, optional German, and **Save word**.
+- Model checking/correction machinery and repeated-lookup nudges are hidden from the child.
+- **My words** shows the English explanation first. German is collapsed behind a disclosure.
 
-### A shared library across devices
+## Word lookup and sense handling
 
-The parent screen has **Buch über einen Link laden**. Paste a direct URL
-to an `.epub` and it downloads straight into the library, no Files app
-involved. The host has to serve the file directly and allow CORS;
-`raw.githubusercontent.com` does, iCloud and Dropbox *share links* do
-not. Useful if you ever want one list of books that appears on more than
-one device — but remember a public repo publishes whatever is in it.
+The cache stores multiple senses per word plus a memo of which sense fits which sentence.
 
----
-
-## How it works
-
-### Word lookup
-
-Two paths, chosen by cost:
-
-- **Prefetch.** When a chapter opens, everything in it worth explaining
-  is resolved in the background in batches of twelve on Haiku, so taps
-  are instant. Three filters decide what qualifies: not already known,
-  not in the commonest 3,500 English words, not a proper noun. On a real
-  children's novel this is about 3% of the running text.
-- **Live.** Anything the prefetcher missed is fetched on tap with Sonnet,
-  which takes two or three seconds.
-
-Explanations are cached across books, so the second book costs
-noticeably less than the first.
-
-### Which meaning
-
-The cache holds a list of senses per word, not one explanation per word,
-plus a memo of which sense won for which sentence. Otherwise the first
-time "point" appeared the app learned one meaning and every later
-"point" got it, right or wrong. What decides:
-
-| on file | what happens |
+| cache state | behavior |
 |---|---|
-| nothing yet | full lookup |
-| one sense, not ambiguous | served instantly, no call |
-| one sense, flagged ambiguous | served instantly, verified behind her, replaced only if wrong |
-| two or more senses | short pick call first, then the right one |
+| no sense | full contextual lookup |
+| one unambiguous sense | serve immediately, no API call |
+| one ambiguous sense | serve immediately, verify in background |
+| multiple senses | use a short model call to choose the fitting sense |
 
-The ambiguity flag costs nothing: the explanation already returns the
-word's *other* common meanings, and an empty list is the model saying
-this word only means one thing. Most words come back empty, which is why
-most taps never trigger a check.
+The model prompt is explicitly for a 10-year-old German A2/B1 learner and asks for the meaning in the current sentence, using a maximum 14-word easy-English explanation.
 
-Serving first and verifying after is deliberate. A spinner on every
-ambiguous word would tax a lot of correct answers to catch a few wrong
-ones. When a correction does happen she sees a marked "in this sentence
-it means this" rather than a silent swap.
+## Prefetch
 
-### Phrasal verbs
+When a chapter opens, likely-difficult words are explained in background batches with `gpt-5.6-luna`. The app skips common words, known words, most proper nouns, contractions, headings, and front matter. Taps usually therefore feel instant.
 
-Tapping "put" in "put up with" and being told what "put" means is worse
-than useless. A bundled list of about 900 phrasal verbs and 130 idioms
-(with inflected forms, so "putting up with" matches too) flags candidate
-spans as the chapter renders. The list only ever *proposes*: it cannot
-tell "look after the cat" from "look at the cat", so the model gets the
-sentence and the candidate and decides whether the words are working as
-a unit here or just sitting next to each other. Same call, no extra cost.
+## Saving words
 
-When the phrase is real, all its words light up in the text for a moment.
-That highlight is half the lesson.
+Saving is explicit. A lookup does not automatically become homework. Saved entries already contain FSRS-4.5 scheduling fields so spaced repetition can be added later without a migration.
 
-### Saving words
+Repeated lookups are still counted quietly and remain visible in Parent settings, but the child is no longer nudged while reading.
 
-She taps **＋ Neues Wort** on the ones she decides are new. Nothing is
-saved automatically.
+## Reading-time accounting
 
-But every lookup is counted quietly. Children over-rate their own recall,
-so the words she skips are often the half-known ones that are worth the
-most. From the third lookup of the same word the sheet says so, and the
-parent screen has a list of everything looked up repeatedly and never
-saved, with a button to add it yourself.
-
-Saved words carry FSRS-4.5 fields (stability, difficulty, due date) from
-the first moment, so the practice game can be switched on later without
-migrating anything.
-
-### Reading time
-
-Elapsed time is not reading time. The clock runs only while the app is
-in front and something has been scrolled or tapped in the last 90
-seconds, and on top of that a stretch of time can only earn as much
-credit as the text that has actually gone past allows:
+The clock only advances while the app is visible and there has been interaction within 90 seconds.
 
 ```
-earned   = words scrolled past / floor_wpm  +  time in word popups
+earned   = words scrolled past / floor_wpm + time in word popups
 credited = min(elapsed, earned)
 ```
 
-The popup term matters. Six lookups on a page is two minutes of real
-work and no scrolling at all, and a plain words-per-minute cap would
-punish exactly the behaviour this app exists to encourage. Capped at 45
-seconds per lookup so an abandoned popup cannot run the clock either.
+A lookup can contribute at most 45 seconds. The starting floor is 50 WPM. Once there are enough real sessions, the floor adapts to 40% of her observed median reading speed.
 
-`floor_wpm` is measured, not guessed. A number for a German ten-year-old
-reading English would have been a guess, and she gets faster over a year
-anyway. It sits at a permissive 50 until there are three real sessions,
-then settles at 40% of her own observed median.
+Calendar keys use the iPad's **local date**, not UTC. Word counts are accumulated across multiple reading sittings in the same day.
 
-Target is 20 minutes on 5 days a week; the ring in the reading view and
-the bars on the parent screen both track it.
+Target: 20 minutes on 5 days per week. Exact time history stays in Parent settings rather than in the reading view.
 
-### Display and read-aloud
+## Parent settings
 
-**Aa** in the reading view: font size 16–30, three line spacings, serif or
-sans, and paper / light / night backgrounds. All persisted.
+Parent settings contains:
 
-**☰** opens the table of contents so she can jump to any chapter instead
-of stepping through one at a time.
+- reading history and target progress;
+- saved words;
+- repeatedly looked-up but unsaved words;
+- API key validation;
+- model selection;
+- estimated API spend;
+- backup/restore;
+- direct-URL EPUB import for hosts that serve the file with CORS;
+- book deletion.
 
-**Long-press any paragraph to hear it read aloud.** A tap already means
-"explain this word", so listening is a press. The paragraph highlights
-while it speaks. Being read to is the single most-praised feature of
-Epic for second-language readers, and a sentence she can decode word by
-word is still a sentence she cannot hear the shape of.
+## Offline behavior and storage
 
-### Her word list
+The service worker caches the app shell. Imported books can therefore be read offline; word lookups still require network access.
 
-The 📓 on the library screen. Every word she saved, with the German, the
-simple English, and the sentence from the book it came from, each with a
-speaker button. Without it the ＋ button was a request with no reply.
+Safari/iPadOS may clear site storage in some circumstances. Parent settings includes JSON export/import for vocabulary and reading history. EPUBs can simply be imported again.
 
-### Parent screen
+## Build and deploy
 
-The ⚙︎ in the top right. Reading time by day, the 5×20 target, the saved
-word list, the looked-up-but-not-saved list, estimated spend for the last
-30 days, the API key field, and export/import.
+App behavior lives in `src/app-source.jsx`. Build it into the root `app.js` with:
 
-No streaks. A streak converts reading into a number she is servicing,
-which is the opposite of the point. Say the word if you disagree and
-I'll add one.
+```sh
+cd src
+npm install
+npm run build
+```
 
----
+`config.js` does not require rebuilding.
 
-## Cost
+Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving the previous cached bundle.
 
-Measured on *The Great Hamster Massacre* (20,172 words, 20 chapters):
-**606 words and 137 expressions worth explaining.** On `gpt-5.6-luna`
-at $0.20/$1.20 per million tokens that is **about $0.10 to pre-explain
-the whole book.**
+Current service-worker cache for this release: `rr-v5`.
 
-At 20 minutes a day, five days a week, she reads roughly one novel a
-month, so budget well under **$1/month**, falling further as the shared
-explanation cache fills across books.
+## OpenAI models and cost table
 
-`DAILY_CALL_CAP` in `config.js` is a hard ceiling on requests per day
-from the device. A runaway loop stops there rather than at your balance.
+`config.js` currently uses these text-token prices per 1M tokens (checked 2026-09-06):
 
-### Switching provider
+- GPT-5.6 Luna: $0.20 input / $1.20 output
+- GPT-5.6 Terra: $2 input / $12 output
+- GPT-5.6 Sol: $4 input / $20 output
 
-`PROVIDER` in `config.js` takes `"openai"` or `"anthropic"`. Both answer
-cross-origin browser requests, which is what keeps this app serverless:
-OpenAI echoes the page origin back in `access-control-allow-origin` and
-accepts an `Authorization` header, Anthropic does the same behind its
-`anthropic-dangerous-direct-browser-access` header. Both verified by
-preflight, not assumed. Everything above the adapter — sense resolution,
-phrase handling, prefetch triage — is provider-independent.
-
-Newer OpenAI models renamed `max_tokens` to `max_completion_tokens`, and
-reasoning models bill hidden thinking tokens against that same budget. The
-app does not try to guess which family a model belongs to: if the API
-rejects a parameter it drops that parameter for good and retries once, so
-a wrong guess costs one rejected call ever rather than one per lookup.
-
----
-
-## Editing it later
-
-- **`config.js`, `manifest.json`, icons** — edit, commit, push. Live
-  immediately, no rebuild.
-- **App behaviour** — everything is in `src/app-source.jsx`. It has to be
-  rebuilt into `app.js`:
-
-  ```
-  cd src && npm install
-  npx esbuild entry.jsx --bundle --minify --outfile=../app.js \
-    --loader:.jsx=jsx --loader:.json=json \
-    --define:process.env.NODE_ENV='"production"'
-  ```
-
-  Or describe the change and I'll rebuild it.
-
----
-
-## Storage, and the one real risk
-
-Books live in IndexedDB, everything else in `localStorage` under `rr_`.
-Nothing leaves the iPad. A service worker (`sw.js`) caches the app shell,
-so reading works with no connection at all; only word lookups need one.
-Bump `VERSION` in `sw.js` on any deploy that changes `index.html` or
-`app.js`, or the old version keeps being served.
-
-Safari clears script-writable storage more aggressively than other
-browsers, and home-screen web apps are treated differently from tabs in
-ways I could not verify from here. The app asks for persistent storage
-on first run, but support for that request is uneven. **Books can be
-re-imported; the word list and reading history cannot.** Export from the
-parent screen every few weeks and drop the file in iCloud.
-
----
-
-## What was tested, and what wasn't
-
-Tested against your actual EPUB in a headless DOM: metadata, spine, NCX
-table of contents, cover extraction, all 20 chapters rendered, 20,316
-tap targets tokenised, 393 phrasal-verb spans marked, contractions kept
-whole, images rewritten to blob URLs, links neutralised, prefetch triage.
-The built bundle mounts and renders.
-
-Bugs found by testing rather than by reading. All were silent — the app
-kept working and did the wrong thing:
-
-**The anti-idling cap stopped working after the first chapter of a book.**
-The credit budget was seeded from every chapter she had ever read in that
-book, taken from stored progress. Opening chapter five on day two handed
-the clock four chapters of credit before she read a word, so `earned` was
-instantly over an hour and `min(elapsed, earned)` was just `elapsed`. The
-feature you specifically asked for was doing nothing from day two onward.
-It now banks words read in the current sitting only. Verified: with 26,400
-words of prior progress on file, seven seconds of sitting still credits
-zero.
-
-**Credited and elapsed time were the same number.** Both got the credited
-delta, so the measured reading speed was a function of the cap that the
-speed itself sets, and the parent screen could never show the gap it
-exists to show.
-
-**A `visibilitychange` listener was added on every chapter change and
-never removed.**
-
-**The long press was cancelled by any pointer movement at all,** so on a
-real touchscreen it would almost never fire. Now it tolerates 10px.
-
-**iOS refuses speech synthesis not started from a user gesture,** and the
-long press speaks from a timer, which does not count. Her first listen
-would have silently done nothing. Now primed on first touch.
-
-**A book with no recognisable chapter names opened on `spine[-1]`,** blank,
-because `findIndex` returns `-1` and `-1 || 0` is `-1`.
-
-**Turning the page during a prefetch meant the new chapter never got one,**
-so every tap in it fell back to a slow live lookup.
-
-**The word cache had no size limit,** because the trimming lived in a
-function nothing called any more, and a failed write was silent. It now
-trims by age and, on a quota error, drops the oldest half and retries.
-
-Earlier, and equally silent:
-
-React re-applies `dangerouslySetInnerHTML` on every render, and the
-reading clock re-renders once a second. All 31 chapter nodes were being
-replaced every second, which detached the span list used to measure
-scroll progress. `getBoundingClientRect` on a detached node returns
-zeros, so the measurement pinned itself to the end of the chapter and
-the anti-idling cap stopped capping. The chapter is now written into the
-DOM once per chapter and React is kept out of that subtree.
-
-That EPUB writes `<a id="page_1"/>` self-closing. HTML parsing ignores
-self-closing syntax on non-void elements, so those anchors stayed open
-and the parser's adoption-agency algorithm pulled the following
-paragraphs inside them. The chapter still rendered; it had silently lost
-a third of its paragraphs. Fixed by closing such tags in the source
-string before parsing. Worth knowing about because it will be true of
-most published EPUB 2 fiction, and it fails quietly.
-
-Not tested from here, because it needs the real thing: an actual iPad,
-an actual API key, Safari's storage behaviour, iOS speech synthesis
-voices, and the scroll-position maths against real touch scrolling. The
-first real session is the test. Tell me what breaks.
+The values are only for the on-device spend estimate; actual billing remains whatever OpenAI charges the project.
