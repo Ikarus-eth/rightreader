@@ -1,0 +1,57 @@
+name: Build reader menu and IPA
+
+on:
+  push:
+    branches: [fix/exact-icon-menu-ipa]
+    paths:
+      - tools/apply_menu_ipa.py
+      - icons/icon.svg
+      - .github/workflows/menu-ipa.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/exact-icon-menu-ipa
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply source patch
+        run: python tools/apply_menu_ipa.py
+      - name: Rasterize exact artwork icon
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq librsvg2-bin
+          rsvg-convert -w 512 -h 512 icons/icon.svg -o icons/icon-512.png
+          cp icons/icon-512.png icons/icon-maskable-512.png
+          rsvg-convert -w 192 -h 192 icons/icon.svg -o icons/icon-192.png
+          rsvg-convert -w 180 -h 180 icons/icon.svg -o icons/apple-touch-icon.png
+      - name: Build production bundle
+        working-directory: src
+        run: |
+          npm install
+          npm run build
+      - name: Verify release
+        run: |
+          grep -q 'readerMenuOpen' src/app-source.jsx
+          grep -q 'Tap the top' src/app-source.jsx
+          grep -q 'ipa:String(j.ipa' src/app-source.jsx
+          grep -q 'className="ipa"' src/app-source.jsx
+          grep -q 'rr-v7' sw.js
+          test -s app.js
+          test -s icons/icon-512.png
+          test -s icons/icon-192.png
+          test -s icons/apple-touch-icon.png
+      - name: Commit generated release
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app-source.jsx app.js README.md sw.js icons/icon.svg icons/icon-512.png icons/icon-maskable-512.png icons/icon-192.png icons/apple-touch-icon.png
+          git commit -m 'Use exact icon artwork, hidden reader menu, and IPA' || exit 0
+          git push origin HEAD:fix/exact-icon-menu-ipa
