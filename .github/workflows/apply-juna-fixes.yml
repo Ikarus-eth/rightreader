@@ -36,7 +36,13 @@ jobs:
           new2='        return\n'
           if old2 not in s:
               raise SystemExit('could not patch optional replacement helper')
-          p.write_text(s.replace(old2,new2,1))
+          s=s.replace(old2,new2,1)
+          marker='# Guard against the specific child-facing German we intended to remove.\n'
+          cleanup='''# Final legacy label cleanup before the English-UI guard.\nfor _old,_new in {\n    "Buch hinzufügen":"Add a book", "Meine Wörter":"My words", "Kapitel ":"Chapter ",\n    "Zurück":"Back", "Weiter →":"Next →", "Auf Deutsch":"German", "Neues Wort":"Save word",\n    "Darstellung":"Text", "Schriftgröße":"Text size", "Zeilenabstand":"Line spacing",\n    "Eltern-Bereich":"Parent", "Speichern & testen":"Save & test", "Lesezeit":"Reading",\n    "Noch keine Bücher":"No books yet", "läuft":"running", "pausiert":"paused",\n    "lang drücken = vorlesen":"hold = listen"\n}.items():\n    s=s.replace(_old,_new)\n\n'''
+          if marker not in s:
+              raise SystemExit('could not find UI guard marker')
+          s=s.replace(marker,cleanup+marker,1)
+          p.write_text(s)
           PY
           python tools/apply_juna_fixes.py
       - name: Install build dependencies
