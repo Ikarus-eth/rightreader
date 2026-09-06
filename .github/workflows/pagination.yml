@@ -1,0 +1,44 @@
+name: Build pagination
+
+on:
+  push:
+    branches: [design/storybook-theme]
+    paths:
+      - tools/apply_pagination.py
+      - .github/workflows/pagination.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build-pagination:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: design/storybook-theme
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply pagination patch
+        run: python tools/apply_pagination.py
+      - name: Build production bundle
+        working-directory: src
+        run: |
+          npm install
+          npm run build
+      - name: Verify pagination
+        run: |
+          grep -q 'function turnPage' src/app-source.jsx
+          grep -q 'reader-shell' src/app-source.jsx
+          grep -q 'Tap the sides' src/app-source.jsx
+          grep -q 'page-indicator' src/app-source.jsx
+          test -s app.js
+      - name: Commit pagination
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app-source.jsx app.js
+          git commit -m 'Use Kindle-style tap pagination in reader' || exit 0
+          git push origin HEAD:design/storybook-theme
