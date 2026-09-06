@@ -5,6 +5,7 @@ on:
     branches: [fix/juna-first-run]
     paths:
       - tools/apply_juna_fixes.py
+      - tools/run-juna-fixes.txt
 
 permissions:
   contents: write
