@@ -50,6 +50,79 @@ s=s.replace('''Cache entries created before IPA support are still useful for mea
        but they cannot satisfy the pronunciation UI.''','''Older cache entries are still useful for meaning,
        but they cannot satisfy the kid-friendly pronunciation UI.''')
 
+# Treat normal grammatical forms as one word for seen/saved underlining.
+# The model already supplies a lemma, so this is intentionally a small inflector,
+# not a dictionary: massacre -> massacres/massacred/massacring, like -> likes/liked/liking.
+once('''function normTok(w){ return w.toLowerCase().replace(/[’‘]/g,"'"); }
+
+/* Longest match wins, so "put up with" beats "put up". */''',
+'''function normTok(w){ return w.toLowerCase().replace(/[’‘]/g,"'"); }
+
+function wordFamily(word){
+  const w=normTok(String(word||"").trim());
+  const out=new Set();
+  if(!w) return out;
+  out.add(w);
+  if(/\\s/.test(w)) return out; // expressions stay exact
+
+  const add=x=>{ if(x&&x.length>1) out.add(x); };
+  if(/[^aeiou]y$/.test(w)){
+    const stem=w.slice(0,-1);
+    add(stem+"ies"); add(stem+"ied"); add(w+"ing");
+  }else if(w.endsWith("e")&&!w.endsWith("ee")){
+    add(w+"s"); add(w+"d"); add(w.slice(0,-1)+"ing");
+  }else{
+    add(w+(/(?:s|x|z|ch|sh)$/.test(w)?"es":"s"));
+    add(w+"ed"); add(w+"ing");
+    /* stop -> stopped/stopping, plan -> planned/planning */
+    if(w.length>=3&&/[^aeiou][aeiou][^aeiouwxy]$/.test(w.slice(-3))){
+      add(w+w.slice(-1)+"ed"); add(w+w.slice(-1)+"ing");
+    }
+  }
+  return out;
+}
+function addWordFamily(set,word){ for(const f of wordFamily(word)) set.add(f); }
+
+/* Longest match wins, so "put up with" beats "put up". */''','word-family helper')
+
+once('''  const knownSet=useMemo(()=>{
+    const s=new Set();
+    for(const e of Object.values(vocab)){
+      if(e.w) s.add(normTok(e.w));
+      if(e.span) s.add(normTok(e.span));
+      for(const f of e.forms||[]) s.add(normTok(f));
+    }
+    return s;
+  },[vocab]);
+  const seenSet=useMemo(()=>new Set(Object.keys(seen)),[seen]);''',
+'''  const knownSet=useMemo(()=>{
+    const s=new Set();
+    for(const e of Object.values(vocab)){
+      if(e.w) addWordFamily(s,e.w);
+      if(e.span) addWordFamily(s,e.span);
+      for(const f of e.forms||[]) addWordFamily(s,f);
+    }
+    return s;
+  },[vocab]);
+  const seenSet=useMemo(()=>{
+    const s=new Set();
+    for(const k of Object.keys(seen)){
+      addWordFamily(s,k);
+      const entry=normalizeEntry(wcache[k]);
+      for(const sense of (entry&&entry.senses)||[]){
+        addWordFamily(s,sense.lemma||"");
+        addWordFamily(s,sense.span||"");
+      }
+    }
+    return s;
+  },[seen,wcache]);''','known/seen word families')
+
+# Give the page noticeably more breathing room at the bottom, including the iPad safe area.
+once('''.reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 38px;font-size:var(--rsize);line-height:var(--rlead);''',
+'''.reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 max(82px,calc(env(safe-area-inset-bottom) + 66px));font-size:var(--rsize);line-height:var(--rlead);''','reader bottom gap')
+once('''.page-indicator{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);z-index:4;''',
+'''.page-indicator{position:absolute;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:4;''','page indicator bottom gap')
+
 # Full portable backup: unlike the old JSON backup this includes the API key,
 # every rr_ localStorage value, and the actual EPUB bytes from IndexedDB.
 old='''    function exportAll(){
@@ -173,7 +246,7 @@ if 'full portable backup' not in t.lower():
 r.write_text(t)
 
 out=p.read_text()
-for needle in ['MASS-uh-kuh','Create full backup','bufferToBase64','missingPron','className="pron"']:
+for needle in ['MASS-uh-kuh','Create full backup','bufferToBase64','missingPron','className="pron"','function wordFamily','addWordFamily(s,sense.lemma','max(82px']:
     if needle not in out: raise SystemExit('missing '+needle)
 if 'rr-v8' not in sw.read_text(): raise SystemExit('sw not bumped')
 print('source patch complete')
