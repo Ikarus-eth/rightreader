@@ -1,0 +1,36 @@
+name: One-shot automatic backup build
+
+on:
+  push:
+    branches: [deploy/final-fixes-2]
+    paths:
+      - tools/run-auto-backup-build.txt
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: deploy/final-fixes-2
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply automatic backup patch
+        run: python tools/add_auto_backup.py
+      - name: Build production bundle
+        working-directory: src
+        run: |
+          npm install
+          npm run build
+      - name: Commit built release
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app-source.jsx app.js README.md sw.js
+          git commit -m 'Add automatic full local safety backup' || exit 0
+          git push origin HEAD:deploy/final-fixes-2
