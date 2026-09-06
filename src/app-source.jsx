@@ -666,7 +666,7 @@ async function rawCall(model,prompt,maxTokens,timeoutMs,key){
     let msg=txt.slice(0,300);
     try{ msg=(JSON.parse(txt).error||{}).message||msg; }catch(e){}
     if(res.status===401||res.status===403) throw new NeedsKey(msg);
-    if(res.status===429) throw new Error("Zu viele Anfragen \u2014 kurz warten.");
+    if(res.status===429) throw new Error("Too many requests — wait a moment.");
     /* A 400 naming a parameter means this model does not take it. Drop it
        for good and try once more instead of failing the lookup. */
     if(res.status===400){
@@ -2188,7 +2188,7 @@ export default function App(){
                     setMsg("Connection failed. The new key was not saved: "+(e&&e.message||""));
                   }
                   setTesting(false);
-                }}>{testing?"Connecting …":"Speichern & testen"}</button>
+                }}>{testing?"Connecting …":"Save & test"}</button>
               <div className="hint">
                 Stored only on this iPad, never in the repository. Use a dedicated key for this app,
                 keep the prepaid balance small, and leave auto-recharge off.
@@ -2217,7 +2217,7 @@ export default function App(){
               ))}
               <button className="btn btn-plain" style={{width:"100%",marginTop:12}}
                 onClick={()=>{ lsSet("models",mdl); setMsg("Models saved."); }}>
-                Modelle speichern
+                Save models
               </button>
               {!modelList.length&&<div className="hint">
                 Tap “Save & test” above to load the model list available to this API key.
