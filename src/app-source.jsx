@@ -892,19 +892,19 @@ function senseKey(lemma,sense){
 const CSS=`
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --paper:#FBF6EC; --paper2:#F3EADA; --ink:#241F1A; --ink2:#5B5148;
-  --accent:#B4551F; --accent-soft:#F4E2D3; --line:#E2D5C1;
-  --good:#3D7A4E; --warn:#B4551F;
+  --paper:#FFF8E3; --paper2:#F6EBCB; --ink:#20392D; --ink2:#6C624D;
+  --accent:#E39A2E; --accent-soft:#FBE8B7; --line:#E7D5AA;
+  --good:#60794E; --warn:#B86E22;
   --rsize:20px; --rlead:1.68;
 }
 html[data-theme="light"]{
-  --paper:#FFFFFF; --paper2:#F2F2F0; --ink:#1B1B19; --ink2:#5E5E5A;
-  --accent:#A8481A; --accent-soft:#F6E4D8; --line:#E4E4E0;
+  --paper:#FFFDF4; --paper2:#F6EFD8; --ink:#20392D; --ink2:#6C624D;
+  --accent:#E39A2E; --accent-soft:#FBE8B7; --line:#E8DAB9;
 }
 html[data-theme="night"]{
-  --paper:#15161A; --paper2:#22242A; --ink:#E4E2DC; --ink2:#9A968D;
-  --accent:#E2884A; --accent-soft:#38291D; --line:#2E3138;
-  --good:#7FB88C;
+  --paper:#14251E; --paper2:#1D342A; --ink:#F8EFCF; --ink2:#C6B993;
+  --accent:#F0B64A; --accent-soft:#3D472B; --line:#355344;
+  --good:#A8C980;
 }
 html[data-theme="night"] .card{background:#1C1E23}
 html[data-theme="night"] input{background:#1C1E23;color:var(--ink)}
@@ -913,47 +913,56 @@ html[data-theme="night"] .w.known{background:linear-gradient(transparent 68%,#2C
 html[data-theme="night"] .w.seen{background:linear-gradient(transparent 72%,#43371F 72%)}
 html,body,#root{height:100%;margin:0}
 body{
-  background:var(--paper); color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:
+    radial-gradient(circle at 12% 8%,rgba(255,237,161,.38),transparent 26%),
+    radial-gradient(circle at 88% 16%,rgba(228,154,46,.10),transparent 26%),
+    linear-gradient(180deg,var(--paper),#FFF3D4 130%);
+  color:var(--ink);
+  font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   -webkit-font-smoothing:antialiased;
   overscroll-behavior-y:none;
 }
 .wrap{max-width:760px;margin:0 auto;padding:0 18px}
 .serif{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif}
+.brand-title{font-family:"Marker Felt","Chalkboard SE","Bradley Hand",sans-serif;font-size:24px!important;font-weight:800;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+.brand-icon{width:38px;height:38px;border-radius:11px;object-fit:cover;box-shadow:0 3px 9px rgba(61,69,40,.18)}
+.empty-mascot{width:116px;height:116px;border-radius:28px;display:block;margin:0 auto 16px;box-shadow:0 8px 24px rgba(75,62,33,.16)}
 
-.topbar{position:sticky;top:0;z-index:20;background:rgba(251,246,236,.94);
-  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(255,248,227,.94);
+  backdrop-filter:saturate(135%) blur(14px);border-bottom:1px solid rgba(211,185,126,.55);
+  box-shadow:0 3px 14px rgba(81,68,35,.06)}
 .topbar-in{display:flex;align-items:center;gap:10px;padding:10px 0;min-height:52px}
 .tb-title{flex:1;min-width:0;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.icon-btn{border:none;background:transparent;font-size:20px;line-height:1;padding:9px 10px;
-  border-radius:12px;cursor:pointer;color:var(--ink)}
+.icon-btn{border:1px solid transparent;background:transparent;font-size:20px;line-height:1;padding:9px 10px;
+  border-radius:14px;cursor:pointer;color:var(--ink)}
 .icon-btn:active{background:var(--paper2)}
 
-.btn{border:none;border-radius:14px;padding:13px 18px;font-size:16px;font-weight:650;
-  cursor:pointer;font-family:inherit;transition:transform .06s}
+.btn{border:none;border-radius:18px;padding:13px 18px;font-size:16px;font-weight:750;
+  cursor:pointer;font-family:inherit;transition:transform .06s,box-shadow .12s}
 .btn:active{transform:scale(.98)}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-ghost{background:var(--accent-soft);color:var(--accent)}
+.btn-primary{background:linear-gradient(180deg,#F2B84B,var(--accent));color:#20392D;box-shadow:0 5px 12px rgba(198,128,27,.22)}
+.btn-ghost{background:#FFF7DF;color:#5A513D;border:1px solid var(--line)}
 .btn-plain{background:var(--paper2);color:var(--ink2)}
 .btn[disabled]{opacity:.5}
 
 /* ---- library ---- */
 .shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:18px;padding:18px 0 40px}
 .bookcard{cursor:pointer;position:relative}
-.bookcover{width:100%;aspect-ratio:2/3;border-radius:8px;object-fit:cover;
-  background:var(--paper2);box-shadow:0 6px 18px rgba(60,40,20,.18);display:flex;
+.bookcover{width:100%;aspect-ratio:2/3;border-radius:16px;object-fit:cover;
+  background:var(--paper2);box-shadow:0 8px 20px rgba(70,59,31,.18);display:flex;
   align-items:center;justify-content:center;text-align:center;padding:12px;
   font-weight:700;font-size:14px;color:var(--ink2);overflow:hidden}
 .bookmeta{margin-top:8px;font-size:13px;font-weight:650;line-height:1.3}
 .bookauth{font-size:12px;color:var(--ink2);margin-top:2px}
 .progbar{height:4px;background:var(--line);border-radius:3px;margin-top:6px;overflow:hidden}
 .progbar i{display:block;height:100%;background:var(--accent)}
-.addcard{border:2px dashed var(--line);border-radius:8px;aspect-ratio:2/3;display:flex;
+.addcard{border:2px dashed #D6B66D;border-radius:16px;aspect-ratio:2/3;display:flex;
+  background:rgba(255,250,233,.7);
   flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--ink2);
   font-weight:650;font-size:14px;cursor:pointer}
 
 /* ---- reading ---- */
-.reader{padding:6px 0 132px;font-size:var(--rsize);line-height:var(--rlead)}
+.reader{padding:18px 4px 132px;font-size:var(--rsize);line-height:var(--rlead);letter-spacing:.003em}
 .reader.sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 .reader p.speaking{background:var(--accent-soft);border-radius:8px;
   box-shadow:0 0 0 6px var(--accent-soft);transition:background .2s}
@@ -964,8 +973,8 @@ body{
   padding:12px 16px;border-radius:0 10px 10px 0;margin:1.2em 0}
 .w{cursor:pointer;border-radius:4px;padding:1px 0;transition:background .12s}
 .w:active{background:var(--accent-soft)}
-.w.known{background:linear-gradient(transparent 68%,#CFE6D3 68%)}
-.w.seen{background:linear-gradient(transparent 72%,#EFE0C6 72%)}
+.w.known{background:linear-gradient(transparent 70%,#C9DBA9 70%)}
+.w.seen{background:linear-gradient(transparent 70%,#F4CC73 70%)}
 .w.lit{background:var(--accent-soft);box-shadow:0 0 0 2px var(--accent-soft)}
 
 .chapnav{display:flex;gap:10px;align-items:center;justify-content:space-between;
@@ -984,18 +993,18 @@ body{
 .scrim{position:fixed;inset:0;z-index:60;background:rgba(30,22,14,.34);
   display:flex;align-items:flex-end;justify-content:center}
 @media(min-width:640px){.scrim{align-items:center}}
-.sheet{background:var(--paper);width:100%;max-width:560px;border-radius:22px 22px 0 0;
-  padding:20px 20px max(20px,env(safe-area-inset-bottom));max-height:86vh;overflow:auto;
-  box-shadow:0 -8px 40px rgba(40,25,10,.25);animation:up .2s ease-out}
+.sheet{background:linear-gradient(180deg,#FFFCF0,var(--paper));width:100%;max-width:560px;border-radius:28px 28px 0 0;
+  padding:22px 22px max(22px,env(safe-area-inset-bottom));max-height:86vh;overflow:auto;
+  border:1px solid var(--line);box-shadow:0 -10px 44px rgba(54,48,27,.22);animation:up .2s ease-out}
 @media(min-width:640px){.sheet{border-radius:22px}}
 @keyframes up{from{transform:translateY(18px);opacity:.4}to{transform:none;opacity:1}}
 .sheet-head{display:flex;align-items:flex-start;gap:8px}
-.headword{font-size:30px;font-weight:800;flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.15}
+.headword{font-size:31px;font-weight:800;flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.15;color:#20392D}
 .ctx{color:var(--ink2);font-size:14px;font-style:italic;margin:10px 0 2px;line-height:1.5}
 .ctx b{background:var(--accent-soft);font-style:normal;font-weight:700;border-radius:4px;padding:0 3px}
 .expl{font-size:19px;line-height:1.6;margin-top:14px}
 .expl .w{cursor:pointer;border-bottom:1px dotted var(--line)}
-.de-box{background:var(--paper2);border-radius:14px;padding:13px 15px;margin-top:14px}
+.de-box{background:#F8EDCF;border:1px solid var(--line);border-radius:18px;padding:13px 15px;margin-top:14px}
 .chip{display:inline-block;background:var(--accent-soft);color:var(--accent);
   border-radius:999px;padding:4px 11px;font-size:12px;font-weight:750;margin-top:10px}
 .nudge{background:#FBEFD6;border-radius:12px;padding:10px 13px;margin-top:12px;
@@ -1008,7 +1017,7 @@ body{
 @keyframes sp{to{transform:rotate(360deg)}}
 
 /* ---- parent ---- */
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card{background:rgba(255,252,240,.92);border:1px solid var(--line);border-radius:20px;padding:17px;margin-bottom:14px;box-shadow:0 5px 16px rgba(78,67,37,.06)}
 .card h3{margin:0 0 10px;font-size:14px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2)}
 .bigstat{font-size:34px;font-weight:800;line-height:1}
 .bars{display:flex;align-items:flex-end;gap:5px;height:76px;margin-top:12px}
@@ -1041,7 +1050,7 @@ input[type=text],input[type=password],input[type=number]{
 .setlab{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);
   font-weight:700;margin-top:18px}
 .setlab:first-child{margin-top:0}
-.wcard{background:var(--paper2);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.wcard{background:rgba(255,252,240,.92);border:1px solid var(--line);border-radius:20px;padding:15px 17px;margin-bottom:11px;box-shadow:0 4px 12px rgba(78,67,37,.06)}
 .wcard .h{display:flex;align-items:center;gap:8px}
 .wcard .hw{font-size:21px;font-weight:800;flex:1;min-width:0;overflow-wrap:anywhere}
 .wcard .de{color:var(--accent);font-weight:700;font-size:15px;margin-top:2px}
@@ -1050,10 +1059,10 @@ input[type=text],input[type=password],input[type=number]{
 .tabs{display:flex;gap:6px;margin:14px 0}
 .tabs button{flex:1;border:none;background:var(--paper2);color:var(--ink2);padding:10px;
   border-radius:11px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
-.tabs button.on{background:var(--accent);color:#fff}
+.tabs button.on{background:var(--accent);color:#20392D;box-shadow:0 3px 8px rgba(198,128,27,.18)}
 .empty{text-align:center;color:var(--ink2);padding:44px 20px;line-height:1.6}
-.reader-tip{display:flex;align-items:center;gap:14px;background:var(--accent-soft);color:var(--ink);
-  border-radius:14px;padding:12px 14px;margin:14px 0 8px;font-size:14px;line-height:1.45}
+.reader-tip{display:flex;align-items:center;gap:14px;background:#FFF0C7;color:var(--ink);
+  border:1px solid #E7CE91;border-radius:18px;padding:12px 14px;margin:14px 0 8px;font-size:14px;line-height:1.45}
 .reader-tip>div{flex:1}.reader-tip .btn{padding:8px 11px;font-size:13px;white-space:nowrap}
 .translation{margin-top:9px}.translation summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:13px}
 .translation .de{margin-top:6px}
@@ -1261,7 +1270,7 @@ export default function App(){
     r.style.setProperty("--rsize",prefs.size+"px");
     r.style.setProperty("--rlead",String(prefs.lead));
     const meta=document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.setAttribute("content",prefs.theme==="night"?"#15161A":prefs.theme==="light"?"#FFFFFF":"#FBF6EC");
+    if(meta) meta.setAttribute("content",prefs.theme==="night"?"#14251E":prefs.theme==="light"?"#FFFDF4":"#FFF8E3");
     lsSet("prefs",prefs);
   },[prefs]);
 
@@ -1943,7 +1952,7 @@ export default function App(){
     return (
       <>
         <div className="topbar"><div className="wrap topbar-in">
-          <div className="tb-title serif" style={{fontSize:19}}>Right Reader</div>
+          <div className="tb-title brand-title"><img className="brand-icon" src="./icons/icon-192.png" alt=""/>Right Reader</div>
           {hit&&<span className="pill on">✓ Reading done</span>}
           <button className="icon-btn" aria-label="My words" onClick={()=>setView("words")}>
             {"📓"}<span style={{fontSize:11,fontWeight:800,verticalAlign:"super"}}>{Object.keys(vocab).length||""}</span>
@@ -1977,7 +1986,8 @@ export default function App(){
             </div>
           ):(
             <div className="empty" style={{paddingTop:70}}>
-              <div className="serif" style={{fontSize:25,fontWeight:800,color:"var(--ink)",marginBottom:12}}>
+              <img className="empty-mascot" src="./icons/icon-192.png" alt=""/>
+              <div className="brand-title" style={{justifyContent:"center",fontSize:27,marginBottom:8}}>
                 Choose a book to start
               </div>
               <button className="btn btn-primary" style={{width:"100%",maxWidth:360,fontSize:18,padding:"16px 20px"}}
