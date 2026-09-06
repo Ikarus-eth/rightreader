@@ -22,7 +22,18 @@ jobs:
         with:
           node-version: '22'
       - name: Apply source patch
-        run: python tools/apply_juna_fixes.py
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('tools/apply_juna_fixes.py')
+          s=p.read_text()
+          old='    s2, n = re.subn(pattern, repl, s, count=1, flags=re.S)\n'
+          new='    rx = re.compile(pattern, re.S)\n    s2, n = rx.subn(lambda _m: repl, s, count=1)\n'
+          if old not in s:
+              raise SystemExit('could not patch sub_once helper')
+          p.write_text(s.replace(old,new,1))
+          PY
+          python tools/apply_juna_fixes.py
       - name: Install build dependencies
         working-directory: src
         run: npm install
