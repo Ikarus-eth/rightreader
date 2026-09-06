@@ -54,14 +54,32 @@ never in this repository.
 
 ### 4. Add books
 
-On your Mac, put DRM-free `.epub` files in an iCloud Drive folder. They
-will appear in **Files** on her iPad. In the app: **+ Buch hinzufügen**
-→ Files → pick the file. Once imported the book is stored on the device
-and she never picks it again.
+On your Mac, make a folder inside **iCloud Drive** called `Junas Bücher`
+and put DRM-free `.epub` files in it. It appears in **Files** on her iPad
+within a minute or two.
 
-There is no way to share a file *into* a web app on iOS — Web Share
-Target is Android only — so importing through the picker is the whole
-mechanism. It is two taps, once per book.
+Then, on the iPad, **inside Right Reader**: **+ Buch hinzufügen** →
+*Datei auswählen* → iCloud Drive → Junas Bücher → tap the book. Once
+imported it lives on the device and is never picked again.
+
+**Do not tap the .epub in the Files app.** iOS hands `.epub` to Apple
+Books, Books copies it into a container no other app can read, and the
+file is then invisible to this one. Same for AirDrop, and for Mail
+attachments. The book has to be *sitting in Files* and *chosen from
+inside the app*. There is no way around this: iOS has no mechanism for
+sharing a file into a web app, because Web Share Target is Android only.
+
+Any Files provider works, not just iCloud — Dropbox and Google Drive
+show up in the same picker if their apps are installed.
+
+### A shared library across devices
+
+The parent screen has **Buch über einen Link laden**. Paste a direct URL
+to an `.epub` and it downloads straight into the library, no Files app
+involved. The host has to serve the file directly and allow CORS;
+`raw.githubusercontent.com` does, iCloud and Dropbox *share links* do
+not. Useful if you ever want one list of books that appears on more than
+one device — but remember a public repo publishes whatever is in it.
 
 ---
 

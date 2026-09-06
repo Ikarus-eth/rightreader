@@ -282,16 +282,20 @@ async function parseEpub(buf){
   return {zip,files,manifest,spine,toc,title,author,language,coverHref,opfDir};
 }
 
+/* The cover used to be read with FileReader, which can sit there firing
+   neither onload nor onerror. The import awaits it, so a stall meant the
+   spinner stayed up forever and the book never appeared in the library -
+   with no error to explain why. JSZip can emit base64 directly, so there
+   is no FileReader in the path at all now, and a missing cover is never
+   a reason to fail an import. */
 async function readCover(parsed){
   if(!parsed.coverHref||!parsed.files[parsed.coverHref]) return null;
   try{
-    const blob=await parsed.files[parsed.coverHref].async("blob");
-    return await new Promise(res=>{
-      const fr=new FileReader();
-      fr.onload=()=>res(fr.result);
-      fr.onerror=()=>res(null);
-      fr.readAsDataURL(blob);
-    });
+    const b64=await parsed.files[parsed.coverHref].async("base64");
+    if(!b64||b64.length>3000000) return null;
+    const item=Object.values(parsed.manifest||{}).find(m=>m.href===parsed.coverHref);
+    const type=(item&&item.type)||"image/jpeg";
+    return "data:"+type+";base64,"+b64;
   }catch(e){ return null; }
 }
 
@@ -1256,6 +1260,7 @@ export default function App(){
   const [modelList,setModelList]=useState([]);
   const [mdl,setMdl]=useState(()=>models());
   const [testing,setTesting]=useState(false);
+  const [bookUrl,setBookUrl]=useState("");
   const [prefs,setPrefs]=useState(()=>lsGet("prefs",{size:20,lead:1.68,theme:"paper",serif:true}));
   const [sheet,setSheet]=useState(null);   // "toc" | "type" | null
 
@@ -1326,24 +1331,50 @@ export default function App(){
   },[]);
   useEffect(()=>{ refreshBooks(); },[refreshBooks]);
 
+  async function addBook(buf,label){
+    /* Never leave the spinner up with nothing behind it: whatever goes
+       wrong, this either adds a book or says why. */
+    const withLimit=(p,ms)=>Promise.race([p,
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error("hat zu lange gedauert")),ms))]);
+    const parsed=await withLimit(parseEpub(buf),60000);
+    const cover=await withLimit(readCover(parsed),15000).catch(()=>null);
+    const id="b_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7);
+    await dbPut({id,file:buf,title:parsed.title||label,author:parsed.author,
+      language:parsed.language,cover,nChapters:parsed.spine.length,
+      added:Date.now(),opened:0,words:0});
+    await refreshBooks();
+  }
+
   async function importFiles(list){
     for(const file of Array.from(list||[])){
       setBusy("Öffne „"+file.name+"“ …");
       try{
-        const buf=await file.arrayBuffer();
-        const parsed=await parseEpub(buf);
-        const cover=await readCover(parsed);
-        const id="b_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7);
-        await dbPut({id,file:buf,title:parsed.title,author:parsed.author,
-          language:parsed.language,cover,nChapters:parsed.spine.length,
-          added:Date.now(),opened:0,words:0});
-        await refreshBooks();
+        if(!/\.epub$/i.test(file.name||""))
+          throw new Error("das ist keine .epub-Datei");
+        await addBook(await file.arrayBuffer(),file.name);
       }catch(e){
         setFatal("„"+file.name+"“: "+(e&&e.message||"konnte nicht gelesen werden"));
       }
     }
     setBusy("");
     if(fileRef.current) fileRef.current.value="";
+  }
+
+  async function importUrl(url){
+    const clean=String(url||"").trim();
+    if(!/^https:\/\//i.test(clean)){ setFatal("Der Link muss mit https:// anfangen."); return; }
+    setBusy("Lade Buch …");
+    try{
+      const res=await fetch(clean);
+      if(!res.ok) throw new Error("HTTP "+res.status);
+      await addBook(await res.arrayBuffer(),clean.split("/").pop());
+    }catch(e){
+      /* A cross-origin block and a dead link look identical from here, so
+         say both rather than guessing which one it was. */
+      setFatal("Link ließ sich nicht laden: "+(e&&e.message||"")+
+        ". Der Server muss die Datei direkt und mit CORS ausliefern (raw.githubusercontent.com tut das).");
+    }
+    setBusy("");
   }
 
   async function openBook(id){
@@ -1959,11 +1990,23 @@ export default function App(){
           </div>
           {!books.length&&(
             <div className="empty">
-              Noch keine Bücher.<br/>
-              Tippe auf <b>+</b> und such die .epub-Datei in <b>Dateien</b> — zum Beispiel in iCloud Drive.
+              Noch keine Bücher.<br/><br/>
+              Tippe auf <b>+</b>, dann auf <b>Datei auswählen</b>, und geh in
+              <b> iCloud Drive → Junas Bücher</b>.<br/><br/>
+              <span style={{fontSize:13}}>
+                Wichtig: das Buch <i>hier</i> im App-Fenster aussuchen. Wenn du die
+                Datei stattdessen in „Dateien“ antippst, öffnet iOS sie in Apple Books,
+                und dort kommt diese App nicht heran.
+              </span>
             </div>
           )}
-          <input ref={fileRef} type="file" accept=".epub,application/epub+zip" multiple
+          {/* No accept filter on purpose. iOS matches accept against its own
+              type identifiers and greys out anything it cannot map, and epub
+              is one it maps unreliably - the file sits there in the picker
+              looking present but refusing to be tapped. Everything is
+              selectable now and the check happens after picking, where a
+              wrong file can actually explain itself. */}
+          <input ref={fileRef} type="file" multiple
             style={{display:"none"}} onChange={e=>importFiles(e.target.files)}/>
         </div>
       </>
@@ -2225,6 +2268,19 @@ export default function App(){
                 Wortliste und Lesezeit nicht — also ab und zu exportieren.
               </div>
             </div>
+            <div className="card">
+              <h3>Buch über einen Link laden</h3>
+              <input type="text" value={bookUrl} placeholder="https://…/buch.epub"
+                onChange={e=>setBookUrl(e.target.value)}/>
+              <button className="btn btn-plain" style={{width:"100%",marginTop:10}}
+                onClick={async()=>{ await importUrl(bookUrl); setBookUrl(""); }}>Laden</button>
+              <div className="hint">
+                Für eine gemeinsame Bibliothek auf mehreren Geräten. Der Server muss die
+                Datei direkt ausliefern und CORS erlauben — raw.githubusercontent.com tut
+                das, iCloud- und Dropbox-Freigabelinks nicht.
+              </div>
+            </div>
+
             <div className="card">
               <h3>Bücher ({books.length})</h3>
               {books.map(b=>(
