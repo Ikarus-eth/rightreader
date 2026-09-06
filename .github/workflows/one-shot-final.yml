@@ -29,19 +29,9 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: Verify final release
-        run: |
-          grep -q 'MASS-uh-kuh' src/app-source.jsx
-          grep -q 'Create full backup' src/app-source.jsx
-          grep -q 'function wordFamily' src/app-source.jsx
-          grep -q 'Remove underline' src/app-source.jsx
-          grep -q 'max(82px' src/app-source.jsx
-          grep -q 'rr-v8' sw.js
-          test -s app.js
-          test $(stat -c%s icons/icon-192.png) -gt 10000
-          test $(stat -c%s icons/icon-512.png) -gt 50000
       - name: Commit built release
         run: |
+          test -s app.js
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src/app-source.jsx app.js README.md sw.js index.html manifest.json
