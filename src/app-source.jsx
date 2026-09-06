@@ -535,17 +535,70 @@ function isProperNounish(surface,sentInitial,lowerSeen){
    accounting surfaced on the parent screen the same day it happens.
    ============================================================ */
 
-const API_URL="https://api.anthropic.com/v1/messages";
+/* ---------------- provider ----------------
+   OpenAI by default. Both providers answer cross-origin requests from a
+   browser, which is what keeps this app serverless: OpenAI echoes the
+   page's origin back in access-control-allow-origin and accepts an
+   Authorization header, and Anthropic does the same behind its
+   dangerous-direct-browser-access header. Verified by preflight against
+   both, not assumed.
+
+   The Anthropic path is kept rather than deleted because the only thing
+   that differs between them is this adapter, and having it means
+   switching back is a one-line change in config.js instead of a rewrite. */
+
+const PROVIDERS={
+  openai:{
+    url:"https://api.openai.com/v1/chat/completions",
+    modelsUrl:"https://api.openai.com/v1/models",
+    keyHint:"sk-\u2026",
+    headers:k=>({"content-type":"application/json","authorization":"Bearer "+k}),
+    body:(model,prompt,maxTokens,drop)=>{
+      const b={model,messages:[{role:"user",content:prompt}]};
+      /* Newer OpenAI models renamed max_tokens and reject the old name,
+         and reasoning models bill hidden thinking tokens against the same
+         budget, so a tight limit can come back with empty content. Both
+         are handled by the parameter fallback below rather than by
+         guessing which family a model belongs to. */
+      if(!drop.has("max_completion_tokens")) b.max_completion_tokens=maxTokens;
+      else b.max_tokens=maxTokens;
+      if(!drop.has("response_format")) b.response_format={type:"json_object"};
+      if(CFG.REASONING_EFFORT&&!drop.has("reasoning_effort")) b.reasoning_effort=CFG.REASONING_EFFORT;
+      return b;
+    },
+    text:d=>((d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||""),
+    usage:d=>({in:(d.usage||{}).prompt_tokens||0,out:(d.usage||{}).completion_tokens||0}),
+    models:d=>(d.data||[]).map(m=>m.id)
+  },
+  anthropic:{
+    url:"https://api.anthropic.com/v1/messages",
+    modelsUrl:"https://api.anthropic.com/v1/models",
+    keyHint:"sk-ant-\u2026",
+    headers:k=>({"content-type":"application/json","x-api-key":k,
+      "anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}),
+    body:(model,prompt,maxTokens)=>({model,max_tokens:maxTokens,messages:[{role:"user",content:prompt}]}),
+    text:d=>(d.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n"),
+    usage:d=>({in:(d.usage||{}).input_tokens||0,out:(d.usage||{}).output_tokens||0}),
+    models:d=>(d.data||[]).map(m=>m.id)
+  }
+};
+
 const CFG=(typeof window!=="undefined"&&window.APP_CONFIG)||{};
-const MODEL_FAST=CFG.MODEL_FAST||"claude-haiku-4-5-20251001";
-const MODEL_GOOD=CFG.MODEL_GOOD||"claude-sonnet-5";
+const PROVIDER=PROVIDERS[CFG.PROVIDER]?CFG.PROVIDER:"openai";
+const P=PROVIDERS[PROVIDER];
 const DAILY_CALL_CAP=CFG.DAILY_CALL_CAP||1200;
 
-/* $ per million tokens, only used for the estimate shown to you. */
-const PRICES={
-  "claude-haiku-4-5-20251001":{in:1.00,out:5.00},
-  "claude-sonnet-5":{in:3.00,out:15.00}
-};
+function models(){
+  const saved=lsGet("models",null);
+  return {fast:(saved&&saved.fast)||CFG.MODEL_FAST||"gpt-5.6-luna",
+          good:(saved&&saved.good)||CFG.MODEL_GOOD||"gpt-5.6-terra"};
+}
+function priceOf(model){
+  const t=(CFG.PRICES||{})[model];
+  /* An unknown model still gets counted, just with a placeholder rate, so
+     the spend figure is never silently zero. */
+  return t||{in:1,out:5};
+}
 
 function today(){ return new Date().toISOString().slice(0,10); }
 
@@ -554,13 +607,10 @@ function noteUsage(model,u){
   const sp=lsGet("spend",{});
   const d=today();
   const row=sp[d]||{calls:0,in:0,out:0,usd:0};
-  const p=PRICES[model]||PRICES[MODEL_GOOD];
-  row.calls+=1;
-  row.in+=u.input_tokens||0;
-  row.out+=u.output_tokens||0;
-  row.usd+=((u.input_tokens||0)*p.in+(u.output_tokens||0)*p.out)/1e6;
+  const pr=priceOf(model);
+  row.calls+=1; row.in+=u.in; row.out+=u.out;
+  row.usd+=(u.in*pr.in+u.out*pr.out)/1e6;
   sp[d]=row;
-  /* keep 120 days, drop the rest */
   const keys=Object.keys(sp).sort();
   while(keys.length>120) delete sp[keys.shift()];
   lsSet("spend",sp);
@@ -568,48 +618,82 @@ function noteUsage(model,u){
 function callsToday(){ const r=lsGet("spend",{})[today()]; return r?r.calls:0; }
 
 const inFlight=new Set();
-function abortAll(){ for(const c of inFlight){ try{ c.abort(); }catch(e){} } inFlight.clear(); }
+let userAborted=false;
+function abortAll(){
+  userAborted=true;
+  for(const c of inFlight){ try{ c.abort(); }catch(e){} }
+  inFlight.clear();
+  setTimeout(()=>{ userAborted=false; },0);
+}
 
 class NeedsKey extends Error{}
 class CapReached extends Error{}
+class Aborted extends Error{}
 
-async function callClaude(prompt,{model=MODEL_GOOD,maxTokens=1400,timeoutMs=60000}={}){
-  const key=lsGet("apikey","");
-  if(!key) throw new NeedsKey("No API key set yet.");
-  if(callsToday()>=DAILY_CALL_CAP) throw new CapReached("Daily request limit reached.");
+/* Parameters the API told us it does not accept for this model, learned
+   once and remembered, so a wrong guess costs one rejected call ever
+   rather than one on every lookup. */
+function droppedParams(){ return new Set(lsGet("drop",[])); }
+function dropParam(name){
+  const d=droppedParams(); if(d.has(name)) return false;
+  d.add(name); lsSet("drop",[...d]); return true;
+}
+
+async function rawCall(model,prompt,maxTokens,timeoutMs,key){
   const ctrl=new AbortController();
   inFlight.add(ctrl);
   const timer=setTimeout(()=>ctrl.abort(),timeoutMs);
   let res;
   try{
-    res=await fetch(API_URL,{
-      method:"POST",
-      signal:ctrl.signal,
-      headers:{
-        "content-type":"application/json",
-        "x-api-key":key,
-        "anthropic-version":"2023-06-01",
-        "anthropic-dangerous-direct-browser-access":"true"
-      },
-      body:JSON.stringify({model,max_tokens:maxTokens,messages:[{role:"user",content:prompt}]})
-    });
+    res=await fetch(P.url,{method:"POST",signal:ctrl.signal,
+      headers:P.headers(key),
+      body:JSON.stringify(P.body(model,prompt,maxTokens,droppedParams()))});
   }catch(e){
+    if(userAborted) throw new Aborted("cancelled");
     if(ctrl.signal.aborted) throw new Error("timed out");
     throw new Error("network");
   }finally{ clearTimeout(timer); inFlight.delete(ctrl); }
 
   const txt=await res.text();
   if(!res.ok){
-    let msg=txt.slice(0,200);
+    let msg=txt.slice(0,300);
     try{ msg=(JSON.parse(txt).error||{}).message||msg; }catch(e){}
-    if(res.status===401) throw new NeedsKey(msg);
+    if(res.status===401||res.status===403) throw new NeedsKey(msg);
+    if(res.status===429) throw new Error("Zu viele Anfragen \u2014 kurz warten.");
+    /* A 400 naming a parameter means this model does not take it. Drop it
+       for good and try once more instead of failing the lookup. */
+    if(res.status===400){
+      const m=/max_completion_tokens|max_tokens|response_format|reasoning_effort/.exec(msg);
+      if(m&&dropParam(m[0]==="max_tokens"?"max_completion_tokens":m[0]))
+        return rawCall(model,prompt,maxTokens,timeoutMs,key);
+    }
     throw new Error("HTTP "+res.status+": "+msg);
   }
   let data;
   try{ data=JSON.parse(txt); }catch(e){ throw new Error("bad response"); }
-  noteUsage(model,data.usage);
   if(data.error) throw new Error(data.error.message||"api error");
-  return (data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n");
+  noteUsage(model,P.usage(data));
+  const out=P.text(data);
+  if(!out||!out.trim()) throw new Error("empty response");
+  return out;
+}
+
+async function callModel(prompt,{model,maxTokens=1400,timeoutMs=60000}={}){
+  const key=lsGet("apikey","");
+  if(!key) throw new NeedsKey("No API key set yet.");
+  if(callsToday()>=DAILY_CALL_CAP) throw new CapReached("Daily request limit reached.");
+  return rawCall(model||models().good,prompt,maxTokens,timeoutMs,key);
+}
+
+async function listModels(key){
+  const res=await fetch(P.modelsUrl,{headers:P.headers(key)});
+  const txt=await res.text();
+  if(!res.ok){
+    let msg=txt.slice(0,200);
+    try{ msg=(JSON.parse(txt).error||{}).message||msg; }catch(e){}
+    throw new Error(msg);
+  }
+  return P.models(JSON.parse(txt)).sort();
 }
 
 function parseLoose(raw){
@@ -624,10 +708,10 @@ async function askJson(prompt,opts){
   let last;
   for(let i=0;i<3;i++){
     if(i>0) await new Promise(r=>setTimeout(r,BACKOFF[i]+Math.random()*1500));
-    try{ return parseLoose(await callClaude(prompt+(i?"\nReply with ONLY the JSON object, one line, nothing else.":""),opts)); }
+    try{ return parseLoose(await callModel(prompt+(i?"\nReply with ONLY the JSON object, one line, nothing else.":""),opts)); }
     catch(e){
       last=e;
-      if(e instanceof NeedsKey||e instanceof CapReached) break;
+      if(e instanceof NeedsKey||e instanceof CapReached||e instanceof Aborted) break;
     }
   }
   throw last;
@@ -684,6 +768,20 @@ function batchPrompt(items){
 }
 
 /* ---------------- speech ---------------- */
+/* iOS will not speak unless synthesis has been started from a real user
+   gesture at least once. The long press fires from a timer, which does not
+   count, so her very first listen would silently do nothing. Priming it on
+   the first touch anywhere in the app fixes that. */
+let speechReady=false;
+function primeSpeech(){
+  if(speechReady||!window.speechSynthesis) return;
+  try{
+    const u=new SpeechSynthesisUtterance("");
+    u.volume=0;
+    window.speechSynthesis.speak(u);
+    speechReady=true;
+  }catch(e){}
+}
 function speak(text){
   try{
     if(!window.speechSynthesis) return;
@@ -1155,13 +1253,16 @@ export default function App(){
   const [tab,setTab]=useState("time");
   const [key,setKey]=useState(()=>lsGet("apikey",""));
   const [msg,setMsg]=useState("");
+  const [modelList,setModelList]=useState([]);
+  const [mdl,setMdl]=useState(()=>models());
+  const [testing,setTesting]=useState(false);
   const [prefs,setPrefs]=useState(()=>lsGet("prefs",{size:20,lead:1.68,theme:"paper",serif:true}));
   const [sheet,setSheet]=useState(null);   // "toc" | "type" | null
 
   const bodyRef=useRef(null);
   const urlsRef=useRef([]);
   const fileRef=useRef(null);
-  const clock=useRef({elapsed:0,popup:0,words:0,base:0,flushed:0,last:Date.now(),bookId:null});
+  const clock=useRef({elapsed:0,popup:0,words:0,base:0,flushed:0,flushedRaw:0,last:Date.now(),bookId:null});
   const spansRef=useRef([]);
   const prefetchRef=useRef({busy:false,done:new Set()});
 
@@ -1181,7 +1282,13 @@ export default function App(){
   /* ---- persistence helpers ---- */
   const saveVocab=useCallback(v=>{ setVocab(v); if(!lsSet("vocab",v)) setFatal("Speicher voll — bitte im Eltern-Bereich exportieren."); },[]);
   const saveSeen =useCallback(v=>{ setSeen(v); lsSet("seen",v); },[]);
-  const saveCache=useCallback(v=>{
+  /* Every cache write goes through here. The trimming used to live in a
+     helper that nothing called any more, so the word cache grew without
+     any limit toward Safari's storage ceiling; and a failed write was
+     silent, so it would simply stop persisting and she would lose the
+     lot on the next eviction. Now it trims by age, and on a quota error
+     it drops the oldest half and tries once more. */
+  function persistCache(v){
     let out=v;
     const keys=Object.keys(v);
     if(keys.length>WCACHE_MAX){
@@ -1189,8 +1296,13 @@ export default function App(){
       out={...v};
       for(const k of keys.slice(0,keys.length-WCACHE_MAX)) delete out[k];
     }
-    setWcache(out); lsSet("wcache",out);
-  },[]);
+    if(lsSet("wcache",out)) return out;
+    const ks=Object.keys(out).sort((a,b)=>((out[a]||{}).ts||0)-((out[b]||{}).ts||0));
+    const half={...out};
+    for(const k of ks.slice(0,Math.ceil(ks.length/2))) delete half[k];
+    if(lsSet("wcache",half)) return half;
+    return half;
+  }
 
   /* ---- derived sets used for underlining in the text ---- */
   const knownSet=useMemo(()=>{
@@ -1246,7 +1358,7 @@ export default function App(){
       const pos=positions[id]||{};
       const start=Number.isInteger(pos.chapter)?pos.chapter:firstTextChapter(parsed);
       setChapIdx(start);
-      clock.current={elapsed:0,popup:0,words:0,base:0,flushed:0,last:Date.now(),bookId:id};
+      clock.current={elapsed:0,popup:0,words:0,base:0,flushed:0,flushedRaw:0,last:Date.now(),bookId:id};
       prefetchRef.current.done=new Set();
       setView("read");
     }catch(e){ setFatal("Buch konnte nicht geöffnet werden: "+(e&&e.message||"")); }
@@ -1257,7 +1369,11 @@ export default function App(){
      on chapter one is what she expects and what Books does. */
   function firstTextChapter(parsed){
     const i=parsed.spine.findIndex(s=>/ch\d|chapter|part|prologue/i.test(s.id+s.href));
-    return i>=0?i:(parsed.spine.findIndex(s=>s.linear)||0);
+    if(i>=0) return i;
+    /* findIndex returns -1 on no match, and -1 is truthy, so the old
+       `|| 0` never fired and the book opened on spine[-1]: blank. */
+    const j=parsed.spine.findIndex(s=>s.linear);
+    return j>=0?j:0;
   }
 
   function closeBook(){
@@ -1293,15 +1409,20 @@ export default function App(){
     return ()=>{ cancelled=true; };
   },[book,chapIdx]);
 
-  /* words already banked from chapters before this one */
+  /* Words banked so far IN THIS SITTING.
+
+     This used to sum every chapter she had ever read in the book, taken
+     from stored progress. So on the second day, opening chapter five
+     handed the clock four chapters of credit before she read a word:
+     earned was instantly over an hour and min(elapsed, earned) was just
+     elapsed. The cap silently stopped capping after the first chapter of
+     any book, which is exactly the case it was built for.
+
+     Banking the session count instead also means re-reading a chapter
+     earns nothing, which is correct. */
   useEffect(()=>{
-    if(!book) return;
-    let base=0;
-    const counted=(positions[book.meta.id]||{}).counted||{};
-    for(let i=0;i<chapIdx;i++) base+=counted[i]||0;
-    clock.current.base=base;
-    clock.current.words=Math.max(clock.current.words,base);
-  },[book,chapIdx]);
+    clock.current.base=clock.current.words;
+  },[chapIdx,book]);
 
   /* The chapter is written into the DOM here rather than through
      dangerouslySetInnerHTML, because React re-applies that prop on every
@@ -1348,7 +1469,15 @@ export default function App(){
      about 3% of the running text, and explaining "Rotherham" to her
      would have been noise as well as cost. */
   async function prefetchChapter(spans){
-    if(prefetchRef.current.busy) return;
+    /* This used to simply return when a prefetch was already running, so
+       turning the page mid-prefetch meant the new chapter never got one
+       and every tap in it fell back to a slow live lookup. Now the running
+       pass is asked to stop and this one takes over. */
+    if(prefetchRef.current.busy){
+      prefetchRef.current.cancel=true;
+      for(let i=0;i<40&&prefetchRef.current.busy;i++) await new Promise(r=>setTimeout(r,100));
+    }
+    prefetchRef.current.cancel=false;
     if(!lsGet("apikey","")) return;
     /* Copyright pages and half-titles are not reading. Explaining
        "cataloging-in-publication" to a ten-year-old is money spent on
@@ -1393,9 +1522,10 @@ export default function App(){
     prefetchRef.current.busy=true;
     try{
       for(let i=0;i<queue.length;i+=12){
+        if(prefetchRef.current.cancel) break;
         const batch=queue.slice(i,i+12);
         try{
-          const j=await askJson(batchPrompt(batch),{model:MODEL_FAST,maxTokens:2600,timeoutMs:70000});
+          const j=await askJson(batchPrompt(batch),{model:models().fast,maxTokens:2600,timeoutMs:70000});
           const got=Array.isArray(j.words)?j.words:[];
           const add=[];
           for(const r of got){
@@ -1417,11 +1547,11 @@ export default function App(){
                 const [entry,idx]=mergeSense(normalizeEntry(nc[k]),d);
                 nc[k]={...entry,picks:{...(entry.picks||{}),[h]:idx}};
               }
-              lsSet("wcache",nc); return nc;
+              return persistCache(nc);
             });
           }
         }catch(e){
-          if(e instanceof NeedsKey||e instanceof CapReached) break;
+          if(e instanceof NeedsKey||e instanceof CapReached||e instanceof Aborted) break;
         }
         await new Promise(r=>setTimeout(r,400));
       }
@@ -1435,13 +1565,21 @@ export default function App(){
      so hearing is a long press: 550ms on any paragraph reads that sentence
      aloud and highlights it. The press also suppresses the click that
      would otherwise follow, or every listen would open a word sheet. */
-  const press=useRef({t:null,el:null,fired:false});
+  const press=useRef({t:null,el:null,fired:false,x:0,y:0});
+  /* A finger never holds still, so cancelling on any pointermove made the
+     long press almost impossible to trigger on a touchscreen. Ten pixels
+     of slop distinguishes a hold from the start of a scroll. */
+  function onPressMove(e){
+    if(press.current.t==null) return;
+    if(Math.abs(e.clientX-press.current.x)>10||Math.abs(e.clientY-press.current.y)>10) onPressEnd();
+  }
   function onPressStart(e){
     touch();
     const el=e.target.closest&&e.target.closest("p,div,h1,h2,h3,li,blockquote");
     if(!el||!bodyRef.current||!bodyRef.current.contains(el)) return;
     press.current.fired=false;
     press.current.el=el;
+    press.current.x=e.clientX; press.current.y=e.clientY;
     press.current.t=setTimeout(()=>{
       press.current.fired=true;
       const wordEl=e.target.closest&&e.target.closest(".w");
@@ -1458,7 +1596,7 @@ export default function App(){
       } else setTimeout(clear,1200);
     },550);
   }
-  function onPressEnd(){ clearTimeout(press.current.t); }
+  function onPressEnd(){ clearTimeout(press.current.t); press.current.t=null; }
 
   /* ---- tapping a word ---- */
   function onTap(e){
@@ -1495,7 +1633,7 @@ export default function App(){
   }
 
   function putEntry(cacheKey,entry){
-    setWcache(cur=>{ const n={...cur,[cacheKey]:entry}; lsSet("wcache",n); return n; });
+    setWcache(cur=>{ const n={...cur,[cacheKey]:entry}; return persistCache(n); });
   }
   function pinPick(cacheKey,h,idx){
     setWcache(cur=>{
@@ -1506,7 +1644,7 @@ export default function App(){
       const ks=Object.keys(picks);
       if(ks.length>400) delete picks[ks[0]];
       const n={...cur,[cacheKey]:{...e,picks}};
-      lsSet("wcache",n); return n;
+      return persistCache(n);
     });
   }
   function showSense(surface,sentence,cand,cacheKey,h,d,extra){
@@ -1552,7 +1690,7 @@ export default function App(){
 
   async function askPick(word,sentence,senses){
     const j=await askJson(disambigPrompt(word,sentence,senses),
-      {model:MODEL_FAST,maxTokens:24,timeoutMs:20000});
+      {model:models().fast,maxTokens:24,timeoutMs:20000});
     const n=Number(j&&j.pick);
     return Number.isFinite(n)?n:1;
   }
@@ -1594,7 +1732,7 @@ export default function App(){
 
   async function liveLookup(surface,sentence,cand,cacheKey,h,changed){
     try{
-      const j=await askJson(wordPrompt(surface,sentence,cand),{model:MODEL_GOOD,maxTokens:700,timeoutMs:45000});
+      const j=await askJson(wordPrompt(surface,sentence,cand),{model:models().good,maxTokens:700,timeoutMs:45000});
       const d={span:String(j.span||surface),lemma:String(j.lemma||surface),sense:String(j.sense||""),
         en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
         also:Array.isArray(j.also)?j.also.slice(0,2):[],
@@ -1603,7 +1741,7 @@ export default function App(){
         const [entry,idx]=mergeSense(normalizeEntry(cur[cacheKey]),d);
         const picks={...(entry.picks||{}),[h]:idx};
         const n={...cur,[cacheKey]:{...entry,picks}};
-        lsSet("wcache",n); return n;
+        return persistCache(n);
       });
       const vk=senseKey(d.lemma,d.sense);
       setStack(st=>st.length&&st[0].cacheKey===cacheKey
@@ -1630,12 +1768,12 @@ export default function App(){
       setStack(s=>[...s,{level:1,word,sentence:explanation,cacheKey,data:null,loading:true,showDe:false}]);
       (async()=>{
         try{
-          const j=await askJson(nestedPrompt(word,explanation),{model:MODEL_GOOD,maxTokens:600,timeoutMs:45000});
+          const j=await askJson(nestedPrompt(word,explanation),{model:models().good,maxTokens:600,timeoutMs:45000});
           const d={span:String(j.span||word),lemma:String(j.lemma||word),sense:String(j.sense||""),
             en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
             also:[],alsoDe:[],ts:Date.now()};
           setWcache(cur=>{ const [e]=mergeSense(normalizeEntry(cur[cacheKey]),d);
-            const n={...cur,[cacheKey]:e}; lsSet("wcache",n); return n; });
+            const n={...cur,[cacheKey]:e}; return persistCache(n); });
           setStack(s=>s.map((x,i)=>i===s.length-1&&x.cacheKey===cacheKey?{...x,loading:false,data:d}:x));
         }catch(e){
           setStack(s=>s.map((x,i)=>i===s.length-1?{...x,loading:false,error:"Das hat leider nicht geklappt.",canRetry:true}:x));
@@ -1668,7 +1806,7 @@ export default function App(){
   /* ---- the clock ---- */
   const floorWpm=useMemo(()=>floorWpmFrom(sessions),[sessions]);
 
-  function touch(){ clock.current.last=Date.now(); }
+  function touch(){ clock.current.last=Date.now(); primeSpeech(); }
 
   const measureWords=useCallback(()=>{
     const spans=spansRef.current;
@@ -1688,16 +1826,22 @@ export default function App(){
 
   function flushClock(final){
     const c=clock.current;
-    const earned=(c.words-0)/Math.max(1,floorWpm)*60000+c.popup;
+    const earned=c.words/Math.max(1,floorWpm)*60000+c.popup;
     const credited=Math.max(0,Math.min(c.elapsed,earned));
     const delta=credited-c.flushed;
-    if(delta<1000&&!final) return credited;
-    c.flushed=credited;
-    if(delta>0){
+    const rawDelta=c.elapsed-(c.flushedRaw||0);
+    if(delta<1000&&rawDelta<1000&&!final) return credited;
+    c.flushed=credited; c.flushedRaw=c.elapsed;
+    if(delta>0||rawDelta>0){
       setSessions(cur=>{
         const d=today();
         const row=cur[d]||{ms:0,raw:0,words:0,lookups:0,saves:0};
-        const n={...cur,[d]:{...row,ms:row.ms+delta,raw:row.raw+delta,words:Math.max(row.words,c.words)}};
+        /* ms is credited time, raw is real elapsed time. They used to both
+           receive the credited delta, which made the measured reading
+           speed a function of the cap that the speed itself sets, and hid
+           the elapsed-vs-credited gap the parent screen exists to show. */
+        const n={...cur,[d]:{...row,ms:row.ms+Math.max(0,delta),
+          raw:row.raw+Math.max(0,rawDelta),words:Math.max(row.words,c.words)}};
         lsSet("sessions",n); return n;
       });
     }
@@ -1743,14 +1887,19 @@ export default function App(){
       }
     };
     const onTouchStart=()=>touch();
+    /* this used to be an anonymous listener with no matching remove, so a
+       fresh one was added every time the chapter changed and none were
+       ever cleaned up */
+    const onVis=()=>{ touch(); if(document.visibilityState!=="visible") flushClock(true); };
     window.addEventListener("scroll",onScroll,{passive:true});
     window.addEventListener("touchstart",onTouchStart,{passive:true});
     window.addEventListener("keydown",onTouchStart);
-    document.addEventListener("visibilitychange",()=>{ touch(); if(document.visibilityState!=="visible") flushClock(true); });
+    document.addEventListener("visibilitychange",onVis);
     return ()=>{
       window.removeEventListener("scroll",onScroll);
       window.removeEventListener("touchstart",onTouchStart);
       window.removeEventListener("keydown",onTouchStart);
+      document.removeEventListener("visibilitychange",onVis);
     };
     // eslint-disable-next-line
   },[view,book,chapIdx,chap]);
@@ -1842,7 +1991,7 @@ export default function App(){
           <div className={"reader"+(prefs.serif?" serif":" sans")} ref={bodyRef}
             onClick={onTap}
             onPointerDown={onPressStart} onPointerUp={onPressEnd}
-            onPointerCancel={onPressEnd} onPointerMove={onPressEnd}
+            onPointerCancel={onPressEnd} onPointerMove={onPressMove}
             onContextMenu={e=>e.preventDefault()}/>
           {chap&&(
             <div className="chapnav">
@@ -1899,7 +2048,7 @@ export default function App(){
           const j=JSON.parse(fr.result);
           if(j.vocab) saveVocab({...vocab,...j.vocab});
           if(j.seen) saveSeen({...seen,...j.seen});
-          if(j.wcache) saveCache({...wcache,...j.wcache});
+          if(j.wcache) setWcache(persistCache(migrateCache({...wcache,...j.wcache})));
           if(j.sessions){ const n={...sessions,...j.sessions}; setSessions(n); lsSet("sessions",n); }
           if(j.positions){ const n={...positions,...j.positions}; setPositions(n); lsSet("pos",n); }
           setMsg("Wiederhergestellt.");
@@ -2000,21 +2149,67 @@ export default function App(){
 
           {tab==="set"&&(<>
             <div className="card">
-              <h3>API-Schlüssel</h3>
-              <input type="password" value={key} placeholder="sk-ant-…"
+              <h3>API-Schlüssel ({PROVIDER})</h3>
+              <input type="password" value={key} placeholder={P.keyHint}
                 onChange={e=>setKey(e.target.value)}/>
               <button className="btn btn-primary" style={{width:"100%",marginTop:10}}
-                onClick={()=>{ lsSet("apikey",key.trim()); setMsg("Gespeichert."); }}>Speichern</button>
+                disabled={testing}
+                onClick={async()=>{
+                  const k=key.trim();
+                  if(!k){ setMsg("Kein Schlüssel eingegeben."); return; }
+                  lsSet("apikey",k);
+                  setTesting(true); setMsg("Verbinde …");
+                  try{
+                    const ms=await listModels(k);
+                    setModelList(ms);
+                    setMsg("Verbunden. "+ms.length+" Modelle gefunden.");
+                  }catch(e){
+                    setMsg("Schlüssel gespeichert, aber die Verbindung schlug fehl: "+(e&&e.message||""));
+                  }
+                  setTesting(false);
+                }}>{testing?"Verbinde …":"Speichern & testen"}</button>
               <div className="hint">
                 Bleibt nur auf diesem iPad, nie im Repository. Nimm einen eigenen Schlüssel
                 nur für diese App, lade ein kleines Guthaben und schalte Auto-Reload aus —
                 dann ist dieses Guthaben die Obergrenze für alles, was schiefgehen kann.
               </div>
             </div>
+
+            <div className="card">
+              <h3>Modelle</h3>
+              <div className="hint" style={{marginTop:0}}>
+                „Schnell“ erklärt im Hintergrund ganze Kapitel voraus und macht die meisten
+                Anfragen. „Gut“ läuft nur, wenn sie wartet: neue Wörter und die Entscheidung,
+                welche Bedeutung im Satz gemeint ist.
+              </div>
+              {[["fast","Schnell (Vorablesen)"],["good","Gut (Antippen)"]].map(([k,lab])=>(
+                <div key={k} style={{marginTop:12}}>
+                  <div className="setlab" style={{marginTop:0}}>{lab}</div>
+                  {modelList.length
+                    ? <select value={mdl[k]} onChange={e=>setMdl(m=>({...m,[k]:e.target.value}))}
+                        style={{width:"100%",padding:"12px 14px",border:"1px solid var(--line)",
+                          borderRadius:12,fontSize:16,fontFamily:"inherit",
+                          background:"var(--paper)",color:"var(--ink)"}}>
+                        {modelList.map(m=><option key={m} value={m}>{m}</option>)}
+                      </select>
+                    : <input type="text" value={mdl[k]}
+                        onChange={e=>setMdl(m=>({...m,[k]:e.target.value}))}/>}
+                </div>
+              ))}
+              <button className="btn btn-plain" style={{width:"100%",marginTop:12}}
+                onClick={()=>{ lsSet("models",mdl); setMsg("Modelle gespeichert."); }}>
+                Modelle speichern
+              </button>
+              {!modelList.length&&<div className="hint">
+                Tippe oben auf „Speichern & testen“, dann steht hier die echte Modell-Liste
+                deines Kontos statt eines Namens, den jemand geraten hat.
+              </div>}
+            </div>
             <div className="card">
               <h3>Kosten (30 Tage)</h3>
               <div className="bigstat">${spend30.toFixed(2)}</div>
-              <div className="hint">Geschätzt aus den zurückgemeldeten Tokens.
+              <div className="hint">Geschätzt aus den zurückgemeldeten Tokens
+                ({models().fast} / {models().good}).
                 Heute {callsToday()} von max. {DAILY_CALL_CAP} Anfragen.</div>
             </div>
             <div className="card">

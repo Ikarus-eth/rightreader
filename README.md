@@ -7,7 +7,7 @@ too; press one button for the German. Words she decides are new go into
 a list that is already shaped for spaced repetition.
 
 No server. No Cloudflare Worker. The site is static files on GitHub
-Pages and it calls the Anthropic API straight from the browser.
+Pages and it calls the OpenAI API straight from the browser.
 
 ---
 
@@ -26,22 +26,28 @@ loads. It will show an empty library. That is correct.
 
 ### 2. Get an API key, and cap it
 
-1. console.anthropic.com → API Keys → Create Key. Copy it now, it is
-   shown once.
-2. Settings → Billing. Load **$10**. That is many months of reading.
-3. **Turn auto-reload OFF.** This is the actual safety net. With
-   auto-reload off you cannot spend more than what you loaded, whatever
-   happens to the key. Nothing technical protects you as well as this.
+1. platform.openai.com → **API keys** → *Create new secret key*. Name it
+   `right-reader`. Copy it now, it is shown once. It starts with `sk-`.
+2. **Billing** → add a payment method → add **$10** of credit.
+3. **Turn auto-recharge OFF.** This is the actual safety net. With it off
+   you cannot spend more than what you loaded, whatever happens to the
+   key. Nothing technical protects you as well as this does.
 
-Use a key that is only ever used by this app, so you can revoke it
-without breaking anything else.
+Use a key that only this app ever uses, so you can revoke it without
+breaking anything else.
 
 ### 3. Put it on the iPad
 
 1. Open the site in **Safari** on her iPad. Must be Safari.
 2. Share icon → **Add to Home Screen** → Add.
-3. Open it from the home screen. Tap the **⚙︎** (top right) → **Einstellungen**
-   → paste the API key → Speichern.
+3. Open it from the home screen. Tap **⚙︎** (top right) → **Einstellungen**
+   → paste the API key → **Speichern & testen**.
+
+That button does more than save. It calls the API and pulls back the list
+of models your account can actually use, then lets you pick the two the
+app uses from a dropdown. The names in `config.js` are my best guess at
+current model IDs and may well be wrong; this is how you fix them without
+guessing again.
 
 The key lives in that iPad's browser storage and nowhere else. It is
 never in this repository.
@@ -188,13 +194,32 @@ I'll add one.
 ## Cost
 
 Measured on *The Great Hamster Massacre* (20,172 words, 20 chapters):
-**606 words and 137 expressions worth explaining, about $0.45 to
-prefetch the whole book.** At 20 minutes a day, five days a week, she
-reads roughly one novel a month, so budget **$1–2/month**, falling as
-the shared explanation cache fills.
+**606 words and 137 expressions worth explaining.** On `gpt-5.6-luna`
+at $0.20/$1.20 per million tokens that is **about $0.10 to pre-explain
+the whole book.**
+
+At 20 minutes a day, five days a week, she reads roughly one novel a
+month, so budget well under **$1/month**, falling further as the shared
+explanation cache fills across books.
 
 `DAILY_CALL_CAP` in `config.js` is a hard ceiling on requests per day
 from the device. A runaway loop stops there rather than at your balance.
+
+### Switching provider
+
+`PROVIDER` in `config.js` takes `"openai"` or `"anthropic"`. Both answer
+cross-origin browser requests, which is what keeps this app serverless:
+OpenAI echoes the page origin back in `access-control-allow-origin` and
+accepts an `Authorization` header, Anthropic does the same behind its
+`anthropic-dangerous-direct-browser-access` header. Both verified by
+preflight, not assumed. Everything above the adapter — sense resolution,
+phrase handling, prefetch triage — is provider-independent.
+
+Newer OpenAI models renamed `max_tokens` to `max_completion_tokens`, and
+reasoning models bill hidden thinking tokens against that same budget. The
+app does not try to guess which family a model belongs to: if the API
+rejects a parameter it drops that parameter for good and retries once, so
+a wrong guess costs one rejected call ever rather than one per lookup.
 
 ---
 
@@ -241,7 +266,45 @@ tap targets tokenised, 393 phrasal-verb spans marked, contractions kept
 whole, images rewritten to blob URLs, links neutralised, prefetch triage.
 The built bundle mounts and renders.
 
-Two bugs found by testing rather than by reading, both silent:
+Bugs found by testing rather than by reading. All were silent — the app
+kept working and did the wrong thing:
+
+**The anti-idling cap stopped working after the first chapter of a book.**
+The credit budget was seeded from every chapter she had ever read in that
+book, taken from stored progress. Opening chapter five on day two handed
+the clock four chapters of credit before she read a word, so `earned` was
+instantly over an hour and `min(elapsed, earned)` was just `elapsed`. The
+feature you specifically asked for was doing nothing from day two onward.
+It now banks words read in the current sitting only. Verified: with 26,400
+words of prior progress on file, seven seconds of sitting still credits
+zero.
+
+**Credited and elapsed time were the same number.** Both got the credited
+delta, so the measured reading speed was a function of the cap that the
+speed itself sets, and the parent screen could never show the gap it
+exists to show.
+
+**A `visibilitychange` listener was added on every chapter change and
+never removed.**
+
+**The long press was cancelled by any pointer movement at all,** so on a
+real touchscreen it would almost never fire. Now it tolerates 10px.
+
+**iOS refuses speech synthesis not started from a user gesture,** and the
+long press speaks from a timer, which does not count. Her first listen
+would have silently done nothing. Now primed on first touch.
+
+**A book with no recognisable chapter names opened on `spine[-1]`,** blank,
+because `findIndex` returns `-1` and `-1 || 0` is `-1`.
+
+**Turning the page during a prefetch meant the new chapter never got one,**
+so every tap in it fell back to a slow live lookup.
+
+**The word cache had no size limit,** because the trimming lived in a
+function nothing called any more, and a failed write was silent. It now
+trims by age and, on a quota error, drops the oldest half and retries.
+
+Earlier, and equally silent:
 
 React re-applies `dangerouslySetInnerHTML` on every render, and the
 reading clock re-renders once a second. All 31 chapter nodes were being
