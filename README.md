@@ -2,7 +2,7 @@
 
 Right Reader is a deliberately simple EPUB reader for a 10-year-old German native speaker reading English at about A2/B1. The product idea is not “study vocabulary”; it is “English books cannot trap you.”
 
-Tap a word and get its British-English IPA plus a very short, contextual explanation in easy English. Tap a harder word inside that explanation and get one more level of explanation. German is available only on request. A word can be saved explicitly for later spaced-repetition work.
+Tap a word and get its kid-friendly British-English pronunciation respelling plus a very short, contextual explanation in easy English. Tap a harder word inside that explanation and get one more level of explanation. German is available only on request. A word can be saved explicitly for later spaced-repetition work.
 
 ## Architecture
 
@@ -140,7 +140,7 @@ npm run build
 
 Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Current service-worker cache for this release: `rr-v7`.
+Current service-worker cache for this release: `rr-v8`.
 
 ## OpenAI models and cost table
 
@@ -151,3 +151,8 @@ Current service-worker cache for this release: `rr-v7`.
 - GPT-5.6 Sol: $4 input / $20 output
 
 The values are only for the on-device spend estimate; actual billing remains whatever OpenAI charges the project.
+
+
+## Safe Home Screen reinstall
+
+Normal app/service-worker updates preserve IndexedDB and localStorage. Removing the Home Screen web app can delete that isolated storage on iPadOS. Parent → Settings → Backup now creates a full portable backup containing EPUBs, saved words, reading history/position, settings, and the API key. Create that file before removing the Home Screen app, then restore it after re-adding. Keep it private because it contains the API key.

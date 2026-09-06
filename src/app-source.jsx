@@ -348,6 +348,31 @@ const MWE_MAP=(()=>{
 
 function normTok(w){ return w.toLowerCase().replace(/[’‘]/g,"'"); }
 
+function wordFamily(word){
+  const w=normTok(String(word||"").trim());
+  const out=new Set();
+  if(!w) return out;
+  out.add(w);
+  if(/\s/.test(w)) return out; // expressions stay exact
+
+  const add=x=>{ if(x&&x.length>1) out.add(x); };
+  if(/[^aeiou]y$/.test(w)){
+    const stem=w.slice(0,-1);
+    add(stem+"ies"); add(stem+"ied"); add(w+"ing");
+  }else if(w.endsWith("e")&&!w.endsWith("ee")){
+    add(w+"s"); add(w+"d"); add(w.slice(0,-1)+"ing");
+  }else{
+    add(w+(/(?:s|x|z|ch|sh)$/.test(w)?"es":"s"));
+    add(w+"ed"); add(w+"ing");
+    /* stop -> stopped/stopping, plan -> planned/planning */
+    if(w.length>=3&&/[^aeiou][aeiou][^aeiouwxy]$/.test(w.slice(-3))){
+      add(w+w.slice(-1)+"ed"); add(w+w.slice(-1)+"ing");
+    }
+  }
+  return out;
+}
+function addWordFamily(set,word){ for(const f of wordFamily(word)) set.add(f); }
+
 /* Longest match wins, so "put up with" beats "put up". */
 function tagMwe(words){
   const out=new Array(words.length).fill(null);
@@ -728,7 +753,7 @@ async function askJson(prompt,opts){
 
 const LEMMA_RULE="Give \"lemma\" as the plain dictionary headword: reduce adverbs to their root ( \"admiringly\" -> \"admire\" ), comparatives and superlatives to the plain adjective, plurals to singular, and any inflected form to the simplest version a beginner would look up.";
 
-const SHAPE='{"span":"...","lemma":"...","sense":"a 1-3 word label for which meaning this is","ipa":"British English IPA for span, between /slashes/, one pronunciation only","also":["0-2 short English phrases naming OTHER common, clearly different meanings; empty array if not ambiguous"],"alsoDe":["German for each phrase in also, same order and count"],"en":"one very simple English sentence, max 14 easy words, explaining what it means HERE","de":"the German translation as used here, 1-3 words","deDesc":"one simple German sentence, max 14 words, explaining it"}';
+const SHAPE='{"span":"...","lemma":"...","sense":"a 1-3 word label for which meaning this is","pron":"kid-friendly British-English pronunciation respelling using normal letters and hyphens; CAPITALISE the stressed syllable; no IPA symbols; example: massacre -> MASS-uh-kuh","also":["0-2 short English phrases naming OTHER common, clearly different meanings; empty array if not ambiguous"],"alsoDe":["German for each phrase in also, same order and count"],"en":"one very simple English sentence, max 14 easy words, explaining what it means HERE","de":"the German translation as used here, 1-3 words","deDesc":"one simple German sentence, max 14 words, explaining it"}';
 
 /* The candidate expression comes from a local list that cannot tell
    idiomatic use from literal use - "look at the cat" and "look after
@@ -768,9 +793,9 @@ function batchPrompt(items){
   return [
     `A 10-year-old German child (English level A2/B1) is reading an English story. Explain each word below very simply, using ONLY the meaning it has in ITS OWN given sentence. ${LEMMA_RULE}`,
     `WORDS: ${list}`,
-    `For each give: "word" (exactly as listed), "lemma", "sense" (1-3 word label), "ipa" (British English IPA for the word, between /slashes/, one pronunciation only), "also" (0-2 short English phrases naming other common, clearly different meanings; empty array if not ambiguous), "alsoDe" (German for each, same order and count), "en" (one very simple English sentence, max 14 easy words), "de" (German translation, 1-3 words), "deDesc" (one simple German sentence, max 14 words).`,
+    `For each give: "word" (exactly as listed), "lemma", "sense" (1-3 word label), "pron" (kid-friendly British-English pronunciation respelling using normal letters and hyphens; CAPITALISE the stressed syllable; no IPA symbols; example: massacre -> MASS-uh-kuh), "also" (0-2 short English phrases naming other common, clearly different meanings; empty array if not ambiguous), "alsoDe" (German for each, same order and count), "en" (one very simple English sentence, max 14 easy words), "de" (German translation, 1-3 words), "deDesc" (one simple German sentence, max 14 words).`,
     `Reply with ONLY one single-line JSON object, no markdown, no line breaks:`,
-    `{"words":[{"word":"...","lemma":"...","sense":"...","ipa":"/.../","also":[],"alsoDe":[],"en":"...","de":"...","deDesc":"..."}]}`
+    `{"words":[{"word":"...","lemma":"...","sense":"...","pron":"MASS-uh-kuh","also":[],"alsoDe":[],"en":"...","de":"...","deDesc":"..."}]}`
   ].join("\n");
 }
 
@@ -967,10 +992,10 @@ body{
   backdrop-filter:saturate(135%) blur(14px);border-bottom:1px solid rgba(211,185,126,.55);
   box-shadow:0 3px 14px rgba(81,68,35,.08);transition:opacity .16s ease,transform .16s ease}
 .reader-topbar.hidden{opacity:0;transform:translateY(-18px);pointer-events:none}
-.reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 38px;font-size:var(--rsize);line-height:var(--rlead);
+.reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 max(82px,calc(env(safe-area-inset-bottom) + 66px));font-size:var(--rsize);line-height:var(--rlead);
   letter-spacing:.003em;overflow:hidden;column-fill:auto;scroll-behavior:auto}
 body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
-.page-indicator{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);z-index:4;
+.page-indicator{position:absolute;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:4;
   background:rgba(255,248,227,.9);border:1px solid var(--line);border-radius:999px;padding:3px 9px;
   font-size:11px;font-weight:750;color:var(--ink2);pointer-events:none}
 .page-edge{position:absolute;top:0;bottom:0;width:24%;z-index:2;pointer-events:none}
@@ -1012,7 +1037,7 @@ body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
 @keyframes up{from{transform:translateY(18px);opacity:.4}to{transform:none;opacity:1}}
 .sheet-head{display:flex;align-items:flex-start;gap:8px}
 .headword{font-size:31px;font-weight:800;flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.15;color:#20392D}
-.ipa{font-family:"Charis SIL","Doulos SIL","Times New Roman",serif;color:var(--ink2);font-size:17px;letter-spacing:.02em;margin:3px 0 8px}
+.pron{font-family:"Avenir Next",Avenir,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink2);font-size:17px;font-weight:650;letter-spacing:.01em;margin:3px 0 8px}
 .ctx{color:var(--ink2);font-size:14px;font-style:italic;margin:10px 0 2px;line-height:1.5}
 .ctx b{background:var(--accent-soft);font-style:normal;font-weight:700;border-radius:4px;padding:0 3px}
 .expl{font-size:19px;line-height:1.6;margin-top:14px}
@@ -1119,7 +1144,7 @@ function Ctx({sentence,span}){
   );
 }
 
-function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime}){
+function WordSheet({stack,onClose,onNested,onSave,onRemove,onRetry,knownSet,onPopupTime}){
   const top=stack[stack.length-1];
   const openedAt=useRef(Date.now());
   useEffect(()=>{
@@ -1139,7 +1164,7 @@ function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime})
           <button className="icon-btn" aria-label="Close" onClick={onClose}>✕</button>
         </div>
 
-        {d&&d.ipa&&<div className="ipa">{d.ipa}</div>}
+        {d&&d.pron&&<div className="pron">{d.pron}</div>}
         {top.level===0
           ? <Ctx sentence={top.sentence} span={d?d.span:top.word}/>
           : <div className="ctx">from the explanation</div>}
@@ -1173,10 +1198,14 @@ function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime})
                 </div>}
 
             {top.level===0&&(
-              top.saved
-                ? <div className="chip" style={{background:"#D8EBDC",color:"var(--good)"}}>✓ Saved</div>
-                : <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
-                    onClick={onSave}>Save word</button>
+              <>
+                {top.saved
+                  ? <div className="chip" style={{background:"#D8EBDC",color:"var(--good)"}}>✓ Saved</div>
+                  : <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
+                      onClick={onSave}>Save word</button>}
+                <button className="btn btn-ghost" style={{width:"100%",marginTop:9}}
+                  onClick={onRemove}>Remove underline</button>
+              </>
             )}
           </>
         )}
@@ -1327,13 +1356,24 @@ export default function App(){
   const knownSet=useMemo(()=>{
     const s=new Set();
     for(const e of Object.values(vocab)){
-      if(e.w) s.add(normTok(e.w));
-      if(e.span) s.add(normTok(e.span));
-      for(const f of e.forms||[]) s.add(normTok(f));
+      if(e.w) addWordFamily(s,e.w);
+      if(e.span) addWordFamily(s,e.span);
+      for(const f of e.forms||[]) addWordFamily(s,f);
     }
     return s;
   },[vocab]);
-  const seenSet=useMemo(()=>new Set(Object.keys(seen)),[seen]);
+  const seenSet=useMemo(()=>{
+    const s=new Set();
+    for(const k of Object.keys(seen)){
+      addWordFamily(s,k);
+      const entry=normalizeEntry(wcache[k]);
+      for(const sense of (entry&&entry.senses)||[]){
+        addWordFamily(s,sense.lemma||"");
+        addWordFamily(s,sense.span||"");
+      }
+    }
+    return s;
+  },[seen,wcache]);
 
   /* ---- library ---- */
   const refreshBooks=useCallback(async()=>{
@@ -1544,8 +1584,8 @@ export default function App(){
       const key=normTok(cand||surface);
       if(picked.has(key)||prefetchRef.current.done.has(key)) continue;
       const have=normalizeEntry(wcache[key]);
-      const haveIpa=!!(have&&have.senses.length&&have.senses.every(x=>String(x.ipa||"").trim()));
-      if(haveIpa||knownSet.has(key)) continue;
+      const havePron=!!(have&&have.senses.length&&have.senses.every(x=>String(x.pron||"").trim()));
+      if(havePron||knownSet.has(key)) continue;
       if(!cand){
         const lw=normTok(surface);
         if(lw.length<4) continue;
@@ -1561,7 +1601,7 @@ export default function App(){
       } else {
         /* expressions are always worth one look: the local list can only
            propose, and whether it is idiomatic here is the model's call */
-        if(haveIpa) continue;
+        if(havePron) continue;
       }
       const p=Number(sp.getAttribute("data-p"))||0;
       picked.add(key);
@@ -1583,7 +1623,7 @@ export default function App(){
             const m=batch.find(b=>normTok(b.w)===normTok(r.word||""))||null;
             if(!m) continue;
             add.push([m.key,{span:m.w,lemma:String(r.lemma||m.w),sense:String(r.sense||""),
-              ipa:String(r.ipa||""),en:String(r.en||""),de:String(r.de||""),deDesc:String(r.deDesc||""),
+              pron:String(r.pron||""),en:String(r.en||""),de:String(r.de||""),deDesc:String(r.deDesc||""),
               also:Array.isArray(r.also)?r.also.slice(0,2):[],
               alsoDe:Array.isArray(r.alsoDe)?r.alsoDe.slice(0,2):[],ctx:m.s,ts:Date.now()},
               sentHash(m.s)]);
@@ -1727,13 +1767,13 @@ export default function App(){
     const cacheKey=normTok(cand||surface);
     const h=sentHash(sentence);
     const entry=normalizeEntry(wcache[cacheKey]);
-    const missingIpa=!!(entry&&entry.senses.some(x=>!String(x.ipa||"").trim()));
+    const missingPron=!!(entry&&entry.senses.some(x=>!String(x.pron||"").trim()));
     bump(cacheKey);
 
-    /* Cache entries created before IPA support are still useful for meaning,
-       but they cannot satisfy the pronunciation UI. Refresh them once on tap;
+    /* Older cache entries are still useful for meaning,
+       but they cannot satisfy the kid-friendly pronunciation UI. Refresh them once on tap;
        mergeSense updates the existing sense rather than duplicating it. */
-    if(!entry||!entry.senses.length||missingIpa){
+    if(!entry||!entry.senses.length||missingPron){
       setStack([{level:0,word:surface,sentence,cand,cacheKey,h,data:null,
         loading:true,showDe:false,saved:false,seenCount:((seen[cacheKey]||{}).n||0)+1}]);
       liveLookup(surface,sentence,cand,cacheKey,h);
@@ -1807,7 +1847,7 @@ export default function App(){
     try{
       const j=await askJson(wordPrompt(surface,sentence,cand),{model:models().good,maxTokens:700,timeoutMs:45000});
       const d={span:String(j.span||surface),lemma:String(j.lemma||surface),sense:String(j.sense||""),
-        ipa:String(j.ipa||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
+        pron:String(j.pron||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
         also:Array.isArray(j.also)?j.also.slice(0,2):[],
         alsoDe:Array.isArray(j.alsoDe)?j.alsoDe.slice(0,2):[],ctx:sentence,ts:Date.now()};
       setWcache(cur=>{
@@ -1843,7 +1883,7 @@ export default function App(){
         try{
           const j=await askJson(nestedPrompt(word,explanation),{model:models().good,maxTokens:600,timeoutMs:45000});
           const d={span:String(j.span||word),lemma:String(j.lemma||word),sense:String(j.sense||""),
-            ipa:String(j.ipa||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
+            pron:String(j.pron||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
             also:[],alsoDe:[],ts:Date.now()};
           setWcache(cur=>{ const [e]=mergeSense(normalizeEntry(cur[cacheKey]),d);
             const n={...cur,[cacheKey]:e}; return persistCache(n); });
@@ -1857,6 +1897,37 @@ export default function App(){
     german:()=>setStack(s=>s.map((x,i)=>i===s.length-1?{...x,showDe:true}:x))
   };
 
+  function removeWordFamily(words){
+    const family=new Set();
+    for(const w of words||[]) for(const f of wordFamily(w)) family.add(f);
+    if(!family.size) return;
+    const touches=w=>{
+      for(const f of wordFamily(w)) if(family.has(f)) return true;
+      return false;
+    };
+    setSeen(cur=>{
+      const n={...cur};
+      for(const k of Object.keys(n)) if(touches(k)) delete n[k];
+      lsSet("seen",n); return n;
+    });
+    setVocab(cur=>{
+      const n={...cur};
+      for(const [k,e] of Object.entries(n)){
+        const forms=[e.w,e.span,...(e.forms||[])].filter(Boolean);
+        if(forms.some(touches)) delete n[k];
+      }
+      lsSet("vocab",n); return n;
+    });
+  }
+
+  function removeTopWord(){
+    const top=stack[0];
+    if(!top) return;
+    const d=top.data||{};
+    removeWordFamily([top.word,top.cacheKey,d.lemma,d.span]);
+    setStack([]);
+  }
+
   function saveWord(){
     const top=stack[0];
     if(!top||!top.data) return;
@@ -1868,7 +1939,7 @@ export default function App(){
       ?{...prev,forms:[...new Set([...(prev.forms||[]),normTok(top.word),normTok(d.span)])]}
       :{w:d.lemma||d.span,span:d.span,sense:d.sense,
         forms:[...new Set([normTok(top.word),normTok(d.span)])],
-        ctx:top.sentence,ipa:d.ipa,en:d.en,de:d.de,dd:d.deDesc,
+        ctx:top.sentence,pron:d.pron,en:d.en,de:d.de,dd:d.deDesc,
         also:d.also,alsoDe:d.alsoDe,
         src:{book:(book&&book.meta.title)||"",chapter:chapIdx},
         added:now,s:null,d:null,reps:0,lapses:0,due:now,last:null};
@@ -2050,7 +2121,7 @@ export default function App(){
     return (
       <>
         <div className="topbar"><div className="wrap topbar-in">
-          <div className="tb-title brand-title"><img className="brand-icon" src="./icons/icon-192.png" alt=""/>Right Reader</div>
+          <div className="tb-title brand-title"><img className="brand-icon" src="./icons/icon-192.png?v=8" alt=""/>Right Reader</div>
           {hit&&<span className="pill on">✓ Reading done</span>}
           <button className="icon-btn" aria-label="My words" onClick={()=>setView("words")}>
             {"📓"}<span style={{fontSize:11,fontWeight:800,verticalAlign:"super"}}>{Object.keys(vocab).length||""}</span>
@@ -2084,7 +2155,7 @@ export default function App(){
             </div>
           ):(
             <div className="empty" style={{paddingTop:70}}>
-              <img className="empty-mascot" src="./icons/icon-192.png" alt=""/>
+              <img className="empty-mascot" src="./icons/icon-192.png?v=8" alt=""/>
               <div className="brand-title" style={{justifyContent:"center",fontSize:27,marginBottom:8}}>
                 Choose a book to start
               </div>
@@ -2156,29 +2227,59 @@ export default function App(){
         &&!Object.values(vocab).some(e=>(e.forms||[]).includes(k)))
       .sort((a,b)=>b[1].n-a[1].n).slice(0,60);
 
-    function exportAll(){
-      const blob=new Blob([JSON.stringify({
-        v:1,exported:new Date().toISOString(),
-        vocab,seen,wcache,sessions,positions,spend
-      },null,1)],{type:"application/json"});
-      const a=document.createElement("a");
-      a.href=URL.createObjectURL(blob);
-      a.download="right-reader-backup-"+today()+".json";
-      a.click();
-      setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+    function bufferToBase64(buf){
+      const bytes=buf instanceof ArrayBuffer?new Uint8Array(buf):new Uint8Array(buf.buffer,buf.byteOffset||0,buf.byteLength||buf.length);
+      let out=""; const chunk=0x8000;
+      for(let i=0;i<bytes.length;i+=chunk) out+=String.fromCharCode(...bytes.subarray(i,i+chunk));
+      return btoa(out);
+    }
+    function base64ToBuffer(text){
+      const raw=atob(String(text||""));
+      const bytes=new Uint8Array(raw.length);
+      for(let i=0;i<raw.length;i++) bytes[i]=raw.charCodeAt(i);
+      return bytes.buffer;
+    }
+    async function exportAll(){
+      setMsg("Making full backup …");
+      try{
+        const stored=await dbAll();
+        const bookRows=stored.map(r=>({...r,file:bufferToBase64(r.file)}));
+        const storage={};
+        for(let i=0;i<localStorage.length;i++){
+          const k=localStorage.key(i);
+          if(k&&k.startsWith("rr_")) storage[k]=localStorage.getItem(k);
+        }
+        const blob=new Blob([JSON.stringify({
+          v:2,exported:new Date().toISOString(),storage,books:bookRows
+        })],{type:"application/json"});
+        const a=document.createElement("a");
+        a.href=URL.createObjectURL(blob);
+        a.download="right-reader-full-backup-"+today()+".json";
+        a.click();
+        setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+        setMsg("Full backup created. Keep it private: it contains the API key.");
+      }catch(e){ setMsg("Could not create the full backup."); }
     }
     function importAll(file){
       const fr=new FileReader();
-      fr.onload=()=>{
+      fr.onload=async()=>{
         try{
           const j=JSON.parse(fr.result);
+          if(j.v>=2&&j.storage){
+            for(const [k,v] of Object.entries(j.storage)) if(k.startsWith("rr_")&&typeof v==="string") localStorage.setItem(k,v);
+            for(const r of (j.books||[])) if(r&&r.id&&r.file) await dbPut({...r,file:base64ToBuffer(r.file)});
+            setMsg("Everything restored. Reloading …");
+            setTimeout(()=>location.reload(),350);
+            return;
+          }
+          /* Legacy v1 backups remain importable. */
           if(j.vocab) saveVocab({...vocab,...j.vocab});
           if(j.seen) saveSeen({...seen,...j.seen});
           if(j.wcache) setWcache(persistCache(migrateCache({...wcache,...j.wcache})));
           if(j.sessions){ const n={...sessions,...j.sessions}; setSessions(n); lsSet("sessions",n); }
           if(j.positions){ const n={...positions,...j.positions}; setPositions(n); lsSet("pos",n); }
           setMsg("Restored.");
-        }catch(e){ setMsg("Could not read that file."); }
+        }catch(e){ setMsg("Could not read that backup file."); }
       };
       fr.readAsText(file);
     }
@@ -2336,15 +2437,15 @@ export default function App(){
             </div>
             <div className="card">
               <h3>Backup</h3>
-              <button className="btn btn-plain" style={{width:"100%"}} onClick={exportAll}>Export everything</button>
+              <button className="btn btn-primary" style={{width:"100%"}} onClick={exportAll}>Create full backup</button>
               <label className="btn btn-plain" style={{width:"100%",marginTop:8,display:"block",textAlign:"center"}}>
                 Restore
                 <input type="file" accept="application/json,.json" style={{display:"none"}}
                   onChange={e=>e.target.files[0]&&importAll(e.target.files[0])}/>
               </label>
               <div className="hint">
-                Browser storage can occasionally be cleared. Books can be imported again, but
-                word history and reading time cannot, so export a backup occasionally.
+                This backup contains the books, reading position, saved words, history, settings and API key.
+                Create one before ever removing Right Reader from the Home Screen. Keep the file private.
               </div>
             </div>
             <div className="card">
@@ -2472,8 +2573,10 @@ export default function App(){
               <div className="h">
                 <div className="hw serif">{e.span||e.w}</div>
                 <button className="icon-btn" aria-label="Say it" onClick={()=>speak(e.span||e.w)}>{"🔊"}</button>
+                <button className="icon-btn" aria-label="Remove word" title="Remove word"
+                  onClick={()=>removeWordFamily([e.w,e.span,...(e.forms||[])])}>{"⌫"}</button>
               </div>
-              {e.ipa&&<div className="ipa">{e.ipa}</div>}
+              {e.pron&&<div className="pron">{e.pron}</div>}
               {e.en&&<div className="en">{e.en}</div>}
               {e.de&&(
                 <details className="translation">
@@ -2504,6 +2607,7 @@ export default function App(){
           onClose={()=>setStack([])}
           onNested={nested}
           onSave={saveWord}
+          onRemove={removeTopWord}
           onPopupTime={onPopupTime}
           onRetry={()=>{
             const t=stack[stack.length-1];
