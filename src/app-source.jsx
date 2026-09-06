@@ -963,7 +963,7 @@ body{
 
 /* ---- reading ---- */
 .reader-shell{position:relative;height:calc(100dvh - 73px);overflow:hidden;touch-action:manipulation}
-.reader{height:100%;width:100%;padding:22px 4px 38px;font-size:var(--rsize);line-height:var(--rlead);
+.reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 38px;font-size:var(--rsize);line-height:var(--rlead);
   letter-spacing:.003em;overflow:hidden;column-fill:auto;scroll-behavior:auto}
 body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
 .page-indicator{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);z-index:4;
@@ -1646,14 +1646,7 @@ export default function App(){
     const el=e.target.closest&&e.target.closest(".w");
     touch();
     if(!bodyRef.current) return;
-    if(!el||!bodyRef.current.contains(el)){
-      dismissReaderTip();
-      const box=bodyRef.current.getBoundingClientRect();
-      const x=e.clientX-box.left;
-      if(x<box.width*.30) turnPage(-1);
-      else if(x>box.width*.70) turnPage(1);
-      return;
-    }
+    if(!el||!bodyRef.current.contains(el)) return;
     dismissReaderTip();
     const surface=el.textContent;
     const cand=el.getAttribute("data-mwe");
@@ -1668,6 +1661,17 @@ export default function App(){
       near.forEach(x=>x.classList.add("lit"));
       setTimeout(()=>near.forEach(x=>x.classList.remove("lit")),2400);
     }
+  }
+
+  function onPageTap(e){
+    if(press.current.fired) return;
+    if(e.target.closest&&e.target.closest(".w,.reader-tip,button")) return;
+    const shell=e.currentTarget.getBoundingClientRect();
+    const x=e.clientX-shell.left;
+    /* Wide edge zones, but the text column itself is inset so ordinary page
+       turns do not compete with word lookup taps. */
+    if(x<shell.width*.28){ dismissReaderTip(); turnPage(-1); }
+    else if(x>shell.width*.72){ dismissReaderTip(); turnPage(1); }
   }
 
   function vocabKeyFor(cacheKey,d){
@@ -2100,7 +2104,7 @@ export default function App(){
         </div></div>
 
         <div className="wrap">
-          <div className="reader-shell">
+          <div className="reader-shell" onClick={onPageTap}>
             {showReaderTip&&(
               <div className="reader-tip">
                 <div><b>Tap a word</b> to explain it.<br/><b>Tap the sides</b> to turn the page.<br/><b>Hold a sentence</b> to hear it.</div>
