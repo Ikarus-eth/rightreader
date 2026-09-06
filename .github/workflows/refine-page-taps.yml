@@ -1,0 +1,42 @@
+name: Refine page taps
+
+on:
+  push:
+    branches: [design/storybook-theme]
+    paths:
+      - tools/refine_page_taps.py
+      - .github/workflows/refine-page-taps.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refine:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: design/storybook-theme
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Refine page tap interaction
+        run: python tools/refine_page_taps.py
+      - name: Build
+        working-directory: src
+        run: |
+          npm install
+          npm run build
+      - name: Verify
+        run: |
+          grep -q 'function onPageTap' src/app-source.jsx
+          grep -q 'reader-shell" onClick={onPageTap}' src/app-source.jsx
+          test -s app.js
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app-source.jsx app.js
+          git commit -m 'Separate page-turn gutters from word taps' || exit 0
+          git push origin HEAD:design/storybook-theme
