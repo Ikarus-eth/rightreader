@@ -140,7 +140,7 @@ npm run build
 
 Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Current service-worker cache for this release: `rr-v8`.
+Current service-worker cache for this release: `rr-v9`.
 
 ## OpenAI models and cost table
 
@@ -156,3 +156,8 @@ The values are only for the on-device spend estimate; actual billing remains wha
 ## Safe Home Screen reinstall
 
 Normal app/service-worker updates preserve IndexedDB and localStorage. Removing the Home Screen web app can delete that isolated storage on iPadOS. Parent → Settings → Backup now creates a full portable backup containing EPUBs, saved words, reading history/position, settings, and the API key. Create that file before removing the Home Screen app, then restore it after re-adding. Keep it private because it contains the API key.
+
+
+### Backup safety
+
+Right Reader automatically mirrors all app state and EPUB bytes into a local IndexedDB safety snapshot after changes. Parent → Settings → Backup can also save a complete `.rrbackup` file through the iOS share sheet; before deleting/re-adding the Home Screen app, save that file to Files because iPadOS may delete the app’s own local storage when the installed web app is removed.

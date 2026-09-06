@@ -6,7 +6,7 @@
    an instant start from cache, and a new version is fetched in the
    background and used at the next launch. Bump VERSION on any deploy
    that changes index.html or app.js. */
-const VERSION = "rr-v8";
+const VERSION = "rr-v9";
 const SHELL = [
   "./","./index.html","./app.js","./config.js","./manifest.json",
   "./icons/icon-192.png","./icons/icon-512.png","./icons/apple-touch-icon.png","./icons/icon.svg"

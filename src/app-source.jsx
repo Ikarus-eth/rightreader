@@ -81,23 +81,27 @@ function lsGet(key,fb){
   catch(e){ return fb; }
 }
 function lsSet(key,val){
-  try{ localStorage.setItem("rr_"+key,JSON.stringify(val)); return true; }
-  catch(e){ return false; }
+  try{
+    localStorage.setItem("rr_"+key,JSON.stringify(val));
+    scheduleSafetyBackup();
+    return true;
+  }catch(e){ return false; }
 }
 
 /* ---------------- IndexedDB (book files only) ----------------
    Books are stored as the original bytes and re-parsed on open. Storing
    parsed chapters instead would be faster to open and far more fragile:
    any change to the parser would leave old books rendered by old rules. */
-const DB_NAME="rightreader", DB_STORE="books";
+const DB_NAME="rightreader", DB_STORE="books", DB_BACKUP_STORE="safetyBackups";
 let dbP=null;
 function db(){
   if(dbP) return dbP;
   dbP=new Promise((res,rej)=>{
-    const r=indexedDB.open(DB_NAME,1);
+    const r=indexedDB.open(DB_NAME,2);
     r.onupgradeneeded=()=>{
       const d=r.result;
       if(!d.objectStoreNames.contains(DB_STORE)) d.createObjectStore(DB_STORE,{keyPath:"id"});
+      if(!d.objectStoreNames.contains(DB_BACKUP_STORE)) d.createObjectStore(DB_BACKUP_STORE,{keyPath:"id"});
     };
     r.onsuccess=()=>res(r.result);
     r.onerror=()=>rej(r.error);
@@ -109,7 +113,7 @@ async function dbPut(rec){
   return new Promise((res,rej)=>{
     const t=d.transaction(DB_STORE,"readwrite");
     t.objectStore(DB_STORE).put(rec);
-    t.oncomplete=()=>res(true); t.onerror=()=>rej(t.error);
+    t.oncomplete=()=>{ scheduleSafetyBackup(); res(true); }; t.onerror=()=>rej(t.error);
   });
 }
 async function dbGet(id){
@@ -133,8 +137,67 @@ async function dbDel(id){
   return new Promise((res,rej)=>{
     const t=d.transaction(DB_STORE,"readwrite");
     t.objectStore(DB_STORE).delete(id);
+    t.oncomplete=()=>{ scheduleSafetyBackup(); res(true); }; t.onerror=()=>rej(t.error);
+  });
+}
+
+/* Automatic in-app safety copy. This mirrors all rr_ localStorage state and
+   all EPUB bytes into a second IndexedDB store after changes. It protects
+   against partial writes/corruption and gives us one intact local snapshot.
+   It is NOT the reinstall backup: iPadOS may remove all origin storage when
+   the Home Screen app is deleted, so a separate file saved to Files is still
+   required before removing the app. */
+let safetyTimer=null, safetyBusy=false, safetyAgain=false;
+function rrStorageSnapshot(){
+  const storage={};
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(k&&k.startsWith("rr_")&&k!=="rr_autoBackupAt") storage[k]=localStorage.getItem(k);
+  }
+  return storage;
+}
+async function dbPutSafety(rec){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const t=d.transaction(DB_BACKUP_STORE,"readwrite");
+    t.objectStore(DB_BACKUP_STORE).put(rec);
     t.oncomplete=()=>res(true); t.onerror=()=>rej(t.error);
   });
+}
+async function dbGetSafety(){
+  const d=await db();
+  return new Promise((res,rej)=>{
+    const t=d.transaction(DB_BACKUP_STORE,"readonly");
+    const q=t.objectStore(DB_BACKUP_STORE).get("latest");
+    q.onsuccess=()=>res(q.result||null); q.onerror=()=>rej(q.error);
+  });
+}
+async function writeSafetyBackup(){
+  if(safetyBusy){ safetyAgain=true; return; }
+  safetyBusy=true;
+  try{
+    const saved=Date.now();
+    await dbPutSafety({id:"latest",v:3,saved,storage:rrStorageSnapshot(),books:await dbAll()});
+    try{ localStorage.setItem("rr_autoBackupAt",JSON.stringify(saved)); }catch(e){}
+  }catch(e){}
+  finally{
+    safetyBusy=false;
+    if(safetyAgain){ safetyAgain=false; scheduleSafetyBackup(); }
+  }
+}
+function scheduleSafetyBackup(){
+  clearTimeout(safetyTimer);
+  safetyTimer=setTimeout(()=>writeSafetyBackup(),1400);
+}
+async function restoreLocalSafetyCopy(){
+  try{
+    const snap=await dbGetSafety();
+    if(!snap||!snap.storage) return false;
+    for(const [k,v] of Object.entries(snap.storage))
+      if(k.startsWith("rr_")&&typeof v==="string") localStorage.setItem(k,v);
+    for(const r of snap.books||[]) if(r&&r.id&&r.file) await dbPut(r);
+    return true;
+  }catch(e){ return false; }
 }
 
 /* Safari clears script-writable storage aggressively. This asks it not
@@ -1310,7 +1373,7 @@ export default function App(){
   const pendingPctRef=useRef(null);
 
   useEffect(()=>{ const s=document.createElement("style"); s.textContent=CSS;
-    document.head.appendChild(s); askPersist(); },[]);
+    document.head.appendChild(s); askPersist(); scheduleSafetyBackup(); },[]);
   useEffect(()=>{
     document.body.classList.toggle("reading-mode",view==="read");
     return ()=>document.body.classList.remove("reading-mode");
@@ -2240,25 +2303,30 @@ export default function App(){
       return bytes.buffer;
     }
     async function exportAll(){
-      setMsg("Making full backup …");
+      setMsg("Preparing full backup …");
       try{
+        await writeSafetyBackup();
         const stored=await dbAll();
         const bookRows=stored.map(r=>({...r,file:bufferToBase64(r.file)}));
-        const storage={};
-        for(let i=0;i<localStorage.length;i++){
-          const k=localStorage.key(i);
-          if(k&&k.startsWith("rr_")) storage[k]=localStorage.getItem(k);
-        }
+        const storage=rrStorageSnapshot();
+        const name="right-reader-reinstall-backup-"+today()+".rrbackup";
         const blob=new Blob([JSON.stringify({
-          v:2,exported:new Date().toISOString(),storage,books:bookRows
+          v:3,exported:new Date().toISOString(),storage,books:bookRows
         })],{type:"application/json"});
-        const a=document.createElement("a");
-        a.href=URL.createObjectURL(blob);
-        a.download="right-reader-full-backup-"+today()+".json";
-        a.click();
-        setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-        setMsg("Full backup created. Keep it private: it contains the API key.");
-      }catch(e){ setMsg("Could not create the full backup."); }
+        const file=new File([blob],name,{type:"application/json"});
+        if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+          await navigator.share({title:"Right Reader backup",text:"Save this backup in Files before removing Right Reader from the Home Screen.",files:[file]});
+        }else{
+          const a=document.createElement("a");
+          a.href=URL.createObjectURL(blob); a.download=name; a.click();
+          setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+        }
+        lsSet("externalBackupAt",Date.now());
+        setMsg("Backup ready. Keep the .rrbackup file in Files; it contains the API key and books.");
+      }catch(e){
+        if(e&&e.name==="AbortError") setMsg("Backup cancelled.");
+        else setMsg("Could not create the full backup.");
+      }
     }
     function importAll(file){
       const fr=new FileReader();
@@ -2437,15 +2505,21 @@ export default function App(){
             </div>
             <div className="card">
               <h3>Backup</h3>
-              <button className="btn btn-primary" style={{width:"100%"}} onClick={exportAll}>Create full backup</button>
+              <button className="btn btn-primary" style={{width:"100%"}} onClick={exportAll}>Save full backup to Files</button>
+              <button className="btn btn-plain" style={{width:"100%",marginTop:8}} onClick={async()=>{
+                if(await restoreLocalSafetyCopy()){ setMsg("Local safety copy restored. Reloading …"); setTimeout(()=>location.reload(),350); }
+                else setMsg("No local safety copy was found.");
+              }}>Restore automatic local copy</button>
               <label className="btn btn-plain" style={{width:"100%",marginTop:8,display:"block",textAlign:"center"}}>
-                Restore
-                <input type="file" accept="application/json,.json" style={{display:"none"}}
+                Restore backup file
+                <input type="file" accept="application/json,.json,.rrbackup" style={{display:"none"}}
                   onChange={e=>e.target.files[0]&&importAll(e.target.files[0])}/>
               </label>
               <div className="hint">
-                This backup contains the books, reading position, saved words, history, settings and API key.
-                Create one before ever removing Right Reader from the Home Screen. Keep the file private.
+                Right Reader now keeps a full automatic local safety copy after changes. It includes books,
+                reading position, saved words, history, settings and the API key. <b>Important:</b> iPadOS may
+                delete that local copy when the Home Screen app itself is removed. Before removing/re-adding
+                Right Reader, tap <b>Save full backup to Files</b> and choose Save to Files. Keep it private.
               </div>
             </div>
             <div className="card">
