@@ -1544,7 +1544,8 @@ export default function App(){
       const key=normTok(cand||surface);
       if(picked.has(key)||prefetchRef.current.done.has(key)) continue;
       const have=normalizeEntry(wcache[key]);
-      if((have&&have.senses.length)||knownSet.has(key)) continue;
+      const haveIpa=!!(have&&have.senses.length&&have.senses.every(x=>String(x.ipa||"").trim()));
+      if(haveIpa||knownSet.has(key)) continue;
       if(!cand){
         const lw=normTok(surface);
         if(lw.length<4) continue;
@@ -1560,7 +1561,7 @@ export default function App(){
       } else {
         /* expressions are always worth one look: the local list can only
            propose, and whether it is idiomatic here is the model's call */
-        if(have&&have.senses.length) continue;
+        if(haveIpa) continue;
       }
       const p=Number(sp.getAttribute("data-p"))||0;
       picked.add(key);
@@ -1726,9 +1727,13 @@ export default function App(){
     const cacheKey=normTok(cand||surface);
     const h=sentHash(sentence);
     const entry=normalizeEntry(wcache[cacheKey]);
+    const missingIpa=!!(entry&&entry.senses.some(x=>!String(x.ipa||"").trim()));
     bump(cacheKey);
 
-    if(!entry||!entry.senses.length){
+    /* Cache entries created before IPA support are still useful for meaning,
+       but they cannot satisfy the pronunciation UI. Refresh them once on tap;
+       mergeSense updates the existing sense rather than duplicating it. */
+    if(!entry||!entry.senses.length||missingIpa){
       setStack([{level:0,word:surface,sentence,cand,cacheKey,h,data:null,
         loading:true,showDe:false,saved:false,seenCount:((seen[cacheKey]||{}).n||0)+1}]);
       liveLookup(surface,sentence,cand,cacheKey,h);
