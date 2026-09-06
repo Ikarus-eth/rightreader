@@ -9,12 +9,32 @@ Tap a word and get a very short, contextual explanation in easy English. Tap a h
 - Static GitHub Pages site. No backend or proxy.
 - Calls the OpenAI API directly from the browser.
 - The API key is entered once in Parent settings and stored only in that iPad's localStorage.
-- EPUBs are parsed with JSZip and rendered into native DOM, not an iframe, so word taps are exact.
+- EPUBs are parsed with JSZip and rendered into native DOM, not an iframe, so word taps stay exact.
+- Chapters are laid out as horizontal CSS columns: one screen-sized page at a time, with no vertical reader scrolling.
 - Raw EPUB bytes live in IndexedDB. Other state lives under `rr_` keys in localStorage.
 - A local list proposes phrasal verbs/idioms; the model decides whether the phrase is actually idiomatic in that sentence.
-- Reading time is capped by text actually scrolled past plus time spent in word explanations. Sitting on one page does not earn reading time.
+- Reading time is capped by words on pages actually reached plus time spent in word explanations. Leaving one page open does not keep earning time.
 
-The browser-held API key is a conscious security tradeoff for a single-family prototype. Use a dedicated OpenAI project/key, a small prepaid balance, and no automatic recharge. Do not distribute this architecture to other families as a production service.
+The browser-held API key is a conscious security tradeoff for a single-family prototype. Use a dedicated OpenAI project/key, a small prepaid balance, and no automatic recharge.
+
+## Reading interaction
+
+Right Reader behaves like an e-reader rather than a web page:
+
+- Tap the **right side** to go forward one page.
+- Tap the **left side** to go back one page.
+- At the end of a chapter, another forward tap opens the first page of the next chapter.
+- At the beginning of a chapter, a back tap opens the last page of the previous chapter.
+- Tap an actual **word** to explain it. Word taps take priority over page turns.
+- Hold a sentence to hear it read aloud.
+- The current page is saved and restored when the book is reopened.
+- Changing text size or rotating/reflowing preserves approximately the same place in the chapter.
+
+The text column is inset from the screen edges to create clear page-turn gutters, so page taps and vocabulary taps do not fight each other.
+
+## Visual identity
+
+The app uses a warm illustrated-storybook look inspired by the kitten-and-butterfly artwork: parchment/cream backgrounds, deep leafy greens, golden accents, softer cards and controls, and a kitten-reading-a-butterfly-book app icon. The Home Screen, manifest and browser theme colors use the same palette.
 
 ## First setup on the iPad
 
@@ -22,7 +42,7 @@ The browser-held API key is a conscious security tradeoff for a single-family pr
 2. Open **Parent → Settings**.
 3. Paste the dedicated OpenAI API key and tap **Save & test**.
 4. The key is saved only if the API test succeeds.
-5. Keep the default models unless there is a reason to change them:
+5. Defaults:
    - `gpt-5.6-luna` for high-volume background prefetch.
    - `gpt-5.6-terra` for live contextual lookups.
 
@@ -46,16 +66,14 @@ On the iPad, Juna opens Right Reader and taps:
 
 Do not open the `.epub` from Files or AirDrop it as the normal workflow. iOS will typically hand it to Apple Books. Right Reader needs the file to be chosen from inside its own document picker. After import, Right Reader keeps its own copy in IndexedDB.
 
-The file input intentionally has no `accept=.epub` filter. iOS has historically mapped EPUB type identifiers inconsistently and can otherwise show the file while greying it out. Right Reader validates the extension after selection instead.
+The file input intentionally has no `accept=.epub` filter because iOS has historically mapped EPUB type identifiers inconsistently. Right Reader validates the extension after selection instead.
 
 ## Child experience
-
-The reading UI is intentionally quiet:
 
 - No live `running / paused` status.
 - No exact minute counter while reading.
 - The library only shows **Reading done** once the daily target is reached.
-- First reading session shows one small hint: **Tap a word to explain it. Hold a sentence to hear it.**
+- First reading session shows: **Tap a word to explain it. Tap the sides to turn the page. Hold a sentence to hear it.**
 - Normal lookup sheet shows the word, its easy-English explanation, optional German, and **Save word**.
 - Model checking/correction machinery and repeated-lookup nudges are hidden from the child.
 - **My words** shows the English explanation first. German is collapsed behind a disclosure.
@@ -75,42 +93,32 @@ The model prompt is explicitly for a 10-year-old German A2/B1 learner and asks f
 
 ## Prefetch
 
-When a chapter opens, likely-difficult words are explained in background batches with `gpt-5.6-luna`. The app skips common words, known words, most proper nouns, contractions, headings, and front matter. Taps usually therefore feel instant.
+When a chapter opens, likely-difficult words are explained in background batches with `gpt-5.6-luna`. The app skips common words, known words, most proper nouns, contractions, headings, and front matter. Taps therefore usually feel instant.
 
 ## Saving words
 
 Saving is explicit. A lookup does not automatically become homework. Saved entries already contain FSRS-4.5 scheduling fields so spaced repetition can be added later without a migration.
 
-Repeated lookups are still counted quietly and remain visible in Parent settings, but the child is no longer nudged while reading.
+Repeated lookups are still counted quietly and remain visible in Parent settings, but the child is not nudged while reading.
 
 ## Reading-time accounting
 
-The clock only advances while the app is visible and there has been interaction within 90 seconds.
+The clock only advances while the app is visible and there has been activity within 90 seconds.
 
-```
-earned   = words scrolled past / floor_wpm + time in word popups
+```text
+earned   = words on pages reached / floor_wpm + time in word popups
 credited = min(elapsed, earned)
 ```
 
 A lookup can contribute at most 45 seconds. The starting floor is 50 WPM. Once there are enough real sessions, the floor adapts to 40% of her observed median reading speed.
 
-Calendar keys use the iPad's **local date**, not UTC. Word counts are accumulated across multiple reading sittings in the same day.
+Calendar keys use the iPad's local date, not UTC. Word counts accumulate across multiple reading sittings in the same day.
 
 Target: 20 minutes on 5 days per week. Exact time history stays in Parent settings rather than in the reading view.
 
 ## Parent settings
 
-Parent settings contains:
-
-- reading history and target progress;
-- saved words;
-- repeatedly looked-up but unsaved words;
-- API key validation;
-- model selection;
-- estimated API spend;
-- backup/restore;
-- direct-URL EPUB import for hosts that serve the file with CORS;
-- book deletion.
+Parent settings contains reading history, saved words, repeatedly looked-up unsaved words, API-key validation, model selection, estimated API spend, backup/restore, direct-URL EPUB import, and book deletion.
 
 ## Offline behavior and storage
 
@@ -128,11 +136,9 @@ npm install
 npm run build
 ```
 
-`config.js` does not require rebuilding.
+Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving the previous cached bundle.
-
-Current service-worker cache for this release: `rr-v5`.
+Current service-worker cache for this release: `rr-v6`.
 
 ## OpenAI models and cost table
 
