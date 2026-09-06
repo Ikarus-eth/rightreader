@@ -9,12 +9,11 @@ import MWE from "./data/mwe.json";
 
    Architecture, and why:
 
-   NO SERVER. Calls go straight from the browser to api.anthropic.com
-   using the anthropic-dangerous-direct-browser-access header. The key
-   lives in localStorage on this one iPad, entered once via the parent
-   screen. It is never in the repo. The blast radius is financial, not
-   technical: use a dedicated key with a small prepaid balance and
-   auto-reload OFF, and the worst case is that balance.
+   NO SERVER. Calls go straight from the browser to api.openai.com.
+   The key lives in localStorage on this one iPad, entered once via the
+   parent screen. It is never in the repo. A browser-stored API key can
+   be read by anyone with access to the device, so use a dedicated key,
+   a small prepaid balance, and auto-recharge OFF.
 
    NO IFRAME. Chapters are parsed out of the EPUB zip and rendered into
    native DOM. epub.js renders into an iframe with CSS columns, and tap
@@ -528,15 +527,13 @@ function isProperNounish(surface,sentInitial,lowerSeen){
 }
 
 /* ============================================================
-   Anthropic API — straight from the browser, no proxy
+   Model API — straight from the browser, no proxy
 
-   api.anthropic.com only answers cross-origin requests that carry
-   anthropic-dangerous-direct-browser-access. The name is the warning:
-   the key travels in a request anyone with dev tools can read. That is
-   acceptable here and only here, because the key belongs to the person
-   holding the device. Guard rails below are financial and behavioural:
-   a per-day request ceiling, a hard max_tokens, and running token
-   accounting surfaced on the parent screen the same day it happens.
+   The API key travels in a browser request and is therefore readable by
+   anyone with access to this device. This app deliberately accepts that
+   tradeoff for a single-family prototype. Guard rails below are financial
+   and behavioural: a per-day request ceiling, a hard output-token cap,
+   and same-day token accounting on the parent screen.
    ============================================================ */
 
 /* ---------------- provider ----------------
@@ -604,7 +601,13 @@ function priceOf(model){
   return t||{in:1,out:5};
 }
 
-function today(){ return new Date().toISOString().slice(0,10); }
+function localDateKey(d=new Date()){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,"0");
+  const day=String(d.getDate()).padStart(2,"0");
+  return `${y}-${m}-${day}`;
+}
+function today(){ return localDateKey(); }
 
 function noteUsage(model,u){
   if(!u) return;
@@ -1049,6 +1052,11 @@ input[type=text],input[type=password],input[type=number]{
   border-radius:11px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
 .tabs button.on{background:var(--accent);color:#fff}
 .empty{text-align:center;color:var(--ink2);padding:44px 20px;line-height:1.6}
+.reader-tip{display:flex;align-items:center;gap:14px;background:var(--accent-soft);color:var(--ink);
+  border-radius:14px;padding:12px 14px;margin:14px 0 8px;font-size:14px;line-height:1.45}
+.reader-tip>div{flex:1}.reader-tip .btn{padding:8px 11px;font-size:13px;white-space:nowrap}
+.translation{margin-top:9px}.translation summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:13px}
+.translation .de{margin-top:6px}
 `;
 
 /* ============================================================
@@ -1103,62 +1111,38 @@ function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime})
       <div className="sheet" onClick={e=>e.stopPropagation()}>
         <div className="sheet-head">
           {stack.length>1&&<button className="icon-btn" aria-label="Back" onClick={onNested.back}>‹</button>}
-          <div className={"headword serif"}>{head}</div>
+          <div className="headword serif">{head}</div>
           <button className="icon-btn" aria-label="Say it" onClick={()=>speak(head)}>🔊</button>
           <button className="icon-btn" aria-label="Close" onClick={onClose}>✕</button>
         </div>
 
         {top.level===0
           ? <Ctx sentence={top.sentence} span={d?d.span:top.word}/>
-          : <div className="ctx">aus der Erklärung</div>}
+          : <div className="ctx">from the explanation</div>}
 
-        {top.loading&&(
-          <>
-            <div className="spin"/>
-            {top.choosing&&<div className="hint" style={{textAlign:"center",marginTop:-14}}>
-              Welche Bedeutung ist hier gemeint?</div>}
-            {top.changed&&!top.choosing&&<div className="hint" style={{textAlign:"center",marginTop:-14}}>
-              Hier heißt es etwas anderes …</div>}
-          </>
-        )}
+        {top.loading&&<div className="spin"/>}
 
         {top.error&&(
           <>
             <div className="err">{top.error}</div>
             {top.canRetry&&<button className="btn btn-plain" style={{width:"100%",marginTop:12}}
-              onClick={onRetry}>Nochmal versuchen</button>}
+              onClick={onRetry}>Try again</button>}
           </>
         )}
 
         {d&&!top.loading&&(
           <>
-            {top.changed&&(
-              <div className="chip" style={{background:"#FBEFD6",color:"#8A5A12"}}>
-                ✓ In diesem Satz heißt es das hier
-              </div>
-            )}
-            {top.checking&&(
-              <div className="chip" style={{background:"var(--paper2)",color:"var(--ink2)"}}>
-                <span className="dot"/> prüfe die Bedeutung …
-              </div>
-            )}
             {d.span&&normTok(d.span)!==normTok(top.word)&&(
-              <div className="chip">🔗 These {d.span.split(/\s+/).length} words go together</div>
+              <div className="chip">These {d.span.split(/\s+/).length} words go together</div>
             )}
             <div className="expl">
               <TapExplain text={d.en} knownSet={knownSet}
                 onWord={top.level===0?onNested.open:()=>{}}/>
             </div>
 
-            {d.also&&d.also.length>0&&(
-              <div className="chip">🔀 Can also mean: {d.also.join(", ")}
-                {top.showDe&&d.alsoDe&&d.alsoDe.length>0&&<> ({d.alsoDe.join(", ")})</>}
-              </div>
-            )}
-
             {!top.showDe
               ? <button className="btn btn-ghost" style={{width:"100%",marginTop:16}}
-                  onClick={onNested.german}>Auf Deutsch 🇩🇪</button>
+                  onClick={onNested.german}>German</button>
               : <div className="de-box">
                   <div style={{fontWeight:800,fontSize:20}}>{d.de||"—"}</div>
                   {d.deDesc&&<div style={{fontSize:15,marginTop:5,color:"var(--ink2)",lineHeight:1.5}}>{d.deDesc}</div>}
@@ -1166,16 +1150,9 @@ function WordSheet({stack,onClose,onNested,onSave,onRetry,knownSet,onPopupTime})
 
             {top.level===0&&(
               top.saved
-                ? <div className="chip" style={{background:"#D8EBDC",color:"var(--good)"}}>✓ In deiner Wortliste</div>
-                : <>
-                    {top.seenCount>=3&&(
-                      <div className="nudge">
-                        Du hast dieses Wort schon {top.seenCount}× nachgeschaut. Vielleicht doch merken?
-                      </div>
-                    )}
-                    <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
-                      onClick={onSave}>＋ Neues Wort</button>
-                  </>
+                ? <div className="chip" style={{background:"#D8EBDC",color:"var(--good)"}}>✓ Saved</div>
+                : <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
+                    onClick={onSave}>Save word</button>
             )}
           </>
         )}
@@ -1221,9 +1198,13 @@ function fmtMin(ms){
 }
 function lastNDays(n){
   const out=[];
+  const base=new Date();
+  /* Noon avoids DST edge cases when a local midnight is skipped/repeated. */
+  base.setHours(12,0,0,0);
   for(let i=n-1;i>=0;i--){
-    const d=new Date(Date.now()-i*DAY);
-    out.push(d.toISOString().slice(0,10));
+    const d=new Date(base);
+    d.setDate(base.getDate()-i);
+    out.push(localDateKey(d));
   }
   return out;
 }
@@ -1253,7 +1234,6 @@ export default function App(){
   const [chapIdx,setChapIdx]=useState(0);
   const [chap,setChap]=useState(null);          // {html,paras,nWords}
   const [stack,setStack]=useState([]);          // word sheet levels
-  const [hud,setHud]=useState({credited:0,elapsed:0,active:false});
   const [tab,setTab]=useState("time");
   const [key,setKey]=useState(()=>lsGet("apikey",""));
   const [msg,setMsg]=useState("");
@@ -1263,11 +1243,12 @@ export default function App(){
   const [bookUrl,setBookUrl]=useState("");
   const [prefs,setPrefs]=useState(()=>lsGet("prefs",{size:20,lead:1.68,theme:"paper",serif:true}));
   const [sheet,setSheet]=useState(null);   // "toc" | "type" | null
+  const [showReaderTip,setShowReaderTip]=useState(()=>!lsGet("readerTipSeen",false));
 
   const bodyRef=useRef(null);
   const urlsRef=useRef([]);
   const fileRef=useRef(null);
-  const clock=useRef({elapsed:0,popup:0,words:0,base:0,flushed:0,flushedRaw:0,last:Date.now(),bookId:null});
+  const clock=useRef({elapsed:0,popup:0,words:0,base:0,flushed:0,flushedRaw:0,flushedWords:0,last:Date.now(),bookId:null});
   const spansRef=useRef([]);
   const prefetchRef=useRef({busy:false,done:new Set()});
 
@@ -1285,7 +1266,7 @@ export default function App(){
   },[prefs]);
 
   /* ---- persistence helpers ---- */
-  const saveVocab=useCallback(v=>{ setVocab(v); if(!lsSet("vocab",v)) setFatal("Speicher voll — bitte im Eltern-Bereich exportieren."); },[]);
+  const saveVocab=useCallback(v=>{ setVocab(v); if(!lsSet("vocab",v)) setFatal("Storage is full — please export a backup in Parent settings."); },[]);
   const saveSeen =useCallback(v=>{ setSeen(v); lsSet("seen",v); },[]);
   /* Every cache write goes through here. The trimming used to live in a
      helper that nothing called any more, so the word cache grew without
@@ -1327,7 +1308,7 @@ export default function App(){
       const all=await dbAll();
       all.sort((a,b)=>(b.opened||b.added||0)-(a.opened||a.added||0));
       setBooks(all.map(({file,...m})=>m));
-    }catch(e){ setFatal("Bibliothek konnte nicht geladen werden."); }
+    }catch(e){ setFatal("Could not load the library."); }
   },[]);
   useEffect(()=>{ refreshBooks(); },[refreshBooks]);
 
@@ -1335,7 +1316,7 @@ export default function App(){
     /* Never leave the spinner up with nothing behind it: whatever goes
        wrong, this either adds a book or says why. */
     const withLimit=(p,ms)=>Promise.race([p,
-      new Promise((_,rej)=>setTimeout(()=>rej(new Error("hat zu lange gedauert")),ms))]);
+      new Promise((_,rej)=>setTimeout(()=>rej(new Error("took too long")),ms))]);
     const parsed=await withLimit(parseEpub(buf),60000);
     const cover=await withLimit(readCover(parsed),15000).catch(()=>null);
     const id="b_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7);
@@ -1347,13 +1328,13 @@ export default function App(){
 
   async function importFiles(list){
     for(const file of Array.from(list||[])){
-      setBusy("Öffne „"+file.name+"“ …");
+      setBusy("Opening “"+file.name+"” …");
       try{
         if(!/\.epub$/i.test(file.name||""))
-          throw new Error("das ist keine .epub-Datei");
+          throw new Error("that is not an .epub file");
         await addBook(await file.arrayBuffer(),file.name);
       }catch(e){
-        setFatal("„"+file.name+"“: "+(e&&e.message||"konnte nicht gelesen werden"));
+        setFatal("“"+file.name+"”: "+(e&&e.message||"could not be read"));
       }
     }
     setBusy("");
@@ -1362,8 +1343,8 @@ export default function App(){
 
   async function importUrl(url){
     const clean=String(url||"").trim();
-    if(!/^https:\/\//i.test(clean)){ setFatal("Der Link muss mit https:// anfangen."); return; }
-    setBusy("Lade Buch …");
+    if(!/^https:\/\//i.test(clean)){ setFatal("The link must start with https://."); return; }
+    setBusy("Downloading book …");
     try{
       const res=await fetch(clean);
       if(!res.ok) throw new Error("HTTP "+res.status);
@@ -1371,17 +1352,17 @@ export default function App(){
     }catch(e){
       /* A cross-origin block and a dead link look identical from here, so
          say both rather than guessing which one it was. */
-      setFatal("Link ließ sich nicht laden: "+(e&&e.message||"")+
-        ". Der Server muss die Datei direkt und mit CORS ausliefern (raw.githubusercontent.com tut das).");
+      setFatal("Could not load that link: "+(e&&e.message||"")+
+        ". The server must provide the file directly and allow CORS (raw.githubusercontent.com does).");
     }
     setBusy("");
   }
 
   async function openBook(id){
-    setBusy("Öffne Buch …");
+    setBusy("Opening book …");
     try{
       const rec=await dbGet(id);
-      if(!rec) throw new Error("nicht gefunden");
+      if(!rec) throw new Error("not found");
       const parsed=await parseEpub(rec.file);
       await dbPut({...rec,opened:Date.now()});
       const {file,...meta}=rec;
@@ -1389,10 +1370,10 @@ export default function App(){
       const pos=positions[id]||{};
       const start=Number.isInteger(pos.chapter)?pos.chapter:firstTextChapter(parsed);
       setChapIdx(start);
-      clock.current={elapsed:0,popup:0,words:0,base:0,flushed:0,flushedRaw:0,last:Date.now(),bookId:id};
+      clock.current={elapsed:0,popup:0,words:0,base:0,flushed:0,flushedRaw:0,flushedWords:0,last:Date.now(),bookId:id};
       prefetchRef.current.done=new Set();
       setView("read");
-    }catch(e){ setFatal("Buch konnte nicht geöffnet werden: "+(e&&e.message||"")); }
+    }catch(e){ setFatal("Could not open the book: "+(e&&e.message||"")); }
     setBusy("");
   }
 
@@ -1434,7 +1415,7 @@ export default function App(){
         urlsRef.current=urls;
         setChap(c);
       }catch(e){
-        if(!cancelled) setChap({html:"<p>Dieses Kapitel konnte nicht angezeigt werden.</p>",paras:[],nWords:0});
+        if(!cancelled) setChap({html:"<p>This chapter could not be displayed.</p>",paras:[],nWords:0});
       }
     })();
     return ()=>{ cancelled=true; };
@@ -1635,6 +1616,7 @@ export default function App(){
     const el=e.target.closest&&e.target.closest(".w");
     touch();
     if(!el||!bodyRef.current||!bodyRef.current.contains(el)) return;
+    dismissReaderTip();
     const surface=el.textContent;
     const cand=el.getAttribute("data-mwe");
     const p=Number(el.getAttribute("data-p"))||0;
@@ -1727,7 +1709,7 @@ export default function App(){
   }
 
   /* two or more senses on file: she waits for the pick, but it is a
-     Haiku call returning a single digit, not a full explanation */
+     fast-model call returning a single digit, not a full explanation */
   async function chooseSense(surface,sentence,cand,cacheKey,h,entry){
     try{
       const pick=await askPick(cand||surface,sentence,entry.senses);
@@ -1779,10 +1761,10 @@ export default function App(){
         ?[{...st[0],loading:false,checking:false,choosing:false,data:d,saved:!!vocab[vk],changed:!!changed},...st.slice(1)]:st);
     }catch(e){
       const msg=e instanceof NeedsKey
-        ?"Es ist noch kein API-Schlüssel eingetragen (Eltern-Bereich)."
+        ?"No API key is set yet (Parent settings)."
         :e instanceof CapReached
-          ?"Heute schon sehr viele Nachschläge — morgen wieder."
-          :"Das hat leider nicht geklappt.";
+          ?"That is enough lookups for today — try again tomorrow."
+          :"That did not work.";
       setStack(st=>st.length?[{...st[0],loading:false,checking:false,choosing:false,
         error:msg,canRetry:!(e instanceof NeedsKey)},...st.slice(1)]:st);
     }
@@ -1807,7 +1789,7 @@ export default function App(){
             const n={...cur,[cacheKey]:e}; return persistCache(n); });
           setStack(s=>s.map((x,i)=>i===s.length-1&&x.cacheKey===cacheKey?{...x,loading:false,data:d}:x));
         }catch(e){
-          setStack(s=>s.map((x,i)=>i===s.length-1?{...x,loading:false,error:"Das hat leider nicht geklappt.",canRetry:true}:x));
+          setStack(s=>s.map((x,i)=>i===s.length-1?{...x,loading:false,error:"That did not work.",canRetry:true}:x));
         }
       })();
     },
@@ -1838,6 +1820,11 @@ export default function App(){
   const floorWpm=useMemo(()=>floorWpmFrom(sessions),[sessions]);
 
   function touch(){ clock.current.last=Date.now(); primeSpeech(); }
+  function dismissReaderTip(){
+    if(!showReaderTip) return;
+    lsSet("readerTipSeen",true);
+    setShowReaderTip(false);
+  }
 
   const measureWords=useCallback(()=>{
     const spans=spansRef.current;
@@ -1861,9 +1848,10 @@ export default function App(){
     const credited=Math.max(0,Math.min(c.elapsed,earned));
     const delta=credited-c.flushed;
     const rawDelta=c.elapsed-(c.flushedRaw||0);
+    const wordsDelta=Math.max(0,c.words-(c.flushedWords||0));
     if(delta<1000&&rawDelta<1000&&!final) return credited;
-    c.flushed=credited; c.flushedRaw=c.elapsed;
-    if(delta>0||rawDelta>0){
+    c.flushed=credited; c.flushedRaw=c.elapsed; c.flushedWords=c.words;
+    if(delta>0||rawDelta>0||wordsDelta>0){
       setSessions(cur=>{
         const d=today();
         const row=cur[d]||{ms:0,raw:0,words:0,lookups:0,saves:0};
@@ -1872,7 +1860,7 @@ export default function App(){
            speed a function of the cap that the speed itself sets, and hid
            the elapsed-vs-credited gap the parent screen exists to show. */
         const n={...cur,[d]:{...row,ms:row.ms+Math.max(0,delta),
-          raw:row.raw+Math.max(0,rawDelta),words:Math.max(row.words,c.words)}};
+          raw:row.raw+Math.max(0,rawDelta),words:row.words+wordsDelta}};
         lsSet("sessions",n); return n;
       });
     }
@@ -1890,7 +1878,6 @@ export default function App(){
       if(active) c.elapsed+=1000;
       measureWords();
       const credited=flushClock(false);
-      setHud({credited,elapsed:c.elapsed,active});
     },1000);
     return ()=>{ clearInterval(iv); flushClock(true); };
     // eslint-disable-next-line
@@ -1957,47 +1944,47 @@ export default function App(){
       <>
         <div className="topbar"><div className="wrap topbar-in">
           <div className="tb-title serif" style={{fontSize:19}}>Right Reader</div>
-          <span className={"pill"+(hit?" on":"")}>
-            {Math.floor(todayMs/60000)} / {TARGET_MIN} min
-          </span>
-          <button className="icon-btn" aria-label="Meine Wörter" onClick={()=>setView("words")}>
+          {hit&&<span className="pill on">✓ Reading done</span>}
+          <button className="icon-btn" aria-label="My words" onClick={()=>setView("words")}>
             {"📓"}<span style={{fontSize:11,fontWeight:800,verticalAlign:"super"}}>{Object.keys(vocab).length||""}</span>
           </button>
-          <button className="icon-btn" aria-label="Eltern" onClick={()=>setView("parent")}>{"⚙︎"}</button>
+          <button className="icon-btn" aria-label="Parent settings" onClick={()=>setView("parent")}>{"⚙︎"}</button>
         </div></div>
         <div className="wrap">
           {busy&&<div className="hint" style={{paddingTop:14}}>{busy}</div>}
           {fatal&&<div className="err" style={{marginTop:14}}>{fatal}
             <button className="btn btn-plain" style={{marginTop:10,width:"100%"}} onClick={()=>setFatal("")}>OK</button></div>}
-          <div className="shelf">
-            {books.map(b=>{
-              const p=positions[b.id];
-              const frac=p&&b.nChapters?Math.min(1,(p.chapter+(p.pct||0))/b.nChapters):0;
-              return (
-                <div className="bookcard" key={b.id} onClick={()=>openBook(b.id)}>
-                  {b.cover
-                    ? <img className="bookcover" src={b.cover} alt=""/>
-                    : <div className="bookcover serif">{b.title}</div>}
-                  <div className="bookmeta">{b.title}</div>
-                  {b.author&&<div className="bookauth">{b.author}</div>}
-                  {frac>0.005&&<div className="progbar"><i style={{width:Math.round(frac*100)+"%"}}/></div>}
-                </div>
-              );
-            })}
-            <div className="addcard" onClick={()=>fileRef.current&&fileRef.current.click()}>
-              <div style={{fontSize:30}}>+</div><div>Buch hinzufügen</div>
+
+          {books.length>0?(
+            <div className="shelf">
+              {books.map(b=>{
+                const p=positions[b.id];
+                const frac=p&&b.nChapters?Math.min(1,(p.chapter+(p.pct||0))/b.nChapters):0;
+                return (
+                  <div className="bookcard" key={b.id} onClick={()=>openBook(b.id)}>
+                    {b.cover
+                      ? <img className="bookcover" src={b.cover} alt=""/>
+                      : <div className="bookcover serif">{b.title}</div>}
+                    <div className="bookmeta">{b.title}</div>
+                    {b.author&&<div className="bookauth">{b.author}</div>}
+                    {frac>0.005&&<div className="progbar"><i style={{width:Math.round(frac*100)+"%"}}/></div>}
+                  </div>
+                );
+              })}
+              <div className="addcard" onClick={()=>fileRef.current&&fileRef.current.click()}>
+                <div style={{fontSize:30}}>+</div><div>Add a book</div>
+              </div>
             </div>
-          </div>
-          {!books.length&&(
-            <div className="empty">
-              Noch keine Bücher.<br/><br/>
-              Tippe auf <b>+</b>, dann auf <b>Datei auswählen</b>, und geh in
-              <b> iCloud Drive → Junas Bücher</b>.<br/><br/>
-              <span style={{fontSize:13}}>
-                Wichtig: das Buch <i>hier</i> im App-Fenster aussuchen. Wenn du die
-                Datei stattdessen in „Dateien“ antippst, öffnet iOS sie in Apple Books,
-                und dort kommt diese App nicht heran.
-              </span>
+          ):(
+            <div className="empty" style={{paddingTop:70}}>
+              <div className="serif" style={{fontSize:25,fontWeight:800,color:"var(--ink)",marginBottom:12}}>
+                Choose a book to start
+              </div>
+              <button className="btn btn-primary" style={{width:"100%",maxWidth:360,fontSize:18,padding:"16px 20px"}}
+                onClick={()=>fileRef.current&&fileRef.current.click()}>＋ Add a book</button>
+              <div className="hint" style={{marginTop:14}}>
+                Choose <b>iCloud Drive → Juna Books</b>.
+              </div>
             </div>
           )}
           {/* No accept filter on purpose. iOS matches accept against its own
@@ -2015,21 +2002,24 @@ export default function App(){
 
   function Reader(){
     const item=book.parsed.spine[chapIdx];
-    const label=(item&&book.parsed.toc[item.href])||("Kapitel "+(chapIdx+1));
-    const goal=TARGET_MIN*60000;
-    const todayMs=((sessions[today()]||{}).ms||0);
-    const pct=Math.min(1,todayMs/goal);
+    const label=(item&&book.parsed.toc[item.href])||("Chapter "+(chapIdx+1));
     return (
       <>
         <div className="topbar"><div className="wrap topbar-in">
-          <button className="icon-btn" aria-label="Bibliothek" onClick={closeBook}>{"‹"}</button>
+          <button className="icon-btn" aria-label="Books" onClick={closeBook}>{"‹"}</button>
           <div className="tb-title">{label}</div>
-          <button className="icon-btn" aria-label="Inhalt" onClick={()=>setSheet("toc")}>{"☰"}</button>
-          <button className="icon-btn" aria-label="Schrift" style={{fontWeight:800,fontSize:17}}
+          <button className="icon-btn" aria-label="Contents" onClick={()=>setSheet("toc")}>{"☰"}</button>
+          <button className="icon-btn" aria-label="Text settings" style={{fontWeight:800,fontSize:17}}
             onClick={()=>setSheet("type")}>Aa</button>
         </div></div>
 
         <div className="wrap">
+          {showReaderTip&&(
+            <div className="reader-tip">
+              <div><b>Tap a word</b> to explain it.<br/><b>Hold a sentence</b> to hear it.</div>
+              <button className="btn btn-ghost" onClick={dismissReaderTip}>Got it</button>
+            </div>
+          )}
           {!chap&&<div className="spin"/>}
           <div className={"reader"+(prefs.serif?" serif":" sans")} ref={bodyRef}
             onClick={onTap}
@@ -2039,23 +2029,12 @@ export default function App(){
           {chap&&(
             <div className="chapnav">
               <button className="btn btn-plain" disabled={chapIdx<=0}
-                onClick={()=>{ flushClock(true); setChapIdx(chapIdx-1); window.scrollTo(0,0); }}>{"← Zurück"}</button>
+                onClick={()=>{ flushClock(true); setChapIdx(chapIdx-1); window.scrollTo(0,0); }}>{"← Back"}</button>
               <button className="btn btn-primary" disabled={chapIdx>=book.parsed.spine.length-1}
-                onClick={()=>{ flushClock(true); setChapIdx(chapIdx+1); window.scrollTo(0,0); }}>{"Weiter →"}</button>
+                onClick={()=>{ flushClock(true); setChapIdx(chapIdx+1); window.scrollTo(0,0); }}>{"Next →"}</button>
             </div>
           )}
         </div>
-
-        <div className="hud"><div className="wrap hud-in">
-          <div className="ring" style={{background:`conic-gradient(var(--accent) ${pct*360}deg, var(--paper2) 0)`}}>
-            <span style={{background:"var(--paper)",width:22,height:22,borderRadius:"50%",
-              display:"grid",placeItems:"center"}}>{Math.floor(todayMs/60000)}</span>
-          </div>
-          <span>{fmtMin(todayMs)} heute</span>
-          <span style={{flex:1}}/>
-          <span className="pill" style={{fontWeight:600}}>lang drücken = vorlesen</span>
-          <span className={"pill"+(hud.active?" on":"")}>{hud.active?"läuft":"pausiert"}</span>
-        </div></div>
       </>
     );
   }
@@ -2094,8 +2073,8 @@ export default function App(){
           if(j.wcache) setWcache(persistCache(migrateCache({...wcache,...j.wcache})));
           if(j.sessions){ const n={...sessions,...j.sessions}; setSessions(n); lsSet("sessions",n); }
           if(j.positions){ const n={...positions,...j.positions}; setPositions(n); lsSet("pos",n); }
-          setMsg("Wiederhergestellt.");
-        }catch(e){ setMsg("Datei konnte nicht gelesen werden."); }
+          setMsg("Restored.");
+        }catch(e){ setMsg("Could not read that file."); }
       };
       fr.readAsText(file);
     }
@@ -2116,24 +2095,24 @@ export default function App(){
       <>
         <div className="topbar"><div className="wrap topbar-in">
           <button className="icon-btn" onClick={()=>setView(book?"read":"library")}>{"‹"}</button>
-          <div className="tb-title">Eltern-Bereich</div>
+          <div className="tb-title">Parent</div>
         </div></div>
         <div className="wrap" style={{paddingBottom:60}}>
           <div className="tabs">
-            <button className={tab==="time"?"on":""} onClick={()=>setTab("time")}>Lesezeit</button>
-            <button className={tab==="words"?"on":""} onClick={()=>setTab("words")}>Wörter</button>
-            <button className={tab==="set"?"on":""} onClick={()=>setTab("set")}>Einstellungen</button>
+            <button className={tab==="time"?"on":""} onClick={()=>setTab("time")}>Reading</button>
+            <button className={tab==="words"?"on":""} onClick={()=>setTab("words")}>Words</button>
+            <button className={tab==="set"?"on":""} onClick={()=>setTab("set")}>Settings</button>
           </div>
 
           {tab==="time"&&(<>
             <div className="card">
-              <h3>Heute</h3>
+              <h3>Today</h3>
               <div className="bigstat">{Math.floor(((sessions[today()]||{}).ms||0)/60000)}
                 <span style={{fontSize:16,fontWeight:600,color:"var(--ink2)"}}> / {TARGET_MIN} min</span></div>
-              <div className="hint">{streak} von {TARGET_DAYS} Tagen diese Woche geschafft.</div>
+              <div className="hint">{streak} of {TARGET_DAYS} reading days completed in the last 7 days.</div>
             </div>
             <div className="card">
-              <h3>Letzte 14 Tage</h3>
+              <h3>Last 14 days</h3>
               <div className="bars">
                 {days.map(d=>{
                   const ms=(sessions[d]||{}).ms||0;
@@ -2147,21 +2126,20 @@ export default function App(){
               </div>
             </div>
             <div className="card">
-              <h3>Wie gezählt wird</h3>
+              <h3>How reading time is counted</h3>
               <div className="hint">
-                Die Uhr läuft nur, wenn die App vorne ist und in den letzten 90 Sekunden
-                gescrollt oder getippt wurde. Zusätzlich kann eine Seite höchstens so viel Zeit
-                verdienen, wie {floorWpm} Wörter pro Minute erlauben — plus die Zeit in
-                Wort-Erklärungen (max. 45 s pro Wort). Auf einer Seite sitzen bringt also nichts.
-                Der Wert {floorWpm} ist {Object.keys(sessions).length<3?"noch ein Startwert":"aus ihrem eigenen bisherigen Tempo berechnet"}.
+                Time counts only while the app is visible and there was a tap or scroll in the last 90 seconds.
+                It is also capped by how much text actually moved past: {floorWpm} words per minute,
+                plus time spent in word explanations (max. 45 seconds per lookup). Sitting on one page
+                therefore earns nothing. {floorWpm} is {Object.keys(sessions).length<3?"still the starting value":"calculated from her own reading pace"}.
               </div>
             </div>
           </>)}
 
           {tab==="words"&&(<>
             <div className="card">
-              <h3>Gespeichert ({learning.length})</h3>
-              {!learning.length&&<div className="hint">Noch keine. Sie tippt beim Lesen auf {"＋ Neues Wort"}.</div>}
+              <h3>Saved ({learning.length})</h3>
+              {!learning.length&&<div className="hint">None yet. She can tap <b>Save word</b> while reading.</div>}
               {learning.slice(0,80).map(([k,e])=>(
                 <div className="wrow" key={k}>
                   <span className="lw">{e.span||e.w}</span>
@@ -2172,12 +2150,12 @@ export default function App(){
               ))}
             </div>
             <div className="card">
-              <h3>Mehrfach nachgeschaut, nicht gespeichert</h3>
+              <h3>Looked up more than once, not saved</h3>
               <div className="hint" style={{marginTop:0,marginBottom:10}}>
-                Die Wörter, bei denen sie gezweifelt hat, aber nicht auf {"＋"} getippt hat.
-                Meist genau die, die sich lohnen.
+                Words she has needed more than once but chose not to save.
+                These are useful candidates for you to review.
               </div>
-              {!seenList.length&&<div className="hint">Noch nichts.</div>}
+              {!seenList.length&&<div className="hint">None yet.</div>}
               {seenList.map(([k,v])=>(
                 <div className="wrow" key={k}>
                   <span className="lw">{((normalizeEntry(wcache[k])||{senses:[]}).senses[0]||{}).span||k}</span>
@@ -2192,40 +2170,38 @@ export default function App(){
 
           {tab==="set"&&(<>
             <div className="card">
-              <h3>API-Schlüssel ({PROVIDER})</h3>
+              <h3>API key ({PROVIDER})</h3>
               <input type="password" value={key} placeholder={P.keyHint}
                 onChange={e=>setKey(e.target.value)}/>
               <button className="btn btn-primary" style={{width:"100%",marginTop:10}}
                 disabled={testing}
                 onClick={async()=>{
                   const k=key.trim();
-                  if(!k){ setMsg("Kein Schlüssel eingegeben."); return; }
-                  lsSet("apikey",k);
-                  setTesting(true); setMsg("Verbinde …");
+                  if(!k){ setMsg("Enter an API key first."); return; }
+                  setTesting(true); setMsg("Connecting …");
                   try{
                     const ms=await listModels(k);
+                    lsSet("apikey",k);
                     setModelList(ms);
-                    setMsg("Verbunden. "+ms.length+" Modelle gefunden.");
+                    setMsg("Connected. Key saved. "+ms.length+" models found.");
                   }catch(e){
-                    setMsg("Schlüssel gespeichert, aber die Verbindung schlug fehl: "+(e&&e.message||""));
+                    setMsg("Connection failed. The new key was not saved: "+(e&&e.message||""));
                   }
                   setTesting(false);
-                }}>{testing?"Verbinde …":"Speichern & testen"}</button>
+                }}>{testing?"Connecting …":"Speichern & testen"}</button>
               <div className="hint">
-                Bleibt nur auf diesem iPad, nie im Repository. Nimm einen eigenen Schlüssel
-                nur für diese App, lade ein kleines Guthaben und schalte Auto-Reload aus —
-                dann ist dieses Guthaben die Obergrenze für alles, was schiefgehen kann.
+                Stored only on this iPad, never in the repository. Use a dedicated key for this app,
+                keep the prepaid balance small, and leave auto-recharge off.
               </div>
             </div>
 
             <div className="card">
-              <h3>Modelle</h3>
+              <h3>Models</h3>
               <div className="hint" style={{marginTop:0}}>
-                „Schnell“ erklärt im Hintergrund ganze Kapitel voraus und macht die meisten
-                Anfragen. „Gut“ läuft nur, wenn sie wartet: neue Wörter und die Entscheidung,
-                welche Bedeutung im Satz gemeint ist.
+                “Fast” pre-explains likely difficult words in the background and makes most requests.
+                “Good” is used for live lookups and choosing the meaning that fits the sentence.
               </div>
-              {[["fast","Schnell (Vorablesen)"],["good","Gut (Antippen)"]].map(([k,lab])=>(
+              {[["fast","Fast (prefetch)"],["good","Good (live lookup)"]].map(([k,lab])=>(
                 <div key={k} style={{marginTop:12}}>
                   <div className="setlab" style={{marginTop:0}}>{lab}</div>
                   {modelList.length
@@ -2240,49 +2216,47 @@ export default function App(){
                 </div>
               ))}
               <button className="btn btn-plain" style={{width:"100%",marginTop:12}}
-                onClick={()=>{ lsSet("models",mdl); setMsg("Modelle gespeichert."); }}>
+                onClick={()=>{ lsSet("models",mdl); setMsg("Models saved."); }}>
                 Modelle speichern
               </button>
               {!modelList.length&&<div className="hint">
-                Tippe oben auf „Speichern & testen“, dann steht hier die echte Modell-Liste
-                deines Kontos statt eines Namens, den jemand geraten hat.
+                Tap “Save & test” above to load the model list available to this API key.
               </div>}
             </div>
             <div className="card">
-              <h3>Kosten (30 Tage)</h3>
+              <h3>Cost (30 days)</h3>
               <div className="bigstat">${spend30.toFixed(2)}</div>
-              <div className="hint">Geschätzt aus den zurückgemeldeten Tokens
+              <div className="hint">Estimated from API token usage
                 ({models().fast} / {models().good}).
-                Heute {callsToday()} von max. {DAILY_CALL_CAP} Anfragen.</div>
+                Today: {callsToday()} of max. {DAILY_CALL_CAP} requests.</div>
             </div>
             <div className="card">
-              <h3>Sicherung</h3>
-              <button className="btn btn-plain" style={{width:"100%"}} onClick={exportAll}>Alles exportieren</button>
+              <h3>Backup</h3>
+              <button className="btn btn-plain" style={{width:"100%"}} onClick={exportAll}>Export everything</button>
               <label className="btn btn-plain" style={{width:"100%",marginTop:8,display:"block",textAlign:"center"}}>
-                Wiederherstellen
+                Restore
                 <input type="file" accept="application/json,.json" style={{display:"none"}}
                   onChange={e=>e.target.files[0]&&importAll(e.target.files[0])}/>
               </label>
               <div className="hint">
-                Safari räumt Browser-Speicher gelegentlich auf. Bücher lassen sich neu laden,
-                Wortliste und Lesezeit nicht — also ab und zu exportieren.
+                Browser storage can occasionally be cleared. Books can be imported again, but
+                word history and reading time cannot, so export a backup occasionally.
               </div>
             </div>
             <div className="card">
-              <h3>Buch über einen Link laden</h3>
-              <input type="text" value={bookUrl} placeholder="https://…/buch.epub"
+              <h3>Import a book from a link</h3>
+              <input type="text" value={bookUrl} placeholder="https://…/book.epub"
                 onChange={e=>setBookUrl(e.target.value)}/>
               <button className="btn btn-plain" style={{width:"100%",marginTop:10}}
-                onClick={async()=>{ await importUrl(bookUrl); setBookUrl(""); }}>Laden</button>
+                onClick={async()=>{ await importUrl(bookUrl); setBookUrl(""); }}>Import</button>
               <div className="hint">
-                Für eine gemeinsame Bibliothek auf mehreren Geräten. Der Server muss die
-                Datei direkt ausliefern und CORS erlauben — raw.githubusercontent.com tut
-                das, iCloud- und Dropbox-Freigabelinks nicht.
+                Useful for a shared library across devices. The server must provide the file directly
+                and allow CORS. raw.githubusercontent.com does; iCloud and Dropbox share links do not.
               </div>
             </div>
 
             <div className="card">
-              <h3>Bücher ({books.length})</h3>
+              <h3>Books ({books.length})</h3>
               {books.map(b=>(
                 <div className="wrow" key={b.id}>
                   <span className="lt" style={{fontWeight:650,color:"var(--ink)"}}>{b.title}</span>
@@ -2304,7 +2278,7 @@ export default function App(){
       <div className="scrim" onClick={()=>setSheet(null)}>
         <div className="sheet" onClick={e=>e.stopPropagation()}>
           <div className="sheet-head">
-            <div className="headword serif" style={{fontSize:22}}>Inhalt</div>
+            <div className="headword serif" style={{fontSize:22}}>Contents</div>
             <button className="icon-btn" onClick={()=>setSheet(null)}>{"✕"}</button>
           </div>
           <div style={{marginTop:8}}>
@@ -2315,7 +2289,7 @@ export default function App(){
                 <div key={it.id+i} className={"toc-row"+(i===chapIdx?" cur":"")}
                   onClick={()=>{ flushClock(true); setSheet(null); setChapIdx(i); window.scrollTo(0,0); }}>
                   <span className="n">{i+1}</span>
-                  <span style={{flex:1}}>{t||("Abschnitt "+(i+1))}</span>
+                  <span style={{flex:1}}>{t||("Section "+(i+1))}</span>
                   {i===chapIdx&&<span>{"●"}</span>}
                 </div>
               );
@@ -2332,73 +2306,78 @@ export default function App(){
       <div className="scrim" onClick={()=>setSheet(null)}>
         <div className="sheet" onClick={e=>e.stopPropagation()}>
           <div className="sheet-head">
-            <div className="headword serif" style={{fontSize:22}}>Darstellung</div>
+            <div className="headword serif" style={{fontSize:22}}>Text</div>
             <button className="icon-btn" onClick={()=>setSheet(null)}>{"✕"}</button>
           </div>
 
-          <div className="setlab">Schriftgröße</div>
+          <div className="setlab">Text size</div>
           <div className="steprow">
             <button onClick={()=>set("size",Math.max(16,prefs.size-1))}>A−</button>
             <span className="val">{prefs.size} px</span>
             <button onClick={()=>set("size",Math.min(30,prefs.size+1))}>A+</button>
           </div>
 
-          <div className="setlab">Zeilenabstand</div>
+          <div className="setlab">Line spacing</div>
           <div className="seg">
-            {[["eng",1.45],["normal",1.68],["weit",2.0]].map(([l,v])=>(
+            {[["tight",1.45],["normal",1.68],["wide",2.0]].map(([l,v])=>(
               <button key={l} className={Math.abs(prefs.lead-v)<0.02?"on":""}
                 onClick={()=>set("lead",v)}>{l}</button>
             ))}
           </div>
 
-          <div className="setlab">Schrift</div>
+          <div className="setlab">Font</div>
           <div className="seg">
-            <button className={prefs.serif?"on":""} onClick={()=>set("serif",true)}>Serife</button>
-            <button className={!prefs.serif?"on":""} onClick={()=>set("serif",false)}>Ohne Serife</button>
+            <button className={prefs.serif?"on":""} onClick={()=>set("serif",true)}>Serif</button>
+            <button className={!prefs.serif?"on":""} onClick={()=>set("serif",false)}>Sans</button>
           </div>
 
-          <div className="setlab">Hintergrund</div>
+          <div className="setlab">Background</div>
           <div className="seg">
-            {[["Papier","paper"],["Hell","light"],["Nacht","night"]].map(([l,v])=>(
+            {[["Paper","paper"],["Light","light"],["Night","night"]].map(([l,v])=>(
               <button key={v} className={prefs.theme===v?"on":""} onClick={()=>set("theme",v)}>{l}</button>
             ))}
           </div>
 
           <div className="hint">
-            Lange auf einen Absatz drücken, um ihn vorlesen zu lassen.
+            Hold a sentence to hear it read aloud.
           </div>
         </div>
       </div>
     );
   }
 
-  /* Her own list. She collects words and until now had nowhere to see
-     them, which makes the ＋ button a request with no reply. */
+  /* Her own list. English stays primary; German is available on demand. */
   function WordList(){
     const rows=Object.entries(vocab).sort((a,b)=>(b[1].added||0)-(a[1].added||0));
     return (
       <>
         <div className="topbar"><div className="wrap topbar-in">
-          <button className="icon-btn" onClick={()=>setView(book?"read":"library")}>{"‹"}</button>
-          <div className="tb-title serif" style={{fontSize:19}}>Meine Wörter</div>
+          <button className="icon-btn" aria-label="Back" onClick={()=>setView(book?"read":"library")}>{"‹"}</button>
+          <div className="tb-title serif" style={{fontSize:19}}>My words</div>
           <span className="pill">{rows.length}</span>
         </div></div>
         <div className="wrap" style={{paddingTop:16,paddingBottom:60}}>
           {!rows.length&&(
             <div className="empty">
-              Noch keine Wörter.<br/>
-              Tippe beim Lesen auf ein Wort und dann auf <b>＋ Neues Wort</b>.
+              No saved words yet.<br/>
+              Tap a word while reading, then tap <b>Save word</b>.
             </div>
           )}
           {rows.map(([k,e])=>(
             <div className="wcard" key={k}>
               <div className="h">
                 <div className="hw serif">{e.span||e.w}</div>
-                <button className="icon-btn" onClick={()=>speak(e.span||e.w)}>{"🔊"}</button>
+                <button className="icon-btn" aria-label="Say it" onClick={()=>speak(e.span||e.w)}>{"🔊"}</button>
               </div>
-              {e.de&&<div className="de">{e.de}</div>}
               {e.en&&<div className="en">{e.en}</div>}
-              {e.ctx&&<div className="src">„{e.ctx}“{e.src&&e.src.book?" — "+e.src.book:""}</div>}
+              {e.de&&(
+                <details className="translation">
+                  <summary>German</summary>
+                  <div className="de">{e.de}</div>
+                  {e.dd&&<div className="hint">{e.dd}</div>}
+                </details>
+              )}
+              {e.ctx&&<div className="src">“{e.ctx}”{e.src&&e.src.book?" — "+e.src.book:""}</div>}
             </div>
           ))}
         </div>
