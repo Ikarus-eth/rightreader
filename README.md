@@ -2,7 +2,7 @@
 
 Right Reader is a deliberately simple EPUB reader for a 10-year-old German native speaker reading English at about A2/B1. The product idea is not “study vocabulary”; it is “English books cannot trap you.”
 
-Tap a word and get a very short, contextual explanation in easy English. Tap a harder word inside that explanation and get one more level of explanation. German is available only on request. A word can be saved explicitly for later spaced-repetition work.
+Tap a word and get its British-English IPA plus a very short, contextual explanation in easy English. Tap a harder word inside that explanation and get one more level of explanation. German is available only on request. A word can be saved explicitly for later spaced-repetition work.
 
 ## Architecture
 
@@ -69,6 +69,8 @@ Do not open the `.epub` from Files or AirDrop it as the normal workflow. iOS wil
 The file input intentionally has no `accept=.epub` filter because iOS has historically mapped EPUB type identifiers inconsistently. Right Reader validates the extension after selection instead.
 
 ## Child experience
+
+The top reading menu is hidden by default and appears when the top of the screen is tapped.
 
 - No live `running / paused` status.
 - No exact minute counter while reading.
@@ -138,7 +140,7 @@ npm run build
 
 Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Current service-worker cache for this release: `rr-v6`.
+Current service-worker cache for this release: `rr-v7`.
 
 ## OpenAI models and cost table
 
