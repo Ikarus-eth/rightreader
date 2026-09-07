@@ -816,7 +816,8 @@ async function askJson(prompt,opts){
 
 const LEMMA_RULE="Give \"lemma\" as the plain dictionary headword: reduce adverbs to their root ( \"admiringly\" -> \"admire\" ), comparatives and superlatives to the plain adjective, plurals to singular, and any inflected form to the simplest version a beginner would look up.";
 
-const SHAPE='{"span":"...","lemma":"...","sense":"a 1-3 word label for which meaning this is","pron":"kid-friendly British-English pronunciation respelling using normal letters and hyphens; CAPITALISE the stressed syllable; no IPA symbols; example: massacre -> MASS-uh-kuh","also":["0-2 short English phrases naming OTHER common, clearly different meanings; empty array if not ambiguous"],"alsoDe":["German for each phrase in also, same order and count"],"en":"one very simple English sentence, max 14 easy words, explaining what it means HERE","de":"the German translation as used here, 1-3 words","deDesc":"one simple German sentence, max 14 words, explaining it"}';
+const EXPLAIN_VERSION=2;
+const SHAPE='{"span":"...","lemma":"...","sense":"a 1-3 word label for which meaning this is","pron":"kid-friendly British-English pronunciation respelling using normal letters and hyphens; CAPITALISE the stressed syllable; no IPA symbols; example: massacre -> MASS-uh-kuh","also":["0-2 short English phrases naming OTHER common, clearly different meanings; empty array if not ambiguous"],"alsoDe":["German for each phrase in also, same order and count"],"en":"a direct mini-dictionary definition in one very simple English sentence, max 14 easy words","de":"the German translation as used here, 1-3 words","deDesc":"one simple German sentence, max 14 words, explaining it"}';
 
 /* The candidate expression comes from a local list that cannot tell
    idiomatic use from literal use - "look at the cat" and "look after
@@ -834,6 +835,7 @@ function wordPrompt(word,sentence,cand){
     `A 10-year-old German child (English level A2/B1) is reading an English story and tapped the word "${word}" in this sentence: "${sentence}"`,
     spanRule(cand),
     `Explain ONLY the meaning it has in THIS sentence, even if that is not its most common meaning. ${LEMMA_RULE}`,
+    `For "en", write a real child-friendly dictionary definition of the word itself. Do NOT paraphrase the story sentence, do NOT make up a new example sentence, and do NOT mention story characters or objects unless they are essential to the meaning. Use easier words than the tapped word. Good style for "fussy": "not happy unless things are just how you want them."`,
     `Reply with ONLY one single-line JSON object, no markdown:`,
     SHAPE
   ].join("\n");
@@ -845,6 +847,7 @@ function nestedPrompt(word,explanation){
     `The explanation was: "${explanation}"`,
     `She tapped the word "${word}".`,
     `Explain that word as simply as you possibly can, simpler than the sentence it came from, using only very easy words. ${LEMMA_RULE}`,
+    `For "en", give a direct mini-dictionary definition of the word itself, not another example sentence and not a paraphrase of the explanation.`,
     `Set "span" to just the word.`,
     `Reply with ONLY one single-line JSON object, no markdown:`,
     SHAPE
@@ -856,7 +859,7 @@ function batchPrompt(items){
   return [
     `A 10-year-old German child (English level A2/B1) is reading an English story. Explain each word below very simply, using ONLY the meaning it has in ITS OWN given sentence. ${LEMMA_RULE}`,
     `WORDS: ${list}`,
-    `For each give: "word" (exactly as listed), "lemma", "sense" (1-3 word label), "pron" (kid-friendly British-English pronunciation respelling using normal letters and hyphens; CAPITALISE the stressed syllable; no IPA symbols; example: massacre -> MASS-uh-kuh), "also" (0-2 short English phrases naming other common, clearly different meanings; empty array if not ambiguous), "alsoDe" (German for each, same order and count), "en" (one very simple English sentence, max 14 easy words), "de" (German translation, 1-3 words), "deDesc" (one simple German sentence, max 14 words).`,
+    `For each give: "word" (exactly as listed), "lemma", "sense" (1-3 word label), "pron" (kid-friendly British-English pronunciation respelling using normal letters and hyphens; CAPITALISE the stressed syllable; no IPA symbols; example: massacre -> MASS-uh-kuh), "also" (0-2 short English phrases naming other common, clearly different meanings; empty array if not ambiguous), "alsoDe" (German for each, same order and count), "en" (a direct mini-dictionary definition in one very simple English sentence, max 14 easy words; NOT a paraphrase of the story sentence and NOT a new example sentence), "de" (German translation, 1-3 words), "deDesc" (one simple German sentence, max 14 words).`,
     `Reply with ONLY one single-line JSON object, no markdown, no line breaks:`,
     `{"words":[{"word":"...","lemma":"...","sense":"...","pron":"MASS-uh-kuh","also":[],"alsoDe":[],"en":"...","de":"...","deDesc":"..."}]}`
   ].join("\n");
@@ -1267,7 +1270,7 @@ function WordSheet({stack,onClose,onNested,onSave,onRemove,onRetry,knownSet,onPo
                   : <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
                       onClick={onSave}>Save word</button>}
                 <button className="btn btn-ghost" style={{width:"100%",marginTop:9}}
-                  onClick={onRemove}>Remove underline</button>
+                  onClick={onRemove}>I know this word</button>
               </>
             )}
           </>
@@ -1647,8 +1650,8 @@ export default function App(){
       const key=normTok(cand||surface);
       if(picked.has(key)||prefetchRef.current.done.has(key)) continue;
       const have=normalizeEntry(wcache[key]);
-      const havePron=!!(have&&have.senses.length&&have.senses.every(x=>String(x.pron||"").trim()));
-      if(havePron||knownSet.has(key)) continue;
+      const haveFresh=!!(have&&have.senses.length&&have.senses.every(x=>String(x.pron||"").trim()&&(x.ev||0)>=EXPLAIN_VERSION));
+      if(haveFresh||knownSet.has(key)) continue;
       if(!cand){
         const lw=normTok(surface);
         if(lw.length<4) continue;
@@ -1664,7 +1667,7 @@ export default function App(){
       } else {
         /* expressions are always worth one look: the local list can only
            propose, and whether it is idiomatic here is the model's call */
-        if(havePron) continue;
+        if(haveFresh) continue;
       }
       const p=Number(sp.getAttribute("data-p"))||0;
       picked.add(key);
@@ -1685,7 +1688,7 @@ export default function App(){
           for(const r of got){
             const m=batch.find(b=>normTok(b.w)===normTok(r.word||""))||null;
             if(!m) continue;
-            add.push([m.key,{span:m.w,lemma:String(r.lemma||m.w),sense:String(r.sense||""),
+            add.push([m.key,{span:m.w,lemma:String(r.lemma||m.w),sense:String(r.sense||""),ev:EXPLAIN_VERSION,
               pron:String(r.pron||""),en:String(r.en||""),de:String(r.de||""),deDesc:String(r.deDesc||""),
               also:Array.isArray(r.also)?r.also.slice(0,2):[],
               alsoDe:Array.isArray(r.alsoDe)?r.alsoDe.slice(0,2):[],ctx:m.s,ts:Date.now()},
@@ -1831,12 +1834,13 @@ export default function App(){
     const h=sentHash(sentence);
     const entry=normalizeEntry(wcache[cacheKey]);
     const missingPron=!!(entry&&entry.senses.some(x=>!String(x.pron||"").trim()));
+    const staleExplanation=!!(entry&&entry.senses.some(x=>(x.ev||0)<EXPLAIN_VERSION));
     bump(cacheKey);
 
-    /* Older cache entries are still useful for meaning,
-       but they cannot satisfy the kid-friendly pronunciation UI. Refresh them once on tap;
-       mergeSense updates the existing sense rather than duplicating it. */
-    if(!entry||!entry.senses.length||missingPron){
+    /* Older cache entries are still useful for meaning, but they may lack the
+       child-friendly pronunciation or use the old weak explanation prompt. Refresh
+       them once on tap; mergeSense updates the existing sense rather than duplicating it. */
+    if(!entry||!entry.senses.length||missingPron||staleExplanation){
       setStack([{level:0,word:surface,sentence,cand,cacheKey,h,data:null,
         loading:true,showDe:false,saved:false,seenCount:((seen[cacheKey]||{}).n||0)+1}]);
       liveLookup(surface,sentence,cand,cacheKey,h);
@@ -1909,7 +1913,7 @@ export default function App(){
   async function liveLookup(surface,sentence,cand,cacheKey,h,changed){
     try{
       const j=await askJson(wordPrompt(surface,sentence,cand),{model:models().good,maxTokens:700,timeoutMs:45000});
-      const d={span:String(j.span||surface),lemma:String(j.lemma||surface),sense:String(j.sense||""),
+      const d={span:String(j.span||surface),lemma:String(j.lemma||surface),sense:String(j.sense||""),ev:EXPLAIN_VERSION,
         pron:String(j.pron||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
         also:Array.isArray(j.also)?j.also.slice(0,2):[],
         alsoDe:Array.isArray(j.alsoDe)?j.alsoDe.slice(0,2):[],ctx:sentence,ts:Date.now()};
@@ -1945,7 +1949,7 @@ export default function App(){
       (async()=>{
         try{
           const j=await askJson(nestedPrompt(word,explanation),{model:models().good,maxTokens:600,timeoutMs:45000});
-          const d={span:String(j.span||word),lemma:String(j.lemma||word),sense:String(j.sense||""),
+          const d={span:String(j.span||word),lemma:String(j.lemma||word),sense:String(j.sense||""),ev:EXPLAIN_VERSION,
             pron:String(j.pron||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
             also:[],alsoDe:[],ts:Date.now()};
           setWcache(cur=>{ const [e]=mergeSense(normalizeEntry(cur[cacheKey]),d);

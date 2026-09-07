@@ -140,7 +140,7 @@ npm run build
 
 Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Current service-worker cache for this release: `rr-v9`.
+Current service-worker cache for this release: `rr-v10`.
 
 ## OpenAI models and cost table
 
@@ -161,3 +161,8 @@ Normal app/service-worker updates preserve IndexedDB and localStorage. Removing 
 ### Backup safety
 
 Right Reader automatically mirrors all app state and EPUB bytes into a local IndexedDB safety snapshot after changes. Parent → Settings → Backup can also save a complete `.rrbackup` file through the iOS share sheet; before deleting/re-adding the Home Screen app, save that file to Files because iPadOS may delete the app’s own local storage when the installed web app is removed.
+
+
+### Explanation quality
+
+Word explanations are direct mini-dictionary definitions, not paraphrases of the story sentence. Cached explanations from the older prompt are refreshed once when tapped. The child popup also includes **I know this word**, which clears the seen/saved state for the whole word family.
