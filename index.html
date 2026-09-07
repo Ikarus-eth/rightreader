@@ -8,19 +8,21 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="apple-mobile-web-app-title" content="Right Reader"/>
 <meta name="theme-color" content="#FFF8E3"/>
-<link rel="manifest" href="manifest.json"/>
+<link rel="manifest" href="manifest.json?v=11"/>
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=8"/>
 <link rel="icon" href="icons/icon-192.png?v=8" type="image/png"/>
 <style>html,body{margin:0;background:#FFF8E3}</style>
 </head>
 <body>
 <div id="root"></div>
-<script src="config.js"></script>
-<script src="app.js"></script>
+<script src="config.js?v=11"></script>
+<script src="app.js?v=11"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js").catch(function () {});
+    navigator.serviceWorker.register("sw.js?v=11", { updateViaCache: "none" })
+      .then(function (reg) { reg.update().catch(function () {}); })
+      .catch(function () {});
   });
 }
 </script>
