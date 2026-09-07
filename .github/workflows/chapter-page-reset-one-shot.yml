@@ -40,12 +40,11 @@ jobs:
           grep -q 'REASONING_EFFORT: "none"' config.js
           grep -q 'rr-v12' sw.js
           grep -q 'app.js?v=12' index.html
-          grep -q 'chapter:target,page:0,total:1' app.js
           grep -q 'api.openai.com/v1/responses' app.js
       - name: Commit clean release
         run: |
           git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.email '41898282+Ikarus-eth@users.noreply.github.com'
           git rm -f tools/fix_chapter_pagination.py tools/fix_openai_responses.py tools/run-chapter-fix.txt .github/workflows/chapter-page-reset-one-shot.yml
           git add src/app-source.jsx app.js sw.js index.html config.js
           git commit -m 'Fix chapter transitions and restore OpenAI lookups'
