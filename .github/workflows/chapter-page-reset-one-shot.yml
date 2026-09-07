@@ -1,4 +1,4 @@
-name: One-shot chapter pagination build
+name: One-shot reader repair build
 
 on:
   push:
@@ -20,26 +20,33 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Apply chapter pagination patch
-        run: python tools/fix_chapter_pagination.py
+      - name: Apply fixes
+        run: |
+          python tools/fix_chapter_pagination.py
+          python tools/fix_openai_responses.py
       - name: Build production bundle
         working-directory: src
         run: |
           npm install
           npm run build
-      - name: Verify fix
+      - name: Verify fixes
         run: |
           grep -q 'pendingPctRef.current={chapter:target,pct:0}' src/app-source.jsx
           grep -q 'pageRef.current.chapter!==chapIdx' src/app-source.jsx
           grep -q 'activeChapterRef.current===layoutChapter' src/app-source.jsx
+          grep -q 'https://api.openai.com/v1/responses' src/app-source.jsx
+          grep -q 'max_output_tokens' src/app-source.jsx
+          grep -q 'output_text' src/app-source.jsx
+          grep -q 'REASONING_EFFORT: "none"' config.js
           grep -q 'rr-v12' sw.js
           grep -q 'app.js?v=12' index.html
           grep -q 'chapter:target,page:0,total:1' app.js
+          grep -q 'api.openai.com/v1/responses' app.js
       - name: Commit clean release
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git rm -f tools/fix_chapter_pagination.py tools/run-chapter-fix.txt .github/workflows/chapter-page-reset-one-shot.yml
-          git add src/app-source.jsx app.js sw.js index.html
-          git commit -m 'Fix chapter transitions starting on wrong page'
+          git rm -f tools/fix_chapter_pagination.py tools/fix_openai_responses.py tools/run-chapter-fix.txt .github/workflows/chapter-page-reset-one-shot.yml
+          git add src/app-source.jsx app.js sw.js index.html config.js
+          git commit -m 'Fix chapter transitions and restore OpenAI lookups'
           git push origin HEAD:fix/chapter-page-reset
