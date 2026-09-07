@@ -8,7 +8,7 @@ window.APP_CONFIG = {
   // Live contextual lookup / sense decisions.
   MODEL_GOOD: "gpt-5.6-terra",
 
-  REASONING_EFFORT: "low",
+  REASONING_EFFORT: "none",
 
   // USD per million text tokens. Used only for the parent-screen estimate.
   PRICES: {

@@ -638,25 +638,21 @@ function isProperNounish(surface,sentInitial,lowerSeen){
 
 const PROVIDERS={
   openai:{
-    url:"https://api.openai.com/v1/chat/completions",
+    url:"https://api.openai.com/v1/responses",
     modelsUrl:"https://api.openai.com/v1/models",
-    keyHint:"sk-\u2026",
+    keyHint:"sk-…",
     headers:k=>({"content-type":"application/json","authorization":"Bearer "+k}),
-    body:(model,prompt,maxTokens,drop)=>{
-      const b={model,messages:[{role:"user",content:prompt}]};
-      /* Newer OpenAI models renamed max_tokens and reject the old name,
-         and reasoning models bill hidden thinking tokens against the same
-         budget, so a tight limit can come back with empty content. Both
-         are handled by the parameter fallback below rather than by
-         guessing which family a model belongs to. */
-      if(!drop.has("max_completion_tokens")) b.max_completion_tokens=maxTokens;
-      else b.max_tokens=maxTokens;
-      if(!drop.has("response_format")) b.response_format={type:"json_object"};
-      if(CFG.REASONING_EFFORT&&!drop.has("reasoning_effort")) b.reasoning_effort=CFG.REASONING_EFFORT;
-      return b;
-    },
-    text:d=>((d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||""),
-    usage:d=>({in:(d.usage||{}).prompt_tokens||0,out:(d.usage||{}).completion_tokens||0}),
+    body:(model,prompt,maxTokens)=>({
+      model,
+      input:prompt,
+      max_output_tokens:maxTokens,
+      text:{format:{type:"json_object"}},
+      reasoning:{effort:CFG.REASONING_EFFORT||"none"},
+      store:false
+    }),
+    text:d=>(d.output||[]).flatMap(x=>x.content||[])
+      .filter(x=>x.type==="output_text").map(x=>x.text||"").join(""),
+    usage:d=>({in:(d.usage||{}).input_tokens||0,out:(d.usage||{}).output_tokens||0}),
     models:d=>(d.data||[]).map(m=>m.id)
   },
   anthropic:{
@@ -1372,8 +1368,9 @@ export default function App(){
   const clock=useRef({elapsed:0,popup:0,words:0,base:0,flushed:0,flushedRaw:0,flushedWords:0,last:Date.now(),bookId:null});
   const spansRef=useRef([]);
   const prefetchRef=useRef({busy:false,done:new Set()});
-  const pageRef=useRef({page:0,total:1,step:0});
+  const pageRef=useRef({chapter:null,page:0,total:1,step:0});
   const pendingPctRef=useRef(null);
+  const activeChapterRef=useRef(chapIdx);
 
   useEffect(()=>{ const s=document.createElement("style"); s.textContent=CSS;
     document.head.appendChild(s); askPersist(); scheduleSafetyBackup(); },[]);
@@ -1382,6 +1379,7 @@ export default function App(){
     return ()=>document.body.classList.remove("reading-mode");
   },[view]);
   useEffect(()=>{ if(view!=="read") setReaderMenuOpen(false); },[view,chapIdx,book?book.meta.id:null]);
+  useEffect(()=>{ activeChapterRef.current=chapIdx; },[chapIdx]);
 
   useEffect(()=>{
     const r=document.documentElement;
@@ -1593,15 +1591,20 @@ export default function App(){
     spansRef.current=spans;
     paintKnown(spans);
     const pos=(positions[(book&&book.meta.id)||""]||{});
-    const savedPct=pendingPctRef.current!=null
-      ?pendingPctRef.current
+    const pending=pendingPctRef.current;
+    const savedPct=pending&&pending.chapter===chapIdx
+      ?pending.pct
       :((pos.chapter===chapIdx&&pos.pct)||0);
-    pendingPctRef.current=null;
+    if(pending&&pending.chapter===chapIdx) pendingPctRef.current=null;
     requestAnimationFrame(()=>layoutPages(savedPct));
-    /* Images can change pagination after their dimensions become known. Re-layout
-       while preserving the current percentage rather than jumping pages. */
+    /* Images can change pagination after their dimensions become known. A detached
+       image from the previous chapter may finish loading late, so only let images
+       belonging to the chapter that registered the listener trigger a reflow. */
+    const layoutChapter=chapIdx;
     for(const img of bodyRef.current.querySelectorAll("img")){
-      if(!img.complete) img.addEventListener("load",()=>layoutPages(currentPagePct()),{once:true});
+      if(!img.complete) img.addEventListener("load",()=>{
+        if(activeChapterRef.current===layoutChapter) layoutPages(currentPagePct());
+      },{once:true});
     }
     prefetchChapter(spans);
     // eslint-disable-next-line
@@ -2040,11 +2043,12 @@ export default function App(){
 
   function currentPagePct(){
     const r=pageRef.current;
+    if(r.chapter!==chapIdx) return 0;
     return r.total>1?r.page/(r.total-1):0;
   }
 
   function savePagePosition(){
-    if(!book) return;
+    if(!book||pageRef.current.chapter!==chapIdx) return;
     const pct=currentPagePct();
     setPositions(cur=>{
       const b=cur[book.meta.id]||{counted:{}};
@@ -2069,7 +2073,7 @@ export default function App(){
       const total=Math.max(1,Math.round((el.scrollWidth+gap)/step));
       const want=Math.max(0,Math.min(1,Number.isFinite(pct)?pct:currentPagePct()));
       const page=Math.max(0,Math.min(total-1,Math.round(want*Math.max(0,total-1))));
-      pageRef.current={page,total,step};
+      pageRef.current={chapter:chapIdx,page,total,step};
       el.scrollLeft=page*step;
       setPageInfo({page,total});
       requestAnimationFrame(measureWords);
@@ -2079,7 +2083,7 @@ export default function App(){
   function goPage(page){
     const el=bodyRef.current;
     const r=pageRef.current;
-    if(!el) return;
+    if(!el||r.chapter!==chapIdx) return;
     const next=Math.max(0,Math.min(r.total-1,page));
     pageRef.current={...r,page:next};
     el.scrollLeft=next*r.step;
@@ -2093,10 +2097,20 @@ export default function App(){
     const next=r.page+dir;
     if(next>=0&&next<r.total){ goPage(next); return; }
     if(dir>0&&chapIdx<book.parsed.spine.length-1){
-      flushClock(true); savePagePosition(); pendingPctRef.current=0; setChapIdx(chapIdx+1); return;
+      const target=chapIdx+1;
+      flushClock(true); savePagePosition();
+      pendingPctRef.current={chapter:target,pct:0};
+      pageRef.current={chapter:target,page:0,total:1,step:0};
+      setPageInfo({page:0,total:1});
+      setChapIdx(target); return;
     }
     if(dir<0&&chapIdx>0){
-      flushClock(true); savePagePosition(); pendingPctRef.current=1; setChapIdx(chapIdx-1);
+      const target=chapIdx-1;
+      flushClock(true); savePagePosition();
+      pendingPctRef.current={chapter:target,pct:1};
+      pageRef.current={chapter:target,page:0,total:1,step:0};
+      setPageInfo({page:0,total:1});
+      setChapIdx(target);
     }
   }
 
