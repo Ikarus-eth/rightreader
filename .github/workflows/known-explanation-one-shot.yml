@@ -1,0 +1,41 @@
+name: One-shot explanation quality build
+
+on:
+  push:
+    branches: [fix/known-button-explanations]
+    paths:
+      - tools/run-known-explanation.txt
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/known-button-explanations
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Apply patch
+        run: python tools/fix_known_and_explanations.py
+      - name: Build production bundle
+        working-directory: src
+        run: |
+          npm install
+          npm run build
+      - name: Verify bundle contains child control and prompt
+        run: |
+          grep -q 'I know this word' app.js
+          grep -q 'mini-dictionary definition' app.js
+          grep -q 'rr-v10' sw.js
+      - name: Commit built release
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/app-source.jsx app.js README.md sw.js
+          git commit -m 'Improve child explanations and add known-word action'
+          git push origin HEAD:fix/known-button-explanations
