@@ -2419,7 +2419,7 @@ export default function App(){
     return (
       <>
         <div className="topbar"><div className="wrap topbar-in">
-          <div className="tb-title brand-title"><img className="brand-icon" src="./icons/icon-192.png?v=8" alt=""/>Right Reader</div>
+          <div className="tb-title brand-title"><img className="brand-icon" src="./icons/rr-192.png" alt=""/>Right Reader</div>
           {hit&&<span className="pill on">✓ Reading done</span>}
           <button className="icon-btn" aria-label="My words" onClick={()=>setView("words")}>
             {"📓"}<span style={{fontSize:11,fontWeight:800,verticalAlign:"super"}}>{Object.keys(vocab).length||""}</span>
@@ -2453,7 +2453,7 @@ export default function App(){
             </div>
           ):(
             <div className="empty" style={{paddingTop:70}}>
-              <img className="empty-mascot" src="./icons/icon-192.png?v=8" alt=""/>
+              <img className="empty-mascot" src="./icons/rr-192.png" alt=""/>
               <div className="brand-title" style={{justifyContent:"center",fontSize:27,marginBottom:8}}>
                 Choose a book to start
               </div>

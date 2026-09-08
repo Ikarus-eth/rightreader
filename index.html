@@ -5,22 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no"/>
 <title>Right Reader</title>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="apple-mobile-web-app-title" content="Right Reader"/>
 <meta name="theme-color" content="#FFF8E3"/>
-<link rel="manifest" href="manifest.json?v=13"/>
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=9"/>
-<link rel="icon" href="icons/icon-192.png?v=9" type="image/png"/>
+<link rel="manifest" href="manifest.json"/>
+<!-- No query strings on any icon URL. iOS resolves the Home Screen icon
+     outside the page's normal fetch path and has never handled ?v= here
+     reliably; the last configuration known to produce a real icon on this
+     site (d215fbe) also used bare paths. Cache busting is done by changing
+     the filename instead. -->
+<link rel="apple-touch-icon" sizes="180x180" href="icons/rr-180.png"/>
+<link rel="apple-touch-icon" sizes="167x167" href="icons/rr-167.png"/>
+<link rel="apple-touch-icon" sizes="152x152" href="icons/rr-152.png"/>
+<link rel="apple-touch-icon" href="icons/rr-180.png"/>
+<link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon-precomposed.png"/>
+<link rel="icon" href="icons/rr-192.png" type="image/png"/>
 <style>html,body{margin:0;background:#FFF8E3}</style>
 </head>
 <body>
 <div id="root"></div>
-<script src="config.js?v=13"></script>
-<script src="app.js?v=13"></script>
+<script src="config.js?v=14"></script>
+<script src="app.js?v=14"></script>
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js?v=13", { updateViaCache: "none" })
+    navigator.serviceWorker.register("sw.js?v=14", { updateViaCache: "none" })
       .then(function (reg) { reg.update().catch(function () {}); })
       .catch(function () {});
   });
