@@ -702,6 +702,93 @@ async function renderChapter(parsed,href,objectUrls){
 
 /* The sentence a tapped word sits in, for the model's context. Falls
    back to the paragraph when the split is unclear. */
+/* ---- whole-book page numbering ----------------------------------------
+
+   "3 / 7" restarts at every chapter, so it never told her where she was in
+   the book, and the number silently changed meaning whenever the text size
+   did. An absolute page needs the column count of every chapter at the
+   current settings, and nothing but a real layout can give that honestly.
+   So each chapter is laid out once in an off-screen box that mirrors the
+   reader exactly, in the background, and the answer is cached against
+   everything that can change it: the book, the text size, the line
+   spacing, the face, and the size of the reading area itself. Rotate the
+   iPad or change the size and it is measured again, because the honest
+   answer really is different. */
+
+function pageMapCache(){ return lsGet("pagemap",{}); }
+function pageMapPut(sig,rec){
+  const c=pageMapCache();
+  c[sig]=rec;
+  const keys=Object.keys(c).sort((a,b)=>(c[a].ts||0)-(c[b].ts||0));
+  while(keys.length>6) delete c[keys.shift()];
+  lsSet("pagemap",c);
+}
+
+async function measureBookPages(parsed,shell,className,onChapter,cancelled){
+  const box=document.createElement("div");
+  box.className=className;
+  box.setAttribute("aria-hidden","true");
+  /* Measured inside the real reader shell, not in a hand-built box of the
+     same nominal size. Copying width and height across got several chapters
+     one column too long, because a box is more than its numbers: the same
+     class in the same containing block is the only way to be sure the
+     columns break where they really will. visibility:hidden rather than
+     display:none, which would have no layout to measure at all. */
+  Object.assign(box.style,{
+    position:"absolute",left:"0",right:"0",top:"0",bottom:"0",
+    visibility:"hidden",pointerEvents:"none",zIndex:"-1"
+  });
+  shell.appendChild(box);
+  const width=box.clientWidth;
+  const gap=Math.max(28,Math.min(44,Math.round(width*.055)));
+  box.style.columnWidth=width+"px";
+  box.style.columnGap=gap+"px";
+  const step=width+gap;
+  const pages=[];
+  try{
+    if(width<20) return null;
+    for(let i=0;i<parsed.spine.length;i++){
+      if(cancelled()) return null;
+      const urls=[];
+      let c=null;
+      try{ c=await renderChapter(parsed,parsed.spine[i].href,urls); }catch(e){}
+      if(cancelled()){ for(const u of urls) URL.revokeObjectURL(u); return null; }
+      box.innerHTML=(c&&c.html)||"";
+      box.scrollLeft=0;
+      /* An image with unknown dimensions is zero pixels tall, which would
+         undercount every illustrated chapter. */
+      const imgs=Array.from(box.querySelectorAll("img")).filter(im=>!im.complete);
+      if(imgs.length){
+        await Promise.race([
+          Promise.all(imgs.map(im=>new Promise(r=>{
+            im.addEventListener("load",r,{once:true});
+            im.addEventListener("error",r,{once:true});
+          }))),
+          new Promise(r=>setTimeout(r,1500))
+        ]);
+      }
+      /* Read the width in a frame, not straight after the mutation. Chromium
+         settles multi-column layout across frames, so a synchronous read
+         right after innerHTML can come back one column long - which it did,
+         for two chapters out of eight. The live reader measures inside a
+         frame too, so this is also the only way the two agree by
+         construction rather than by luck. */
+      await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+      if(cancelled()){ for(const u of urls) URL.revokeObjectURL(u); return null; }
+      pages[i]=Math.max(1,Math.round((box.scrollWidth+gap)/step));
+      for(const u of urls) URL.revokeObjectURL(u);
+      onChapter(i,pages[i]);
+      /* Yield between chapters. A whole novel is a couple of seconds of
+         work and she should not feel any of it while reading. */
+      await new Promise(r=>setTimeout(r,16));
+    }
+  }finally{
+    box.innerHTML="";
+    box.remove();
+  }
+  return pages;
+}
+
 function sentenceFor(paraText,word){
   const t=String(paraText||"");
   if(!t) return "";
@@ -1573,6 +1660,12 @@ export default function App(){
   const [showReaderTip,setShowReaderTip]=useState(()=>!lsGet("readerTipSeen",false));
   const [readerMenuOpen,setReaderMenuOpen]=useState(false);
   const [pageInfo,setPageInfo]=useState({page:0,total:1});
+  const [pageMap,setPageMap]=useState(null);   // {sig,pages:[],total,done}
+  const [geom,setGeom]=useState(null);         // the reader box the layout used
+  const geomRef=useRef(null);
+  const anchorRef=useRef(-1);       // the word a reflow should return her to
+  const firstVisibleRef=useRef(-1); // the word currently at the top of the page
+  const measureRef=useRef({sig:null,token:null});
 
   const bodyRef=useRef(null);
   const urlsRef=useRef([]);
@@ -1602,6 +1695,22 @@ export default function App(){
     if(meta) meta.setAttribute("content",prefs.theme==="night"?"#14251E":prefs.theme==="light"?"#FFFDF4":"#FFF8E3");
     lsSet("prefs",prefs);
   },[prefs]);
+
+  /* Changing the text size reflowed the columns and nothing re-measured
+     them. pageRef kept the old total and the old step, so the indicator
+     showed a page count that no longer existed, scrollLeft pointed at the
+     wrong page, and a tap forward was computed against the stale total.
+     Two frames, because the first only guarantees the new font size has
+     been applied, not that the columns have been laid out against it. */
+  useEffect(()=>{
+    if(view!=="read"||!chap) return;
+    let inner=0;
+    const outer=requestAnimationFrame(()=>{
+      inner=requestAnimationFrame(()=>layoutPages(null,anchorRef.current));
+    });
+    return ()=>{ cancelAnimationFrame(outer); if(inner) cancelAnimationFrame(inner); };
+    // eslint-disable-next-line
+  },[prefs.size,prefs.lead,prefs.serif]);
 
   /* ---- persistence helpers ---- */
   const saveVocab=useCallback(v=>{ setVocab(v); if(!lsSet("vocab",v)) setFatal("Storage is full — please export a backup in Parent settings."); },[]);
@@ -2259,14 +2368,89 @@ export default function App(){
     const spans=spansRef.current;
     if(!el||!spans.length) return;
     const box=el.getBoundingClientRect();
-    let best=-1;
+    let best=-1, first=Infinity;
     for(const sp of spans){
       const r=sp.getBoundingClientRect();
       const visible=r.right>box.left+2&&r.left<box.right-2&&r.bottom>box.top&&r.top<box.bottom;
-      if(visible) best=Math.max(best,Number(sp.getAttribute("data-i"))||0);
+      if(visible){
+        const i=Number(sp.getAttribute("data-i"))||0;
+        best=Math.max(best,i);
+        first=Math.min(first,i);
+      }
     }
     if(best>=0) clock.current.words=Math.max(clock.current.words,clock.current.base+best+1);
+    /* The first word on the page she is looking at. Free here, because this
+       walk already happens on every layout and page turn. */
+    firstVisibleRef.current=first<Infinity?first:-1;
   },[]);
+
+  /* Measure the whole book whenever the answer could have changed. Cached
+     results come back instantly; a fresh book is measured in the background
+     while she reads, in spine order, so the pages before her are known
+     first and the number appears within a second or two of opening. */
+  useEffect(()=>{
+    if(view!=="read"||!book||!geom) return;
+    const sig=[book.meta.id,prefs.size,prefs.lead,prefs.serif?"serif":"sans",
+      geom.width,geom.height,geom.gap].join("|");
+    if(measureRef.current.sig===sig) return;
+    measureRef.current.sig=sig;
+
+    const n=book.parsed.spine.length;
+    const cached=pageMapCache()[sig];
+    if(cached&&Array.isArray(cached.pages)&&cached.pages.length===n){
+      setPageMap({sig,pages:cached.pages.slice(),total:cached.total,done:true});
+      return;
+    }
+    setPageMap({sig,pages:[],total:0,done:false});
+
+    const token={};
+    measureRef.current.token=token;
+    const cancelled=()=>measureRef.current.token!==token;
+    const live=[];
+    (async()=>{
+      const el=bodyRef.current;
+      const shell=el&&el.parentElement;
+      if(!shell) return;
+      /* Take the class list off the live element rather than rebuilding it.
+         Rebuilt, it read "reader" where the real one reads "reader serif",
+         so the whole book was measured in the wrong typeface and two
+         chapters came out a page long. */
+      const pages=await measureBookPages(book.parsed,shell,el.className,
+        (i,count)=>{
+          live[i]=count;
+          setPageMap(m=>(m&&m.sig===sig)?{...m,pages:live.slice()}:m);
+        },
+        cancelled);
+      if(!pages||cancelled()) return;
+      const total=pages.reduce((a,b)=>a+(b||0),0);
+      setPageMap({sig,pages,total,done:true});
+      pageMapPut(sig,{pages,total,ts:Date.now()});
+    })();
+
+    return ()=>{ if(measureRef.current.token===token) measureRef.current.token=null; };
+    // eslint-disable-next-line
+  },[view,book,geom,prefs.size,prefs.lead,prefs.serif]);
+
+  /* Absolute page: the chapters before this one, plus where she is in it.
+     Shows a bare number until the whole book is counted, and an ellipsis
+     until her own chapter's prefix is known, because a confidently wrong
+     page number is worse than a visibly pending one. */
+  function pageLabel(){
+    const m=pageMap;
+    if(m&&m.pages.length){
+      let prefix=0, known=true;
+      for(let i=0;i<chapIdx;i++){
+        const c=m.pages[i];
+        if(!c){ known=false; break; }
+        prefix+=c;
+      }
+      if(known){
+        const abs=prefix+pageInfo.page+1;
+        return (m.done&&m.total)?abs+" / "+m.total:String(abs);
+      }
+    }
+    return "…";
+  }
 
   function currentPagePct(){
     const r=pageRef.current;
@@ -2286,24 +2470,68 @@ export default function App(){
     });
   }
 
-  function layoutPages(pct){
+  /* Which column a given word ends up in, read after the reflow. Called
+     while scrollLeft is 0, so the rect offset is the content offset. */
+  function pageOfWord(el,idx,step){
+    if(!(idx>=0)||!step) return null;
+    const sp=spansRef.current.find(x=>(Number(x.getAttribute("data-i"))||0)===idx);
+    if(!sp) return null;
+    const r=sp.getBoundingClientRect(), box=el.getBoundingClientRect();
+    const off=r.left-box.left+el.scrollLeft;
+    if(!Number.isFinite(off)) return null;
+    return Math.max(0,Math.floor((off+2)/step));
+  }
+
+  function layoutPages(pct,anchor){
     const el=bodyRef.current;
     if(!el||view!=="read") return;
     const width=el.clientWidth;
     if(width<20) return;
     const gap=Math.max(28,Math.min(44,Math.round(width*.055)));
+    const height=el.clientHeight;
     el.style.columnWidth=width+"px";
     el.style.columnGap=gap+"px";
     el.scrollLeft=0;
+    /* The measuring pass needs the same box this layout just used. Publish
+       it only when it actually changes, or every page turn would restart a
+       whole-book measurement. */
+    const g=geomRef.current;
+    if(!g||g.width!==width||g.height!==height||g.gap!==gap){
+      geomRef.current={width,height,gap};
+      setGeom({width,height,gap});
+    }
     requestAnimationFrame(()=>{
       const step=width+gap;
       const total=Math.max(1,Math.round((el.scrollWidth+gap)/step));
-      const want=Math.max(0,Math.min(1,Number.isFinite(pct)?pct:currentPagePct()));
-      const page=Math.max(0,Math.min(total-1,Math.round(want*Math.max(0,total-1))));
+      let page=null;
+      if(Number.isFinite(anchor)&&anchor>=0){
+        const p=pageOfWord(el,anchor,step);
+        if(p!=null) page=Math.max(0,Math.min(total-1,p));
+      }
+      if(page==null){
+        const want=Math.max(0,Math.min(1,Number.isFinite(pct)?pct:currentPagePct()));
+        page=Math.max(0,Math.min(total-1,Math.round(want*Math.max(0,total-1))));
+      }
       pageRef.current={chapter:chapIdx,page,total,step};
       el.scrollLeft=page*step;
       setPageInfo({page,total});
-      requestAnimationFrame(measureWords);
+      /* This chapter was just laid out for real, so it outranks whatever the
+         background pass measured for it. Correcting the map here also means
+         a stale cache can never survive being contradicted. */
+      setPageMap(m=>{
+        if(!m||m.pages[chapIdx]===total) return m;
+        const pages=m.pages.slice();
+        pages[chapIdx]=total;
+        return {...m,pages,total:m.done?pages.reduce((a,b)=>a+(b||0),0):m.total};
+      });
+      requestAnimationFrame(()=>{
+        measureWords();
+        /* Re-pin only when this layout was not itself an attempt to hold a
+           position. Re-pinning after every reflow walked the anchor back to
+           the top of whatever page it had just landed on, so each change of
+           text size lost her another page: 1726, 1500, 1402, 1197, 1029. */
+        if(!(Number.isFinite(anchor)&&anchor>=0)) anchorRef.current=firstVisibleRef.current;
+      });
     });
   }
 
@@ -2316,11 +2544,20 @@ export default function App(){
     el.scrollLeft=next*r.step;
     setPageInfo({page:next,total:r.total});
     touch();
-    requestAnimationFrame(()=>{ measureWords(); savePagePosition(); });
+    requestAnimationFrame(()=>{
+      measureWords();
+      anchorRef.current=firstVisibleRef.current;
+      savePagePosition();
+    });
   }
 
   function turnPage(dir){
     const r=pageRef.current;
+    /* A chapter that has not been laid out yet carries a placeholder count
+       of one page and a step of zero. Acting on that turned a quick second
+       tap into a skipped chapter, or into nothing at all. Dropping the tap
+       is the honest answer: the layout is a frame or two away. */
+    if(!r.step||r.chapter!==chapIdx) return;
     const next=r.page+dir;
     if(next>=0&&next<r.total){ goPage(next); return; }
     const target=dir>0?chapIdx+1:chapIdx-1;
@@ -2395,7 +2632,7 @@ export default function App(){
       if(e.key==="ArrowLeft"||e.key==="PageUp"){ e.preventDefault(); turnPage(-1); }
     };
     let rt=0;
-    const onResize=()=>{ clearTimeout(rt); rt=setTimeout(()=>layoutPages(currentPagePct()),120); };
+    const onResize=()=>{ const a=anchorRef.current; clearTimeout(rt); rt=setTimeout(()=>layoutPages(null,a),120); };
     const onVis=()=>{ touch(); if(document.visibilityState!=="visible"){ savePagePosition(); flushClock(true); } };
     window.addEventListener("touchstart",onTouchStart,{passive:true});
     window.addEventListener("keydown",onKey);
@@ -2518,7 +2755,7 @@ export default function App(){
               onPointerDown={onPressStart} onPointerUp={onPressEnd}
               onPointerCancel={onPressEnd} onPointerMove={onPressMove}
               onContextMenu={e=>e.preventDefault()}/>
-            {chap&&<div className="page-indicator">{pageInfo.page+1} / {pageInfo.total}</div>}
+            {chap&&<div className="page-indicator">{pageLabel()}</div>}
           </div>
         </div>
       </>
