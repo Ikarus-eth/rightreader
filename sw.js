@@ -3,10 +3,10 @@
    Reading needs no network; only word lookups do. App shell files use
    network-first when online so an iPad Home Screen install does not get
    stuck on an old bundle. Everything still falls back to cache offline. */
-const VERSION = "rr-v12";
+const VERSION = "rr-v13";
 const SHELL = [
-  "./","./index.html","./app.js?v=12","./config.js?v=12","./manifest.json?v=12",
-  "./icons/icon-192.png","./icons/icon-512.png","./icons/apple-touch-icon.png","./icons/icon.svg"
+  "./","./index.html","./app.js?v=13","./config.js?v=13","./manifest.json?v=13",
+  "./icons/icon-192.png","./icons/icon-512.png","./icons/apple-touch-icon.png"
 ];
 
 self.addEventListener("install", e => {

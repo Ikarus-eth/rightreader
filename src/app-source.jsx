@@ -172,12 +172,38 @@ async function dbGetSafety(){
     q.onsuccess=()=>res(q.result||null); q.onerror=()=>rej(q.error);
   });
 }
-async function writeSafetyBackup(){
+/* How much real state a snapshot holds. Used to refuse a backup that would
+   destroy a better one. */
+function backupWeight(snap){
+  if(!snap) return {books:0,keys:0,key:0};
+  const st=snap.storage||{};
+  return {books:(snap.books||[]).length,keys:Object.keys(st).length,
+    key:(st.rr_apikey&&st.rr_apikey.length>8)?1:0};
+}
+
+async function writeSafetyBackup(force){
   if(safetyBusy){ safetyAgain=true; return; }
   safetyBusy=true;
   try{
     const saved=Date.now();
-    await dbPutSafety({id:"latest",v:3,saved,storage:rrStorageSnapshot(),books:await dbAll()});
+    const next={id:"latest",v:3,saved,storage:rrStorageSnapshot(),books:await dbAll()};
+
+    /* Safari can clear localStorage and IndexedDB on different schedules. If
+       localStorage went and the safety copy did not, the old code cheerfully
+       overwrote the one surviving copy with an empty one, 1.4 seconds after
+       launch and before anyone could restore it. A backup is only allowed to
+       shrink when the parent asks for it explicitly. */
+    if(!force){
+      let prev=null;
+      try{ prev=await dbGetSafety(); }catch(e){}
+      const a=backupWeight(prev), b=backupWeight(next);
+      if(prev&&(b.books<a.books||b.keys<a.keys||b.key<a.key)){
+        try{ localStorage.setItem("rr_backupSkippedAt",JSON.stringify({at:saved,
+          had:a,now:b})); }catch(e){}
+        return;
+      }
+    }
+    await dbPutSafety(next);
     try{ localStorage.setItem("rr_autoBackupAt",JSON.stringify(saved)); }catch(e){}
   }catch(e){}
   finally{
@@ -411,27 +437,94 @@ const MWE_MAP=(()=>{
 
 function normTok(w){ return w.toLowerCase().replace(/[’‘]/g,"'"); }
 
-function wordFamily(word){
-  const w=normTok(String(word||"").trim());
-  const out=new Set();
-  if(!w) return out;
-  out.add(w);
-  if(/\s/.test(w)) return out; // expressions stay exact
+/* True when English would double the final consonant before -ed/-ing:
+   one vowel group and a consonant-vowel-consonant ending. stop -> stopped,
+   but gallop -> galloped and shiver -> shivered. */
+function wouldDouble(w){
+  return w.length>=3
+    &&/[^aeiou][aeiou][^aeiouwxy]$/.test(w.slice(-3))
+    &&(w.match(/[aeiouy]+/g)||[]).length<=1;
+}
 
+/* Forms this word generates if it IS the dictionary headword. */
+function expandForms(w,out){
   const add=x=>{ if(x&&x.length>1) out.add(x); };
+  add(w);
   if(/[^aeiou]y$/.test(w)){
     const stem=w.slice(0,-1);
     add(stem+"ies"); add(stem+"ied"); add(w+"ing");
   }else if(w.endsWith("e")&&!w.endsWith("ee")){
-    add(w+"s"); add(w+"d"); add(w.slice(0,-1)+"ing");
+    add(w+"s"); add(w+"d"); add(w.slice(0,-1)+"ing"); add(w+"r"); add(w+"st");
   }else{
     add(w+(/(?:s|x|z|ch|sh)$/.test(w)?"es":"s"));
-    add(w+"ed"); add(w+"ing");
-    /* stop -> stopped/stopping, plan -> planned/planning */
-    if(w.length>=3&&/[^aeiou][aeiou][^aeiouwxy]$/.test(w.slice(-3))){
-      add(w+w.slice(-1)+"ed"); add(w+w.slice(-1)+"ing");
+    add(w+"ly");
+    /* stop -> stopped, plan -> planned, but gallop -> galloped. English only
+       doubles the final consonant when the stress is on that last syllable,
+       which for this vocabulary is near enough "the word has one vowel
+       group". Emitting both spellings instead was what let "hop" claim
+       "hoped" and "hoping" and so merge itself with "hope". */
+    if(wouldDouble(w)){
+      const d=w+w.slice(-1);
+      add(d+"ed"); add(d+"ing"); add(d+"er"); add(d+"est");
+    }else{
+      add(w+"ed"); add(w+"ing"); add(w+"er"); add(w+"est");
     }
   }
+  return out;
+}
+
+/* Plausible headwords this surface form could have come FROM. The old code
+   only ever expanded forwards, so "massacred" and "massacring" never met:
+   each generated its own nonsense family and the two never intersected.
+   Reducing as well as expanding is what makes the family symmetric.
+
+   Two guards keep unrelated words apart. Anything in the commonest 3,500
+   English words is left alone, which is where nearly every dangerous false
+   match lives ("thing", "during", "bring", "string", "less", "his"). And a
+   stem shorter than three letters is refused outright. */
+function baseCandidates(w){
+  const out=new Set();
+  if(w.length<5||FREQ_SET.has(w)) return out;
+  /* Four, not three. At three letters "hoping" reduced to both "hope" and
+     "hop" and quietly merged two unrelated words. Losing the odd correct
+     merge on a very short stem is the cheaper mistake: an underline that
+     appears on a word she never tapped is confusing, a missing one is not. */
+  const add=x=>{ if(x&&x.length>=4&&x!==w) out.add(x); };
+  const dedouble=s=>(/([^aeiou])\1$/.test(s)&&s.length>3)?s.slice(0,-1):null;
+
+  if(w.endsWith("ies")){ add(w.slice(0,-3)+"y"); add(w.slice(0,-2)); }
+  else if(w.endsWith("es")){ add(w.slice(0,-2)); add(w.slice(0,-1)); }
+  else if(w.endsWith("ss")){ /* glass, dress: not a plural */ }
+  else if(w.endsWith("s")&&!/(?:us|is)$/.test(w)) add(w.slice(0,-1));
+
+  if(w.endsWith("ied")){ add(w.slice(0,-3)+"y"); }
+  else if(w.endsWith("ed")){
+    const s=w.slice(0,-2);
+    if(!wouldDouble(s)) add(s);
+    add(s+"e"); add(dedouble(s));
+    add(w.slice(0,-1));           // massacred -> massacre
+  }
+  if(w.endsWith("ing")){
+    const s=w.slice(0,-3);
+    /* "staring" cannot come from "star", because "star" would have given
+       "starring". So the bare stem is only a candidate when it would not
+       have doubled; otherwise the headword must be the -e spelling. */
+    if(!wouldDouble(s)) add(s);
+    add(s+"e"); add(dedouble(s));
+  }
+  if(w.endsWith("est")) { add(w.slice(0,-3)); add(w.slice(0,-2)); }
+  else if(w.endsWith("er")) { add(w.slice(0,-2)); add(w.slice(0,-1)); }
+  if(w.endsWith("ly")) { add(w.slice(0,-2)); add(w.slice(0,-2)+"e"); }
+  return out;
+}
+
+function wordFamily(word){
+  const w=normTok(String(word||"").trim());
+  const out=new Set();
+  if(!w) return out;
+  if(/\s/.test(w)){ out.add(w); return out; } // expressions stay exact
+  expandForms(w,out);
+  for(const base of baseCandidates(w)) expandForms(base,out);
   return out;
 }
 function addWordFamily(set,word){ for(const f of wordFamily(word)) set.add(f); }
@@ -636,41 +729,28 @@ function isProperNounish(surface,sentInitial,lowerSeen){
    that differs between them is this adapter, and having it means
    switching back is a one-line change in config.js instead of a rewrite. */
 
-const PROVIDERS={
-  openai:{
-    url:"https://api.openai.com/v1/responses",
-    modelsUrl:"https://api.openai.com/v1/models",
-    keyHint:"sk-…",
-    headers:k=>({"content-type":"application/json","authorization":"Bearer "+k}),
-    body:(model,prompt,maxTokens)=>({
-      model,
-      input:prompt,
-      max_output_tokens:maxTokens,
-      text:{format:{type:"json_object"}},
-      reasoning:{effort:CFG.REASONING_EFFORT||"none"},
-      store:false
-    }),
-    text:d=>(d.output||[]).flatMap(x=>x.content||[])
-      .filter(x=>x.type==="output_text").map(x=>x.text||"").join(""),
-    usage:d=>({in:(d.usage||{}).input_tokens||0,out:(d.usage||{}).output_tokens||0}),
-    models:d=>(d.data||[]).map(m=>m.id)
-  },
-  anthropic:{
-    url:"https://api.anthropic.com/v1/messages",
-    modelsUrl:"https://api.anthropic.com/v1/models",
-    keyHint:"sk-ant-\u2026",
-    headers:k=>({"content-type":"application/json","x-api-key":k,
-      "anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"}),
-    body:(model,prompt,maxTokens)=>({model,max_tokens:maxTokens,messages:[{role:"user",content:prompt}]}),
-    text:d=>(d.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("\n"),
-    usage:d=>({in:(d.usage||{}).input_tokens||0,out:(d.usage||{}).output_tokens||0}),
-    models:d=>(d.data||[]).map(m=>m.id)
-  }
+const P={
+  url:"https://api.openai.com/v1/responses",
+  modelsUrl:"https://api.openai.com/v1/models",
+  keyHint:"sk-…",
+  headers:k=>({"content-type":"application/json","authorization":"Bearer "+k}),
+  body:(model,prompt,maxTokens)=>({
+    model,
+    input:prompt,
+    max_output_tokens:maxTokens,
+    text:{format:{type:"json_object"}},
+    reasoning:{effort:CFG.REASONING_EFFORT||"none"},
+    store:false
+  }),
+  text:d=>(d.output||[]).flatMap(x=>x.content||[])
+    .filter(x=>x.type==="output_text").map(x=>x.text||"").join(""),
+  refusal:d=>(d.output||[]).flatMap(x=>x.content||[])
+    .filter(x=>x.type==="refusal").map(x=>x.refusal||"").join(" ").trim(),
+  usage:d=>({in:(d.usage||{}).input_tokens||0,out:(d.usage||{}).output_tokens||0}),
+  models:d=>(d.data||[]).map(m=>m.id)
 };
 
 const CFG=(typeof window!=="undefined"&&window.APP_CONFIG)||{};
-const PROVIDER=PROVIDERS[CFG.PROVIDER]?CFG.PROVIDER:"openai";
-const P=PROVIDERS[PROVIDER];
 const DAILY_CALL_CAP=CFG.DAILY_CALL_CAP||1200;
 
 function models(){
@@ -721,13 +801,30 @@ class NeedsKey extends Error{}
 class CapReached extends Error{}
 class Aborted extends Error{}
 
-/* Parameters the API told us it does not accept for this model, learned
-   once and remembered, so a wrong guess costs one rejected call ever
-   rather than one on every lookup. */
-function droppedParams(){ return new Set(lsGet("drop",[])); }
-function dropParam(name){
-  const d=droppedParams(); if(d.has(name)) return false;
-  d.add(name); lsSet("drop",[...d]); return true;
+/* The last real API failure, kept for the parent screen. The child-facing
+   popup stays a single friendly line; the diagnosis lives here so a broken
+   key is never again indistinguishable from a broken wifi. */
+function noteApiError(detail){
+  try{ lsSet("lastApiError",{detail:String(detail).slice(0,400),at:Date.now()}); }catch(e){}
+}
+function clearApiError(){ try{ localStorage.removeItem("rr_lastApiError"); }catch(e){} }
+
+/* A rejected fetch to /v1/responses is ambiguous in a browser. OpenAI omits
+   Access-Control-Allow-Origin on a 401 when an Authorization header is
+   present, so the browser reports a wrong key as an opaque network error.
+   GET /v1/models does send the header on 401, so one cheap follow-up request
+   tells the two apart. Memoised briefly so a retry storm costs one probe. */
+let probeMemo={at:0,verdict:null};
+async function classifyFetchFailure(key){
+  if(typeof navigator!=="undefined"&&navigator.onLine===false) return "offline";
+  if(probeMemo.verdict&&Date.now()-probeMemo.at<30000) return probeMemo.verdict;
+  let verdict="network";
+  try{
+    const r=await fetch(P.modelsUrl,{headers:P.headers(key),cache:"no-store"});
+    verdict=(r.status===401||r.status===403)?"key":(r.ok?"network":"network");
+  }catch(e){ verdict="offline"; }
+  probeMemo={at:Date.now(),verdict};
+  return verdict;
 }
 
 async function rawCall(model,prompt,maxTokens,timeoutMs,key){
@@ -738,34 +835,52 @@ async function rawCall(model,prompt,maxTokens,timeoutMs,key){
   try{
     res=await fetch(P.url,{method:"POST",signal:ctrl.signal,
       headers:P.headers(key),
-      body:JSON.stringify(P.body(model,prompt,maxTokens,droppedParams()))});
+      body:JSON.stringify(P.body(model,prompt,maxTokens))});
   }catch(e){
     if(userAborted) throw new Aborted("cancelled");
-    if(ctrl.signal.aborted) throw new Error("timed out");
-    throw new Error("network");
+    if(ctrl.signal.aborted){ noteApiError("Request timed out after "+timeoutMs+"ms ("+model+")"); throw new Error("timed out"); }
+    const why=await classifyFetchFailure(key);
+    if(why==="key"){
+      noteApiError("OpenAI rejected the API key (401 on /v1/models). The key is missing, wrong, revoked, or has no access to "+model+".");
+      throw new NeedsKey("OpenAI rejected the API key.");
+    }
+    noteApiError(why==="offline"
+      ?"No connection to api.openai.com. Device appears offline."
+      :"Request to /v1/responses was blocked by the browser, but the key is valid. Original error: "+(e&&e.message||e));
+    throw new Error(why==="offline"?"offline":"blocked");
   }finally{ clearTimeout(timer); inFlight.delete(ctrl); }
 
   const txt=await res.text();
   if(!res.ok){
     let msg=txt.slice(0,300);
     try{ msg=(JSON.parse(txt).error||{}).message||msg; }catch(e){}
+    noteApiError("HTTP "+res.status+" from /v1/responses ("+model+"): "+msg);
     if(res.status===401||res.status===403) throw new NeedsKey(msg);
     if(res.status===429) throw new Error("Too many requests — wait a moment.");
-    /* A 400 naming a parameter means this model does not take it. Drop it
-       for good and try once more instead of failing the lookup. */
-    if(res.status===400){
-      const m=/max_completion_tokens|max_tokens|response_format|reasoning_effort/.exec(msg);
-      if(m&&dropParam(m[0]==="max_tokens"?"max_completion_tokens":m[0]))
-        return rawCall(model,prompt,maxTokens,timeoutMs,key);
-    }
     throw new Error("HTTP "+res.status+": "+msg);
   }
   let data;
-  try{ data=JSON.parse(txt); }catch(e){ throw new Error("bad response"); }
-  if(data.error) throw new Error(data.error.message||"api error");
+  try{ data=JSON.parse(txt); }catch(e){ noteApiError("Response was not JSON: "+txt.slice(0,200)); throw new Error("bad response"); }
+  if(data.error){ noteApiError("API error object: "+(data.error.message||"")); throw new Error(data.error.message||"api error"); }
   noteUsage(model,P.usage(data));
+
+  /* A reasoning model can spend the whole output budget before writing a
+     single visible token. That returns 200 with status "incomplete" and no
+     output_text at all, which used to surface as a bare "empty response". */
+  if(data.status==="incomplete"){
+    const why=(data.incomplete_details||{}).reason||"unknown";
+    noteApiError("Model stopped early ("+why+"). max_output_tokens was "+maxTokens+".");
+    throw new Error("stopped early: "+why);
+  }
+  const refused=P.refusal(data);
+  if(refused){ noteApiError("Model refused: "+refused); throw new Error("refused"); }
+
   const out=P.text(data);
-  if(!out||!out.trim()) throw new Error("empty response");
+  if(!out||!out.trim()){
+    noteApiError("200 OK but no output_text. status="+(data.status||"?")+" output items="+((data.output||[]).map(x=>x.type).join(",")||"none"));
+    throw new Error("empty response");
+  }
+  clearApiError();
   return out;
 }
 
@@ -777,14 +892,44 @@ async function callModel(prompt,{model,maxTokens=1400,timeoutMs=60000}={}){
 }
 
 async function listModels(key){
-  const res=await fetch(P.modelsUrl,{headers:P.headers(key)});
+  let res;
+  try{ res=await fetch(P.modelsUrl,{headers:P.headers(key),cache:"no-store"}); }
+  catch(e){ throw new Error("Could not reach api.openai.com at all — check the connection."); }
   const txt=await res.text();
   if(!res.ok){
     let msg=txt.slice(0,200);
     try{ msg=(JSON.parse(txt).error||{}).message||msg; }catch(e){}
-    throw new Error(msg);
+    throw new Error("HTTP "+res.status+": "+msg);
   }
   return P.models(JSON.parse(txt)).sort();
+}
+
+/* One end-to-end probe for the parent screen: is the key accepted, are the
+   configured models actually on this account, and does a real lookup call
+   come back? Reports the true error rather than the child-facing wording. */
+async function diagnose(){
+  const key=lsGet("apikey","");
+  const out=[];
+  if(!key) return ["No API key is stored on this iPad."];
+  out.push("Key stored: "+key.slice(0,7)+"…"+key.slice(-4)+" ("+key.length+" chars)");
+  let ids=null;
+  try{
+    ids=await listModels(key);
+    out.push("Key accepted. "+ids.length+" models visible.");
+  }catch(e){ out.push("Key check FAILED — "+(e&&e.message||e)); return out; }
+  const m=models();
+  for(const [label,id] of [["fast",m.fast],["good",m.good]]){
+    out.push((ids.includes(id)?"✓":"✗")+" "+label+" model \""+id+"\" "+(ids.includes(id)?"available":"NOT on this account"));
+  }
+  try{
+    const r=await rawCall(m.good,'Reply with only this JSON: {"ok":true}',600,25000,key);
+    out.push("Live lookup call OK. Model replied: "+String(r).slice(0,80));
+  }catch(e){
+    out.push("Live lookup FAILED — "+(e&&e.message||e));
+    const rec=lsGet("lastApiError",null);
+    if(rec&&rec.detail) out.push("Detail: "+rec.detail);
+  }
+  return out;
 }
 
 function parseLoose(raw){
@@ -834,6 +979,51 @@ function wordPrompt(word,sentence,cand){
     `For "en", write a real child-friendly dictionary definition of the word itself. Do NOT paraphrase the story sentence, do NOT make up a new example sentence, and do NOT mention story characters or objects unless they are essential to the meaning. Use easier words than the tapped word. Good style for "fussy": "not happy unless things are just how you want them."`,
     `Reply with ONLY one single-line JSON object, no markdown:`,
     SHAPE
+  ].join("\n");
+}
+
+/* Why an explanation gets rejected and asked for again.
+
+   The failure we actually saw was not a wrong definition, it was the model
+   answering a different question: "fussy" came back as "The rabbit was fussy
+   about its fur", which is the book's own sentence with the word still in it.
+   Three cheap tests catch that family of answer without needing a second
+   model to grade the first one. */
+const STOPISH=new Set(["a","an","the","and","or","but","of","to","in","on","at","for","with",
+  "is","are","was","were","be","been","it","its","he","she","they","them","his","her","this",
+  "that","you","your","not","no","so","as","if","when","then","than","there","here","about"]);
+function contentWords(s){
+  return String(s||"").toLowerCase().match(/[a-zà-öø-ÿ']+/g)?.filter(w=>w.length>2&&!STOPISH.has(w))||[];
+}
+function explanationProblem(word,sentence,en){
+  const t=String(en||"").trim();
+  if(!t) return "empty";
+  const words=t.split(/\s+/);
+  if(words.length<3) return "too short";
+  if(words.length>26) return "too long";
+
+  /* circular: defines the word with the word, or with any of its forms */
+  const fam=wordFamily(word);
+  for(const w of contentWords(t)) if(fam.has(w)) return "repeats the word";
+
+  /* parroted: mostly the book's own sentence handed back */
+  const src=new Set(contentWords(sentence));
+  const def=contentWords(t);
+  if(src.size&&def.length){
+    const shared=def.filter(w=>src.has(w)).length;
+    if(shared>=3&&shared/def.length>=0.5) return "repeats the story sentence";
+  }
+  return null;
+}
+
+function retryPrompt(word,problem){
+  return [
+    `That answer was rejected because the "en" field ${problem}.`,
+    `Write "en" again as a plain dictionary definition of "${word}" on its own.`,
+    `Do not use the word "${word}" or any form of it inside the definition.`,
+    `Do not mention anything from the story sentence.`,
+    `Use at most 14 very easy words a 10-year-old learner would know.`,
+    `Reply with ONLY the same single-line JSON object again, with every field filled in.`
   ].join("\n");
 }
 
@@ -1053,11 +1243,11 @@ body{
 .reader-topbar{position:absolute;left:0;right:0;top:0;z-index:12;background:rgba(255,248,227,.96);
   backdrop-filter:saturate(135%) blur(14px);border-bottom:1px solid rgba(211,185,126,.55);
   box-shadow:0 3px 14px rgba(81,68,35,.08);transition:opacity .16s ease,transform .16s ease}
-.reader-topbar.hidden{opacity:0;transform:translateY(-18px);pointer-events:none}
-.reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 max(82px,calc(env(safe-area-inset-bottom) + 66px));font-size:var(--rsize);line-height:var(--rlead);
+.reader-topbar.hidden{opacity:0;transform:translateY(-18px);pointer-events:none;visibility:hidden;transition:opacity .16s ease,transform .16s ease,visibility 0s linear .16s}
+.reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 max(118px,calc(env(safe-area-inset-bottom) + 98px));font-size:var(--rsize);line-height:var(--rlead);
   letter-spacing:.003em;overflow:hidden;column-fill:auto;scroll-behavior:auto}
 body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
-.page-indicator{position:absolute;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:4;
+.page-indicator{position:absolute;left:50%;bottom:max(22px,calc(env(safe-area-inset-bottom) + 12px));transform:translateX(-50%);z-index:4;
   background:rgba(255,248,227,.9);border:1px solid var(--line);border-radius:999px;padding:3px 9px;
   font-size:11px;font-weight:750;color:var(--ink2);pointer-events:none}
 .page-edge{position:absolute;top:0;bottom:0;width:24%;z-index:2;pointer-events:none}
@@ -1260,16 +1450,21 @@ function WordSheet({stack,onClose,onNested,onSave,onRemove,onRetry,knownSet,onPo
                 </div>}
 
             {top.level===0&&(
-              <>
-                {top.saved
-                  ? <div className="chip" style={{background:"#D8EBDC",color:"var(--good)"}}>✓ Saved</div>
-                  : <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
-                      onClick={onSave}>Save word</button>}
-                <button className="btn btn-ghost" style={{width:"100%",marginTop:9}}
-                  onClick={onRemove}>I know this word</button>
-              </>
+              top.saved
+                ? <div className="chip" style={{background:"#D8EBDC",color:"var(--good)"}}>✓ Saved</div>
+                : <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
+                    onClick={onSave}>Save word</button>
             )}
           </>
+        )}
+
+        {/* Outside the data block on purpose. This used to sit inside it, so
+            the one moment she most needs it - a word tapped by accident, or a
+            lookup that failed and left an underline behind - was exactly the
+            moment the button did not render. */}
+        {top.level===0&&(
+          <button className="btn btn-ghost" style={{width:"100%",marginTop:9}}
+            onClick={onRemove}>I know this word</button>
         )}
       </div>
     </div>
@@ -1355,6 +1550,10 @@ export default function App(){
   const [modelList,setModelList]=useState([]);
   const [mdl,setMdl]=useState(()=>models());
   const [testing,setTesting]=useState(false);
+  const [diagBusy,setDiagBusy]=useState(false);
+  const [diagLines,setDiagLines]=useState([]);
+  /* read lazily: App re-renders once a second while she reads */
+  const lastErr=useMemo(()=>lsGet("lastApiError",null),[view,diagLines]);
   const [bookUrl,setBookUrl]=useState("");
   const [prefs,setPrefs]=useState(()=>lsGet("prefs",{size:20,lead:1.68,theme:"paper",serif:true}));
   const [sheet,setSheet]=useState(null);   // "toc" | "type" | null
@@ -1915,7 +2114,17 @@ export default function App(){
 
   async function liveLookup(surface,sentence,cand,cacheKey,h,changed){
     try{
-      const j=await askJson(wordPrompt(surface,sentence,cand),{model:models().good,maxTokens:700,timeoutMs:45000});
+      const base=wordPrompt(surface,sentence,cand);
+      let j=await askJson(base,{model:models().good,maxTokens:1200,timeoutMs:45000});
+      const problem=explanationProblem(surface,sentence,j&&j.en);
+      if(problem){
+        try{
+          const j2=await askJson(base+"\n\n"+retryPrompt(surface,problem),
+            {model:models().good,maxTokens:1200,timeoutMs:45000});
+          /* keep the retry only if it is actually better */
+          if(j2&&j2.en&&!explanationProblem(surface,sentence,j2.en)) j=j2;
+        }catch(e){}
+      }
       const d={span:String(j.span||surface),lemma:String(j.lemma||surface),sense:String(j.sense||""),ev:EXPLAIN_VERSION,
         pron:String(j.pron||""),en:String(j.en||""),de:String(j.de||""),deDesc:String(j.deDesc||""),
         also:Array.isArray(j.also)?j.also.slice(0,2):[],
@@ -1930,11 +2139,16 @@ export default function App(){
       setStack(st=>st.length&&st[0].cacheKey===cacheKey
         ?[{...st[0],loading:false,checking:false,choosing:false,data:d,saved:!!vocab[vk],changed:!!changed},...st.slice(1)]:st);
     }catch(e){
+      const m=String((e&&e.message)||"");
       const msg=e instanceof NeedsKey
-        ?"No API key is set yet (Parent settings)."
+        ?"The key needs fixing (Parent settings)."
         :e instanceof CapReached
           ?"That is enough lookups for today — try again tomorrow."
-          :"That did not work.";
+          :m==="offline"
+            ?"No internet just now. Reading still works."
+            :m==="timed out"
+              ?"That took too long. Try again."
+              :"That did not work.";
       setStack(st=>st.length?[{...st[0],loading:false,checking:false,choosing:false,
         error:msg,canRetry:!(e instanceof NeedsKey)},...st.slice(1)]:st);
     }
@@ -2096,22 +2310,25 @@ export default function App(){
     const r=pageRef.current;
     const next=r.page+dir;
     if(next>=0&&next<r.total){ goPage(next); return; }
-    if(dir>0&&chapIdx<book.parsed.spine.length-1){
-      const target=chapIdx+1;
-      flushClock(true); savePagePosition();
-      pendingPctRef.current={chapter:target,pct:0};
-      pageRef.current={chapter:target,page:0,total:1,step:0};
-      setPageInfo({page:0,total:1});
-      setChapIdx(target); return;
-    }
-    if(dir<0&&chapIdx>0){
-      const target=chapIdx-1;
-      flushClock(true); savePagePosition();
-      pendingPctRef.current={chapter:target,pct:1};
-      pageRef.current={chapter:target,page:0,total:1,step:0};
-      setPageInfo({page:0,total:1});
-      setChapIdx(target);
-    }
+    const target=dir>0?chapIdx+1:chapIdx-1;
+    if(target<0||target>book.parsed.spine.length-1) return;
+    const entryPct=dir>0?0:1;
+    flushClock(true); savePagePosition();
+    pendingPctRef.current={chapter:target,pct:entryPct};
+    pageRef.current={chapter:target,page:0,total:1,step:0};
+    setPageInfo({page:0,total:1});
+    /* Belt as well as braces. pendingPctRef is a ref, and a ref is only ever
+       one dropped effect away from being read by nobody - which is how a
+       forward turn once landed on the last page of the new chapter, taking
+       the old chapter's saved percentage with it. Writing the destination to
+       stored position too means the fallback path agrees with the intent
+       instead of contradicting it. */
+    if(book) setPositions(cur=>{
+      const b=cur[book.meta.id]||{counted:{}};
+      const n={...cur,[book.meta.id]:{...b,chapter:target,pct:entryPct,page:0,pages:1,ts:Date.now()}};
+      lsSet("pos",n); return n;
+    });
+    setChapIdx(target);
   }
 
   function flushClock(final){
@@ -2461,7 +2678,7 @@ export default function App(){
 
           {tab==="set"&&(<>
             <div className="card">
-              <h3>API key ({PROVIDER})</h3>
+              <h3>API key (OpenAI)</h3>
               <input type="password" value={key} placeholder={P.keyHint}
                 onChange={e=>setKey(e.target.value)}/>
               <button className="btn btn-primary" style={{width:"100%",marginTop:10}}
@@ -2484,6 +2701,32 @@ export default function App(){
                 Stored only on this iPad, never in the repository. Use a dedicated key for this app,
                 keep the prepaid balance small, and leave auto-recharge off.
               </div>
+            </div>
+
+            <div className="card">
+              <h3>Check the connection</h3>
+              <div className="hint" style={{marginTop:0}}>
+                Runs a real lookup and reports what actually came back. Use this when she says
+                a word did not work — the popup keeps a simple message for her, the details land here.
+              </div>
+              <button className="btn btn-plain" style={{width:"100%",marginTop:10}}
+                disabled={diagBusy}
+                onClick={async()=>{
+                  setDiagBusy(true); setDiagLines(["Checking …"]);
+                  try{ setDiagLines(await diagnose()); }
+                  catch(e){ setDiagLines(["Check itself failed: "+(e&&e.message||e)]); }
+                  setDiagBusy(false);
+                }}>{diagBusy?"Checking …":"Run check"}</button>
+              {!!diagLines.length&&(
+                <div style={{marginTop:12,fontSize:13,lineHeight:1.55,fontFamily:"ui-monospace,Menlo,monospace",
+                  whiteSpace:"pre-wrap",wordBreak:"break-word",background:"var(--paper2)",
+                  border:"1px solid var(--line)",borderRadius:12,padding:"10px 12px"}}>
+                  {diagLines.join("\n")}
+                </div>
+              )}
+              {!!lastErr&&(
+                <div className="hint">Last recorded failure: {lastErr.detail}</div>
+              )}
             </div>
 
             <div className="card">
