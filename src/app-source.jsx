@@ -193,6 +193,10 @@ async function writeSafetyBackup(force){
        overwrote the one surviving copy with an empty one, 1.4 seconds after
        launch and before anyone could restore it. A backup is only allowed to
        shrink when the parent asks for it explicitly. */
+    /* A snapshot with nothing in it protects nothing and can only ever
+       destroy something. On a genuine first run there is nothing to save
+       either, so skipping is right in both cases. */
+    if(!force&&!next.books.length&&!Object.keys(next.storage).length) return;
     if(!force){
       let prev=null;
       try{ prev=await dbGetSafety(); }catch(e){}
@@ -215,15 +219,24 @@ function scheduleSafetyBackup(){
   clearTimeout(safetyTimer);
   safetyTimer=setTimeout(()=>writeSafetyBackup(),1400);
 }
+/* Returns what was actually put back, not just "it ran". An empty snapshot
+   used to return true, so the app reloaded, announced success and restored
+   nothing - which is indistinguishable from a working restore right up to
+   the moment you look for the books. */
 async function restoreLocalSafetyCopy(){
   try{
     const snap=await dbGetSafety();
-    if(!snap||!snap.storage) return false;
-    for(const [k,v] of Object.entries(snap.storage))
-      if(k.startsWith("rr_")&&typeof v==="string") localStorage.setItem(k,v);
-    for(const r of snap.books||[]) if(r&&r.id&&r.file) await dbPut(r);
-    return true;
-  }catch(e){ return false; }
+    if(!snap||!snap.storage) return null;
+    const keys=Object.keys(snap.storage).filter(k=>k.startsWith("rr_"));
+    const books=(snap.books||[]).filter(r=>r&&r.id&&r.file);
+    if(!keys.length&&!books.length) return {empty:true,keys:0,books:0,saved:snap.saved||0};
+    for(const k of keys){
+      const v=snap.storage[k];
+      if(typeof v==="string") localStorage.setItem(k,v);
+    }
+    for(const r of books) await dbPut(r);
+    return {empty:false,keys:keys.length,books:books.length,saved:snap.saved||0};
+  }catch(e){ return null; }
 }
 
 /* Safari clears script-writable storage aggressively. This asks it not
@@ -2544,7 +2557,10 @@ export default function App(){
         const stored=await dbAll();
         const bookRows=stored.map(r=>({...r,file:bufferToBase64(r.file)}));
         const storage=rrStorageSnapshot();
-        const name="right-reader-reinstall-backup-"+today()+".rrbackup";
+        /* .json, not .rrbackup. iOS decides a file's type from its extension, and
+           an unregistered extension makes the file unselectable in the Files
+           picker on the way back in - a backup you cannot restore. */
+        const name="right-reader-backup-"+today()+".json";
         const blob=new Blob([JSON.stringify({
           v:3,exported:new Date().toISOString(),storage,books:bookRows
         })],{type:"application/json"});
@@ -2557,22 +2573,45 @@ export default function App(){
           setTimeout(()=>URL.revokeObjectURL(a.href),4000);
         }
         lsSet("externalBackupAt",Date.now());
-        setMsg("Backup ready. Keep the .rrbackup file in Files; it contains the API key and books.");
+        setMsg("Backup saved ("+bookRows.length+" book(s), "+Object.keys(storage).length+" settings entries). Keep it in Files; it contains the API key.");
       }catch(e){
         if(e&&e.name==="AbortError") setMsg("Backup cancelled.");
         else setMsg("Could not create the full backup.");
       }
     }
     function importAll(file){
+      setMsg("Reading "+(file&&file.name||"the file")+" …");
       const fr=new FileReader();
+      fr.onerror=()=>setMsg("The file could not be read off the device.");
       fr.onload=async()=>{
+        let j;
+        try{ j=JSON.parse(fr.result); }
+        catch(e){
+          setMsg("That file is not a Right Reader backup — it did not parse as JSON. ("+String(fr.result).slice(0,40)+"…)");
+          return;
+        }
         try{
-          const j=JSON.parse(fr.result);
           if(j.v>=2&&j.storage){
-            for(const [k,v] of Object.entries(j.storage)) if(k.startsWith("rr_")&&typeof v==="string") localStorage.setItem(k,v);
-            for(const r of (j.books||[])) if(r&&r.id&&r.file) await dbPut({...r,file:base64ToBuffer(r.file)});
-            setMsg("Everything restored. Reloading …");
-            setTimeout(()=>location.reload(),350);
+            const keys=Object.keys(j.storage).filter(k=>k.startsWith("rr_"));
+            const books=(j.books||[]).filter(r=>r&&r.id&&r.file);
+            if(!keys.length&&!books.length){
+              setMsg("That backup file is empty — no books and no settings inside. Nothing was changed.");
+              return;
+            }
+            setMsg("Restoring "+books.length+" book(s) …");
+            for(const k of keys){
+              const v=j.storage[k];
+              if(typeof v==="string") localStorage.setItem(k,v);
+            }
+            let done=0;
+            for(const r of books){
+              await dbPut({...r,file:base64ToBuffer(r.file)});
+              setMsg("Restoring books … "+(++done)+" of "+books.length);
+            }
+            const hadKey=keys.includes("rr_apikey");
+            setMsg("Restored "+books.length+" book(s), "+keys.length+" settings entries"+
+              (hadKey?", API key":"")+". Reloading …");
+            setTimeout(()=>location.reload(),700);
             return;
           }
           /* Legacy v1 backups remain importable. */
@@ -2581,8 +2620,8 @@ export default function App(){
           if(j.wcache) setWcache(persistCache(migrateCache({...wcache,...j.wcache})));
           if(j.sessions){ const n={...sessions,...j.sessions}; setSessions(n); lsSet("sessions",n); }
           if(j.positions){ const n={...positions,...j.positions}; setPositions(n); lsSet("pos",n); }
-          setMsg("Restored.");
-        }catch(e){ setMsg("Could not read that backup file."); }
+          setMsg("Restored (older backup format — books are not included in v1 backups).");
+        }catch(e){ setMsg("Restore failed partway: "+(e&&e.message||e)); }
       };
       fr.readAsText(file);
     }
@@ -2768,19 +2807,21 @@ export default function App(){
               <h3>Backup</h3>
               <button className="btn btn-primary" style={{width:"100%"}} onClick={exportAll}>Save full backup to Files</button>
               <button className="btn btn-plain" style={{width:"100%",marginTop:8}} onClick={async()=>{
-                if(await restoreLocalSafetyCopy()){ setMsg("Local safety copy restored. Reloading …"); setTimeout(()=>location.reload(),350); }
-                else setMsg("No local safety copy was found.");
+                const r=await restoreLocalSafetyCopy();
+                if(!r) setMsg("No local safety copy was found.");
+                else if(r.empty) setMsg("The local safety copy exists but is EMPTY — it holds no books and no settings. Nothing was changed. Restore from the backup file in Files instead.");
+                else { setMsg("Restored "+r.books+" book(s) and "+r.keys+" settings entries. Reloading …"); setTimeout(()=>location.reload(),350); }
               }}>Restore automatic local copy</button>
               <label className="btn btn-plain" style={{width:"100%",marginTop:8,display:"block",textAlign:"center"}}>
                 Restore backup file
-                <input type="file" accept="application/json,.json,.rrbackup" style={{display:"none"}}
+                <input type="file" style={{display:"none"}}
                   onChange={e=>e.target.files[0]&&importAll(e.target.files[0])}/>
               </label>
               <div className="hint">
                 Right Reader now keeps a full automatic local safety copy after changes. It includes books,
                 reading position, saved words, history, settings and the API key. <b>Important:</b> iPadOS may
                 delete that local copy when the Home Screen app itself is removed. Before removing/re-adding
-                Right Reader, tap <b>Save full backup to Files</b> and choose Save to Files. Keep it private.
+                Right Reader, tap <b>Save full backup to Files</b> and choose Save to Files. The file is a .json; keep it private, it contains the API key.
               </div>
             </div>
             <div className="card">
