@@ -75,6 +75,184 @@ function strengthOf(e){
   return i;
 }
 
+/* ---------------- word practice ----------------
+
+   What the evidence says, and what each rule here is doing about it:
+
+   - Retrieval beats restudy, and for primary-age learners *cued* retrieval
+     beats free recall, because free recall mostly produces failure and
+     failure is where a ten-year-old quits. So every item is cued: four
+     choices, or a blank inside the sentence she met the word in.
+   - Recall items beat recognition items for long-term retention, so the
+     format gets harder as the word gets stronger rather than staying at
+     multiple choice forever: recognise the meaning, recognise the word,
+     fill the gap, type the word.
+   - Multiple choice only teaches when she actually tries to remember before
+     reading the options. Showing the prompt first and the options a beat
+     later turns a recognition tap into covert recall (delayed-alternatives
+     effect), so every item has that pause, skippable by tapping.
+   - Feedback immediately after the answer is what fixes the form-meaning
+     link, so every item ends with the word, its sound, its explanation and
+     her own sentence - right or wrong.
+   - Words that look or sound alike, or mean nearly the same thing, get
+     cross-associated when they are practised against each other. Distractors
+     are therefore chosen to be plausible but not confusable: different
+     opening letters, similar length so length alone never gives it away.
+   - She is not asked to rate her own memory. Children are poor at judging
+     what they know, and a self-rating is one more decision per card, so the
+     FSRS grade is derived from whether she was right, how long she took, and
+     whether she needed the hint. */
+const PLAY_MAX=12;            // items in one session: about four minutes
+const PLAY_THINK_MS=2200;     // prompt alone before the options appear
+const PLAY_SLOW_MS=12000;     // right, but this slow, is Hard
+const PLAY_FAST_MS=5000;      // right this fast on a recall item is Easy
+const PLAY_GAP=3;             // items to get through before a missed word returns
+
+function rrShuffle(a){
+  const x=a.slice();
+  for(let i=x.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const t=x[i]; x[i]=x[j]; x[j]=t; }
+  return x;
+}
+function escRe(s){ return String(s).replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); }
+function editDistance(a,b){
+  a=String(a); b=String(b);
+  const m=a.length,n=b.length;
+  if(!m||!n) return Math.max(m,n);
+  let prev=new Array(n+1); for(let j=0;j<=n;j++) prev[j]=j;
+  for(let i=1;i<=m;i++){
+    const cur=[i];
+    for(let j=1;j<=n;j++){
+      cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    }
+    prev=cur;
+  }
+  return prev[n];
+}
+
+/* The sentence she met the word in, with the word itself taken out. Her own
+   context is the whole point: a gap in a sentence from her book is a far
+   better cue than a bare translation prompt. */
+function clozeFor(entry){
+  const ctx=String((entry&&entry.ctx)||"").trim();
+  if(!ctx||ctx.length>240) return null;
+  const forms=[...new Set([entry.span,entry.w,...(entry.forms||[])])]
+    .filter(Boolean).map(String).sort((a,b)=>b.length-a.length);
+  for(const f of forms){
+    let m=null;
+    try{ m=ctx.match(new RegExp("(^|[^A-Za-zÀ-ÿ'’])("+escRe(f)+")(?![A-Za-zÀ-ÿ])","i")); }catch(e){}
+    if(m&&m.index!=null){
+      const at=m.index+m[1].length;
+      return {before:ctx.slice(0,at),after:ctx.slice(at+m[2].length),surface:m[2]};
+    }
+  }
+  return null;
+}
+
+/* Everything the app could offer as a wrong answer: her saved words first,
+   then anything she has ever looked up. The second pool matters on day one,
+   when four saved words do not yet exist. */
+function distractorPool(vocab,wcache){
+  const out=[],seen=new Set();
+  const add=(w,en)=>{
+    w=String(w||"").trim(); en=String(en||"").trim();
+    if(!w||!en||en.length>90) return;
+    const k=normTok(w); if(seen.has(k)) return;
+    seen.add(k); out.push({w,en,k});
+  };
+  for(const e of Object.values(vocab||{})) add(e.w||e.span,e.en);
+  for(const raw of Object.values(wcache||{})){
+    const e=normalizeEntry(raw); if(!e) continue;
+    for(const s of e.senses||[]) add(s.lemma||s.span,s.en);
+  }
+  return out;
+}
+
+function pickOptions(target,pool,mode){
+  /* mode "meaning": the options are explanations. mode "word": the options
+     are words. Either way the right answer is the target's own. */
+  const val=x=>mode==="meaning"?x.en:x.w;
+  const right=mode==="meaning"?String(target.en||""):String(target.w||"");
+  if(!right) return null;
+  const tk=normTok(target.w||""), tr=right.toLowerCase();
+  const usable=pool.filter(x=>{
+    const v=String(val(x)||""); if(!v) return false;
+    if(x.k===tk) return false;
+    if(v.toLowerCase()===tr) return false;
+    /* A distractor that starts like the answer is a spelling puzzle, and
+       words that begin alike are exactly the pair she will cross-associate. */
+    if(mode==="word"&&x.k.slice(0,2)===tk.slice(0,2)) return false;
+    return true;
+  });
+  /* Similar length, so the odd one out is never the obvious one. */
+  const near=usable.slice().sort((a,b)=>
+    Math.abs(String(val(a)).length-right.length)-Math.abs(String(val(b)).length-right.length));
+  const picked=rrShuffle(near.slice(0,16)).slice(0,3);
+  if(picked.length<2) return null;
+  return rrShuffle([{text:right,ok:true},...picked.map(x=>({text:String(val(x)),ok:false}))]);
+}
+
+/* The ladder. Band comes from FSRS stability, so the format follows what she
+   actually knows rather than how many times she has seen the card. */
+function buildPlayItem(key,entry,pool,demote){
+  const order=["meaning","word","cloze","type"];
+  /* Clamp to the ladder first, then demote, or a miss on a "Known" word would
+     drop from band 4 to band 3 and still be the same typing item. */
+  const rung=Math.max(0,Math.min(order.length-1,strengthOf(entry))-(demote||0));
+  const cl=clozeFor(entry);
+  let want=order[Math.max(0,rung)];
+  if((want==="cloze"||want==="type")&&!cl) want="word";
+  if(want==="type"&&!cl) want="word";
+  const base={key,entry,kind:want,cloze:cl,hinted:false,demote:demote||0,
+    word:entry.w||entry.span,pron:entry.pron,en:entry.en,de:entry.de,ctx:entry.ctx};
+  if(want==="type"){
+    const answers=[...new Set([cl.surface,entry.w,entry.span,...(entry.forms||[])])]
+      .filter(Boolean).map(x=>normTok(String(x)));
+    return {...base,answers};
+  }
+  const opts=pickOptions({w:entry.w||entry.span,en:entry.en},pool,want==="meaning"?"meaning":"word");
+  if(!opts){
+    /* Not enough other words to build a fair choice yet. A gap she can type
+       still works with a deck of one. */
+    if(cl) return {...base,kind:"type",
+      answers:[...new Set([cl.surface,entry.w,entry.span])].filter(Boolean).map(x=>normTok(String(x)))};
+    return {...base,kind:"show"};
+  }
+  return {...base,options:opts};
+}
+
+function playGrade(ok,ms,kind,hinted){
+  if(!ok) return 1;
+  if(hinted||ms>PLAY_SLOW_MS) return 2;
+  if((kind==="type"||kind==="cloze")&&ms<PLAY_FAST_MS) return 4;
+  return 3;
+}
+
+/* One painted blob. Pale and small when a word is new, deep green when it is
+   known, so a page of them reads as a garden rather than a score. */
+function Klecks({band,label,size}){
+  const b=Math.max(0,Math.min(4,band|0));
+  const px=size||(26+b*5);
+  return (
+    <div className="gword" title={STRENGTH_NAMES[b]}>
+      <span className={"klecks k"+b} style={{"--ks":px+"px",width:px,height:px}}/>
+      {label&&<span className="gw">{label}</span>}
+    </div>
+  );
+}
+
+/* The displacement filter every blob shares. Defined once, near the root. */
+function KlecksDefs(){
+  return (
+    <svg className="klecks-defs" aria-hidden="true" focusable="false">
+      <filter id="klecks" x="-35%" y="-35%" width="170%" height="170%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="11" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8"
+          xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </svg>
+  );
+}
+
 /* ---------------- localStorage ---------------- */
 function lsGet(key,fb){
   try{ const v=localStorage.getItem("rr_"+key); return v?JSON.parse(v):fb; }
@@ -1373,27 +1551,115 @@ body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
    leaves free. Tapping the sides still works; these exist so turning a page
    never depends on guessing where the invisible zone is. Chapter sits above
    page: the thumb rests low, and the button it can least afford to hit by
-   accident is the one further from it. */
+   accident is the one further from it.
+
+   Each one is a painted blob rather than a chip: an organic border-radius
+   for the silhouette, two radial gradients for the wet-pigment middle, and
+   an SVG displacement filter to rough up the edge the way paint dries. If a
+   browser ignores the filter the blob is still a blob. */
 .pagenav{position:absolute;top:50%;transform:translateY(-50%);z-index:11;
-  display:flex;flex-direction:column;align-items:center;gap:11px;pointer-events:none}
-.pagenav.left{left:calc(env(safe-area-inset-left) + 6px)}
-.pagenav.right{right:calc(env(safe-area-inset-right) + 6px)}
-.navbtn{pointer-events:auto;display:grid;place-items:center;padding:0;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:13px;pointer-events:none}
+.pagenav.left{left:calc(env(safe-area-inset-left) + 7px)}
+.pagenav.right{right:calc(env(safe-area-inset-right) + 7px)}
+.navbtn{pointer-events:auto;position:relative;display:grid;place-items:center;padding:0;cursor:pointer;
+  border:none;background:none;box-shadow:none;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
-  border:1px solid var(--line);background:rgba(255,248,227,.86);color:var(--ink2);
-  backdrop-filter:saturate(130%) blur(8px);border-radius:16px;
-  font-family:inherit;font-weight:800;line-height:1;
-  box-shadow:0 3px 11px rgba(71,59,28,.12);
-  transition:transform .06s ease,background .12s ease,opacity .12s ease}
-.navbtn.page{width:54px;height:62px;font-size:31px}
-.navbtn.chap{width:54px;height:44px;font-size:20px;opacity:.8}
-.navbtn:active{transform:scale(.93);background:var(--accent-soft);color:var(--accent)}
-.navbtn[disabled]{opacity:.2;box-shadow:none;cursor:default}
+  font-family:inherit;font-weight:800;line-height:1;color:#1F3A2C;
+  transition:transform .09s ease,opacity .14s ease}
+.navbtn::before{content:"";position:absolute;inset:-7px;z-index:0;
+  background:
+    radial-gradient(58% 52% at 33% 29%,rgba(255,255,255,.6),rgba(255,255,255,0) 62%),
+    radial-gradient(88% 84% at 62% 70%,var(--k2),var(--k1) 72%);
+  border-radius:var(--blob);
+  transform:rotate(var(--spin));
+  filter:url(#klecks);
+  opacity:.94}
+.navbtn>span{position:relative;z-index:1;text-shadow:0 1px 0 rgba(255,255,255,.55)}
+.navbtn.page{width:52px;height:56px;font-size:30px}
+.navbtn.chap{width:46px;height:42px;font-size:19px}
+.navbtn:active{transform:scale(.9) rotate(-3deg)}
+.navbtn[disabled]{opacity:.24;cursor:default}
+.nb-pb{--k1:#93B978;--k2:#CBE0AC;--blob:62% 38% 55% 45%/48% 60% 40% 52%;--spin:-6deg}
+.nb-pf{--k1:#E8A536;--k2:#F9D68F;--blob:42% 58% 39% 61%/58% 42% 58% 42%;--spin:5deg}
+.nb-cb{--k1:#DF9E88;--k2:#F6CDBB;--blob:55% 45% 63% 37%/38% 57% 43% 62%;--spin:9deg}
+.nb-cf{--k1:#7CB2B4;--k2:#BCDEDC;--blob:38% 62% 46% 54%/62% 38% 62% 38%;--spin:-8deg}
 @media (max-height:560px){
-  .navbtn.page{height:54px;font-size:27px}
-  .navbtn.chap{height:38px;font-size:18px}
-  .pagenav{gap:9px}
+  .navbtn.page{width:46px;height:50px;font-size:26px}
+  .navbtn.chap{width:42px;height:37px;font-size:17px}
+  .pagenav{gap:10px}
 }
+.klecks-defs{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+
+/* ---- word practice ---- */
+.klecks{display:block;width:var(--ks,34px);height:var(--ks,34px);border-radius:var(--blob);
+  transform:rotate(var(--spin));filter:url(#klecks);
+  background:
+    radial-gradient(58% 52% at 33% 29%,rgba(255,255,255,.55),rgba(255,255,255,0) 62%),
+    radial-gradient(88% 84% at 62% 70%,var(--k2),var(--k1) 72%)}
+.k0{--k1:#DCCFAE;--k2:#EFE6CC;--blob:58% 42% 52% 48%/46% 58% 42% 54%;--spin:-7deg}
+.k1{--k1:#E9C98A;--k2:#F7E6BE;--blob:44% 56% 61% 39%/57% 43% 57% 43%;--spin:6deg}
+.k2{--k1:#E8A536;--k2:#F9D68F;--blob:61% 39% 44% 56%/42% 61% 39% 58%;--spin:-4deg}
+.k3{--k1:#93B978;--k2:#CBE0AC;--blob:52% 48% 58% 42%/61% 39% 58% 42%;--spin:8deg}
+.k4{--k1:#5E7A4C;--k2:#9CBE80;--blob:47% 53% 39% 61%/55% 44% 56% 45%;--spin:-9deg}
+.klecks-mini{display:inline-block;width:15px;height:15px;--ks:15px;
+  --k1:#E8A536;--k2:#F9D68F;--blob:58% 42% 45% 55%/46% 58% 42% 54%;--spin:-6deg;
+  border-radius:var(--blob);filter:url(#klecks);
+  background:radial-gradient(88% 84% at 62% 70%,var(--k2),var(--k1) 72%);
+  animation:breathe 1.5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.72) rotate(-6deg)}50%{transform:scale(1) rotate(4deg)}}
+
+.playcard{display:flex;align-items:center;gap:14px;cursor:pointer;
+  background:linear-gradient(180deg,#FFFCF0,var(--paper2));border:1px solid var(--line);
+  border-radius:22px;padding:15px 17px;margin:16px 0 2px;box-shadow:0 5px 16px rgba(78,67,37,.08)}
+.playcard .pc-t{flex:1;min-width:0}
+.playcard .pc-h{font-weight:800;font-size:17px;color:var(--ink)}
+.playcard .pc-s{font-size:13px;color:var(--ink2);margin-top:3px;font-weight:600}
+.playcard .pc-blobs{display:flex;align-items:center}
+.playcard .pc-blobs .klecks{--ks:30px;margin-left:-9px}
+.playcard.quiet{background:rgba(255,252,240,.7);box-shadow:none}
+
+.play-wrap{padding-bottom:40px}
+.play-top{display:flex;align-items:center;gap:10px;padding:8px 0 2px}
+.play-dots{flex:1;display:flex;gap:4px;align-items:center;justify-content:center}
+.play-dots i{width:7px;height:7px;border-radius:50%;background:var(--line);display:block}
+.play-dots i.on{background:var(--good)}
+.play-dots i.now{background:var(--accent);transform:scale(1.35)}
+.play-card{background:rgba(255,252,240,.94);border:1px solid var(--line);border-radius:24px;
+  padding:20px 18px;box-shadow:0 5px 18px rgba(78,67,37,.07);margin-top:8px}
+.play-kind{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);
+  font-weight:800;text-align:center}
+.play-word{font-size:36px;font-weight:800;text-align:center;margin:14px 0 4px;color:#20392D;
+  overflow-wrap:anywhere;line-height:1.15}
+.play-ask{font-size:21px;line-height:1.5;text-align:center;margin:16px 4px 6px}
+.play-cloze{font-size:20px;line-height:1.6;text-align:left}
+.play-cloze .gap{background:var(--accent-soft);border-radius:6px;padding:0 10px;font-weight:800}
+.play-think{display:flex;align-items:center;justify-content:center;gap:9px;
+  color:var(--ink2);font-weight:700;font-size:14px;padding:22px 0 8px;cursor:pointer}
+.play-opts{display:grid;gap:9px;margin-top:16px}
+.optbtn{text-align:left;font-family:inherit;font-size:17px;font-weight:650;line-height:1.4;
+  padding:14px 16px;border-radius:17px;border:1px solid var(--line);background:#FFF9E9;
+  color:var(--ink);cursor:pointer;transition:transform .06s,background .12s}
+.optbtn:active{transform:scale(.99);background:var(--accent-soft)}
+.optbtn.right{background:#D9EBC9;border-color:#A9C68C;font-weight:800}
+.optbtn.wrong{background:#F7DED4;border-color:#E0B2A0}
+.optbtn[disabled]{opacity:.9}
+.play-type{margin-top:16px}
+.play-typerow{display:flex;gap:10px;margin-top:12px}
+.play-typerow .btn{flex:1}
+.play-feedback{margin-top:14px;border-radius:22px;padding:16px 18px;border:1px solid var(--line);
+  background:rgba(255,252,240,.95);animation:up .18s ease-out}
+.play-feedback.good{background:#EDF4E3;border-color:#BFD4A8}
+.play-feedback.miss{background:#FBF0E6;border-color:#E6CBA9}
+.play-feedback .fb-head{display:flex;align-items:center;gap:8px}
+.play-feedback .hw{font-size:25px;font-weight:800;flex:1;min-width:0;overflow-wrap:anywhere}
+.play-feedback .en{font-size:17px;line-height:1.5;margin-top:6px}
+.play-feedback .src{font-size:13px;color:var(--ink2);margin-top:9px;font-style:italic;line-height:1.45}
+.play-done{text-align:center;padding-top:26px}
+.play-score{font-size:44px;font-weight:800;color:var(--accent);line-height:1}
+.garden{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:22px 0 4px}
+.gword{display:flex;flex-direction:column;align-items:center;gap:5px;width:74px}
+.gword .gw{font-size:11px;font-weight:700;color:var(--ink2);overflow-wrap:anywhere;line-height:1.2}
+.play-grew{margin-top:12px;font-weight:800;color:var(--good)}
 .reader.sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 .reader p.speaking{background:var(--accent-soft);border-radius:8px;
   box-shadow:0 0 0 6px var(--accent-soft);transition:background .2s}
@@ -1699,6 +1965,8 @@ export default function App(){
   const [bookUrl,setBookUrl]=useState("");
   const [prefs,setPrefs]=useState(()=>lsGet("prefs",{size:20,lead:1.68,theme:"paper",serif:true}));
   const [sheet,setSheet]=useState(null);   // "toc" | "type" | null
+  const [play,setPlay]=useState(null);     // practice session, see startPlay
+  const [typed,setTyped]=useState("");
   const [showReaderTip,setShowReaderTip]=useState(()=>!lsGet("readerTipSeen",false));
   const [readerMenuOpen,setReaderMenuOpen]=useState(false);
   const [pageInfo,setPageInfo]=useState({page:0,total:1});
@@ -2650,6 +2918,158 @@ export default function App(){
   function navPage(dir){ dismissReaderTip(); if(readerMenuOpen) setReaderMenuOpen(false); turnPage(dir); }
   function navChapter(dir){ dismissReaderTip(); if(readerMenuOpen) setReaderMenuOpen(false); turnChapter(dir); }
 
+  /* ============================================================
+     Word practice
+     ============================================================ */
+
+  const dueNow=useMemo(()=>{
+    const now=Date.now();
+    return Object.entries(vocab).filter(([,e])=>!e.due||e.due<=now).length;
+  },[vocab]);
+
+  function playPool(){ return distractorPool(vocab,wcache); }
+
+  function startPlay(extra){
+    const now=Date.now();
+    const all=Object.entries(vocab);
+    if(!all.length) return;
+    let pick=all.filter(([,e])=>!e.due||e.due<=now);
+    if(!pick.length){
+      if(!extra) return;
+      /* An extra round takes the words closest to being forgotten. FSRS is
+         built to absorb early reviews - a word recalled well before it was
+         due simply gains little stability - so this cannot corrupt the
+         schedule. */
+      pick=all.slice().sort((a,b)=>{
+        const r=e=>e.s==null?0:retrievability(Math.max(0,(now-(e.last||now))/DAY),e.s);
+        return r(a[1])-r(b[1]);
+      }).slice(0,PLAY_MAX);
+    }
+    const plan=rrShuffle(pick).slice(0,PLAY_MAX).map(([k])=>({key:k,demote:0}));
+    const pool=playPool();
+    setTyped("");
+    setPlay({plan,idx:0,phase:"think",shown:now,started:now,
+      item:buildPlayItem(plan[0].key,vocab[plan[0].key],pool,0),
+      right:0,asked:0,graded:{},moved:[],pool,
+      from:view==="play"?(play&&play.from)||"library":view});
+    setView("play");
+  }
+
+  function endPlay(){
+    const back=(play&&play.from)||"library";
+    setPlay(null); setTyped("");
+    setView(back==="read"&&!book?"library":back);
+  }
+
+  function playAdvance(){
+    setPlay(p=>{
+      if(!p) return p;
+      const idx=p.idx+1;
+      if(idx>=p.plan.length) return {...p,phase:"done"};
+      const step=p.plan[idx];
+      const e=vocabRef.current[step.key];
+      if(!e) return {...p,idx,phase:"think",shown:Date.now(),item:null};
+      return {...p,idx,phase:"think",shown:Date.now(),nearMiss:false,lastPick:null,
+        item:buildPlayItem(step.key,e,p.pool,step.demote)};
+    });
+    setTyped("");
+  }
+
+  /* The FSRS grade is written once per word per session, on the first
+     attempt. A word she gets right on the second try inside the same session
+     has still been forgotten, and pretending otherwise is how a deck quietly
+     stops being true. */
+  function playAnswer(ok){
+    const p=play; if(!p||!p.item) return;
+    const it=p.item;
+    const ms=Date.now()-(p.shown||Date.now());
+    const first=!p.graded[it.key];
+    let moved=null;
+    if(first){
+      const g=playGrade(ok,ms,it.kind,it.hinted);
+      const prev=vocab[it.key];
+      if(prev){
+        const before=strengthOf(prev);
+        const now=Date.now();
+        const next=schedule(prev,g,now);
+        /* Picking the right answer out of four is recognition, and recognition
+           overstates what she can actually recall. FSRS takes the first success
+           at face value and would not ask again for four days. Cap the first
+           gap after a multiple-choice success at two days; only the due date
+           moves, never stability, so the model itself stays honest and simply
+           sees an early review next time. */
+        if(!prev.reps&&g>1&&(it.kind==="meaning"||it.kind==="word")){
+          next.due=Math.min(next.due,now+2*DAY);
+        }
+        saveVocab({...vocab,[it.key]:next});
+        const after=strengthOf(next);
+        if(after>before) moved={w:next.w,band:after};
+      }
+      setSessions(cur=>{
+        const d=today();
+        const row=cur[d]||{ms:0,raw:0,words:0,lookups:0,saves:0};
+        const n={...cur,[d]:{...row,plays:(row.plays||0)+1,playRight:(row.playRight||0)+(ok?1:0)}};
+        lsSet("sessions",n); return n;
+      });
+    }
+    setPlay(cur=>{
+      if(!cur) return cur;
+      const plan=cur.plan.slice();
+      /* Back into the queue a few items later, one rung easier: the point of
+         the repeat is a success to remember, not a second failure. Twice is
+         the limit - a third go round the same word ends the session in
+         defeat, and the scheduler will bring it back tomorrow anyway. */
+      if(!ok&&(it.demote||0)<2){
+        const at=Math.min(plan.length,cur.idx+1+PLAY_GAP);
+        plan.splice(at,0,{key:it.key,demote:(it.demote||0)+1});
+      }
+      return {...cur,plan,phase:ok?"ok":"no",
+        right:cur.right+(ok&&first?1:0),asked:cur.asked+(first?1:0),
+        graded:{...cur.graded,[it.key]:true},
+        moved:moved?[...cur.moved,moved]:cur.moved};
+    });
+  }
+
+  function playCheckTyped(){
+    const it=play&&play.item; if(!it) return;
+    const v=normTok(String(typed).trim());
+    if(!v) return;
+    const exact=(it.answers||[]).some(a=>a===v);
+    const close=!exact&&(it.answers||[]).some(a=>a.length>=5&&editDistance(a,v)<=1);
+    if(close) setPlay(p=>p?{...p,item:{...p.item,hinted:true},nearMiss:true}:p);
+    playAnswer(exact||close);
+  }
+
+  function playHint(){
+    setPlay(p=>p&&p.item?{...p,item:{...p.item,hinted:true}}:p);
+  }
+
+  function playReveal(){
+    setPlay(p=>p&&p.phase==="think"?{...p,phase:"ask",shown:Date.now()}:p);
+  }
+
+  /* The pause before the options appear. Tapping skips it; it is a nudge to
+     remember first, not a lock. */
+  useEffect(()=>{
+    if(!play||play.phase!=="think") return;
+    const t=setTimeout(()=>{
+      setPlay(p=>p&&p.phase==="think"?{...p,phase:"ask",shown:Date.now()}:p);
+    },PLAY_THINK_MS);
+    return ()=>clearTimeout(t);
+  },[play&&play.idx,play&&play.phase]); // eslint-disable-line
+
+  useEffect(()=>{
+    if(!play||play.phase!=="ok") return;
+    const t=setTimeout(playAdvance,1600);
+    return ()=>clearTimeout(t);
+  },[play&&play.idx,play&&play.phase]); // eslint-disable-line
+
+  /* A saved word can change under the session (she edits My words in another
+     tab of her own head, or a restore lands); read the live map when the
+     next item is built rather than the one captured at start. */
+  const vocabRef=useRef(vocab);
+  useEffect(()=>{ vocabRef.current=vocab; },[vocab]);
+
   function flushClock(final){
     const c=clock.current;
     const earned=c.words/Math.max(1,floorWpm)*60000+c.popup;
@@ -2760,6 +3180,25 @@ export default function App(){
           {fatal&&<div className="err" style={{marginTop:14}}>{fatal}
             <button className="btn btn-plain" style={{marginTop:10,width:"100%"}} onClick={()=>setFatal("")}>OK</button></div>}
 
+          {Object.keys(vocab).length>0&&(
+            <div className={"playcard"+(dueNow?"":" quiet")} onClick={()=>startPlay(true)}>
+              <div className="pc-blobs">
+                {Object.values(vocab).slice(-4).map((e,i)=>(
+                  <span key={i} className={"klecks k"+strengthOf(e)} style={{"--ks":"30px"}}/>
+                ))}
+              </div>
+              <div className="pc-t">
+                <div className="pc-h">{dueNow?"Play with my words":"Words all rested"}</div>
+                <div className="pc-s">
+                  {dueNow
+                    ? dueNow+(dueNow===1?" word is ready":" words are ready")
+                    : "Nothing due — tap for an extra round"}
+                </div>
+              </div>
+              <div style={{fontSize:22,color:"var(--accent)",fontWeight:800}}>{"▶"}</div>
+            </div>
+          )}
+
           {books.length>0?(
             <div className="shelf">
               {books.map(b=>{
@@ -2840,21 +3279,173 @@ export default function App(){
               onPointerCancel={onPressEnd} onPointerMove={onPressMove}
               onContextMenu={e=>e.preventDefault()}/>
             <div className="pagenav left">
-              <button className="navbtn chap" aria-label="Previous chapter" title="Previous chapter"
-                disabled={chapIdx<=0} onClick={()=>navChapter(-1)}>{"«"}</button>
-              <button className="navbtn page" aria-label="Previous page" title="Previous page"
-                disabled={!canBack} onClick={()=>navPage(-1)}>{"‹"}</button>
+              <button className="navbtn chap nb-cb" aria-label="Previous chapter" title="Previous chapter"
+                disabled={chapIdx<=0} onClick={()=>navChapter(-1)}><span>{"«"}</span></button>
+              <button className="navbtn page nb-pb" aria-label="Previous page" title="Previous page"
+                disabled={!canBack} onClick={()=>navPage(-1)}><span>{"‹"}</span></button>
             </div>
             <div className="pagenav right">
-              <button className="navbtn chap" aria-label="Next chapter" title="Next chapter"
-                disabled={chapIdx>=lastChap} onClick={()=>navChapter(1)}>{"»"}</button>
-              <button className="navbtn page" aria-label="Next page" title="Next page"
-                disabled={!canFwd} onClick={()=>navPage(1)}>{"›"}</button>
+              <button className="navbtn chap nb-cf" aria-label="Next chapter" title="Next chapter"
+                disabled={chapIdx>=lastChap} onClick={()=>navChapter(1)}><span>{"»"}</span></button>
+              <button className="navbtn page nb-pf" aria-label="Next page" title="Next page"
+                disabled={!canFwd} onClick={()=>navPage(1)}><span>{"›"}</span></button>
             </div>
             {chap&&<div className="page-indicator">{pageLabel()}</div>}
           </div>
         </div>
       </>
+    );
+  }
+
+  function PlayDone(){
+    const strong=play.moved.length;
+    const bands=Object.values(vocab).map(strengthOf);
+    return (
+      <div className="wrap play-wrap">
+        <div className="play-done">
+          <div className="brand-title" style={{justifyContent:"center",fontSize:26,marginBottom:6}}>
+            {play.right===play.asked&&play.asked>0?"All right, every one!":"Good practice!"}
+          </div>
+          <div className="play-score">{play.right} / {play.asked}</div>
+          <div className="garden">
+            {play.plan.map((s,i)=>{
+              const e=vocab[s.key]; if(!e||s.demote) return null;
+              return <Klecks key={s.key+i} band={strengthOf(e)} label={e.w}/>;
+            })}
+          </div>
+          {strong>0&&(
+            <div className="play-grew">
+              {strong===1?"1 word got stronger":strong+" words got stronger"}
+            </div>
+          )}
+          <div className="hint" style={{marginTop:16}}>
+            {bands.filter(b=>b>=3).length} of your {bands.length} words are strong now.
+          </div>
+          <button className="btn btn-primary" style={{width:"100%",marginTop:20,fontSize:18,padding:"16px"}}
+            onClick={endPlay}>Done</button>
+          {dueNow>0&&(
+            <button className="btn btn-ghost" style={{width:"100%",marginTop:10}}
+              onClick={()=>startPlay(false)}>Another round ({dueNow} waiting)</button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  function Play(){
+    if(!play) return null;
+    if(play.phase==="done") return PlayDone();
+    const it=play.item;
+    if(!it) return (
+      <div className="wrap play-wrap"><div className="empty">That word is gone.
+        <button className="btn btn-plain" style={{marginTop:14}} onClick={playAdvance}>Next</button></div></div>
+    );
+    const answered=play.phase==="ok"||play.phase==="no";
+    const asking=play.phase==="ask";
+    const n=play.plan.length;
+
+    const prompt=(()=>{
+      if(it.kind==="meaning") return (
+        <div className="play-word serif">{it.word}
+          {it.pron&&<div className="pron" style={{textAlign:"center"}}>{it.pron}</div>}
+        </div>
+      );
+      if(it.kind==="word") return <div className="play-ask">{it.en}</div>;
+      if(it.cloze) return (
+        <div className="play-ask play-cloze serif">
+          {it.cloze.before}<b className="gap">{answered?it.cloze.surface:"？"}</b>{it.cloze.after}
+        </div>
+      );
+      return <div className="play-word serif">{it.word}</div>;
+    })();
+
+    return (
+      <div className="wrap play-wrap">
+        <div className="play-top">
+          <button className="icon-btn" aria-label="Stop" onClick={endPlay}>{"✕"}</button>
+          <div className="play-dots">
+            {play.plan.map((s,i)=>(
+              <i key={i} className={i<play.idx?"on":(i===play.idx?"now":"")}/>
+            ))}
+          </div>
+          <button className="icon-btn" aria-label="Say the word" onClick={()=>speak(it.word)}>{"🔊"}</button>
+        </div>
+
+        <div className="play-card">
+          <div className="play-kind">
+            {it.kind==="meaning"?"What does it mean?":
+             it.kind==="word"?"Which word is this?":
+             it.kind==="cloze"?"Which word fits the gap?":
+             it.kind==="type"?"Type the missing word":"Read it again"}
+          </div>
+          {prompt}
+
+          {play.phase==="think"&&(
+            <div className="play-think" onClick={playReveal}>
+              <span className="klecks-mini"/>
+              <span>Think first…</span>
+            </div>
+          )}
+
+          {(asking||answered)&&it.options&&(
+            <div className="play-opts">
+              {it.options.map((o,i)=>{
+                const cls=answered?(o.ok?" right":(play.lastPick===i?" wrong":"")):"";
+                return (
+                  <button key={i} className={"optbtn"+cls} disabled={answered}
+                    onClick={()=>{ setPlay(p=>p?{...p,lastPick:i}:p); playAnswer(!!o.ok); }}>
+                    {o.text}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {(asking||answered)&&it.kind==="type"&&(
+            <div className="play-type">
+              <input type="text" autoCapitalize="none" autoCorrect="off" spellCheck={false}
+                value={typed} disabled={answered} placeholder="…"
+                onChange={e=>setTyped(e.target.value)}
+                onKeyDown={e=>{ if(e.key==="Enter") playCheckTyped(); }}/>
+              {!answered&&(
+                <div className="play-typerow">
+                  <button className="btn btn-ghost" onClick={playHint}>
+                    {it.hinted?"Starts with “"+String(it.word)[0]+"”":"Hint"}
+                  </button>
+                  <button className="btn btn-primary" onClick={playCheckTyped}>Check</button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {(asking||answered)&&it.kind==="show"&&!answered&&(
+            <div className="play-typerow" style={{justifyContent:"center"}}>
+              <button className="btn btn-primary" onClick={()=>playAnswer(true)}>I remember it</button>
+              <button className="btn btn-ghost" onClick={()=>playAnswer(false)}>Not yet</button>
+            </div>
+          )}
+        </div>
+
+        {answered&&(
+          <div className={"play-feedback"+(play.phase==="ok"?" good":" miss")}>
+            <div className="fb-head">
+              <div className="hw serif">{it.word}</div>
+              <button className="icon-btn" aria-label="Say it" onClick={()=>speak(it.word)}>{"🔊"}</button>
+            </div>
+            {it.pron&&<div className="pron">{it.pron}</div>}
+            {play.nearMiss&&play.phase==="ok"&&(
+              <div className="chip" style={{marginTop:2}}>Almost — that is the spelling</div>
+            )}
+            {it.en&&<div className="en">{it.en}</div>}
+            {play.phase==="no"&&it.de&&<div className="de-box" style={{marginTop:10}}>{it.de}</div>}
+            {it.ctx&&<div className="src">“{it.ctx}”</div>}
+            {play.phase==="no"&&(
+              <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
+                onClick={playAdvance}>Got it</button>
+            )}
+          </div>
+        )}
+      </div>
     );
   }
 
@@ -2866,6 +3457,12 @@ export default function App(){
     const streak=streakOf(sessions);
 
     const learning=Object.entries(vocab).sort((a,b)=>(b[1].added||0)-(a[1].added||0));
+    const playTotals=lastNDays(14).reduce((a,d)=>{
+      const r=sessions[d]||{};
+      return {n:a.n+(r.plays||0),right:a.right+(r.playRight||0)};
+    },{n:0,right:0});
+    const hardest=learning.filter(([,e])=>(e.lapses||0)>=3)
+      .sort((a,b)=>(b[1].lapses||0)-(a[1].lapses||0)).slice(0,8);
     const seenList=Object.entries(seen)
       .filter(([k,v])=>v.n>=2&&(normalizeEntry(wcache[k])||{senses:[]}).senses.length
         &&!Object.values(vocab).some(e=>(e.forms||[]).includes(k)))
@@ -3017,6 +3614,33 @@ export default function App(){
           </>)}
 
           {tab==="words"&&(<>
+            <div className="card">
+              <h3>Practice</h3>
+              <div className="bigstat">{(sessions[today()]||{}).plays||0}
+                <span style={{fontSize:16,fontWeight:600,color:"var(--ink2)"}}> answers today</span></div>
+              <div className="hint">
+                {dueNow} of {learning.length} words are due. Last 14 days: {playTotals.n} answers,
+                {" "}{playTotals.n?Math.round(100*playTotals.right/playTotals.n):0}% right first time.
+              </div>
+              <div className="hint">
+                Strength: {[0,1,2,3,4].map(b=>STRENGTH_NAMES[b]+" "+learning.filter(([,e])=>strengthOf(e)===b).length).join(" · ")}.
+              </div>
+              {hardest.length>0&&(<>
+                <div className="setlab">Keeps slipping</div>
+                {hardest.map(([k,e])=>(
+                  <div className="wrow" key={k}>
+                    <span className="lw">{e.span||e.w}</span>
+                    <span className="lt">{e.de||e.en}</span>
+                    <span style={{fontSize:11,color:"var(--warn)",fontWeight:700}}>{e.lapses}× forgotten</span>
+                  </div>
+                ))}
+              </>)}
+              <div className="hint">
+                Formats get harder as a word gets stronger: choose the meaning, choose the word,
+                fill the gap in her own sentence, then type it. Grades are taken from the first
+                answer only, from whether it was right, how long it took, and whether she used the hint.
+              </div>
+            </div>
             <div className="card">
               <h3>Saved ({learning.length})</h3>
               {!learning.length&&<div className="hint">None yet. She can tap <b>Save word</b> while reading.</div>}
@@ -3269,6 +3893,10 @@ export default function App(){
           <button className="icon-btn" aria-label="Back" onClick={()=>setView(book?"read":"library")}>{"‹"}</button>
           <div className="tb-title serif" style={{fontSize:19}}>My words</div>
           <span className="pill">{rows.length}</span>
+          {rows.length>0&&(
+            <button className="icon-btn" aria-label="Practise my words"
+              onClick={()=>startPlay(true)}>{"▶"}</button>
+          )}
         </div></div>
         <div className="wrap" style={{paddingTop:16,paddingBottom:60}}>
           {!rows.length&&(
@@ -3280,6 +3908,8 @@ export default function App(){
           {rows.map(([k,e])=>(
             <div className="wcard" key={k}>
               <div className="h">
+                <span className={"klecks k"+strengthOf(e)} style={{"--ks":"22px",width:22,height:22,flex:"none"}}
+                  title={STRENGTH_NAMES[strengthOf(e)]}/>
                 <div className="hw serif">{e.span||e.w}</div>
                 <button className="icon-btn" aria-label="Say it" onClick={()=>speak(e.span||e.w)}>{"🔊"}</button>
                 <button className="icon-btn" aria-label="Remove word" title="Remove word"
@@ -3305,8 +3935,10 @@ export default function App(){
   /* ---- root ---- */
   return (
     <>
+      <KlecksDefs/>
       {view==="library"&&Library()}
       {view==="read"&&book&&Reader()}
+      {view==="play"&&play&&Play()}
       {view==="parent"&&Parent()}
       {view==="words"&&WordList()}
       {view==="read"&&book&&sheet==="toc"&&TocSheet()}

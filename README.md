@@ -21,7 +21,7 @@ The browser-held API key is a conscious security tradeoff for a single-family pr
 
 Right Reader behaves like an e-reader rather than a web page:
 
-- Four permanent buttons sit at the screen edges, two per side: `‹` and `›` turn one page, `«` and `»` jump one chapter. A chapter jump always lands on the first page of the target chapter.
+- Four permanent buttons sit at the screen edges, two per side: `‹` and `›` turn one page, `«` and `»` jump one chapter. A chapter jump always lands on the first page of the target chapter. They are painted blobs — an organic border-radius, two radial gradients and an SVG displacement filter that roughs up the edge; if a browser ignores the filter, the blob is still a blob.
 - Tap the **right side** to go forward one page.
 - Tap the **left side** to go back one page.
 - At the end of a chapter, another forward tap opens the first page of the next chapter.
@@ -79,7 +79,7 @@ The top reading menu is hidden by default and appears when the top of the screen
 - First reading session shows how to tap a word, turn a page with `‹ ›` or a side tap, jump a chapter with `« »`, open the menu, and hear a sentence.
 - Normal lookup sheet shows the word, its easy-English explanation, optional German, and **Save word**.
 - Model checking/correction machinery and repeated-lookup nudges are hidden from the child.
-- **My words** shows the English explanation first. German is collapsed behind a disclosure.
+- **My words** shows the English explanation first, with a strength blob per word. German is collapsed behind a disclosure.
 
 ## Word lookup and sense handling
 
@@ -100,9 +100,31 @@ When a chapter opens, likely-difficult words are explained in background batches
 
 ## Saving words
 
-Saving is explicit. A lookup does not automatically become homework. Saved entries already contain FSRS-4.5 scheduling fields so spaced repetition can be added later without a migration.
+Saving is explicit. A lookup does not automatically become homework. Saved entries carry FSRS-4.5 scheduling fields, which the practice game below reads and writes.
 
 Repeated lookups are still counted quietly and remain visible in Parent settings, but the child is not nudged while reading.
+
+## Word practice
+
+The library shows a practice card once there is anything saved: her words as coloured blobs, how many are due, and a play button. A session is at most 12 items, roughly four minutes.
+
+What the design follows, and why:
+
+- **Cued retrieval, never free recall.** Retrieval practice beats restudying, but for primary-age learners cued retrieval beats free recall, because free recall mostly produces failure. Every item is either four choices or a gap in a sentence.
+- **The format climbs as the word gets stronger.** Recall items retain better than recognition items long-term, so the ladder runs: choose the meaning → choose the word → fill the gap in her own sentence → type the word. The rung comes from FSRS stability, not from how many times the card has been seen.
+- **The options appear a beat after the prompt.** Multiple choice only teaches if the learner tries to remember before reading the options; delaying the alternatives turns a recognition tap into covert recall. The pause is skippable by tapping.
+- **Her own sentence is the cue.** Gap items use the sentence she met the word in, taken from the saved entry.
+- **Feedback every time.** Right or wrong, the item ends with the word, its sound, its explanation and her sentence. German appears only on a miss.
+- **Distractors are plausible but not confusable.** Wrong options come from her other saved words, or from her lookup cache when the deck is still small. They never share the first two letters with the answer, and they are chosen to be close in length so length alone never gives it away — words that look or mean nearly the same get cross-associated.
+- **She does not grade herself.** Children judge their own memory poorly, and a self-rating is one more decision per card. The FSRS grade is derived: wrong is Again; right but slow or hinted is Hard; right is Good; right and fast on a recall item is Easy.
+- **A miss returns in the same session**, three items later, one rung easier, at most twice. Only the first attempt is graded — a word she gets right on the second try in one sitting was still forgotten.
+- **A first multiple-choice success is capped at two days.** Picking one of four overstates what she can recall, and FSRS would otherwise wait four days. Only the due date is capped; stability is left alone, so the model stays honest and simply sees an early review.
+
+Typed answers accept the inflected form from the sentence or the dictionary form, ignore case, and treat a single-letter slip as correct-but-Hard.
+
+Parent → Words shows answers today, first-time accuracy over 14 days, the strength spread, and any word that has been forgotten three times or more.
+
+The scheduler is still FSRS-4.5 rather than FSRS-6. On a deck of a few dozen words, graded from taps rather than self-reports, the version difference is far smaller than the noise in the grades themselves, and Story Time uses the same port.
 
 ## Reading-time accounting
 
@@ -141,7 +163,7 @@ npm run build
 
 Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Current service-worker cache for this release: `rr-v17`.
+Current service-worker cache for this release: `rr-v18`.
 
 ## OpenAI models and cost table
 

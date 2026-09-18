@@ -5,9 +5,9 @@
    stuck on an old bundle or on a broken icon. Everything still falls back to
    cache offline. Nothing here touches IndexedDB or localStorage, so an
    update never costs her books, words or reading position. */
-const VERSION = "rr-v17";
+const VERSION = "rr-v18";
 const SHELL = [
-  "./","./index.html","./app.js?v=17","./config.js?v=17","./manifest.json",
+  "./","./index.html","./app.js?v=18","./config.js?v=18","./manifest.json",
   "./icons/rr-192.png","./icons/rr-512.png","./icons/rr-180.png"
 ];
 
