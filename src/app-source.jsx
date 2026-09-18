@@ -102,11 +102,15 @@ function strengthOf(e){
      what they know, and a self-rating is one more decision per card, so the
      FSRS grade is derived from whether she was right, how long she took, and
      whether she needed the hint. */
-const PLAY_MAX=12;            // items in one session: about four minutes
-const PLAY_THINK_MS=2200;     // prompt alone before the options appear
-const PLAY_SLOW_MS=12000;     // right, but this slow, is Hard
+const PLAY_MAX=10;            // distinct words in one session
+const PLAY_NEW=3;             // of those, at most this many never practised before
+const PLAY_THINK_MS=2000;     // prompt alone before the options appear
+const PLAY_SLOW_MS=11000;     // right, but this slow, is Hard (before reading time)
+const PLAY_READ_MS=55;        // ...plus this much per character she had to read
+const PLAY_SLOW_CAP=26000;
 const PLAY_FAST_MS=5000;      // right this fast on a recall item is Easy
 const PLAY_GAP=3;             // items to get through before a missed word returns
+const PLAY_MEET_GAP=4;        // ...and between meeting a new word and being asked it
 
 function rrShuffle(a){
   const x=a.slice();
@@ -167,7 +171,22 @@ function distractorPool(vocab,wcache){
   return out;
 }
 
-function pickOptions(target,pool,mode){
+/* The explanations are written as mini-dictionary entries, which makes the
+   part of speech guessable from the first word or two. It only has to be
+   right often enough to stop a gap item being solvable by grammar alone:
+   with "creep / mutter / gleam" in the options she has to know the meaning,
+   with "creep / clumsy / lamp" she can tick the only verb without knowing
+   anything. */
+function posOf(en){
+  const t=String(en||"").trim().toLowerCase();
+  if(/^to\s/.test(t)) return "v";
+  if(/^(a|an|the)\s/.test(t)) return "n";
+  if(/^(very|quite|really)?\s*(feeling|looking|moving|sounding)\b/.test(t)) return "a";
+  if(/\b(way|manner)\b/.test(t)) return "a";
+  return "?";
+}
+
+function pickOptions(target,pool,mode,samePos){
   /* mode "meaning": the options are explanations. mode "word": the options
      are words. Either way the right answer is the target's own. */
   const val=x=>mode==="meaning"?x.en:x.w;
@@ -183,47 +202,91 @@ function pickOptions(target,pool,mode){
     if(mode==="word"&&x.k.slice(0,2)===tk.slice(0,2)) return false;
     return true;
   });
+  const tp=posOf(target.en);
+  const fit=samePos&&tp!=="?"?usable.filter(x=>posOf(x.en)===tp):[];
+  const from=fit.length>=3?fit:usable;
   /* Similar length, so the odd one out is never the obvious one. */
-  const near=usable.slice().sort((a,b)=>
+  const near=from.slice().sort((a,b)=>
     Math.abs(String(val(a)).length-right.length)-Math.abs(String(val(b)).length-right.length));
   const picked=rrShuffle(near.slice(0,16)).slice(0,3);
   if(picked.length<2) return null;
   return rrShuffle([{text:right,ok:true},...picked.map(x=>({text:String(val(x)),ok:false}))]);
 }
 
-/* The ladder. Band comes from FSRS stability, so the format follows what she
-   actually knows rather than how many times she has seen the card. */
-function buildPlayItem(key,entry,pool,demote){
-  const order=["meaning","word","cloze","type"];
-  /* Clamp to the ladder first, then demote, or a miss on a "Known" word would
-     drop from band 4 to band 3 and still be the same typing item. */
-  const rung=Math.max(0,Math.min(order.length-1,strengthOf(entry))-(demote||0));
+/* The ladder. The rung comes from FSRS stability, so the format follows what
+   she actually knows rather than how many times she has seen the card:
+
+     meet    a word she has never practised - read it, no question
+     meaning the word, choose what it means
+     word    the meaning (or the sound), choose the word
+     cloze   her own sentence with the word missing, choose the word
+     build   the same gap, but tap the letters in order
+     type    the same gap, typed from nothing
+
+   Letters before keyboard is deliberate. Tapping letters is still production
+   and it teaches English spelling, which is her weak point as a German
+   speaker, without handing an iPad keyboard to a ten-year-old and covering
+   the sentence she is supposed to be reading. */
+const PLAY_LADDER=["meaning","word","cloze","build","type"];
+
+function scramble(word){
+  const letters=String(word).split("");
+  const extra="aeinorstlmdch".split("");
+  const decoys=[];
+  const want=letters.length<=4?2:3;
+  for(let i=0;i<40&&decoys.length<want;i++){
+    const c=extra[Math.floor(Math.random()*extra.length)];
+    if(!decoys.includes(c)) decoys.push(c);
+  }
+  return rrShuffle([...letters,...decoys]).map((ch,i)=>({ch,id:i}));
+}
+
+function buildPlayItem(key,entry,pool,demote,meet){
   const cl=clozeFor(entry);
-  let want=order[Math.max(0,rung)];
-  if((want==="cloze"||want==="type")&&!cl) want="word";
-  if(want==="type"&&!cl) want="word";
-  const base={key,entry,kind:want,cloze:cl,hinted:false,demote:demote||0,
+  const base={key,entry,cloze:cl,hinted:false,demote:demote||0,
     word:entry.w||entry.span,pron:entry.pron,en:entry.en,de:entry.de,ctx:entry.ctx};
-  if(want==="type"){
+  if(meet) return {...base,kind:"meet"};
+  /* Clamp to the ladder first, then demote, or a miss on a "Known" word would
+     drop a band and still be the same typing item. */
+  const rung=Math.max(0,Math.min(PLAY_LADDER.length-1,strengthOf(entry))-(demote||0));
+  let want=PLAY_LADDER[Math.max(0,rung)];
+  if((want==="cloze"||want==="build"||want==="type")&&!cl) want="word";
+  if(want==="type"||want==="build"){
     const answers=[...new Set([cl.surface,entry.w,entry.span,...(entry.forms||[])])]
       .filter(Boolean).map(x=>normTok(String(x)));
-    return {...base,answers};
+    if(want==="build") return {...base,kind:"build",target:cl.surface,
+      tiles:scramble(cl.surface),answers};
+    return {...base,kind:"type",answers};
   }
-  const opts=pickOptions({w:entry.w||entry.span,en:entry.en},pool,want==="meaning"?"meaning":"word");
+  /* One in three of the middle rung comes through the ear instead of the eye.
+     English spelling and English sound are two different problems for a German
+     speaker, and only one of them is practised by reading. */
+  const listen=want==="word"&&Math.random()<0.34;
+  const opts=pickOptions({w:entry.w||entry.span,en:entry.en},pool,
+    want==="meaning"?"meaning":"word",want!=="meaning");
   if(!opts){
-    /* Not enough other words to build a fair choice yet. A gap she can type
-       still works with a deck of one. */
-    if(cl) return {...base,kind:"type",
+    /* Not enough other words to build a fair choice yet. A gap she can build
+       out of letters still works with a deck of one. */
+    if(cl) return {...base,kind:"build",target:cl.surface,tiles:scramble(cl.surface),
       answers:[...new Set([cl.surface,entry.w,entry.span])].filter(Boolean).map(x=>normTok(String(x)))};
     return {...base,kind:"show"};
   }
-  return {...base,options:opts};
+  return {...base,kind:want,listen,options:opts};
 }
 
-function playGrade(ok,ms,kind,hinted){
+/* How long is a fair answer? She has to read the options before she can
+   choose, and four long explanations are a lot of reading for a child whose
+   English is the thing being tested. Charging that reading time against her
+   as hesitation would grade half her right answers as Hard. */
+function playSlowMs(item){
+  const text=(item.options||[]).reduce((a,o)=>a+String(o.text||"").length,0);
+  return Math.min(PLAY_SLOW_CAP,PLAY_SLOW_MS+text*PLAY_READ_MS);
+}
+
+function playGrade(ok,ms,item){
   if(!ok) return 1;
-  if(hinted||ms>PLAY_SLOW_MS) return 2;
-  if((kind==="type"||kind==="cloze")&&ms<PLAY_FAST_MS) return 4;
+  if(item.hinted||ms>playSlowMs(item)) return 2;
+  if((item.kind==="type"||item.kind==="build"||item.kind==="cloze")&&ms<PLAY_FAST_MS) return 4;
   return 3;
 }
 
@@ -1636,13 +1699,34 @@ body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
 .play-think{display:flex;align-items:center;justify-content:center;gap:9px;
   color:var(--ink2);font-weight:700;font-size:14px;padding:22px 0 8px;cursor:pointer}
 .play-opts{display:grid;gap:9px;margin-top:16px}
-.optbtn{text-align:left;font-family:inherit;font-size:17px;font-weight:650;line-height:1.4;
+.optbtn{text-align:left;font-family:inherit;font-size:18px;font-weight:650;line-height:1.4;
   padding:14px 16px;border-radius:17px;border:1px solid var(--line);background:#FFF9E9;
   color:var(--ink);cursor:pointer;transition:transform .06s,background .12s}
 .optbtn:active{transform:scale(.99);background:var(--accent-soft)}
 .optbtn.right{background:#D9EBC9;border-color:#A9C68C;font-weight:800}
 .optbtn.wrong{background:#F7DED4;border-color:#E0B2A0}
 .optbtn[disabled]{opacity:.9}
+.play-listen{display:flex;flex-direction:column;align-items:center;margin:14px 0 2px}
+.hearbtn{border:none;background:none;padding:0;cursor:pointer;width:96px;height:96px;
+  display:grid;place-items:center;font-size:40px;position:relative;
+  -webkit-user-select:none;user-select:none}
+.hearbtn::before{content:"";position:absolute;inset:0;z-index:0;
+  --k1:#7CB2B4;--k2:#BCDEDC;
+  background:radial-gradient(58% 52% at 33% 29%,rgba(255,255,255,.6),rgba(255,255,255,0) 62%),
+    radial-gradient(88% 84% at 62% 70%,var(--k2),var(--k1) 72%);
+  border-radius:58% 42% 45% 55%/48% 60% 40% 52%;transform:rotate(-5deg);filter:url(#klecks)}
+.hearbtn>span{position:relative;z-index:1}
+.hearbtn:active{transform:scale(.94)}
+.play-build{margin-top:18px}
+.tilebank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tile{width:44px;height:50px;font-family:inherit;font-size:23px;font-weight:800;cursor:pointer;
+  border:1px solid var(--line);background:#FFF9E9;color:var(--ink);border-radius:13px;
+  -webkit-user-select:none;user-select:none;transition:transform .06s,opacity .12s}
+.tile:active{transform:scale(.92);background:var(--accent-soft)}
+.tile[disabled]{opacity:.22}
+.play-escape{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:14px}
+.linkbtn{border:none;background:none;font-family:inherit;font-size:13px;font-weight:700;
+  color:var(--ink2);text-decoration:underline;cursor:pointer;padding:6px 8px}
 .play-type{margin-top:16px}
 .play-typerow{display:flex;gap:10px;margin-top:12px}
 .play-typerow .btn{flex:1}
@@ -2945,12 +3029,40 @@ export default function App(){
         return r(a[1])-r(b[1]);
       }).slice(0,PLAY_MAX);
     }
-    const plan=rrShuffle(pick).slice(0,PLAY_MAX).map(([k])=>({key:k,demote:0}));
+    /* Three new words at most. A session that is mostly words she has never
+       retrieved is a session she mostly gets wrong, and new words interfere
+       with each other more than they interfere with settled ones. */
+    const seenBefore=rrShuffle(pick.filter(([,e])=>e.reps));
+    /* The cap lifts a little when there is nothing else to do, or the first
+       session after she saves ten words would introduce three of them and
+       call it a day. New words still never make up more than half a session
+       that has review words in it. */
+    const newCap=seenBefore.length?PLAY_NEW:PLAY_NEW+2;
+    const fresh=rrShuffle(pick.filter(([,e])=>!e.reps)).slice(0,newCap);
+    const words=rrShuffle([...fresh,...seenBefore.slice(0,PLAY_MAX-fresh.length)]);
+    const freshKeys=new Set(fresh.map(([k])=>k));
+
+    /* One correct retrieval per word per session is the criterion; drilling
+       the same word to three correct answers in one sitting buys almost
+       nothing once the word comes back on later days, and costs her the
+       minutes that spacing would have used better. So each word appears once,
+       and only a miss brings it back.
+
+       A word she has never retrieved gets met first - read, heard, no
+       question - and asked later in the session, far enough down the queue
+       that the answer is a retrieval rather than an echo. */
+    const meets=words.filter(([k])=>freshKeys.has(k)).map(([k])=>({key:k,demote:0,meet:true}));
+    const tail=rrShuffle(words.filter(([k])=>!freshKeys.has(k)).map(([k])=>({key:k,demote:0})));
+    for(const [k] of rrShuffle(words.filter(([k])=>freshKeys.has(k)))){
+      const lo=Math.floor(tail.length*0.4);
+      tail.splice(lo+Math.floor(Math.random()*(tail.length-lo+1)),0,{key:k,demote:0});
+    }
+    const plan=[...meets,...tail];
     const pool=playPool();
     setTyped("");
-    setPlay({plan,idx:0,phase:"think",shown:now,started:now,
-      item:buildPlayItem(plan[0].key,vocab[plan[0].key],pool,0),
-      right:0,asked:0,graded:{},moved:[],pool,
+    setPlay({plan,idx:0,phase:"think",shown:now,started:now,length:plan.length,
+      item:buildPlayItem(plan[0].key,vocab[plan[0].key],pool,0,plan[0].meet),
+      right:0,asked:0,graded:{},moved:[],pool,tiles:[],
       from:view==="play"?(play&&play.from)||"library":view});
     setView("play");
   }
@@ -2969,8 +3081,9 @@ export default function App(){
       const step=p.plan[idx];
       const e=vocabRef.current[step.key];
       if(!e) return {...p,idx,phase:"think",shown:Date.now(),item:null};
-      return {...p,idx,phase:"think",shown:Date.now(),nearMiss:false,lastPick:null,
-        item:buildPlayItem(step.key,e,p.pool,step.demote)};
+      return {...p,idx,phase:"think",shown:Date.now(),nearMiss:false,lastPick:null,tiles:[],
+        gaveUp:false,grew:null,
+        item:buildPlayItem(step.key,e,p.pool,step.demote,step.meet)};
     });
     setTyped("");
   }
@@ -2979,14 +3092,15 @@ export default function App(){
      attempt. A word she gets right on the second try inside the same session
      has still been forgotten, and pretending otherwise is how a deck quietly
      stops being true. */
-  function playAnswer(ok){
+  function playAnswer(ok,override){
     const p=play; if(!p||!p.item) return;
-    const it=p.item;
+    const it=override||p.item;
+    if(it.kind==="meet"){ playAdvance(); return; }
     const ms=Date.now()-(p.shown||Date.now());
     const first=!p.graded[it.key];
-    let moved=null;
+    let moved=null,grew=null;
     if(first){
-      const g=playGrade(ok,ms,it.kind,it.hinted);
+      const g=playGrade(ok,ms,it);
       const prev=vocab[it.key];
       if(prev){
         const before=strengthOf(prev);
@@ -2998,12 +3112,13 @@ export default function App(){
            gap after a multiple-choice success at two days; only the due date
            moves, never stability, so the model itself stays honest and simply
            sees an early review next time. */
-        if(!prev.reps&&g>1&&(it.kind==="meaning"||it.kind==="word")){
+        if(prev.reps<2&&g>1&&(it.kind==="meaning"||it.kind==="word")){
           next.due=Math.min(next.due,now+2*DAY);
         }
         saveVocab({...vocab,[it.key]:next});
         const after=strengthOf(next);
         if(after>before) moved={w:next.w,band:after};
+        grew=after>before?after:null;
       }
       setSessions(cur=>{
         const d=today();
@@ -3023,11 +3138,29 @@ export default function App(){
         const at=Math.min(plan.length,cur.idx+1+PLAY_GAP);
         plan.splice(at,0,{key:it.key,demote:(it.demote||0)+1});
       }
-      return {...cur,plan,phase:ok?"ok":"no",
+      return {...cur,plan,phase:ok?"ok":"no",grew,
         right:cur.right+(ok&&first?1:0),asked:cur.asked+(first?1:0),
         graded:{...cur.graded,[it.key]:true},
         moved:moved?[...cur.moved,moved]:cur.moved};
     });
+  }
+
+  function playTile(t){
+    setPlay(p=>{
+      if(!p||!p.item||p.phase!=="ask") return p;
+      const tiles=[...(p.tiles||[]),t];
+      return {...p,tiles};
+    });
+  }
+  function playUntile(){
+    setPlay(p=>p?{...p,tiles:(p.tiles||[]).slice(0,-1)}:p);
+  }
+  function playCheckTiles(){
+    const it=play&&play.item; if(!it) return;
+    const v=normTok((play.tiles||[]).map(t=>t.ch).join(""));
+    if(!v) return;
+    const exact=(it.answers||[]).some(a=>a===v);
+    playAnswer(exact);
   }
 
   function playCheckTyped(){
@@ -3036,8 +3169,20 @@ export default function App(){
     if(!v) return;
     const exact=(it.answers||[]).some(a=>a===v);
     const close=!exact&&(it.answers||[]).some(a=>a.length>=5&&editDistance(a,v)<=1);
-    if(close) setPlay(p=>p?{...p,item:{...p.item,hinted:true},nearMiss:true}:p);
-    playAnswer(exact||close);
+    /* setPlay does not land before playAnswer reads the item, so the spelling
+       slip has to be handed over directly or it would be graded as a clean
+       success. */
+    if(close) setPlay(p=>p?{...p,nearMiss:true}:p);
+    playAnswer(exact||close,close?{...it,hinted:true}:it);
+  }
+
+  /* She can say she does not know instead of guessing. A lucky tap out of
+     four is graded Good and pushes the word two days away on knowledge she
+     does not have, so the honest button is worth more to the schedule than
+     it costs in effort - and it spares her guessing for its own sake. */
+  function playGiveUp(){
+    setPlay(p=>p?{...p,gaveUp:true}:p);
+    playAnswer(false);
   }
 
   function playHint(){
@@ -3060,7 +3205,9 @@ export default function App(){
 
   useEffect(()=>{
     if(!play||play.phase!=="ok") return;
-    const t=setTimeout(playAdvance,1600);
+    /* Long enough to read the explanation and her own sentence, and tappable
+       the moment she has. */
+    const t=setTimeout(playAdvance,2600);
     return ()=>clearTimeout(t);
   },[play&&play.idx,play&&play.phase]); // eslint-disable-line
 
@@ -3342,18 +3489,37 @@ export default function App(){
     );
     const answered=play.phase==="ok"||play.phase==="no";
     const asking=play.phase==="ask";
-    const n=play.plan.length;
+    const meet=it.kind==="meet";
+    const built=(play.tiles||[]).map(t=>t.ch).join("");
+    const used=new Set((play.tiles||[]).map(t=>t.id));
+    const done=Math.min(play.idx,play.length);
 
     const prompt=(()=>{
+      if(meet) return (
+        <div className="play-word serif">{it.word}
+          {it.pron&&<div className="pron" style={{textAlign:"center"}}>{it.pron}</div>}
+        </div>
+      );
       if(it.kind==="meaning") return (
         <div className="play-word serif">{it.word}
           {it.pron&&<div className="pron" style={{textAlign:"center"}}>{it.pron}</div>}
         </div>
       );
+      if(it.kind==="word"&&it.listen) return (
+        <div className="play-listen">
+          <button className="hearbtn" aria-label="Hear the word" onClick={()=>speak(it.word)}>
+            <span>{"🔊"}</span>
+          </button>
+          <div className="hint" style={{marginTop:8}}>Tap to hear it{it.hinted?"":" — as often as you like"}</div>
+          {it.hinted&&<div className="play-ask" style={{fontSize:18,marginTop:6}}>{it.en}</div>}
+        </div>
+      );
       if(it.kind==="word") return <div className="play-ask">{it.en}</div>;
       if(it.cloze) return (
         <div className="play-ask play-cloze serif">
-          {it.cloze.before}<b className="gap">{answered?it.cloze.surface:"？"}</b>{it.cloze.after}
+          {it.cloze.before}
+          <b className="gap">{answered?it.cloze.surface:(it.kind==="build"?(built||"…"):"？")}</b>
+          {it.cloze.after}
         </div>
       );
       return <div className="play-word serif">{it.word}</div>;
@@ -3364,8 +3530,8 @@ export default function App(){
         <div className="play-top">
           <button className="icon-btn" aria-label="Stop" onClick={endPlay}>{"✕"}</button>
           <div className="play-dots">
-            {play.plan.map((s,i)=>(
-              <i key={i} className={i<play.idx?"on":(i===play.idx?"now":"")}/>
+            {Array.from({length:play.length}).map((_,i)=>(
+              <i key={i} className={i<done?"on":(i===done?"now":"")}/>
             ))}
           </div>
           <button className="icon-btn" aria-label="Say the word" onClick={()=>speak(it.word)}>{"🔊"}</button>
@@ -3373,14 +3539,26 @@ export default function App(){
 
         <div className="play-card">
           <div className="play-kind">
-            {it.kind==="meaning"?"What does it mean?":
-             it.kind==="word"?"Which word is this?":
+            {meet?"A new word":
+             it.kind==="meaning"?"What does it mean?":
+             it.kind==="word"?(it.listen?"Which word did you hear?":"Which word is this?"):
              it.kind==="cloze"?"Which word fits the gap?":
+             it.kind==="build"?"Build the missing word":
              it.kind==="type"?"Type the missing word":"Read it again"}
           </div>
           {prompt}
 
-          {play.phase==="think"&&(
+          {meet&&(<>
+            <div className="play-ask" style={{marginTop:6}}>{it.en}</div>
+            {it.ctx&&<div className="src" style={{marginTop:10}}>“{it.ctx}”</div>}
+            <div className="play-typerow">
+              <button className="btn btn-ghost" onClick={()=>speak(it.word)}>{"🔊 Hear it"}</button>
+              <button className="btn btn-primary" onClick={playAdvance}>Got it</button>
+            </div>
+            <div className="hint" style={{textAlign:"center"}}>You will be asked this one later.</div>
+          </>)}
+
+          {play.phase==="think"&&!meet&&(
             <div className="play-think" onClick={playReveal}>
               <span className="klecks-mini"/>
               <span>Think first…</span>
@@ -3398,6 +3576,23 @@ export default function App(){
                   </button>
                 );
               })}
+            </div>
+          )}
+
+          {(asking||answered)&&it.kind==="build"&&(
+            <div className="play-build">
+              <div className="tilebank">
+                {it.tiles.map(t=>(
+                  <button key={t.id} className="tile" disabled={answered||used.has(t.id)}
+                    onClick={()=>playTile(t)}>{t.ch}</button>
+                ))}
+              </div>
+              {!answered&&(
+                <div className="play-typerow">
+                  <button className="btn btn-plain" disabled={!built} onClick={playUntile}>{"⌫"}</button>
+                  <button className="btn btn-primary" disabled={!built} onClick={playCheckTiles}>Check</button>
+                </div>
+              )}
             </div>
           )}
 
@@ -3424,18 +3619,31 @@ export default function App(){
               <button className="btn btn-ghost" onClick={()=>playAnswer(false)}>Not yet</button>
             </div>
           )}
+
+          {asking&&!meet&&it.kind!=="show"&&(
+            <div className="play-escape">
+              {it.listen&&!it.hinted&&(
+                <button className="linkbtn" onClick={playHint}>Show me what it means</button>
+              )}
+              <button className="linkbtn" onClick={playGiveUp}>I don’t know this one</button>
+            </div>
+          )}
         </div>
 
         {answered&&(
-          <div className={"play-feedback"+(play.phase==="ok"?" good":" miss")}>
+          <div className={"play-feedback"+(play.phase==="ok"?" good":" miss")}
+            onClick={()=>{ if(play.phase==="ok") playAdvance(); }}>
             <div className="fb-head">
+              {play.grew!=null&&<Klecks band={play.grew} size={30}/>}
               <div className="hw serif">{it.word}</div>
-              <button className="icon-btn" aria-label="Say it" onClick={()=>speak(it.word)}>{"🔊"}</button>
+              <button className="icon-btn" aria-label="Say it" onClick={e=>{ e.stopPropagation(); speak(it.word); }}>{"🔊"}</button>
             </div>
             {it.pron&&<div className="pron">{it.pron}</div>}
+            {play.grew!=null&&<div className="chip">Stronger — now {STRENGTH_NAMES[play.grew].toLowerCase()}</div>}
             {play.nearMiss&&play.phase==="ok"&&(
               <div className="chip" style={{marginTop:2}}>Almost — that is the spelling</div>
             )}
+            {play.gaveUp&&<div className="chip" style={{marginTop:2}}>Good to say so</div>}
             {it.en&&<div className="en">{it.en}</div>}
             {play.phase==="no"&&it.de&&<div className="de-box" style={{marginTop:10}}>{it.de}</div>}
             {it.ctx&&<div className="src">“{it.ctx}”</div>}
@@ -3443,6 +3651,7 @@ export default function App(){
               <button className="btn btn-primary" style={{width:"100%",marginTop:14}}
                 onClick={playAdvance}>Got it</button>
             )}
+            {play.phase==="ok"&&<div className="hint" style={{textAlign:"center"}}>Tap to carry on</div>}
           </div>
         )}
       </div>

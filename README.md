@@ -106,21 +106,37 @@ Repeated lookups are still counted quietly and remain visible in Parent settings
 
 ## Word practice
 
-The library shows a practice card once there is anything saved: her words as coloured blobs, how many are due, and a play button. A session is at most 12 items, roughly four minutes.
+The library shows a practice card once there is anything saved: her words as coloured blobs, how many are due, and a play button. A session is at most 10 words, roughly four minutes.
 
-What the design follows, and why:
+### The ladder
 
-- **Cued retrieval, never free recall.** Retrieval practice beats restudying, but for primary-age learners cued retrieval beats free recall, because free recall mostly produces failure. Every item is either four choices or a gap in a sentence.
-- **The format climbs as the word gets stronger.** Recall items retain better than recognition items long-term, so the ladder runs: choose the meaning → choose the word → fill the gap in her own sentence → type the word. The rung comes from FSRS stability, not from how many times the card has been seen.
-- **The options appear a beat after the prompt.** Multiple choice only teaches if the learner tries to remember before reading the options; delaying the alternatives turns a recognition tap into covert recall. The pause is skippable by tapping.
-- **Her own sentence is the cue.** Gap items use the sentence she met the word in, taken from the saved entry.
-- **Feedback every time.** Right or wrong, the item ends with the word, its sound, its explanation and her sentence. German appears only on a miss.
-- **Distractors are plausible but not confusable.** Wrong options come from her other saved words, or from her lookup cache when the deck is still small. They never share the first two letters with the answer, and they are chosen to be close in length so length alone never gives it away — words that look or mean nearly the same get cross-associated.
-- **She does not grade herself.** Children judge their own memory poorly, and a self-rating is one more decision per card. The FSRS grade is derived: wrong is Again; right but slow or hinted is Hard; right is Good; right and fast on a recall item is Easy.
+| rung | item | when |
+|---|---|---|
+| meet | word, sound, meaning, her sentence — no question | a word she has never been asked |
+| meaning | the word → choose what it means | new |
+| word | the meaning, or the word spoken aloud → choose the word | getting there |
+| cloze | her own sentence with the word missing → choose the word | sticking |
+| build | the same gap, tapped out of scrambled letters | strong |
+| type | the same gap, typed from nothing | known |
+
+The rung comes from FSRS stability, not from how many times the card has been seen. Letters before keyboard is deliberate: tapping letters is still production and it teaches English spelling, which is the weak point for a German speaker, without handing an iPad keyboard to a ten-year-old and covering the sentence she is meant to be reading. One middle-rung item in three arrives through the ear instead of the eye, because English sound and English spelling are two separate problems and reading only practises one.
+
+### What the design follows, and why
+
+- **Cued retrieval, never free recall.** Retrieval beats restudy, but for primary-age learners cued retrieval beats free recall, which mostly produces failure — and failure is where a ten-year-old quits.
+- **One correct retrieval per word per session.** Drilling a word to three correct answers in one sitting buys almost nothing once the word returns on later days; the gains come from spaced returns, not from same-session repetition. So each word is asked once, and only a miss brings it back.
+- **A new word is met before it is asked.** It is shown once early in the session and asked later in the same session, far enough down the queue that answering is retrieval rather than echo. At most three new words per session, five when nothing else is due, because new words interfere with each other far more than with settled ones.
+- **The options appear a beat after the prompt.** Multiple choice only teaches if she tries to remember before reading the options; delaying the alternatives turns a recognition tap into covert recall. The pause is skippable by tapping.
+- **She can say she does not know.** A lucky tap out of four is graded Good and pushes the word two days away on knowledge she does not have. The honest button is worth more to the schedule than it costs in effort, and it spares her guessing for its own sake.
+- **Feedback every time.** Right or wrong, the item ends with the word, its sound, its explanation and her sentence. German appears only on a miss. A correct answer moves on by itself after a couple of seconds, or immediately on a tap; a miss waits for her.
+- **Distractors are plausible but not confusable.** They come from her other saved words, or from her lookup cache when the deck is small. They never share the first two letters with the answer, they are close in length so length alone never gives it away, and for gap items they match the part of speech — otherwise she can tick the only verb without knowing anything.
+- **She does not grade herself.** Children judge their own memory poorly, and a self-rating is one more decision per card. The FSRS grade is derived: wrong or "I don't know" is Again; right but slow or hinted is Hard; right is Good; right and fast on a recall item is Easy.
+- **Reading time is not counted as hesitation.** The "slow" threshold grows with how much option text she had to read, because four long explanations are a lot of reading for a child whose English is the thing being tested.
 - **A miss returns in the same session**, three items later, one rung easier, at most twice. Only the first attempt is graded — a word she gets right on the second try in one sitting was still forgotten.
-- **A first multiple-choice success is capped at two days.** Picking one of four overstates what she can recall, and FSRS would otherwise wait four days. Only the due date is capped; stability is left alone, so the model stays honest and simply sees an early review.
+- **Early multiple-choice successes are capped at two days.** Picking one of four overstates recall, and FSRS would otherwise wait four days. Only the due date is capped, never stability, so the model stays honest and simply sees an early review.
+- **The progress bar never grows.** A missed word comes back, but the row of dots stays the length it started at, so a hard session does not visibly lengthen as punishment.
 
-Typed answers accept the inflected form from the sentence or the dictionary form, ignore case, and treat a single-letter slip as correct-but-Hard.
+Typed and built answers accept the inflected form from the sentence or the dictionary form, ignore case, and treat a single-letter slip in typing as correct-but-Hard.
 
 Parent → Words shows answers today, first-time accuracy over 14 days, the strength spread, and any word that has been forgotten three times or more.
 
@@ -163,7 +179,7 @@ npm run build
 
 Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Current service-worker cache for this release: `rr-v18`.
+Current service-worker cache for this release: `rr-v19`.
 
 ## OpenAI models and cost table
 
