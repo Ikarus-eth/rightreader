@@ -1339,19 +1339,61 @@ body{
   font-weight:650;font-size:14px;cursor:pointer}
 
 /* ---- reading ---- */
-.reader-shell{position:relative;height:100dvh;overflow:hidden;touch-action:manipulation}
+/* The reading surface ignores the 760px page wrapper. In landscape the
+   wrapper left a dead strip of a couple of hundred pixels down each edge of
+   the iPad: exactly where she taps to turn a page, and nothing happened. The
+   shell now spans the viewport in any orientation and the text column is
+   capped on its own instead. */
+.reader-wrap{max-width:none;padding:0}
+.reader-shell{position:relative;height:100dvh;overflow:hidden;touch-action:manipulation;
+  --rail:clamp(62px,8vw,92px)}
 .reader-topbar{position:absolute;left:0;right:0;top:0;z-index:12;background:rgba(255,248,227,.96);
   backdrop-filter:saturate(135%) blur(14px);border-bottom:1px solid rgba(211,185,126,.55);
   box-shadow:0 3px 14px rgba(81,68,35,.08);transition:opacity .16s ease,transform .16s ease}
 .reader-topbar.hidden{opacity:0;transform:translateY(-18px);pointer-events:none;visibility:hidden;transition:opacity .16s ease,transform .16s ease,visibility 0s linear .16s}
-.reader{height:100%;width:auto;margin-inline:clamp(28px,7vw,60px);padding:22px 0 max(118px,calc(env(safe-area-inset-bottom) + 98px));font-size:var(--rsize);line-height:var(--rlead);
+/* Horizontal padding stays 0 on purpose: layoutPages sets columnWidth to
+   clientWidth, which includes padding but not margin, so the column box and
+   the scroll step only agree while the side inset is margin. */
+.reader{height:100%;width:min(calc(100% - 2*var(--rail)),720px);margin-inline:auto;padding:22px 0 max(118px,calc(env(safe-area-inset-bottom) + 98px));font-size:var(--rsize);line-height:var(--rlead);
   letter-spacing:.003em;overflow:hidden;column-fill:auto;scroll-behavior:auto}
+/* Landscape on a short viewport: give the page back the vertical space the
+   portrait gutters were spending. */
+@media (max-height:560px){
+  .reader{padding-top:12px;padding-bottom:max(70px,calc(env(safe-area-inset-bottom) + 56px))}
+}
 body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
 .page-indicator{position:absolute;left:50%;bottom:max(22px,calc(env(safe-area-inset-bottom) + 12px));transform:translateX(-50%);z-index:4;
   background:rgba(255,248,227,.9);border:1px solid var(--line);border-radius:999px;padding:3px 9px;
   font-size:11px;font-weight:750;color:var(--ink2);pointer-events:none}
 .page-edge{position:absolute;top:0;bottom:0;width:24%;z-index:2;pointer-events:none}
 .page-edge.left{left:0}.page-edge.right{right:0}
+
+/* ---- permanent page/chapter buttons ----
+   One pair per edge, vertically centred, inside the rail the text column
+   leaves free. Tapping the sides still works; these exist so turning a page
+   never depends on guessing where the invisible zone is. Chapter sits above
+   page: the thumb rests low, and the button it can least afford to hit by
+   accident is the one further from it. */
+.pagenav{position:absolute;top:50%;transform:translateY(-50%);z-index:11;
+  display:flex;flex-direction:column;align-items:center;gap:11px;pointer-events:none}
+.pagenav.left{left:calc(env(safe-area-inset-left) + 6px)}
+.pagenav.right{right:calc(env(safe-area-inset-right) + 6px)}
+.navbtn{pointer-events:auto;display:grid;place-items:center;padding:0;cursor:pointer;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  border:1px solid var(--line);background:rgba(255,248,227,.86);color:var(--ink2);
+  backdrop-filter:saturate(130%) blur(8px);border-radius:16px;
+  font-family:inherit;font-weight:800;line-height:1;
+  box-shadow:0 3px 11px rgba(71,59,28,.12);
+  transition:transform .06s ease,background .12s ease,opacity .12s ease}
+.navbtn.page{width:54px;height:62px;font-size:31px}
+.navbtn.chap{width:54px;height:44px;font-size:20px;opacity:.8}
+.navbtn:active{transform:scale(.93);background:var(--accent-soft);color:var(--accent)}
+.navbtn[disabled]{opacity:.2;box-shadow:none;cursor:default}
+@media (max-height:560px){
+  .navbtn.page{height:54px;font-size:27px}
+  .navbtn.chap{height:38px;font-size:18px}
+  .pagenav{gap:9px}
+}
 .reader.sans{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 .reader p.speaking{background:var(--accent-soft);border-radius:8px;
   box-shadow:0 0 0 6px var(--accent-soft);transition:background .2s}
@@ -1451,7 +1493,7 @@ input[type=text],input[type=password],input[type=number]{
   border-radius:11px;font-weight:700;font-size:13px;font-family:inherit;cursor:pointer}
 .tabs button.on{background:var(--accent);color:#20392D;box-shadow:0 3px 8px rgba(198,128,27,.18)}
 .empty{text-align:center;color:var(--ink2);padding:44px 20px;line-height:1.6}
-.reader-tip{position:absolute;left:10px;right:10px;top:8px;z-index:8;display:flex;align-items:center;gap:14px;
+.reader-tip{position:absolute;left:10px;right:10px;top:8px;z-index:8;max-width:620px;margin-inline:auto;display:flex;align-items:center;gap:14px;
   background:rgba(255,240,199,.97);color:var(--ink);border:1px solid #E7CE91;border-radius:18px;
   padding:12px 14px;margin:0;font-size:14px;line-height:1.45;box-shadow:0 7px 22px rgba(71,59,28,.14)}
 .reader-tip>div{flex:1}.reader-tip .btn{padding:8px 11px;font-size:13px;white-space:nowrap}
@@ -2105,7 +2147,7 @@ export default function App(){
 
   function onPageTap(e){
     if(press.current.fired) return;
-    if(e.target.closest&&e.target.closest(".w,.reader-tip,.reader-topbar,button")) return;
+    if(e.target.closest&&e.target.closest(".w,.reader-tip,.reader-topbar,.pagenav,button")) return;
     const shell=e.currentTarget.getBoundingClientRect();
     const y=e.clientY-shell.top;
     const topZone=Math.min(100,Math.max(58,shell.height*.14));
@@ -2581,6 +2623,33 @@ export default function App(){
     setChapIdx(target);
   }
 
+  /* Chapter jumps land on the first page of the target chapter in both
+     directions, so the two buttons are mirror images of each other. The
+     alternative - back meaning "start of the chapter I am in, unless I am
+     already there" - is what music players do and is harder for a child to
+     predict than a plain skip. */
+  function turnChapter(dir){
+    if(!book) return;
+    const target=chapIdx+dir;
+    if(target<0||target>book.parsed.spine.length-1) return;
+    touch();
+    flushClock(true); savePagePosition();
+    pendingPctRef.current={chapter:target,pct:0};
+    pageRef.current={chapter:target,page:0,total:1,step:0};
+    setPageInfo({page:0,total:1});
+    if(book) setPositions(cur=>{
+      const b=cur[book.meta.id]||{counted:{}};
+      const n={...cur,[book.meta.id]:{...b,chapter:target,pct:0,page:0,pages:1,ts:Date.now()}};
+      lsSet("pos",n); return n;
+    });
+    setChapIdx(target);
+  }
+
+  /* The four permanent buttons. They share the tap-zone housekeeping with
+     onPageTap so a button press also puts the tip and the menu away. */
+  function navPage(dir){ dismissReaderTip(); if(readerMenuOpen) setReaderMenuOpen(false); turnPage(dir); }
+  function navChapter(dir){ dismissReaderTip(); if(readerMenuOpen) setReaderMenuOpen(false); turnChapter(dir); }
+
   function flushClock(final){
     const c=clock.current;
     const earned=c.words/Math.max(1,floorWpm)*60000+c.popup;
@@ -2631,18 +2700,28 @@ export default function App(){
       if(e.key==="ArrowRight"||e.key==="PageDown"||e.key===" "){ e.preventDefault(); turnPage(1); }
       if(e.key==="ArrowLeft"||e.key==="PageUp"){ e.preventDefault(); turnPage(-1); }
     };
-    let rt=0;
-    const onResize=()=>{ const a=anchorRef.current; clearTimeout(rt); rt=setTimeout(()=>layoutPages(null,a),120); };
+    let rt=0,ot=0;
+    const relayout=d=>{ const a=anchorRef.current; clearTimeout(rt); rt=setTimeout(()=>layoutPages(null,a),d); };
+    const onResize=()=>relayout(120);
+    /* iPadOS still reports the old viewport for a moment after the rotation
+       event, and columns measured against it leave every page turn pointing
+       at the wrong scroll offset. Lay out once on the event and again once
+       the new geometry has settled. */
+    const onOrient=()=>{ relayout(150); clearTimeout(ot); ot=setTimeout(()=>relayout(60),420); };
     const onVis=()=>{ touch(); if(document.visibilityState!=="visible"){ savePagePosition(); flushClock(true); } };
     window.addEventListener("touchstart",onTouchStart,{passive:true});
     window.addEventListener("keydown",onKey);
     window.addEventListener("resize",onResize);
+    window.addEventListener("orientationchange",onOrient);
+    if(window.visualViewport) window.visualViewport.addEventListener("resize",onResize);
     document.addEventListener("visibilitychange",onVis);
     return ()=>{
-      clearTimeout(rt); savePagePosition();
+      clearTimeout(rt); clearTimeout(ot); savePagePosition();
       window.removeEventListener("touchstart",onTouchStart);
       window.removeEventListener("keydown",onKey);
       window.removeEventListener("resize",onResize);
+      window.removeEventListener("orientationchange",onOrient);
+      if(window.visualViewport) window.visualViewport.removeEventListener("resize",onResize);
       document.removeEventListener("visibilitychange",onVis);
     };
     // eslint-disable-next-line
@@ -2730,9 +2809,14 @@ export default function App(){
   function Reader(){
     const item=book.parsed.spine[chapIdx];
     const label=(item&&book.parsed.toc[item.href])||("Chapter "+(chapIdx+1));
+    const lastChap=book.parsed.spine.length-1;
+    /* A page turn rolls into the neighbouring chapter at either end, so the
+       page buttons only go dead at the two ends of the whole book. */
+    const canBack=pageInfo.page>0||chapIdx>0;
+    const canFwd=pageInfo.page<pageInfo.total-1||chapIdx<lastChap;
     return (
       <>
-        <div className="wrap">
+        <div className="wrap reader-wrap">
           <div className="reader-shell" onClick={onPageTap}>
             <div className={"reader-topbar"+(readerMenuOpen?"":" hidden")}>
               <div className="wrap topbar-in">
@@ -2745,7 +2829,7 @@ export default function App(){
             </div>
             {showReaderTip&&(
               <div className="reader-tip">
-                <div><b>Tap a word</b> to explain it.<br/><b>Tap the sides</b> to turn the page.<br/><b>Tap the top</b> to show the menu.<br/><b>Hold a sentence</b> to hear it.</div>
+                <div><b>Tap a word</b> to explain it.<br/><b>‹ ›</b> or a tap on the sides turns the page.<br/><b>« »</b> jumps a whole chapter.<br/><b>Tap the top</b> to show the menu. <b>Hold a sentence</b> to hear it.</div>
                 <button className="btn btn-ghost" onClick={dismissReaderTip}>Got it</button>
               </div>
             )}
@@ -2755,6 +2839,18 @@ export default function App(){
               onPointerDown={onPressStart} onPointerUp={onPressEnd}
               onPointerCancel={onPressEnd} onPointerMove={onPressMove}
               onContextMenu={e=>e.preventDefault()}/>
+            <div className="pagenav left">
+              <button className="navbtn chap" aria-label="Previous chapter" title="Previous chapter"
+                disabled={chapIdx<=0} onClick={()=>navChapter(-1)}>{"«"}</button>
+              <button className="navbtn page" aria-label="Previous page" title="Previous page"
+                disabled={!canBack} onClick={()=>navPage(-1)}>{"‹"}</button>
+            </div>
+            <div className="pagenav right">
+              <button className="navbtn chap" aria-label="Next chapter" title="Next chapter"
+                disabled={chapIdx>=lastChap} onClick={()=>navChapter(1)}>{"»"}</button>
+              <button className="navbtn page" aria-label="Next page" title="Next page"
+                disabled={!canFwd} onClick={()=>navPage(1)}>{"›"}</button>
+            </div>
             {chap&&<div className="page-indicator">{pageLabel()}</div>}
           </div>
         </div>

@@ -21,6 +21,7 @@ The browser-held API key is a conscious security tradeoff for a single-family pr
 
 Right Reader behaves like an e-reader rather than a web page:
 
+- Four permanent buttons sit at the screen edges, two per side: `‹` and `›` turn one page, `«` and `»` jump one chapter. A chapter jump always lands on the first page of the target chapter.
 - Tap the **right side** to go forward one page.
 - Tap the **left side** to go back one page.
 - At the end of a chapter, another forward tap opens the first page of the next chapter.
@@ -30,7 +31,7 @@ Right Reader behaves like an e-reader rather than a web page:
 - The current page is saved and restored when the book is reopened.
 - Changing text size or rotating/reflowing preserves approximately the same place in the chapter.
 
-The text column is inset from the screen edges to create clear page-turn gutters, so page taps and vocabulary taps do not fight each other.
+The text column is inset from the screen edges to create clear page-turn gutters, so page taps and vocabulary taps do not fight each other. The reading screen is full-bleed rather than held inside the 760px page wrapper: in landscape the wrapper left a wide dead strip down each edge of the iPad, so edge taps there did nothing. The column itself is capped at 720px, and the inset reserves the rail the buttons live in.
 
 ## Visual identity
 
@@ -75,7 +76,7 @@ The top reading menu is hidden by default and appears when the top of the screen
 - No live `running / paused` status.
 - No exact minute counter while reading.
 - The library only shows **Reading done** once the daily target is reached.
-- First reading session shows: **Tap a word to explain it. Tap the sides to turn the page. Hold a sentence to hear it.**
+- First reading session shows how to tap a word, turn a page with `‹ ›` or a side tap, jump a chapter with `« »`, open the menu, and hear a sentence.
 - Normal lookup sheet shows the word, its easy-English explanation, optional German, and **Save word**.
 - Model checking/correction machinery and repeated-lookup nudges are hidden from the child.
 - **My words** shows the English explanation first. German is collapsed behind a disclosure.
@@ -140,7 +141,7 @@ npm run build
 
 Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Current service-worker cache for this release: `rr-v10`.
+Current service-worker cache for this release: `rr-v17`.
 
 ## OpenAI models and cost table
 
