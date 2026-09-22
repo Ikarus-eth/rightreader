@@ -21,7 +21,7 @@ The browser-held API key is a conscious security tradeoff for a single-family pr
 
 Right Reader behaves like an e-reader rather than a web page:
 
-- Four permanent buttons sit at the screen edges, two per side: `‹` and `›` turn one page, `«` and `»` jump one chapter. A chapter jump always lands on the first page of the target chapter. They are painted blobs — an organic border-radius, two radial gradients and an SVG displacement filter that roughs up the edge; if a browser ignores the filter, the blob is still a blob.
+- Four permanent buttons sit at the screen edges, two per side: `‹` and `›` turn one page, `«` and `»` jump one chapter. A chapter jump always lands on the first page of the target chapter. They are painted blobs — an organic border-radius, two radial gradients and an SVG displacement filter that roughs up the edge; if a browser ignores the filter, the blob is still a blob. The chapter and page button on each side sit well apart (about 6% of the screen height, 40–72px) so a thumb aiming for a page turn does not land on a chapter jump.
 - Tap the **right side** to go forward one page.
 - Tap the **left side** to go back one page.
 - At the end of a chapter, another forward tap opens the first page of the next chapter.
@@ -31,7 +31,9 @@ Right Reader behaves like an e-reader rather than a web page:
 - The current page is saved and restored when the book is reopened.
 - Changing text size or rotating/reflowing preserves approximately the same place in the chapter.
 
-The text column is inset from the screen edges to create clear page-turn gutters, so page taps and vocabulary taps do not fight each other. The reading screen is full-bleed rather than held inside the 760px page wrapper: in landscape the wrapper left a wide dead strip down each edge of the iPad, so edge taps there did nothing. The column itself is capped at 720px, and the inset reserves the rail the buttons live in.
+The text column is inset from the screen edges to create clear page-turn gutters, so page taps and vocabulary taps do not fight each other. The reading screen is full-bleed rather than held inside the 760px page wrapper: in landscape the wrapper left a wide dead strip down each edge of the iPad, so edge taps there did nothing. The column itself is capped at 720px, and the inset reserves the rail the buttons live in. The rail is computed from the button geometry (edge offset + button width + painted bleed + clearance, 84px), never from the viewport alone: an 8vw rail came to 62–67px in portrait on every iPad up to 11" and the painted blobs covered the first letter of the lines beside them.
+
+The column width is rounded down to a whole pixel. Pagination sets `column-width` to `clientWidth` and scrolls by `clientWidth + gap`; `clientWidth` is rounded, the real columns are not, so a fractional width moved the text sideways by a fraction of a pixel on every page turn (6px by page 30 of a chapter on an 820px portrait screen).
 
 ## Visual identity
 
@@ -179,7 +181,7 @@ npm run build
 
 Whenever `index.html` or `app.js` changes, bump `VERSION` in `sw.js`; otherwise the Home Screen install can continue serving an older cached bundle.
 
-Current service-worker cache for this release: `rr-v19`.
+Current service-worker cache for this release: `rr-v20`.
 
 ## OpenAI models and cost table
 

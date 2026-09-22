@@ -1586,8 +1586,18 @@ body{
    shell now spans the viewport in any orientation and the text column is
    capped on its own instead. */
 .reader-wrap{max-width:none;padding:0}
+/* The rail is derived from the buttons, so the text column always clears
+   the paint. It used to be 8vw on its own: 62-67px in portrait on every
+   iPad up to 11", while the painted blob reaches about 68px, so the first
+   letter of the lines beside the buttons sat under it. */
 .reader-shell{position:relative;height:100dvh;overflow:hidden;touch-action:manipulation;
-  --rail:clamp(62px,8vw,92px)}
+  --nb-edge:7px;                 /* screen edge to the button box */
+  --nb-w:52px;                   /* the widest button, page */
+  --nb-bleed:7px;                /* blob painted outside the box */
+  --nb-clear:18px;               /* filter wobble (4px) plus air before the first letter */
+  --nb-gap:clamp(40px,6dvh,72px);/* between the chapter and the page button */
+  --rail:max(clamp(62px,8vw,92px),
+    calc(max(env(safe-area-inset-left),env(safe-area-inset-right)) + var(--nb-edge) + var(--nb-w) + var(--nb-bleed) + var(--nb-clear)))}
 .reader-topbar{position:absolute;left:0;right:0;top:0;z-index:12;background:rgba(255,248,227,.96);
   backdrop-filter:saturate(135%) blur(14px);border-bottom:1px solid rgba(211,185,126,.55);
   box-shadow:0 3px 14px rgba(81,68,35,.08);transition:opacity .16s ease,transform .16s ease}
@@ -1601,6 +1611,14 @@ body{
    portrait gutters were spending. */
 @media (max-height:560px){
   .reader{padding-top:12px;padding-bottom:max(70px,calc(env(safe-area-inset-bottom) + 56px))}
+}
+/* The column box must be a whole number of pixels. clientWidth rounds, the
+   columns use the exact width, and each page turn scrolled by the rounded
+   step: on an 820px portrait screen the text slid 0.2px left per page, so
+   by page 30 of a chapter the first letter of every line was 6px under the
+   edge. Rounding down here makes column, clientWidth and step identical. */
+@supports (width:round(down,100%,1px)){
+  .reader{width:round(down,min(calc(100% - 2*var(--rail)),720px),1px)}
 }
 body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
 .page-indicator{position:absolute;left:50%;bottom:max(22px,calc(env(safe-area-inset-bottom) + 12px));transform:translateX(-50%);z-index:4;
@@ -1621,15 +1639,15 @@ body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
    an SVG displacement filter to rough up the edge the way paint dries. If a
    browser ignores the filter the blob is still a blob. */
 .pagenav{position:absolute;top:50%;transform:translateY(-50%);z-index:11;
-  display:flex;flex-direction:column;align-items:center;gap:13px;pointer-events:none}
-.pagenav.left{left:calc(env(safe-area-inset-left) + 7px)}
-.pagenav.right{right:calc(env(safe-area-inset-right) + 7px)}
+  display:flex;flex-direction:column;align-items:center;gap:var(--nb-gap,48px);pointer-events:none}
+.pagenav.left{left:calc(env(safe-area-inset-left) + var(--nb-edge,7px))}
+.pagenav.right{right:calc(env(safe-area-inset-right) + var(--nb-edge,7px))}
 .navbtn{pointer-events:auto;position:relative;display:grid;place-items:center;padding:0;cursor:pointer;
   border:none;background:none;box-shadow:none;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
   font-family:inherit;font-weight:800;line-height:1;color:#1F3A2C;
   transition:transform .09s ease,opacity .14s ease}
-.navbtn::before{content:"";position:absolute;inset:-7px;z-index:0;
+.navbtn::before{content:"";position:absolute;inset:calc(-1*var(--nb-bleed,7px));z-index:0;
   background:
     radial-gradient(58% 52% at 33% 29%,rgba(255,255,255,.6),rgba(255,255,255,0) 62%),
     radial-gradient(88% 84% at 62% 70%,var(--k2),var(--k1) 72%);
@@ -1638,7 +1656,7 @@ body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
   filter:url(#klecks);
   opacity:.94}
 .navbtn>span{position:relative;z-index:1;text-shadow:0 1px 0 rgba(255,255,255,.55)}
-.navbtn.page{width:52px;height:56px;font-size:30px}
+.navbtn.page{width:var(--nb-w,52px);height:56px;font-size:30px}
 .navbtn.chap{width:46px;height:42px;font-size:19px}
 .navbtn:active{transform:scale(.9) rotate(-3deg)}
 .navbtn[disabled]{opacity:.24;cursor:default}
@@ -1647,9 +1665,9 @@ body.reading-mode{overflow:hidden;position:fixed;inset:0;width:100%}
 .nb-cb{--k1:#DF9E88;--k2:#F6CDBB;--blob:55% 45% 63% 37%/38% 57% 43% 62%;--spin:9deg}
 .nb-cf{--k1:#7CB2B4;--k2:#BCDEDC;--blob:38% 62% 46% 54%/62% 38% 62% 38%;--spin:-8deg}
 @media (max-height:560px){
-  .navbtn.page{width:46px;height:50px;font-size:26px}
+  .reader-shell{--nb-w:46px;--nb-gap:28px}
+  .navbtn.page{height:50px;font-size:26px}
   .navbtn.chap{width:42px;height:37px;font-size:17px}
-  .pagenav{gap:10px}
 }
 .klecks-defs{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
 
