@@ -30,13 +30,13 @@ The connected Runway workspace's included speech credits were exhausted preparin
 
 `phonics/prepare-premium-audio.py` can fill the entire bounded story/example vocabulary using an `ELEVENLABS_API_KEY` environment variable. It retains completed clips if quota runs out, does not retry failed speech requests, and uses a fixed British George voice. Run it only after a key and allowance are available, then validate and deploy the changed audio files through the existing Pages route.
 
-The provided GitHub token cannot create or update workflows (GitHub rejected the push for missing workflow scope). No new Actions workflows are included; existing Pages publishing remains available.
+The provided GitHub token cannot create or update workflows (GitHub rejected the push for missing workflow scope). Creating a pull request also returned HTTP 403. No new Actions workflows are included; existing Pages publishing remains available. The user-authorized deployment uses a normal fast-forward push to main after checking current main.
 
 ### Validation
 
-The local content check verifies the EPUB ZIP structure and XML, exact text matches on all 25 pages, matching illustration bytes, all teaching mappings, and audio file hashes. All recorded clips were decoded with FFmpeg. JavaScript syntax checks pass locally. EPUBCheck 5.4.0 is being run locally before deployment.
+The local content check verifies the EPUB ZIP structure and XML, exact text matches on all 25 pages, matching illustration bytes, all teaching mappings, and audio file hashes. All recorded clips were decoded with FFmpeg. JavaScript syntax checks pass locally. EPUBCheck 5.4.0 passed locally with zero errors and zero warnings.
 
-All 25 reader pages were traversed in Chrome and checked for text, word targets and horizontal overflow. Recorded MP3 playback was observed in Chrome. The in-app preview browser rejected MP3 sources; it is not evidence that physical Safari playback fails. Portrait tablet and phone layouts were visually inspected. Physical iPad/Safari and human listening review remain outstanding.
+All 25 reader pages were traversed in Chrome and checked for text, word targets and horizontal overflow. Recorded MP3 playback was observed in Chrome. The in-app preview browser rejected MP3 sources; it is not evidence that physical Safari playback fails. Portrait tablet and phone layouts were visually inspected. Landscape width and large-text persistence passed. The saved-word review → help → return flow passed with recorded playback. After saving the offline pack and stopping the local web server, the reader reloaded with its illustration, saved page/text size and working recorded audio. Physical iPad/Safari and human listening review remain outstanding.
 
 ### Deliberately outside this pilot
 
