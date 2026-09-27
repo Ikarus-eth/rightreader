@@ -1,0 +1,738 @@
+{
+  "version": 1,
+  "accent": "en-GB",
+  "anchors": {
+    "th": {
+      "word": "thumb",
+      "picture": "👍",
+      "cue": "The first sound in thumb."
+    },
+    "dh": {
+      "word": "feather",
+      "picture": "🪶",
+      "cue": "The middle sound in feather. Your voice is on."
+    },
+    "r": {
+      "word": "rain",
+      "picture": "🌧️",
+      "cue": "The first sound in rain."
+    },
+    "oo": {
+      "word": "moon",
+      "picture": "🌙",
+      "cue": "The middle sound in moon."
+    },
+    "l": {
+      "word": "leaf",
+      "picture": "🍃",
+      "cue": "The first sound in leaf."
+    },
+    "igh": {
+      "word": "night",
+      "picture": "🌌",
+      "cue": "The middle sound in night."
+    },
+    "t": {
+      "word": "tiger",
+      "picture": "🐅",
+      "cue": "The first sound in tiger."
+    },
+    "n": {
+      "word": "nose",
+      "picture": "👃",
+      "cue": "The first sound in nose."
+    },
+    "m": {
+      "word": "moon",
+      "picture": "🌙",
+      "cue": "The first sound in moon."
+    },
+    "b": {
+      "word": "ball",
+      "picture": "⚽",
+      "cue": "The first sound in ball."
+    },
+    "s": {
+      "word": "sun",
+      "picture": "☀️",
+      "cue": "The first sound in sun."
+    },
+    "k": {
+      "word": "cat",
+      "picture": "🐈",
+      "cue": "The first sound in cat."
+    },
+    "g": {
+      "word": "goat",
+      "picture": "🐐",
+      "cue": "The first sound in goat."
+    },
+    "oa": {
+      "word": "boat",
+      "picture": "⛵",
+      "cue": "The middle sound in boat."
+    },
+    "f": {
+      "word": "fish",
+      "picture": "🐟",
+      "cue": "The first sound in fish."
+    },
+    "ee": {
+      "word": "tree",
+      "picture": "🌳",
+      "cue": "The last sound in tree."
+    },
+    "p": {
+      "word": "pig",
+      "picture": "🐖",
+      "cue": "The first sound in pig."
+    },
+    "oi": {
+      "word": "oil",
+      "picture": "🫒",
+      "cue": "The first sound in oil."
+    },
+    "ai": {
+      "word": "rain",
+      "picture": "🌧️",
+      "cue": "The middle sound in rain."
+    },
+    "ar": {
+      "word": "star",
+      "picture": "⭐",
+      "cue": "The last sound in star, in this British voice."
+    },
+    "i": {
+      "word": "fish",
+      "picture": "🐟",
+      "cue": "The middle sound in fish."
+    },
+    "ng": {
+      "word": "ring",
+      "picture": "💍",
+      "cue": "The last sound in ring."
+    },
+    "sh": {
+      "word": "ship",
+      "picture": "🚢",
+      "cue": "The first sound in ship."
+    },
+    "u": {
+      "word": "sun",
+      "picture": "☀️",
+      "cue": "The middle sound in sun."
+    }
+  },
+  "words": {
+    "light": {
+      "parts": [
+        {
+          "text": "l",
+          "sound": "l"
+        },
+        {
+          "text": "igh",
+          "sound": "igh"
+        },
+        {
+          "text": "t",
+          "sound": "t"
+        }
+      ],
+      "focus": 1,
+      "note": "Three letters, igh, work together. These words share the same ending.",
+      "family": [
+        "night",
+        "right",
+        "bright"
+      ],
+      "pattern": "ight",
+      "sentences": []
+    },
+    "night": {
+      "parts": [
+        {
+          "text": "n",
+          "sound": "n"
+        },
+        {
+          "text": "igh",
+          "sound": "igh"
+        },
+        {
+          "text": "t",
+          "sound": "t"
+        }
+      ],
+      "focus": 1,
+      "note": "Three letters, igh, work together. These words share the same ending.",
+      "family": [
+        "light",
+        "right",
+        "bright"
+      ],
+      "pattern": "ight",
+      "sentences": []
+    },
+    "right": {
+      "parts": [
+        {
+          "text": "r",
+          "sound": "r"
+        },
+        {
+          "text": "igh",
+          "sound": "igh"
+        },
+        {
+          "text": "t",
+          "sound": "t"
+        }
+      ],
+      "focus": 1,
+      "note": "Three letters, igh, work together. These words share the same ending.",
+      "family": [
+        "light",
+        "night",
+        "bright"
+      ],
+      "pattern": "ight",
+      "sentences": []
+    },
+    "through": {
+      "parts": [
+        {
+          "text": "th",
+          "sound": "th"
+        },
+        {
+          "text": "r",
+          "sound": "r"
+        },
+        {
+          "text": "ough",
+          "sound": "oo"
+        }
+      ],
+      "focus": 2,
+      "note": "In through, ough makes the middle sound in moon. There is no extra g or h sound.",
+      "family": [],
+      "pattern": "",
+      "sentences": [
+        "Go through the door.",
+        "Look through the window."
+      ]
+    },
+    "moon": {
+      "parts": [
+        {
+          "text": "m",
+          "sound": "m"
+        },
+        {
+          "text": "oo",
+          "sound": "oo"
+        },
+        {
+          "text": "n",
+          "sound": "n"
+        }
+      ],
+      "focus": 1,
+      "note": "Here, oo makes the long sound in moon.",
+      "family": [
+        "boot",
+        "roots",
+        "smooth"
+      ],
+      "pattern": "oo",
+      "sentences": []
+    },
+    "boot": {
+      "parts": [
+        {
+          "text": "b",
+          "sound": "b"
+        },
+        {
+          "text": "oo",
+          "sound": "oo"
+        },
+        {
+          "text": "t",
+          "sound": "t"
+        }
+      ],
+      "focus": 1,
+      "note": "Here, oo makes the long sound in moon.",
+      "family": [
+        "moon",
+        "roots",
+        "smooth"
+      ],
+      "pattern": "oo",
+      "sentences": []
+    },
+    "roots": {
+      "parts": [
+        {
+          "text": "r",
+          "sound": "r"
+        },
+        {
+          "text": "oo",
+          "sound": "oo"
+        },
+        {
+          "text": "t",
+          "sound": "t"
+        },
+        {
+          "text": "s",
+          "sound": "s"
+        }
+      ],
+      "focus": 1,
+      "note": "Here, oo makes the long sound in moon. Keep the final s.",
+      "family": [
+        "moon",
+        "boot",
+        "smooth"
+      ],
+      "pattern": "oo",
+      "sentences": []
+    },
+    "smooth": {
+      "parts": [
+        {
+          "text": "s",
+          "sound": "s"
+        },
+        {
+          "text": "m",
+          "sound": "m"
+        },
+        {
+          "text": "oo",
+          "sound": "oo"
+        },
+        {
+          "text": "th",
+          "sound": "dh"
+        }
+      ],
+      "focus": 2,
+      "note": "Here, oo makes the long sound in moon. The final th is voiced, as in feather.",
+      "family": [
+        "moon",
+        "boot",
+        "roots"
+      ],
+      "pattern": "oo",
+      "sentences": []
+    },
+    "crow": {
+      "parts": [
+        {
+          "text": "c",
+          "sound": "k"
+        },
+        {
+          "text": "r",
+          "sound": "r"
+        },
+        {
+          "text": "ow",
+          "sound": "oa"
+        }
+      ],
+      "focus": 2,
+      "note": "In this word, ow sounds like the middle of boat.",
+      "family": [
+        "glow",
+        "low"
+      ],
+      "pattern": "ow",
+      "sentences": []
+    },
+    "glow": {
+      "parts": [
+        {
+          "text": "g",
+          "sound": "g"
+        },
+        {
+          "text": "l",
+          "sound": "l"
+        },
+        {
+          "text": "ow",
+          "sound": "oa"
+        }
+      ],
+      "focus": 2,
+      "note": "In this word, ow sounds like the middle of boat.",
+      "family": [
+        "crow",
+        "low"
+      ],
+      "pattern": "ow",
+      "sentences": []
+    },
+    "low": {
+      "parts": [
+        {
+          "text": "l",
+          "sound": "l"
+        },
+        {
+          "text": "ow",
+          "sound": "oa"
+        }
+      ],
+      "focus": 1,
+      "note": "In this word, ow sounds like the middle of boat.",
+      "family": [
+        "crow",
+        "glow"
+      ],
+      "pattern": "ow",
+      "sentences": []
+    },
+    "grew": {
+      "parts": [
+        {
+          "text": "g",
+          "sound": "g"
+        },
+        {
+          "text": "r",
+          "sound": "r"
+        },
+        {
+          "text": "ew",
+          "sound": "oo"
+        }
+      ],
+      "focus": 2,
+      "note": "In these words, ew makes the middle sound in moon.",
+      "family": [
+        "flew"
+      ],
+      "pattern": "ew",
+      "sentences": []
+    },
+    "flew": {
+      "parts": [
+        {
+          "text": "f",
+          "sound": "f"
+        },
+        {
+          "text": "l",
+          "sound": "l"
+        },
+        {
+          "text": "ew",
+          "sound": "oo"
+        }
+      ],
+      "focus": 2,
+      "note": "In these words, ew makes the middle sound in moon.",
+      "family": [
+        "grew"
+      ],
+      "pattern": "ew",
+      "sentences": []
+    },
+    "stream": {
+      "parts": [
+        {
+          "text": "s",
+          "sound": "s"
+        },
+        {
+          "text": "t",
+          "sound": "t"
+        },
+        {
+          "text": "r",
+          "sound": "r"
+        },
+        {
+          "text": "ea",
+          "sound": "ee"
+        },
+        {
+          "text": "m",
+          "sound": "m"
+        }
+      ],
+      "focus": 3,
+      "note": "In stream, ea makes the last sound in tree.",
+      "family": [
+        "cream",
+        "dream"
+      ],
+      "pattern": "eam",
+      "sentences": []
+    },
+    "steep": {
+      "parts": [
+        {
+          "text": "s",
+          "sound": "s"
+        },
+        {
+          "text": "t",
+          "sound": "t"
+        },
+        {
+          "text": "ee",
+          "sound": "ee"
+        },
+        {
+          "text": "p",
+          "sound": "p"
+        }
+      ],
+      "focus": 2,
+      "note": "The two e letters work together.",
+      "family": [
+        "deep",
+        "keep",
+        "sleep"
+      ],
+      "pattern": "eep",
+      "sentences": []
+    },
+    "soil": {
+      "parts": [
+        {
+          "text": "s",
+          "sound": "s"
+        },
+        {
+          "text": "oi",
+          "sound": "oi"
+        },
+        {
+          "text": "l",
+          "sound": "l"
+        }
+      ],
+      "focus": 1,
+      "note": "The letters oi work together.",
+      "family": [
+        "oil",
+        "boil"
+      ],
+      "pattern": "oil",
+      "sentences": []
+    },
+    "tail": {
+      "parts": [
+        {
+          "text": "t",
+          "sound": "t"
+        },
+        {
+          "text": "ai",
+          "sound": "ai"
+        },
+        {
+          "text": "l",
+          "sound": "l"
+        }
+      ],
+      "focus": 1,
+      "note": "The letters ai work together.",
+      "family": [
+        "mail",
+        "sail"
+      ],
+      "pattern": "ail",
+      "sentences": []
+    },
+    "path": {
+      "parts": [
+        {
+          "text": "p",
+          "sound": "p"
+        },
+        {
+          "text": "a",
+          "sound": "ar"
+        },
+        {
+          "text": "th",
+          "sound": "th"
+        }
+      ],
+      "focus": 1,
+      "note": "In this British pronunciation, a has the vowel sound in star. Other accents say path differently.",
+      "family": [
+        "bath"
+      ],
+      "pattern": "ath",
+      "sentences": []
+    },
+    "three": {
+      "parts": [
+        {
+          "text": "th",
+          "sound": "th"
+        },
+        {
+          "text": "r",
+          "sound": "r"
+        },
+        {
+          "text": "ee",
+          "sound": "ee"
+        }
+      ],
+      "focus": 2,
+      "note": "Th is one sound; r is the next sound; ee is the last sound.",
+      "family": [
+        "tree",
+        "free"
+      ],
+      "pattern": "ee",
+      "sentences": []
+    },
+    "ring": {
+      "parts": [
+        {
+          "text": "r",
+          "sound": "r"
+        },
+        {
+          "text": "i",
+          "sound": "i"
+        },
+        {
+          "text": "ng",
+          "sound": "ng"
+        }
+      ],
+      "focus": 2,
+      "note": "The letters ng make one sound.",
+      "family": [
+        "king",
+        "wing"
+      ],
+      "pattern": "ing",
+      "sentences": []
+    },
+    "fish": {
+      "parts": [
+        {
+          "text": "f",
+          "sound": "f"
+        },
+        {
+          "text": "i",
+          "sound": "i"
+        },
+        {
+          "text": "sh",
+          "sound": "sh"
+        }
+      ],
+      "focus": 2,
+      "note": "The letters sh make one sound.",
+      "family": [
+        "dish",
+        "wish"
+      ],
+      "pattern": "ish",
+      "sentences": []
+    },
+    "sun": {
+      "parts": [
+        {
+          "text": "s",
+          "sound": "s"
+        },
+        {
+          "text": "u",
+          "sound": "u"
+        },
+        {
+          "text": "n",
+          "sound": "n"
+        }
+      ],
+      "focus": 1,
+      "note": "Blend the three sounds together.",
+      "family": [
+        "run",
+        "fun"
+      ],
+      "pattern": "un",
+      "sentences": []
+    },
+    "shut": {
+      "parts": [
+        {
+          "text": "sh",
+          "sound": "sh"
+        },
+        {
+          "text": "u",
+          "sound": "u"
+        },
+        {
+          "text": "t",
+          "sound": "t"
+        }
+      ],
+      "focus": 0,
+      "note": "The letters sh make one sound.",
+      "family": [
+        "ship",
+        "shop"
+      ],
+      "pattern": "sh",
+      "sentences": []
+    },
+    "thump": {
+      "parts": [
+        {
+          "text": "th",
+          "sound": "th"
+        },
+        {
+          "text": "u",
+          "sound": "u"
+        },
+        {
+          "text": "m",
+          "sound": "m"
+        },
+        {
+          "text": "p",
+          "sound": "p"
+        }
+      ],
+      "focus": 0,
+      "note": "The letters th make the first sound in thumb.",
+      "family": [
+        "thin",
+        "thick"
+      ],
+      "pattern": "th",
+      "sentences": []
+    }
+  },
+  "rhyme": {
+    "words": [
+      "light",
+      "night",
+      "bright"
+    ],
+    "ending": "ight",
+    "line": "A light in the night, shining bright."
+  }
+}

@@ -1,5 +1,11 @@
 # Right Reader
 
+## Artus phonics pilot
+
+The separate [Moonflower reading pilot](https://ikarus-eth.github.io/rightreader/phonics/) opens **The Thirsty Moonflower** with all 25 illustrations, tappable story words, 24 reviewed sound breakdowns, picture hints, spelling-family examples and a short optional review. [Download the EPUB](https://ikarus-eth.github.io/rightreader/phonics/book/Artus-and-Pip-The-Thirsty-Moonflower.epub).
+
+This pilot uses its own `rrp_moonflower_v1` progress record. It does not change the original reader's books, vocabulary, API key or reading position. Current audio coverage and verification limits are documented in [current status](docs/CURRENT_STATUS.md). The original reader below remains the default app.
+
 Right Reader is a deliberately simple EPUB reader for a 10-year-old German native speaker reading English at about A2/B1. The product idea is not “study vocabulary”; it is “English books cannot trap you.”
 
 Tap a word and get its kid-friendly British-English pronunciation respelling plus a very short, contextual explanation in easy English. Tap a harder word inside that explanation and get one more level of explanation. German is available only on request. A word can be saved explicitly for later spaced-repetition work.

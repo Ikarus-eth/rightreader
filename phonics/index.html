@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#183f35">
+  <meta name="rightreader-pilot-build" content="moonflower-20260927-r4">
+  <meta name="description" content="Read The Thirsty Moonflower with Artus and Pip. Tap a word for reading help.">
+  <title>Artus & Pip · Right Reader</title>
+  <link rel="icon" href="../icons/rr-192.png">
+  <link rel="apple-touch-icon" href="../icons/rr-180.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body>
+  <header class="app-header">
+    <button class="brand" id="home" aria-label="Open book menu"><span class="brand-mark" aria-hidden="true">✦</span><span>Right Reader<small>ARTUS & PIP</small></span></button>
+    <div class="header-actions"><button id="words-button">My words <span id="word-count" class="count" hidden></span></button><button id="settings-button" class="icon-button" aria-label="Reading settings">Aa</button></div>
+  </header>
+  <main id="reader" aria-label="Story reader">
+    <div class="loading" role="status">Opening your story…</div>
+  </main>
+  <footer class="reader-nav" aria-label="Page navigation">
+    <button id="previous" class="nav-button" aria-label="Previous page">‹</button>
+    <button id="page-menu" class="page-label" aria-label="Choose a page">1 <span>/ 25</span></button>
+    <button id="next" class="nav-button" aria-label="Next page">›</button>
+  </footer>
+  <p id="notice" class="notice" role="status" hidden></p>
+  <dialog id="help-dialog" class="help-dialog" aria-labelledby="help-title"></dialog>
+  <dialog id="menu-dialog" class="menu-dialog" aria-labelledby="menu-title"></dialog>
+  <audio id="narrator" preload="none"></audio>
+  <script type="module" src="reader.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,919 @@
+{
+  "version": 1,
+  "storyWordCount": 264,
+  "recordedStoryWords": 104,
+  "words": {
+    "a": {
+      "file": "audio/ca978112ca1bbdca.mp3",
+      "voice": "Tom, British English",
+      "sha256": "ba33d69381abb8bbb3a38896c292b303982068d0cde4bb4f0ae5251ee8d408b9",
+      "source": "assets/narration/core-male-003.mp3"
+    },
+    "again": {
+      "file": "audio/b4c9e14061c2fd45.mp3",
+      "voice": "Tom, British English",
+      "sha256": "0195e2a58c3a07a7dd8b5519c673cddd291133a7dcdf4349cedfc6b6179f1218",
+      "source": "assets/narration/core-male-094.mp3"
+    },
+    "all": {
+      "file": "audio/5ef5ef0364b6939c.mp3",
+      "voice": "Tom, British English",
+      "sha256": "dec7bdd2e5db52fa08c39b2eb0a54b23b1f760e9609ee1823360e9cea18f7142",
+      "source": "assets/narration/core-male-017.mp3"
+    },
+    "an": {
+      "file": "audio/ea325d761f98c6b7.mp3",
+      "voice": "Tom, British English",
+      "sha256": "121915c2fd6154137821451f04344275b6cbcb63060b2a818a9158340dbd1300",
+      "source": "assets/narration/core-male-068.mp3"
+    },
+    "and": {
+      "file": "audio/6201111b83a0cb5b.mp3",
+      "voice": "Tom, British English",
+      "sha256": "1dcd7a83a6e8b3c969560b984352800f24c927aa0cd744772ece7cd8b78c7cae",
+      "source": "assets/narration/core-male-002.mp3"
+    },
+    "are": {
+      "file": "audio/ba78973ddcf98d4e.mp3",
+      "voice": "Tom, British English",
+      "sha256": "3f17da7df656bad188e945449623adf1f6dcb2ef5d7ed5138ca47bbc54d8d7a8",
+      "source": "assets/narration/core-male-024.mp3"
+    },
+    "at": {
+      "file": "audio/b1d6b91b67c2afa5.mp3",
+      "voice": "Tom, British English",
+      "sha256": "cfa5af58a840af30b70997c738c294527335a81aa65477c504bf7c4a7459ea35",
+      "source": "assets/narration/core-male-023.mp3"
+    },
+    "away": {
+      "file": "audio/378ce56a9d146d51.mp3",
+      "voice": "Tom, British English",
+      "sha256": "b4aa55cceaf59f75d3bdcd6268d5896e1ac02a1a1f9cc0e5f2f59545ff8e63ec",
+      "source": "assets/narration/core-male-098.mp3"
+    },
+    "back": {
+      "file": "audio/3c482346f3750276.mp3",
+      "voice": "Tom, British English",
+      "sha256": "1da778f65c1c55e93aca54c6bc8cd4986dc1c6854ce3452593c52f4e60fb5fad",
+      "source": "assets/narration/core-male-074.mp3"
+    },
+    "ball": {
+      "file": "audio/e9de08263f4ad491.mp3",
+      "voice": "Tom, British English",
+      "sha256": "4019625d6b88d8e6e4294f6dc0024ad0d69d31500bd306aaa4744c3a2ecc6687",
+      "source": "assets/narration/core-male-162.mp3"
+    },
+    "big": {
+      "file": "audio/2a21fe6d592a19b7.mp3",
+      "voice": "Tom, British English",
+      "sha256": "ec000c31dd20898adcb2d49bbe2aa1efece9a7584e11f4d9b4725250253e6eb3",
+      "source": "assets/narration/en-male-013.mp3"
+    },
+    "both": {
+      "file": "audio/ff7772053abf7d81.mp3",
+      "voice": "Tom, British English",
+      "sha256": "bac1a7895360a7cc0df9668029efc95bf9abc3cdc8fd66acb6ae2367a4451777",
+      "source": "assets/narration/core-male-102.mp3"
+    },
+    "bright": {
+      "file": "audio/a87b3e348ccb598e.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "5c65c40c96a62c0544e6f4aa964979578010b004aff6310cd668a2869b50aa44",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "but": {
+      "file": "audio/cdc29937887188ad.mp3",
+      "voice": "Tom, British English",
+      "sha256": "0583e93ec40987b1b17bf451e8ae67cef21d2b8d8fd36ead4dab8cccc76cea40",
+      "source": "assets/narration/core-male-015.mp3"
+    },
+    "by": {
+      "file": "audio/a7e2d26e8d15814d.mp3",
+      "voice": "Tom, British English",
+      "sha256": "885c48d8818b1a939ada057669ac25cbf8f6841d953899ffeee3a47721548eaf",
+      "source": "assets/narration/core-male-065.mp3"
+    },
+    "can": {
+      "file": "audio/9f584196e7fe6de8.mp3",
+      "voice": "Tom, British English",
+      "sha256": "6e19f1592c8b86fcd4ad569c7dd0075912fd717a0fcf860c6c6b64d5ff25b75c",
+      "source": "assets/narration/en-male-035.mp3"
+    },
+    "carry": {
+      "file": "audio/6ef49cacb4c39f8f.mp3",
+      "voice": "Tom, British English",
+      "sha256": "b28d39bbebdd12f70fc8645c689b7ef3a7bbd59b744c919a16bd45aa4aa39efb",
+      "source": "assets/narration/core-male-104.mp3"
+    },
+    "cat": {
+      "file": "audio/77af778b51abd4a3.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "0694f99ddfe3b9e14c8da2703bcd9e16eb17116c1d97149951de4d18fb37f6b6",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "did": {
+      "file": "audio/75ca3ca2ece24355.mp3",
+      "voice": "Tom, British English",
+      "sha256": "92d8e8e9a16b0995a3a5dfc095b65f557bbaeddb9461d90056c9f6d225dcb8d8",
+      "source": "assets/narration/core-male-086.mp3"
+    },
+    "do": {
+      "file": "audio/ac0b52a2ae6ef999.mp3",
+      "voice": "Tom, British English",
+      "sha256": "1015e67c21e2cf8c5030b299bd18e2cab8055febc048ac74ab86b8b594e2a02a",
+      "source": "assets/narration/core-male-034.mp3"
+    },
+    "down": {
+      "file": "audio/908aec4512d80ff4.mp3",
+      "voice": "Tom, British English",
+      "sha256": "080912843659d1b5d7757ab81998f9d4023dad72af339b76944d734b39d5b772",
+      "source": "assets/narration/core-male-064.mp3"
+    },
+    "find": {
+      "file": "audio/e6640de835ad09fb.mp3",
+      "voice": "Tom, British English",
+      "sha256": "c1f593116dfeb410a79cd9f48712c1cfcd5e52f2e8212e3408a786f6aa4231b0",
+      "source": "assets/narration/core-male-108.mp3"
+    },
+    "for": {
+      "file": "audio/10c22bcf4c768b51.mp3",
+      "voice": "Tom, British English",
+      "sha256": "4ea01b93c41b6896a7df05e2b5b7f3ec07dd41204c536b88d55f537a8bd52240",
+      "source": "assets/narration/core-male-012.mp3"
+    },
+    "found": {
+      "file": "audio/bcc649cfdb8cc557.mp3",
+      "voice": "Tom, British English",
+      "sha256": "c111401b1b364bd49dd5d9990ae45acecd2d28f822d576b87f486de8b9c0decd",
+      "source": "assets/narration/core-male-110.mp3"
+    },
+    "from": {
+      "file": "audio/75857a45899985be.mp3",
+      "voice": "Tom, British English",
+      "sha256": "18dbfd315934964260a353edebaafde4f9657e1774f2f0fd7e5b0e93d20210a3",
+      "source": "assets/narration/core-male-049.mp3"
+    },
+    "gave": {
+      "file": "audio/e559f1a651605ce2.mp3",
+      "voice": "Tom, British English",
+      "sha256": "f648aae407641dd1ca3375df39cac60ad5792c2cb96ac18c062cb6dd243f3445",
+      "source": "assets/narration/core-male-111.mp3"
+    },
+    "get": {
+      "file": "audio/2998b3232d29e8dc.mp3",
+      "voice": "Tom, British English",
+      "sha256": "81e5c3c61190372f194a29ddd461212a8e2edf4a9ad29f9ec8bb26a8b9c1cf48",
+      "source": "assets/narration/core-male-060.mp3"
+    },
+    "good": {
+      "file": "audio/770e607624d68926.mp3",
+      "voice": "Tom, British English",
+      "sha256": "041e84a58cd57da609d8d3075c3d1424f6cc9aaccbe90dd94a5009354b6e7413",
+      "source": "assets/narration/core-male-062.mp3"
+    },
+    "had": {
+      "file": "audio/e02a753f0c060173.mp3",
+      "voice": "Tom, British English",
+      "sha256": "f9039cc991e635bb62922c06068ca8e9fceb3819314e88b5b8295e2a87229625",
+      "source": "assets/narration/core-male-050.mp3"
+    },
+    "have": {
+      "file": "audio/193c45b5281908d2.mp3",
+      "voice": "Tom, British English",
+      "sha256": "145f4d0755d2e658ca32658aeb45e676f8a2dfe51d72049fd3e74f44dc071ba0",
+      "source": "assets/narration/core-male-032.mp3"
+    },
+    "he": {
+      "file": "audio/372f7e2fd2d01ce2.mp3",
+      "voice": "Tom, British English",
+      "sha256": "f3f1a5f19ee4545b403cba2f9ae121639fdb963e334ec1daafa537d8f55be594",
+      "source": "assets/narration/core-male-009.mp3"
+    },
+    "here": {
+      "file": "audio/fcec91509759ad99.mp3",
+      "voice": "Tom, British English",
+      "sha256": "4817365d280c34eec6531f231c821c106905151b1bfec722d9ed387f9c7aab61",
+      "source": "assets/narration/core-male-083.mp3"
+    },
+    "him": {
+      "file": "audio/5a7cf4ac138054a8.mp3",
+      "voice": "Tom, British English",
+      "sha256": "ebe8bd74c489ebf16311b045c5c26ee693ecf4c61b4cfb10c88776317692aace",
+      "source": "assets/narration/core-male-058.mp3"
+    },
+    "his": {
+      "file": "audio/73c9c98668a34c54.mp3",
+      "voice": "Tom, British English",
+      "sha256": "5f56e145d8f781f55016618d9b819697647737c23e6b707501f45e895645fa16",
+      "source": "assets/narration/core-male-016.mp3"
+    },
+    "i": {
+      "file": "audio/de7d1b721a1e0632.mp3",
+      "voice": "Tom, British English",
+      "sha256": "7f18c57629bf1e262df04f351a3606e65a5f0724f491bde25f00492f03e01018",
+      "source": "assets/narration/core-male-005.mp3"
+    },
+    "in": {
+      "file": "audio/582967534d0f909d.mp3",
+      "voice": "Tom, British English",
+      "sha256": "b8791c758f1db369d9ac4b3c2ff4e300ccc3f240f27bcb33a6a8241e78c37691",
+      "source": "assets/narration/core-male-006.mp3"
+    },
+    "is": {
+      "file": "audio/fa51fd49abf67705.mp3",
+      "voice": "Tom, British English",
+      "sha256": "503a0afba338aa4770aceef5f6cb03e5635b60f018c893347c44bb3fb09ff156",
+      "source": "assets/narration/core-male-010.mp3"
+    },
+    "it": {
+      "file": "audio/2ad8a7049d7c5511.mp3",
+      "voice": "Tom, British English",
+      "sha256": "560663ac7c7a2dbf6cffd87cbe56a6674b92381403b04ea56e1faf9221e8a4d9",
+      "source": "assets/narration/core-male-008.mp3"
+    },
+    "just": {
+      "file": "audio/b2c66dfd45dd07f5.mp3",
+      "voice": "Tom, British English",
+      "sha256": "60a9fe2073722228b75fd4e68159d333419accbcc4037f8ac5374a0df48c87d8",
+      "source": "assets/narration/core-male-044.mp3"
+    },
+    "keep": {
+      "file": "audio/6ca7ea2feefc88ec.mp3",
+      "voice": "Tom, British English",
+      "sha256": "5ba1f62ad9a97ecf23cf6547605fbc62258827629dbe8727fb8d3e3b52a0789d",
+      "source": "assets/narration/core-male-114.mp3"
+    },
+    "light": {
+      "file": "audio/99a7026172d42714.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "92aa20bfd9e38cbd90e903968a4ceb029d8033330d9d9373afd905eaa2b5684d",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "little": {
+      "file": "audio/180ca01b95f0dfdd.mp3",
+      "voice": "Tom, British English",
+      "sha256": "7513e553bed853f64d6911d9a483315379d05d3a5aafb1ee3ef93937a7eabca3",
+      "source": "assets/narration/core-male-047.mp3"
+    },
+    "moon": {
+      "file": "audio/9e78b43ea00edcac.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "e1abcfa2c87b208fca10eb7ba7d1d49db228006350a1ac12b7051335b8033277",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "more": {
+      "file": "audio/187897ce0afcf20b.mp3",
+      "voice": "Tom, British English",
+      "sha256": "ece87472e10e4dd5ebd4e3178f15946e0ab4822514df046afe1f66de7f4a80a1",
+      "source": "assets/narration/core-male-070.mp3"
+    },
+    "my": {
+      "file": "audio/038468518ad8122e.mp3",
+      "voice": "Tom, British English",
+      "sha256": "d5acf06ae3b6f5c2dccd71ffc957be9c61ad4a8d2348a9fe124b0f5c1a7dc34b",
+      "source": "assets/narration/core-male-019.mp3"
+    },
+    "new": {
+      "file": "audio/11507a0e2f5e69d5.mp3",
+      "voice": "Tom, British English",
+      "sha256": "dae1095d792eae8f801b624c229ea81e1b761a5ed146c74f4fbf3cdb40f3be77",
+      "source": "assets/narration/core-male-087.mp3"
+    },
+    "night": {
+      "file": "audio/176473d7313395b6.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "3dcb9d7c2dbf3803e07a014eeabf1f7a31edcc02168a69bc5f4e0d4c182ccfa3",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "no": {
+      "file": "audio/9390298f3fb0c5b1.mp3",
+      "voice": "Tom, British English",
+      "sha256": "a919bc8729da047c014f01d1ba2ea6b2e5b002ca260c9e589e3df1e808e1b9d3",
+      "source": "assets/narration/core-male-041.mp3"
+    },
+    "not": {
+      "file": "audio/254bb97b57f12e16.mp3",
+      "voice": "Tom, British English",
+      "sha256": "9317e2231038a3a9022d888dcc1de787c1173fe91d1ebc956b2e6695df11fddf",
+      "source": "assets/narration/core-male-038.mp3"
+    },
+    "now": {
+      "file": "audio/ed5eb9a37e2d8231.mp3",
+      "voice": "Tom, British English",
+      "sha256": "596f4b7296ac47722f7c06b635d18473a700770319160e83947730172c6a8557",
+      "source": "assets/narration/core-male-051.mp3"
+    },
+    "of": {
+      "file": "audio/28391d3bc64ec15c.mp3",
+      "voice": "Tom, British English",
+      "sha256": "425c8fba878aeba4d661806c5d71bdb7181008cbb42a029eaff1703d8dc337a1",
+      "source": "assets/narration/core-male-007.mp3"
+    },
+    "oh": {
+      "file": "audio/cf04119a706e2c45.mp3",
+      "voice": "Tom, British English",
+      "sha256": "c2b2495d696d64a0f06636d673ff9730fdde4a48ba6c9ab2fba83a84b4176cb0",
+      "source": "assets/narration/core-male-069.mp3"
+    },
+    "on": {
+      "file": "audio/b8d31e852725afb1.mp3",
+      "voice": "Tom, British English",
+      "sha256": "28eaf356e5a32f120bd0ae6bfb8c1ecb817bfc03abb66bd75144750b548bbb5b",
+      "source": "assets/narration/en-male-001.mp3"
+    },
+    "one": {
+      "file": "audio/7692c3ad3540bb80.mp3",
+      "voice": "Tom, British English",
+      "sha256": "50ddac5c62ac0956668bcfeb1058fb4bc522620769cdd5dca0fd4f66b203a1d2",
+      "source": "assets/narration/core-male-025.mp3"
+    },
+    "our": {
+      "file": "audio/a6556e4852e26390.mp3",
+      "voice": "Tom, British English",
+      "sha256": "3b0be3452bef530a51e5e28b068738aec30cab96cd74ee7c1f938f6dae20ed67",
+      "source": "assets/narration/core-male-089.mp3"
+    },
+    "over": {
+      "file": "audio/5fb6a47e368e12e5.mp3",
+      "voice": "Tom, British English",
+      "sha256": "22060d79f1d591e855eae1f58dbc7e9cff67f57bc7b46750b0f0960658a21b5c",
+      "source": "assets/narration/en-male-011.mp3"
+    },
+    "pig": {
+      "file": "audio/f0b8c9d84dd2b877.mp3",
+      "voice": "Tom, British English",
+      "sha256": "e3fa7ffca2445335145649d4d054b58635c4b017bd640975f2214055dc6ba05c",
+      "source": "assets/narration/core-male-151.mp3"
+    },
+    "rain": {
+      "file": "audio/319b44c570a417ff.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "0019764d56819828f97569742b5384b13358c4e20d1545d38ba957690f51b3b3",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "right": {
+      "file": "audio/27042f4e6eca7d0b.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "7fc6870832ba789a7ddb128b69e41ff5310e83dd02ee1b65b28bf60207ad0f87",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "rock": {
+      "file": "audio/350a770c0ec9f353.mp3",
+      "voice": "Tom, British English",
+      "sha256": "c4dbb25b2135c88d681193f7ea21f4a0fc90d19e2245634179219a5de0186275",
+      "source": "assets/narration/en-male-002.mp3"
+    },
+    "run": {
+      "file": "audio/acba25512100f80b.mp3",
+      "voice": "Tom, British English",
+      "sha256": "c751472b3d149c90c5521b1429ef16a9b68a612b491ae071a27f9dd32021c441",
+      "source": "assets/narration/core-male-123.mp3"
+    },
+    "said": {
+      "file": "audio/fb46c79b7eb7af17.mp3",
+      "voice": "Tom, British English",
+      "sha256": "7e71055500f2d46941b2cb8012098c798bf2ab0a1166870971fad5739dd58771",
+      "source": "assets/narration/core-male-026.mp3"
+    },
+    "sat": {
+      "file": "audio/339efeab70b4cc6e.mp3",
+      "voice": "Tom, British English",
+      "sha256": "2b7ab7d7ff1ffd5771d52ccbc3db7debfedf5a676266519b09da084d13aca1bd",
+      "source": "assets/narration/en-male-031.mp3"
+    },
+    "ship": {
+      "file": "audio/e5d5b971139eefeb.mp3",
+      "voice": "Tom, British English",
+      "sha256": "6270f7a45c51becbc4f1353a78d1a619c3a4b62ad1af3c44276af2624f8e11f6",
+      "source": "assets/narration/en-male-037.mp3"
+    },
+    "show": {
+      "file": "audio/1c6333509debf060.mp3",
+      "voice": "Tom, British English",
+      "sha256": "031cb0fe1fe7c968f2cea7bc87a2e8c5e4bbf09737df392da46d60bcac0a1b45",
+      "source": "assets/narration/core-male-125.mp3"
+    },
+    "silver": {
+      "file": "audio/78cde64c3e47f2cb.mp3",
+      "voice": "Tom, British English",
+      "sha256": "806d1189b432faa0d0af315a173120809309a4ed0a34aff3a6a03fbe6ebdc1d3",
+      "source": "assets/narration/en-male-044.mp3"
+    },
+    "sleep": {
+      "file": "audio/0afa5bb5d5f17879.mp3",
+      "voice": "Tom, British English",
+      "sha256": "210c1cf90b87799ce4755665f1425d1389eac319e61a5b4b41c3cbc6b0447035",
+      "source": "assets/narration/core-male-127.mp3"
+    },
+    "small": {
+      "file": "audio/81db8ebbbbc69c6c.mp3",
+      "voice": "Tom, British English",
+      "sha256": "738c0c173f54a6f760005db5bda4a24908d3ea5ae600d692b7faccfe6cab0f12",
+      "source": "assets/narration/en-male-014.mp3"
+    },
+    "some": {
+      "file": "audio/a6b46dd0d1ae5e86.mp3",
+      "voice": "Tom, British English",
+      "sha256": "297dfd18139daeac532de13b0568c149072ee26fab275936e39032b2d1823e6d",
+      "source": "assets/narration/core-male-059.mp3"
+    },
+    "star": {
+      "file": "audio/525eca1d5089dbdc.mp3",
+      "voice": "Tom, British English",
+      "sha256": "b7482621aeb400c4f3d3e00da1d7c11a5f6d6944f47b2a69287394b714bbd4f1",
+      "source": "assets/narration/en-male-038.mp3"
+    },
+    "stone": {
+      "file": "audio/dc3d50da8dac041f.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "29a99c5dad54901d33331c3475ee3d2f29b65e1aeeeaeba2941d66a5a0161c7a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "take": {
+      "file": "audio/d1905cf90af29a5a.mp3",
+      "voice": "Tom, British English",
+      "sha256": "9dec5699cbfbe81315b78c1a02afb029f59cde5ce252c4e2a4874516e1861d65",
+      "source": "assets/narration/core-male-130.mp3"
+    },
+    "that": {
+      "file": "audio/8e7fc0236af43df9.mp3",
+      "voice": "Tom, British English",
+      "sha256": "dac5eeac22cf1cf1cb16b7233b353974a9aa1050da383fabf6b76db3629e1e2c",
+      "source": "assets/narration/core-male-013.mp3"
+    },
+    "the": {
+      "file": "audio/b9776d7ddf459c9a.mp3",
+      "voice": "Tom, British English",
+      "sha256": "174aa0fd702ca1b01bb4c1e1fb71327f3b3577d2f9e2525cba206807d5468503",
+      "source": "assets/narration/core-male-001.mp3"
+    },
+    "them": {
+      "file": "audio/c9a8dc336964db7f.mp3",
+      "voice": "Tom, British English",
+      "sha256": "d3bf2e20fb567a94785da7a8c896c9726e8a8e4dc691df0eb042b296351fee86",
+      "source": "assets/narration/core-male-057.mp3"
+    },
+    "then": {
+      "file": "audio/21af6f1260f927f5.mp3",
+      "voice": "Tom, British English",
+      "sha256": "ae1188655bc988499f2f1c9a0d1c51ce8ae440f2ce044a0a7aa7a5aa6d467aae",
+      "source": "assets/narration/core-male-039.mp3"
+    },
+    "there": {
+      "file": "audio/e244f187f696561d.mp3",
+      "voice": "Tom, British English",
+      "sha256": "943d6e6cc538e6817246d85811ab7d46bcd2246250a5ea95b3394aa7dd0a1a1a",
+      "source": "assets/narration/core-male-042.mp3"
+    },
+    "they": {
+      "file": "audio/151e58a831306903.mp3",
+      "voice": "Tom, British English",
+      "sha256": "d566bdcd355986039e1398fd6c3b9277228da0b54bed927f51e8aa937950cd42",
+      "source": "assets/narration/core-male-018.mp3"
+    },
+    "thin": {
+      "file": "audio/1a0dc227b5aa78f8.mp3",
+      "voice": "Tom, British English",
+      "sha256": "73e4946381601afc22cbbca10b66345aab00813a0dd20d2c67e636b45c8cda8e",
+      "source": "assets/narration/core-male-163.mp3"
+    },
+    "to": {
+      "file": "audio/663ea1bfffe5038f.mp3",
+      "voice": "Tom, British English",
+      "sha256": "4266b882f06e76e29e0b4c80a790375817dabe60fa6444b90d2861b7899ce487",
+      "source": "assets/narration/core-male-004.mp3"
+    },
+    "too": {
+      "file": "audio/94c05f1c45a1d1a9.mp3",
+      "voice": "Tom, British English",
+      "sha256": "743c6a36782f044966df171fbe3b5da40a4f74e12b975b1a7080b11346fab27d",
+      "source": "assets/narration/core-male-056.mp3"
+    },
+    "treasure": {
+      "file": "audio/74ae323f9b9abcff.mp3",
+      "voice": "Tom, British English",
+      "sha256": "a29ba8755f06e77b49351021374ccb369536d894be63fd3d74dff35fc1396818",
+      "source": "assets/narration/en-male-026.mp3"
+    },
+    "tree": {
+      "file": "audio/dc9c5edb8b2d479e.mp3",
+      "voice": "Tom, British English",
+      "sha256": "3f1c3586f195a62d8ff9fb98d3f8301baf8256ddeab67fdf6d776e02f1745d4d",
+      "source": "assets/narration/en-male-003.mp3"
+    },
+    "two": {
+      "file": "audio/3fc4ccfe745870e2.mp3",
+      "voice": "Tom, British English",
+      "sha256": "64294cac58c7a2cf2e6812e1c898cc2519e276f41db5546d5ee5167f47204457",
+      "source": "assets/narration/en-male-015.mp3"
+    },
+    "up": {
+      "file": "audio/75a288c0d6898c5f.mp3",
+      "voice": "Tom, British English",
+      "sha256": "f56b3cf316c6d6dc4fcea084696c0ce448c4cfc7cb39612b8c93e85b0e832892",
+      "source": "assets/narration/en-male-012.mp3"
+    },
+    "was": {
+      "file": "audio/b63b99f6383ba713.mp3",
+      "voice": "Tom, British English",
+      "sha256": "373380d484ed0ece00296d3435b5788bfca19f2892be155ebaf9e2b0e8674140",
+      "source": "assets/narration/core-male-011.mp3"
+    },
+    "water": {
+      "file": "audio/0f4168490e38b844.mp3",
+      "voice": "Tom, British English",
+      "sha256": "1aa4585739233b56672f4e03a3a13ae470ff17f046d6a044a091c94f848eb2eb",
+      "source": "assets/narration/en-male-007.mp3"
+    },
+    "way": {
+      "file": "audio/44c5e7071f3a75a2.mp3",
+      "voice": "Tom, British English",
+      "sha256": "1c20a64b04a25651ea1464b0fcc64eba21b6aeed9a191cdf716143750ca01cad",
+      "source": "assets/narration/core-male-085.mp3"
+    },
+    "we": {
+      "file": "audio/dc7c811b9561739d.mp3",
+      "voice": "Tom, British English",
+      "sha256": "5bec47ac3a6f7a8a4bef7049f4d5c7b8242e4b1f3fe471a351d66085d728652e",
+      "source": "assets/narration/core-male-030.mp3"
+    },
+    "white": {
+      "file": "audio/018fa96a44715c90.mp3",
+      "voice": "Tom, British English",
+      "sha256": "78d2e5a4427a45ffe053d74866d4cfe2903c54398adfd26f15bfa6ca734f50be",
+      "source": "assets/narration/core-male-135.mp3"
+    },
+    "wing": {
+      "file": "audio/c047caef95b4d3e8.mp3",
+      "voice": "Tom, British English",
+      "sha256": "96b255ae04645d0459ef43badb5c0f49ef5ffac4f4b2a1ea5f02e404b8449f0c",
+      "source": "assets/narration/en-male-009.mp3"
+    },
+    "wish": {
+      "file": "audio/091e606752615c91.mp3",
+      "voice": "Tom, British English",
+      "sha256": "88aecaefbfc6bef69adbce21d1a8486fad219a60372746d1719a400ec6324bd4",
+      "source": "assets/narration/core-male-136.mp3"
+    },
+    "with": {
+      "file": "audio/0695b563acde461f.mp3",
+      "voice": "Tom, British English",
+      "sha256": "fd2f48efd98c79d69725f0e3df72985741a8a2406c3f2c344ef860a39d918267",
+      "source": "assets/narration/core-male-014.mp3"
+    },
+    "would": {
+      "file": "audio/c6323a2117013ed6.mp3",
+      "voice": "Tom, British English",
+      "sha256": "0eeda6208c398a087b244378e79033b24701acc9e76f877e9cdc4d6de8e5b611",
+      "source": "assets/narration/core-male-081.mp3"
+    },
+    "yes": {
+      "file": "audio/8a798890fe938171.mp3",
+      "voice": "Tom, British English",
+      "sha256": "954b108f33ff5691d49de78d7c606d47c3e7b8fc5c5f1912a7f9d3b366fdd71a",
+      "source": "assets/narration/core-male-158.mp3"
+    },
+    "through": {
+      "file": "audio/9c6725dc269a48ce.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "2c9c36d65bb70e0db68f42bf9f3bf5bcb39493879c467748e581a5f32d27a29e",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "smooth": {
+      "file": "audio/c0f1779c16d26bac.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "3aaac8345d0f2fdaab322140a4c2c35ad96ce45efd843c23cdf3523dccc061a6",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "boot": {
+      "file": "audio/4509beb0ab401d71.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "56b8c40e39d579b4825f6cc4b5013542c3cae6a972d73f7d1d94cc406713f134",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "roots": {
+      "file": "audio/a4e3c20a32776660.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "c46fae7919c55387b5b423733c51170f3339aced28e2b15da732e001ce3b7e7e",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "crow": {
+      "file": "audio/851d49d3087657e9.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "764216788a9a003f5650a49864a2b0e726e809bf4d0c5c4ff0661da95724492a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "glow": {
+      "file": "audio/d27608cca9b65f91.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "b071ec5751fcc18bff2b51515b3253e95feff0dcd573666a080a4718b82f778a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "low": {
+      "file": "audio/6c1ff09db3a73dc4.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "56f660d769ba7a9fd32ea30224737fdcc21d5201e3b377a03d78b6f92e1e0383",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "grew": {
+      "file": "audio/b4da13b0fdf693ea.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "be089f4e60af4d3ace296cb51d8b228c454285ef4ca7fcb3a491f33afb03c6d2",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "flew": {
+      "file": "audio/a8e15df13c8b7451.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "13a1d0305edf8cb263c15e0459590ef81468323bdbcaae09a2dd466bdb8d73d1",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "stream": {
+      "file": "audio/dca83e717b1f64eb.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "34e2fd74604afb54526df3bec481b30fc3baefa25b31f6ae40bb5694ba5247ff",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "steep": {
+      "file": "audio/aaa84acb9758cff1.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "6d25f1909293d90c08aec1ee9474a5f1b41c1b6fed34fa2f9bb60f647639cf8c",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "leaves": {
+      "file": "audio/5ed0a10b951bfe15.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "f34cd100256f49a311e0bbc41ad2d79c76093369d3ea82819f2fdc8bf0a314be",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "soil": {
+      "file": "audio/e93d59a02163f846.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "ffbaca67dea358b3d89c4887b547c6a461a6bb2776219f1124a9bedfd2e62bf5",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "tail": {
+      "file": "audio/0c62f876ef1dea83.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "a7ca4e82d8cb246dfc75d7ef3baa90109ba8423587ad331f60fee599b794dbbe",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "path": {
+      "file": "audio/a0af9f865bf637e6.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "6bda7238382ed92ca79572ffdacd0abeb7a2ca947839a5c7d6c1ed73e9d4ab8d",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "three": {
+      "file": "audio/8b5b9db0c13db242.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "a8b6a3e9aed6af8cd4c3027d411d0384635f0054fc8e92aeaa6d91047de413df",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "thumb": {
+      "file": "audio/05eeec2d70845694.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "6cb7dffd5254b16cefb780177dda34c02beaf3639a0922d3a2f224806dda2e92",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "fish": {
+      "file": "audio/b474a99a2705e23c.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "9480248c27b4d0886803e36876658954551aeca0d7a3f7b366d692468b5d8438",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "sun": {
+      "file": "audio/27756f050e14a1cb.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "33223962ee0e3bd254da74e1fdb6413f17405e406aa601adacd9963b8741b38e",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "ring": {
+      "file": "audio/16b974583155fdcb.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "a3d38058a544d91899b64a8c285d379d6747f2bfc60c28ca1439babe5504cf0a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "egg": {
+      "file": "audio/34707c3f40dfa20c.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "e79aca6fd23c062f5a9d30605baec7eff899c257bbf25edf7c5d8a09ea1c0ebc",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "owl": {
+      "file": "audio/10f7127b980b0b06.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "783cc169de65dc0d68da6ffd3c48bad012cf3e6df0a47316c268e1973150279a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "home": {
+      "file": "audio/4ea140588150773c.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "3cc8543906ef27f873a7f7f4e00172ac996e7e3dde1bd72a06357b56de2a2ed7",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    "shut": {
+      "file": "audio/2a1db49adbe0e828.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "fc8050f454b2ebdc7c543d6970f658476cb9ddb73270a690bdf8231eb1a7019c",
+      "source": "Runway task 245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc"
+    },
+    "thump": {
+      "file": "audio/1b59efc442ea4d47.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "815b17848b14e037663833a063b57c13cff85224cd65496effb310a2f70fde86",
+      "source": "Runway task 245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc"
+    },
+    "feather": {
+      "file": "audio/b52115ea553c55b7.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "408c1d58220efdef2292b89aa984175fb4d66b0e6546ddab885724ce993df091",
+      "source": "Runway task 245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc"
+    },
+    "leaf": {
+      "file": "audio/9f91161f43433e49.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "c65b7a24cb16459afa0df3693adff2831c25d8d59dcc7fc6c40e2a5c2147a8c7",
+      "source": "Runway task 245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc"
+    },
+    "tiger": {
+      "file": "audio/f15c16b99f82d820.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "aed70d22f4ff85e83ab367090495da423fe08aec87d46c2f1d84a62f85a142b5",
+      "source": "Runway task 245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc"
+    },
+    "nose": {
+      "file": "audio/d77e22123e64d3d8.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "374b2e11e546adc7f5508fc89fbe39a3af30504fa1d416497db345cea676c772",
+      "source": "Runway task 245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc"
+    },
+    "goat": {
+      "file": "audio/5480f08f35968440.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "8634f371b54e85c2c7dfbba87ed125786a3f97b8dbd82387d4439329748de093",
+      "source": "Runway task 245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc"
+    }
+  },
+  "missingStoryWords": [
+    "against",
+    "am",
+    "another",
+    "artus",
+    "artus's",
+    "aside",
+    "beamed",
+    "bed",
+    "below",
+    "beside",
+    "between",
+    "bit",
+    "blinked",
+    "breath",
+    "brought",
+    "call",
+    "came",
+    "cannot",
+    "careful",
+    "caw",
+    "close",
+    "cold",
+    "crept",
+    "cried",
+    "crows",
+    "cup",
+    "curled",
+    "dark",
+    "dear",
+    "dipped",
+    "drop",
+    "dropped",
+    "dry",
+    "each",
+    "even",
+    "everyone",
+    "far",
+    "felt",
+    "filled",
+    "fit",
+    "flapped",
+    "floated",
+    "flock",
+    "flower",
+    "followed",
+    "forth",
+    "full",
+    "garden",
+    "gasped",
+    "great",
+    "grinned",
+    "hand",
+    "hands",
+    "head",
+    "heard",
+    "heavier",
+    "held",
+    "help",
+    "hill",
+    "hop",
+    "hopped",
+    "huffed",
+    "idea",
+    "ideas",
+    "inside",
+    "its",
+    "jar",
+    "last",
+    "lay",
+    "leaned",
+    "ledge",
+    "let",
+    "lift",
+    "lifted",
+    "listened",
+    "lit",
+    "looked",
+    "lost",
+    "loud",
+    "mark",
+    "moths",
+    "move",
+    "must",
+    "narrow",
+    "nearly",
+    "neck",
+    "need",
+    "needs",
+    "nudged",
+    "odd",
+    "old",
+    "ones",
+    "onto",
+    "opened",
+    "packed",
+    "past",
+    "paw",
+    "paws",
+    "pebble",
+    "peered",
+    "petal",
+    "pick",
+    "picked",
+    "pile",
+    "pip",
+    "plop",
+    "plops",
+    "poked",
+    "poured",
+    "pressed",
+    "puffed",
+    "pushed",
+    "raised",
+    "ran",
+    "reach",
+    "reached",
+    "remember",
+    "rose",
+    "rubbed",
+    "shone",
+    "short",
+    "sighed",
+    "sip",
+    "slowed",
+    "smile",
+    "smiled",
+    "soft",
+    "space",
+    "spilled",
+    "splashed",
+    "spread",
+    "staff",
+    "stay",
+    "stayed",
+    "step",
+    "still",
+    "stones",
+    "stood",
+    "stopped",
+    "stretched",
+    "swept",
+    "swooped",
+    "tall",
+    "than",
+    "these",
+    "tiny",
+    "tired",
+    "took",
+    "touched",
+    "tower",
+    "turn",
+    "underneath",
+    "us",
+    "wake",
+    "wall",
+    "went",
+    "whole",
+    "without",
+    "wooden",
+    "works"
+  ]
+}

@@ -1,0 +1,330 @@
+{
+  "generatedText": "Through. Smooth. Boot. Roots. Crow. Glow. Low. Grew. Flew. Stream. Steep. Leaves. Soil. Tail. Path. Three. Thumb. Rain. Moon. Fish. Sun. Ring. Cat. Egg. Owl. Light. Night. Right. Bright. Stone. Home.",
+  "task": "91a7d9f2-9ac5-4a8a-924d-58f66d6517cd",
+  "voice": "Miriam",
+  "model": "eleven_multilingual_v2",
+  "clips": [
+    {
+      "word": "through",
+      "start": 0,
+      "end": 0.669751,
+      "file": "audio/9c6725dc269a48ce.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "2c9c36d65bb70e0db68f42bf9f3bf5bcb39493879c467748e581a5f32d27a29e",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "smooth",
+      "start": 0.669751,
+      "end": 1.5333215,
+      "file": "audio/c0f1779c16d26bac.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "3aaac8345d0f2fdaab322140a4c2c35ad96ce45efd843c23cdf3523dccc061a6",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "boot",
+      "start": 1.5333215,
+      "end": 2.2434009999999995,
+      "file": "audio/4509beb0ab401d71.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "56b8c40e39d579b4825f6cc4b5013542c3cae6a972d73f7d1d94cc406713f134",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "roots",
+      "start": 2.2434009999999995,
+      "end": 2.9189115,
+      "file": "audio/a4e3c20a32776660.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "c46fae7919c55387b5b423733c51170f3339aced28e2b15da732e001ce3b7e7e",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "crow",
+      "start": 2.9189115,
+      "end": 3.6421769999999998,
+      "file": "audio/851d49d3087657e9.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "764216788a9a003f5650a49864a2b0e726e809bf4d0c5c4ff0661da95724492a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "glow",
+      "start": 3.6421769999999998,
+      "end": 4.4233785,
+      "file": "audio/d27608cca9b65f91.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "b071ec5751fcc18bff2b51515b3253e95feff0dcd573666a080a4718b82f778a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "low",
+      "start": 4.4233785,
+      "end": 5.1311225,
+      "file": "audio/6c1ff09db3a73dc4.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "56f660d769ba7a9fd32ea30224737fdcc21d5201e3b377a03d78b6f92e1e0383",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "grew",
+      "start": 5.1311225,
+      "end": 5.807335500000001,
+      "file": "audio/b4da13b0fdf693ea.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "be089f4e60af4d3ace296cb51d8b228c454285ef4ca7fcb3a491f33afb03c6d2",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "flew",
+      "start": 5.807335500000001,
+      "end": 6.5407139999999995,
+      "file": "audio/a8e15df13c8b7451.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "13a1d0305edf8cb263c15e0459590ef81468323bdbcaae09a2dd466bdb8d73d1",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "stream",
+      "start": 6.5407139999999995,
+      "end": 7.4229140000000005,
+      "file": "audio/dca83e717b1f64eb.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "34e2fd74604afb54526df3bec481b30fc3baefa25b31f6ae40bb5694ba5247ff",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "steep",
+      "start": 7.4229140000000005,
+      "end": 8.243004500000001,
+      "file": "audio/aaa84acb9758cff1.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "6d25f1909293d90c08aec1ee9474a5f1b41c1b6fed34fa2f9bb60f647639cf8c",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "leaves",
+      "start": 8.243004500000001,
+      "end": 9.0622225,
+      "file": "audio/5ed0a10b951bfe15.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "f34cd100256f49a311e0bbc41ad2d79c76093369d3ea82819f2fdc8bf0a314be",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "soil",
+      "start": 9.0622225,
+      "end": 9.918276500000001,
+      "file": "audio/e93d59a02163f846.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "ffbaca67dea358b3d89c4887b547c6a461a6bb2776219f1124a9bedfd2e62bf5",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "tail",
+      "start": 9.918276500000001,
+      "end": 10.700294999999999,
+      "file": "audio/0c62f876ef1dea83.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "a7ca4e82d8cb246dfc75d7ef3baa90109ba8423587ad331f60fee599b794dbbe",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "path",
+      "start": 10.700294999999999,
+      "end": 11.363730499999999,
+      "file": "audio/a0af9f865bf637e6.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "6bda7238382ed92ca79572ffdacd0abeb7a2ca947839a5c7d6c1ed73e9d4ab8d",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "three",
+      "start": 11.363730499999999,
+      "end": 12.052222500000001,
+      "file": "audio/8b5b9db0c13db242.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "a8b6a3e9aed6af8cd4c3027d411d0384635f0054fc8e92aeaa6d91047de413df",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "thumb",
+      "start": 12.052222500000001,
+      "end": 12.845771500000001,
+      "file": "audio/05eeec2d70845694.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "6cb7dffd5254b16cefb780177dda34c02beaf3639a0922d3a2f224806dda2e92",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "rain",
+      "start": 12.845771500000001,
+      "end": 13.616553499999998,
+      "file": "audio/319b44c570a417ff.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "0019764d56819828f97569742b5384b13358c4e20d1545d38ba957690f51b3b3",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "moon",
+      "start": 13.616553499999998,
+      "end": 14.410329,
+      "file": "audio/9e78b43ea00edcac.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "e1abcfa2c87b208fca10eb7ba7d1d49db228006350a1ac12b7051335b8033277",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "fish",
+      "start": 14.410329,
+      "end": 15.130623,
+      "file": "audio/b474a99a2705e23c.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "9480248c27b4d0886803e36876658954551aeca0d7a3f7b366d692468b5d8438",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "sun",
+      "start": 15.130623,
+      "end": 15.919989,
+      "file": "audio/27756f050e14a1cb.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "33223962ee0e3bd254da74e1fdb6413f17405e406aa601adacd9963b8741b38e",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "ring",
+      "start": 15.919989,
+      "end": 16.678333000000002,
+      "file": "audio/16b974583155fdcb.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "a3d38058a544d91899b64a8c285d379d6747f2bfc60c28ca1439babe5504cf0a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "cat",
+      "start": 16.678333000000002,
+      "end": 17.328685,
+      "file": "audio/77af778b51abd4a3.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "0694f99ddfe3b9e14c8da2703bcd9e16eb17116c1d97149951de4d18fb37f6b6",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "egg",
+      "start": 17.328685,
+      "end": 18.051190499999997,
+      "file": "audio/34707c3f40dfa20c.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "e79aca6fd23c062f5a9d30605baec7eff899c257bbf25edf7c5d8a09ea1c0ebc",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "owl",
+      "start": 18.051190499999997,
+      "end": 18.8885715,
+      "file": "audio/10f7127b980b0b06.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "783cc169de65dc0d68da6ffd3c48bad012cf3e6df0a47316c268e1973150279a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "light",
+      "start": 18.8885715,
+      "end": 19.6732765,
+      "file": "audio/99a7026172d42714.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "92aa20bfd9e38cbd90e903968a4ceb029d8033330d9d9373afd905eaa2b5684d",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "night",
+      "start": 19.6732765,
+      "end": 20.4392285,
+      "file": "audio/176473d7313395b6.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "3dcb9d7c2dbf3803e07a014eeabf1f7a31edcc02168a69bc5f4e0d4c182ccfa3",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "right",
+      "start": 20.4392285,
+      "end": 21.227698500000002,
+      "file": "audio/27042f4e6eca7d0b.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "7fc6870832ba789a7ddb128b69e41ff5310e83dd02ee1b65b28bf60207ad0f87",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "bright",
+      "start": 21.227698500000002,
+      "end": 21.980057000000002,
+      "file": "audio/a87b3e348ccb598e.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "5c65c40c96a62c0544e6f4aa964979578010b004aff6310cd668a2869b50aa44",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "stone",
+      "start": 21.980057000000002,
+      "end": 22.825283499999998,
+      "file": "audio/dc3d50da8dac041f.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "29a99c5dad54901d33331c3475ee3d2f29b65e1aeeeaeba2941d66a5a0161c7a",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    },
+    {
+      "word": "home",
+      "start": 22.825283499999998,
+      "end": 23.684354,
+      "file": "audio/4ea140588150773c.mp3",
+      "voice": "Miriam, British English",
+      "sha256": "3cc8543906ef27f873a7f7f4e00172ac996e7e3dde1bd72a06357b56de2a2ed7",
+      "source": "Runway task 91a7d9f2-9ac5-4a8a-924d-58f66d6517cd"
+    }
+  ],
+  "existingRecordings": "https://github.com/Ikarus-eth/Blitzword_app/blob/main/narration.js",
+  "review": "Split at inter-word silences; decoded and duration-checked. Human listening review is still recommended.",
+  "extraBatch": {
+    "task": "245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc",
+    "text": "Shut. Thump. Feather. Leaf. Tiger. Nose. Goat.",
+    "clips": [
+      {
+        "word": "shut",
+        "start": 0,
+        "end": 0.829615
+      },
+      {
+        "word": "thump",
+        "start": 0.829615,
+        "end": 1.7275285000000002
+      },
+      {
+        "word": "feather",
+        "start": 1.7275285000000002,
+        "end": 2.722755
+      },
+      {
+        "word": "leaf",
+        "start": 2.722755,
+        "end": 3.5548640000000002
+      },
+      {
+        "word": "tiger",
+        "start": 3.5548640000000002,
+        "end": 4.763968
+      },
+      {
+        "word": "nose",
+        "start": 4.763968,
+        "end": 6.0066785
+      },
+      {
+        "word": "goat",
+        "start": 6.0066785,
+        "end": 7.198186
+      }
+    ]
+  }
+}
