@@ -1,4 +1,4 @@
-"""Generate a bounded, resumable set of story recordings. Run in GitHub Actions.
+"""Generate a bounded, resumable set of story recordings. Run locally with an environment key.
 
 Only the requested story, its teaching examples and anchors are sent to the
 speech provider. Credentials are read from the environment and never written.
@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parent
 KEY=os.environ.get('ELEVENLABS_API_KEY','')
 VOICE='JBFqnCBsd6RMkjVDRZzb'
 MODEL='eleven_multilingual_v2'
-if not KEY:raise SystemExit('ELEVENLABS_API_KEY is not configured for this repository. Existing recordings are unchanged.')
+if not KEY:raise SystemExit('ELEVENLABS_API_KEY is not configured in the environment. Existing recordings are unchanged.')
 book=json.loads((ROOT/'book/story.json').read_text())
 teaching=json.loads((ROOT/'teaching.json').read_text())
 manifest=json.loads((ROOT/'audio.json').read_text())
