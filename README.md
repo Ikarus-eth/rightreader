@@ -171,6 +171,8 @@ Safari/iPadOS may clear site storage in some circumstances. Parent settings incl
 
 ## Build and deploy
 
+Production updates are published through this repository’s GitHub Pages deployment.
+
 App behavior lives in `src/app-source.jsx`. Build it into the root `app.js` with:
 
 ```sh
