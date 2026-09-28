@@ -1014,5 +1014,66 @@
       "invalid ranges",
       "cache quota failure"
     ]
+  },
+  "anchorUpdate": {
+    "build": "moonflower-20260928-r6",
+    "sourceCommit": "cc6b16d41687d711a545a16522181e2c67c4daed",
+    "verifiedAt": "2026-09-28T00:17:05.230936+00:00",
+    "pagesRun": "https://github.com/Ikarus-eth/rightreader/actions/runs/36361543202",
+    "pagesConclusion": "success",
+    "uniqueSoundAnchors": 24,
+    "uniquePictures": 24,
+    "uniqueAnchorWords": 24,
+    "checks": [
+      {
+        "path": "phonics/build-content.py",
+        "status": 200,
+        "bytes": 4791,
+        "sha256": "f00a9adcad2a4c6735b15f00d433572c8b222fde35e4c40089ab03fa62b1ba7a"
+      },
+      {
+        "path": "phonics/index.html",
+        "status": 200,
+        "bytes": 1900,
+        "sha256": "ae116e2054abaca177ea75bd97ee41d683b7feb6279b0e6f0e92675c6aefc4a7"
+      },
+      {
+        "path": "phonics/reader.js",
+        "status": 200,
+        "bytes": 18904,
+        "sha256": "bb20035b62fd4815d208764d0d56a853b003a1b095f4c4d2af7115f3a04f09d7"
+      },
+      {
+        "path": "phonics/sw.js",
+        "status": 200,
+        "bytes": 2356,
+        "sha256": "3bf37ad36526eda94e2b704de6a7c73c24ae04090d1bfabd9726044a080a1f19"
+      },
+      {
+        "path": "phonics/teaching.json",
+        "status": 200,
+        "bytes": 13828,
+        "sha256": "1365c4fa4cf1b4ef407e80dcd90484a8e4197facd01313dc5769dc94b5fbe8e7"
+      },
+      {
+        "path": "phonics/verify-content.py",
+        "status": 200,
+        "bytes": 2319,
+        "sha256": "988d929ba033f89508029859a89c8f83b7a1a1c960a3720fa3938a938f53acc8"
+      },
+      {
+        "path": "phonics/audio.json",
+        "status": 200,
+        "bytes": 33222,
+        "sha256": "0ee30c72497b406b7425640741a73ad8dadaf49b500a1dea657555c52b1f2e3a"
+      },
+      {
+        "path": "phonics/audio/776cb326ab0cd5f0.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "f6d37431e769f2ca486626845672b04ac4be2b066b09c47b914b7b16db913d1a"
+      }
+    ],
+    "browserCheck": "Public r6 reader: sun card s shows sun icon and first sound in sun; u shows up arrow and first sound in up. Up recording played, readyState 4, duration 0.603719 seconds. Saved reading position survived the update."
   }
 }

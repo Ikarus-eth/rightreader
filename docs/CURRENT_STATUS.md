@@ -6,7 +6,7 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 28 September 2026
 
-Build `moonflower-20260928-r6` corrects shared sound icons and is ready for deployment. The previous r5 deployment evidence remains in `MOONFLOWER_DEPLOYMENT.json` until the new publication is verified.
+Build `moonflower-20260928-r6` is deployed and verified at [the pilot URL](https://ikarus-eth.github.io/rightreader/phonics/). [Pages run 36361543202](https://github.com/Ikarus-eth/rightreader/actions/runs/36361543202) published commit `cc6b16d41687d711a545a16522181e2c67c4daed`. The `anchorUpdate` section of `MOONFLOWER_DEPLOYMENT.json` records the new evidence; the original r5 evidence is preserved. All 24 icons and anchor words are unique. Live browser checks confirmed separate sun and up hints, and recorded up playback.
 
 The separate `/rightreader/phonics/` reader contains the full user-provided **Artus and Pip: The Thirsty Moonflower** story: 25 illustrations and 587 story words. It uses extracted illustrations and native text; words are not baked into page images. The reflowable EPUB preserves every paragraph and illustration, includes a two-chapter contents list and page navigation, and is downloadable from the book menu.
 
