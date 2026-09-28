@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "accent": "en-GB",
   "anchors": {
     "th": {
@@ -13,14 +13,14 @@
       "cue": "The middle sound in feather. Your voice is on."
     },
     "r": {
-      "word": "rain",
-      "picture": "🌧️",
-      "cue": "The first sound in rain."
+      "word": "rock",
+      "picture": "🪨",
+      "cue": "The first sound in rock."
     },
     "oo": {
-      "word": "moon",
-      "picture": "🌙",
-      "cue": "The middle sound in moon."
+      "word": "boot",
+      "picture": "👢",
+      "cue": "The middle sound in boot."
     },
     "l": {
       "word": "leaf",
@@ -73,9 +73,9 @@
       "cue": "The middle sound in boat."
     },
     "f": {
-      "word": "fish",
-      "picture": "🐟",
-      "cue": "The first sound in fish."
+      "word": "fox",
+      "picture": "🦊",
+      "cue": "The first sound in fox."
     },
     "ee": {
       "word": "tree",
@@ -118,9 +118,9 @@
       "cue": "The first sound in ship."
     },
     "u": {
-      "word": "sun",
-      "picture": "☀️",
-      "cue": "The middle sound in sun."
+      "word": "up",
+      "picture": "⬆️",
+      "cue": "The first sound in up."
     }
   },
   "words": {
@@ -215,7 +215,7 @@
         }
       ],
       "focus": 2,
-      "note": "In through, ough makes the middle sound in moon. There is no extra g or h sound.",
+      "note": "In through, ough makes the middle sound in boot. There is no extra g or h sound.",
       "family": [],
       "pattern": "",
       "sentences": [
@@ -239,7 +239,7 @@
         }
       ],
       "focus": 1,
-      "note": "Here, oo makes the long sound in moon.",
+      "note": "Here, oo makes the long sound in boot.",
       "family": [
         "boot",
         "roots",
@@ -264,7 +264,7 @@
         }
       ],
       "focus": 1,
-      "note": "Here, oo makes the long sound in moon.",
+      "note": "Here, oo makes the long sound in boot.",
       "family": [
         "moon",
         "roots",
@@ -293,7 +293,7 @@
         }
       ],
       "focus": 1,
-      "note": "Here, oo makes the long sound in moon. Keep the final s.",
+      "note": "Here, oo makes the long sound in boot. Keep the final s.",
       "family": [
         "moon",
         "boot",
@@ -322,7 +322,7 @@
         }
       ],
       "focus": 2,
-      "note": "Here, oo makes the long sound in moon. The final th is voiced, as in feather.",
+      "note": "Here, oo makes the long sound in boot. The final th is voiced, as in feather.",
       "family": [
         "moon",
         "boot",
@@ -415,7 +415,7 @@
         }
       ],
       "focus": 2,
-      "note": "In these words, ew makes the middle sound in moon.",
+      "note": "In these words, ew makes the middle sound in boot.",
       "family": [
         "flew"
       ],
@@ -438,7 +438,7 @@
         }
       ],
       "focus": 2,
-      "note": "In these words, ew makes the middle sound in moon.",
+      "note": "In these words, ew makes the middle sound in boot.",
       "family": [
         "grew"
       ],

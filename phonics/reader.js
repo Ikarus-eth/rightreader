@@ -1,6 +1,6 @@
-const BUILD='moonflower-20260927-r5';
+const BUILD='moonflower-20260928-r6';
 const KEY='rrp_moonflower_v1';
-const CACHE='rightreader-phonics-moonflower-v5';
+const CACHE='rightreader-phonics-moonflower-v6';
 const $=id=>document.getElementById(id);
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normal=s=>s.toLowerCase().replaceAll('’',"'");
@@ -127,7 +127,7 @@ async function saveOffline(){
  try{
   if(!registration||!('caches'in window))throw Error('Offline support has not started. Reopen the page while online.');
   const cache=await caches.open(CACHE);
-  const urls=['./','index.html','reader.js?v=5','styles.css?v=5','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
+  const urls=['./','index.html','reader.js?v=6','styles.css?v=6','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
   const unique=[...new Set(urls)];let completed=0;
   for(let i=0;i<unique.length;i+=4){await Promise.all(unique.slice(i,i+4).map(async u=>{const res=await fetch(u,{cache:'reload'});if(!res.ok)throw Error('A book file could not download. Please try again.');await cache.put(u,res);completed++;}));if(label.isConnected)label.textContent=`Saving… ${Math.round(completed/unique.length*100)}%`;}
   if(label.isConnected)label.textContent='Book and recorded voices saved. Device-voice availability depends on your iPad.';

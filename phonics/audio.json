@@ -752,6 +752,12 @@
       "voice": "Miriam, British English",
       "sha256": "8634f371b54e85c2c7dfbba87ed125786a3f97b8dbd82387d4439329748de093",
       "source": "Runway task 245b5f7f-7ca7-4f92-af7e-1c96f52c5dfc"
+    },
+    "fox": {
+      "file": "audio/776cb326ab0cd5f0.mp3",
+      "voice": "Tom, British English",
+      "sha256": "f6d37431e769f2ca486626845672b04ac4be2b066b09c47b914b7b16db913d1a",
+      "source": "https://raw.githubusercontent.com/Ikarus-eth/Blitzword_app/main/assets/narration/en-male-005.mp3"
     }
   },
   "missingStoryWords": [

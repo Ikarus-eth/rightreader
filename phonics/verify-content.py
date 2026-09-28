@@ -5,6 +5,9 @@ ROOT=Path(__file__).resolve().parent
 book=json.loads((ROOT/'book/story.json').read_text())
 teaching=json.loads((ROOT/'teaching.json').read_text())
 audio=json.loads((ROOT/'audio.json').read_text())
+anchors=list(teaching['anchors'].values())
+assert len({a['picture'] for a in anchors})==len(anchors),'Each sound must have its own distinct icon.'
+assert len({a['word'] for a in anchors})==len(anchors),'An anchor word must not represent two different sounds.'
 assert len(book['pages'])==25
 assert [p['number'] for p in book['pages']]==list(range(1,26))
 assert [p['number'] for p in book['pages'] if p['heading']]==[1,13]
