@@ -1,4 +1,4 @@
-name: ElevenLabs one-word test
+name: ElevenLabs ten-word credit test
 
 on:
   push:
@@ -9,11 +9,11 @@ permissions:
   contents: read
 
 jobs:
-  generate-one-word:
+  generate-ten-words:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
-      - name: Generate through once
+      - name: Generate ten words and measure credits
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY1 }}
         shell: python
@@ -21,82 +21,152 @@ jobs:
           import hashlib
           import json
           import os
-          import pathlib
+          from pathlib import Path
           import sys
+          import time
           import urllib.error
+          import urllib.parse
           import urllib.request
-
-          output = pathlib.Path("voice-test")
-          output.mkdir()
-          key = os.environ.get("ELEVENLABS_API_KEY", "").strip()
-          result = {
-              "word": "through",
-              "text": "Through.",
-              "voice_id": "JBFqnCBsd6RMkjVDRZzb",
-              "voice_name": "George",
-              "model_id": "eleven_multilingual_v2",
-              "requests_attempted": 0,
-          }
-
-          def finish(status, exit_code):
-              result["status"] = status
-              (output / "result.json").write_text(json.dumps(result, indent=2) + "\n")
-              print(json.dumps(result))
-              sys.exit(exit_code)
-
-          if not key:
-              finish("missing_repository_secret_ELEVENLABS_API_KEY1", 1)
-
-          payload = json.dumps({
-              "text": result["text"],
-              "model_id": result["model_id"],
-              "voice_settings": {
-                  "stability": 0.75,
-                  "similarity_boost": 0.75,
-                  "speed": 0.85,
-              },
-          }).encode()
-          request = urllib.request.Request(
-              "https://api.elevenlabs.io/v1/text-to-speech/"
-              + result["voice_id"] + "?output_format=mp3_44100_128",
-              data=payload,
-              headers={"xi-api-key": key, "Content-Type": "application/json"},
-              method="POST",
-          )
-          result["requests_attempted"] = 1
-          try:
-              with urllib.request.urlopen(request, timeout=90) as response:
-                  result["http_status"] = response.status
-                  content_type = response.headers.get("Content-Type", "")
-                  audio = response.read()
-          except urllib.error.HTTPError as exc:
-              result["http_status"] = exc.code
+          
+          WORDS = ["light", "night", "right", "moon", "smooth", "water", "brought", "little", "treasure", "underneath"]
+          VOICE = "JBFqnCBsd6RMkjVDRZzb"
+          MODEL = "eleven_multilingual_v2"
+          KEY = os.environ.get("ELEVENLABS_API_KEY", "").strip()
+          OUT = Path("voice-test")
+          OUT.mkdir(exist_ok=True)
+          report = {"voice": "George", "voice_id": VOICE, "model": MODEL, "words": [], "generation_requests": 0}
+          assert len(WORDS) == len(set(WORDS)) == 10 and "through" not in WORDS
+          assert sum(len(w) + 1 for w in WORDS) < 150
+          
+          def save():
+              (OUT / "result.json").write_text(json.dumps(report, indent=2) + "\n")
+          
+          def api_error(exc):
+              result = {"http_status": exc.code}
               try:
-                  error = json.loads(exc.read().decode())
-                  detail = error.get("detail", {})
+                  detail = json.loads(exc.read().decode()).get("detail", {})
                   status = detail.get("status") if isinstance(detail, dict) else None
                   if isinstance(status, str) and status.replace("_", "").isalnum():
-                      result["api_error"] = status.replace(key, "[redacted]")[:80]
+                      result["status"] = status.replace(KEY, "[redacted]")[:80]
               except (ValueError, AttributeError, UnicodeError):
                   pass
-              finish("request_failed_no_retry", 1)
-          except (urllib.error.URLError, TimeoutError):
-              finish("connection_failed_no_retry", 1)
+              return result
+          
+          def read_json(path):
+              request = urllib.request.Request("https://api.elevenlabs.io" + path, headers={"xi-api-key": KEY})
+              try:
+                  with urllib.request.urlopen(request, timeout=30) as response:
+                      return json.load(response), None
+              except urllib.error.HTTPError as exc:
+                  return None, api_error(exc)
+              except (urllib.error.URLError, TimeoutError):
+                  return None, {"status": "connection_failed"}
+          
+          def counter():
+              data, error = read_json("/v1/user/subscription")
+              if error:
+                  return None, error
+              value = data.get("character_count")
+              return (value if isinstance(value, (int, float)) else None), None
+          
+          if not KEY:
+              report["error"] = "missing_ELEVENLABS_API_KEY1"
+              save()
+              sys.exit(1)
+          if os.environ.get("GITHUB_RUN_ATTEMPT", "1") != "1":
+              report["error"] = "no_automatic_regeneration_on_rerun"
+              save()
+              sys.exit(1)
+          
+          # Only inspect the earlier authorized Through sample. Account balances, invoice
+          # details and unrelated history stay in memory and are never logged or saved.
+          query = urllib.parse.urlencode({
+              "voice_id": VOICE, "model_id": MODEL, "source": "TTS",
+              "search": "Through.", "page_size": 10,
+              "date_after_unix": 1790566920, "date_before_unix": 1790567040,
+          })
+          history, history_error = read_json("/v1/history?" + query)
+          if history_error:
+              report["earlier_through_cost_lookup"] = history_error
+          else:
+              matches = [h for h in history.get("history", [])
+                         if h.get("text") == "Through." and h.get("voice_id") == VOICE
+                         and h.get("model_id") == MODEL]
+              if len(matches) == 1:
+                  h = matches[0]
+                  start, end = h.get("character_count_change_from"), h.get("character_count_change_to")
+                  if isinstance(start, (int, float)) and isinstance(end, (int, float)):
+                      report["earlier_through_credits"] = end - start
+              else:
+                  report["earlier_through_cost_lookup"] = {"matching_items": len(matches)}
+          
+          before, before_error = counter()
+          if before_error:
+              report["subscription_lookup_before"] = before_error
+          save()
+          try:
+              for word in WORDS:
+                  text = word.capitalize() + "."
+                  item = {"word": word, "text": text, "input_characters": len(text)}
+                  payload = json.dumps({
+                      "text": text, "model_id": MODEL,
+                      "voice_settings": {"stability": 0.75, "similarity_boost": 0.75, "speed": 0.85},
+                  }).encode()
+                  request = urllib.request.Request(
+                      "https://api.elevenlabs.io/v1/text-to-speech/" + VOICE + "?output_format=mp3_44100_128",
+                      data=payload, method="POST",
+                      headers={"xi-api-key": KEY, "Content-Type": "application/json", "Accept": "audio/mpeg"},
+                  )
+                  report["generation_requests"] += 1
+                  report["words"].append(item)
+                  save()
+                  try:
+                      with urllib.request.urlopen(request, timeout=90) as response:
+                          item["http_status"] = response.status
+                          raw_cost = response.headers.get("character-cost")
+                          if raw_cost is not None:
+                              try:
+                                  item["credits"] = float(raw_cost)
+                              except ValueError:
+                                  item["credit_header_unreadable"] = True
+                          content_type = response.headers.get("Content-Type", "")
+                          audio = response.read()
+                  except urllib.error.HTTPError as exc:
+                      item["error"] = api_error(exc)
+                      break
+                  except (urllib.error.URLError, TimeoutError):
+                      item["error"] = {"status": "connection_failed_no_retry"}
+                      break
+                  if not content_type.lower().startswith("audio/") or len(audio) < 100:
+                      item["error"] = {"status": "unexpected_response_no_retry"}
+                      break
+                  (OUT / (word + ".mp3")).write_bytes(audio)
+                  item.update({"audio_bytes": len(audio), "sha256": hashlib.sha256(audio).hexdigest()})
+                  save()
+                  print("Generated " + word)
+          finally:
+              after, after_error = counter()
+              if after_error:
+                  report["subscription_lookup_after"] = after_error
+              if before is not None and after is not None:
+                  report["account_credit_delta_during_test"] = after - before
+              costed = [w["credits"] for w in report["words"] if "credits" in w]
+              report["words_with_reported_cost"] = len(costed)
+              if len(costed) == len(report["words"]):
+                  report["reported_generation_credits"] = sum(costed)
+              report["input_characters"] = sum(w["input_characters"] for w in report["words"])
+              report["successful_words"] = sum("sha256" in w for w in report["words"])
+              save()
+          print(json.dumps(report))
+          sys.exit(0 if report["successful_words"] == 10 else 1)
 
-          if not content_type.lower().startswith("audio/") or len(audio) < 100:
-              finish("unexpected_response_no_retry", 1)
-          (output / "through.mp3").write_bytes(audio)
-          result["audio_bytes"] = len(audio)
-          result["sha256"] = hashlib.sha256(audio).hexdigest()
-          finish("generated", 0)
-
-      - name: Save test result
+      - name: Save recordings and credit report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: elevenlabs-through-test
+          name: elevenlabs-ten-word-test
           path: |
-            voice-test/through.mp3
+            voice-test/*.mp3
             voice-test/result.json
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 30
