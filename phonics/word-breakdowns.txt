@@ -311,3 +311,5 @@ web w:w e:e b:b
 cheese ch:ch ee:ee se:z
 banana b:b a:schwa n:n a:ar n:n a:schwa
 cure c:k ure:y+ure
+power p:p ow:ow er:schwa
+shower sh:sh ow:ow er:schwa

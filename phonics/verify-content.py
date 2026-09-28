@@ -49,10 +49,13 @@ assert sounds('one')==['w','u','n']
 assert sounds('whole')==['h','oa','l']
 assert sounds('close')==['k','l','oa','s']
 assert sounds('would')==['w','shortoo','d']
+assert set(teaching['words']['flower']['family'])=={'power','shower','tower'}
+assert sounds('power')==['p','ow','schwa']
+assert sounds('shower')==['sh','ow','schwa']
 for sound,a in teaching['anchors'].items():assert sound in sounds(a['word']),(sound,a['word'])
 story_words={w.lower().replace('’',"'") for p in book['pages'] for w in re.findall(r"[A-Za-z]+(?:[’'][A-Za-z]+)?",p['text']+' '+(p['heading'] or ''))}
 wanted=story_words|{w for e in teaching['words'].values() for w in e['family']}|{a['word'] for a in anchors}|set(teaching['rhyme']['words'])
-assert set(teaching['words'])==wanted and len(wanted)==313,'Every available word needs a sound breakdown.'
+assert set(teaching['words'])==wanted and len(wanted)==315,'Every available word needs a sound breakdown.'
 assert {s for w in story_words for s in sounds(w)}==expected-{'ure'}
 assert {s for w in wanted for s in sounds(w)}==expected
 assert set(audio['words'])==wanted,'Every story, family, rhyme and anchor word needs a recording.'

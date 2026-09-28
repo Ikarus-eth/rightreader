@@ -1,6 +1,9 @@
 name: Complete saved Moonflower word audio
 on:
   workflow_dispatch:
+  push:
+    branches: [codex/elevenlabs-word-test-20260928]
+    paths: [.github/workflows/finalize-moonflower-audio.yml]
 permissions:
   contents: write
   actions: read
@@ -31,13 +34,13 @@ jobs:
           import json, subprocess
           from pathlib import Path
           manifest=json.loads(Path('phonics/audio.json').read_text())
-          assert len(manifest['words']) == 313
+          assert len(manifest['words']) == 315
           assert manifest['recordedStoryWords'] == manifest['storyWordCount'] == 265
           assert not manifest['missingStoryWords']
           for word, clip in manifest['words'].items():
               assert clip['voiceId'] == 'JBFqnCBsd6RMkjVDRZzb'
               subprocess.run(['ffmpeg','-v','error','-i','phonics/'+clip['file'],'-f','null','-'],check=True)
-          print('All 313 recordings decode and use the same George voice.')
+          print('All 315 recordings decode and use the same George voice.')
           PY
       - name: Preserve generated files on the staging branch
         if: always()

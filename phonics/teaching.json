@@ -3090,9 +3090,13 @@
       ],
       "phonemeCount": 4,
       "focus": 2,
-      "note": "Say each sound from left to right, then blend them into the word. Letters in one tile work together.",
-      "family": [],
-      "pattern": "",
+      "note": "These words rhyme and share ower: the vowel in cow followed by the soft, unstressed vowel in banana.",
+      "family": [
+        "power",
+        "shower",
+        "tower"
+      ],
+      "pattern": "ower",
       "sentences": []
     },
     "followed": {
@@ -6591,6 +6595,38 @@
       "pattern": "",
       "sentences": []
     },
+    "power": {
+      "parts": [
+        {
+          "text": "p",
+          "sounds": [
+            "p"
+          ]
+        },
+        {
+          "text": "ow",
+          "sounds": [
+            "ow"
+          ]
+        },
+        {
+          "text": "er",
+          "sounds": [
+            "schwa"
+          ]
+        }
+      ],
+      "phonemeCount": 3,
+      "focus": 1,
+      "note": "These words rhyme and share ower: the vowel in cow followed by the soft, unstressed vowel in banana.",
+      "family": [
+        "flower",
+        "shower",
+        "tower"
+      ],
+      "pattern": "ower",
+      "sentences": []
+    },
     "pressed": {
       "parts": [
         {
@@ -7347,6 +7383,38 @@
       "note": "Say each sound from left to right, then blend them into the word. Letters in one tile work together.",
       "family": [],
       "pattern": "",
+      "sentences": []
+    },
+    "shower": {
+      "parts": [
+        {
+          "text": "sh",
+          "sounds": [
+            "sh"
+          ]
+        },
+        {
+          "text": "ow",
+          "sounds": [
+            "ow"
+          ]
+        },
+        {
+          "text": "er",
+          "sounds": [
+            "schwa"
+          ]
+        }
+      ],
+      "phonemeCount": 3,
+      "focus": 1,
+      "note": "These words rhyme and share ower: the vowel in cow followed by the soft, unstressed vowel in banana.",
+      "family": [
+        "flower",
+        "power",
+        "tower"
+      ],
+      "pattern": "ower",
       "sentences": []
     },
     "shut": {
@@ -9304,9 +9372,13 @@
       ],
       "phonemeCount": 3,
       "focus": 1,
-      "note": "Say each sound from left to right, then blend them into the word. Letters in one tile work together.",
-      "family": [],
-      "pattern": "",
+      "note": "These words rhyme and share ower: the vowel in cow followed by the soft, unstressed vowel in banana.",
+      "family": [
+        "flower",
+        "power",
+        "shower"
+      ],
+      "pattern": "ower",
       "sentences": []
     },
     "treasure": {

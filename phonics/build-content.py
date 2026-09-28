@@ -137,10 +137,13 @@ for line in (ROOT/'word-breakdowns.txt').read_text().splitlines():
   else:note='Say each sound from left to right, then blend them into the word. Letters in one tile work together.'
  mapped[word]={'parts':parts,'phonemeCount':sum(len(p['sounds']) for p in parts),'focus':focus,'note':note,
                'family':prior.get('family',[]),'pattern':prior.get('pattern',''),'sentences':prior.get('sentences',[])}
-for family,pattern in [(['before','more'],'ore'),(['stone','stones'],'one'),(['looked','took','stood','good','book'],'oo'),(['brought'],'ough')]:
+for family,pattern in [(['before','more'],'ore'),(['stone','stones'],'one'),(['looked','took','stood','good','book'],'oo'),(['brought'],'ough'),(['flower','power','shower','tower'],'ower')]:
  for word in family:
   mapped[word]['family']=[w for w in family if w!=word]
   mapped[word]['pattern']=pattern
+for word in ['flower','power','shower','tower']:
+ mapped[word]['focus']=next(i for i,p in enumerate(mapped[word]['parts']) if p['text']=='ow')
+ mapped[word]['note']='These words rhyme and share ower: the vowel in cow followed by the soft, unstressed vowel in banana.'
 anchor_data={k:dict(word=v[0],picture=v[1],cue=v[2],ipa=ipa[k],kind='consonant' if k in set('p b t d k g f v th dh s z sh zh h ch j m n ng l r w y'.split()) else 'vowel') for k,v in anchors.items()}
 anchor_data['ee']['cue']+=' At the unstressed end of a word, this vowel is shorter.'
 data={'version':3,'accent':'en-GB','inventory':'44 traditional British English phonemes; accents vary, especially the cure vowel.',

@@ -17,7 +17,7 @@ def vocabulary():
     wanted = story | {w for e in teaching['words'].values() for w in e['family']}
     wanted |= {a['word'] for a in teaching['anchors'].values()} | set(teaching['rhyme']['words'])
     wanted |= set(teaching['words'])
-    assert len(wanted) == 313 and len(story) == 265, 'Re-review changed vocabulary.'
+    assert len(wanted) == 315 and len(story) == 265, 'Re-review changed vocabulary.'
     return story, wanted
 
 def main():
