@@ -6,7 +6,7 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 28 September 2026
 
-Build `moonflower-20260928-r8` is implemented and locally tested; production verification is pending. It supersedes r7’s 24-entry teaching set. The existing GitHub Pages route is [the pilot URL](https://ikarus-eth.github.io/rightreader/phonics/).
+Build `moonflower-20260928-r8` is deployed and verified. [Pages run 36391697463](https://github.com/Ikarus-eth/rightreader/actions/runs/36391697463) published commit `681a8b7d0fca46dbfb6597df4d913bb409e151d9`. All 353 checked public files match the tested source, including all 313 recordings and the unchanged original-reader runtime. It supersedes r7’s 24-entry teaching set. The existing GitHub Pages route is [the pilot URL](https://ikarus-eth.github.io/rightreader/phonics/).
 
 ### Implemented
 
@@ -34,7 +34,7 @@ The generator saves each completed recording immediately, skips already prepared
 
 The content validator checks all 313 mappings and recordings, exact reconstruction of every spelling, valid linked tiles, phoneme counts, all 44 anchors and their distinct icons/words, coverage of every story/title/related word, audio hashes and one voice/model. Regression cases include Artus, before, through, stone, fox, little, one, whole, close, smooth and would. All 313 MP3s decode locally and in Actions. JavaScript syntax and all four existing service-worker range/cache tests pass.
 
-Local Chrome checks cover tappable chapter titles, Artus’s four-sound map and schwa hint, before’s new recording, all 44 unique guide cards, linked o…e in stone and the two x sounds in fox, plus silent l in would. The complete offline pack downloads successfully. Additional browser and public-deployment results are recorded in `MOONFLOWER_DEPLOYMENT.json` after verification.
+Local Chrome checks cover tappable chapter titles, Artus’s four-sound map and schwa hint, before’s new recording, all 44 unique guide cards, linked o…e in stone and the two x sounds in fox, plus silent l in would. The complete offline pack downloads successfully. With the local server stopped, the reader reloaded at saved page 17 with its illustration and played the new book anchor recording. At 390px, sound hints and the 44-card guide have no horizontal overflow. Live Chrome confirmed r8, all 44 unique guide pictures and successful playback of the new banana clip. The existing two-word help-history count was preserved. `MOONFLOWER_DEPLOYMENT.json` records these results under `soundBreakdownUpdate`; earlier release evidence remains historical.
 
 The EPUB and illustrations are unchanged from the previously verified release: EPUBCheck 5.4.0 passed with zero errors/warnings; all 25 EPUB paragraphs and illustrations match the reader. Physical iPad/Safari and a complete human listening review remain outstanding. Authored British phonemic maps and programmatic checks do not certify every nuance of a generated recording; proper names and accent variants warrant listening review.
 
