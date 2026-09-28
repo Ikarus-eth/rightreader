@@ -1,6 +1,6 @@
-const BUILD='moonflower-20260928-r6';
+const BUILD='moonflower-20260928-r7';
 const KEY='rrp_moonflower_v1';
-const CACHE='rightreader-phonics-moonflower-v6';
+const CACHE='rightreader-phonics-moonflower-v7';
 const $=id=>document.getElementById(id);
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normal=s=>s.toLowerCase().replaceAll('’',"'");
@@ -11,7 +11,7 @@ function validState(s){
 }
 let state=emptyState();
 try{const saved=JSON.parse(localStorage.getItem(KEY));if(validState(saved))state=saved;}catch{}
-let book,teaching,audioManifest,selectedWord='',noticeTimer,playSerial=0,currentAudio=null,currentUtterance=null,lastWordButton=null,review=null,registration=null;
+let book,teaching,audioManifest,selectedWord='',noticeTimer,playSerial=0,currentAudio=null,lastWordButton=null,review=null,registration=null;
 const help=$('help-dialog'),menu=$('menu-dialog');
 function notice(text){$('notice').textContent=text;$('notice').hidden=false;clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>$('notice').hidden=true,6000);}
 function save(){state.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(state));}catch{notice('Your progress could not be saved. You can make a backup in Reading settings.');}updateCount();}
@@ -19,26 +19,14 @@ function updateCount(){const n=Object.keys(state.words).length;$('word-count').t
 function stopAudio(){
  playSerial++;
  if(currentAudio){currentAudio.pause();currentAudio.removeAttribute('src');currentAudio.load();currentAudio=null;}
- if(window.speechSynthesis)window.speechSynthesis.cancel();
- currentUtterance=null;help.classList.remove('playing');
+ help.classList.remove('playing');
 }
 function setAudioStatus(text,fallback=false){const el=$('audio-status');if(el){el.textContent=text;el.classList.toggle('fallback',fallback);}}
-function deviceSpeak(text,serial){
- if(serial!==playSerial)return;
- if(!window.speechSynthesis){setAudioStatus('Audio is unavailable on this device.',true);notice('Audio is unavailable on this device.');return;}
- const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=.83;
- const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>v.lang==='en-GB'&&/Daniel|Serena|Martha|Arthur/.test(v.name))||vs.find(v=>v.lang==='en-GB')||null;
- currentUtterance=u;setAudioStatus('Device voice for this word',true);
- u.onstart=()=>{if(serial===playSerial)help.classList.toggle('playing',normal($('help-title')?.textContent||'')===normal(text));};
- u.onend=()=>{if(serial===playSerial)help.classList.remove('playing');};
- u.onerror=e=>{if(serial===playSerial&&e.error!=='canceled'&&e.error!=='interrupted'){setAudioStatus('Tap Listen to try again.',true);help.classList.remove('playing');}};
- speechSynthesis.speak(u);
-}
 function speak(word){
  stopAudio();const serial=playSerial;const entry=audioManifest.words[normal(word)];
- if(!entry){deviceSpeak(word,serial);return;}
+ if(!entry){setAudioStatus('Recording not available for this word.',true);return;}
  const a=$('narrator');a.src=new URL(entry.file,location.href).href;currentAudio=a;a.preload='auto';
- setAudioStatus('Recorded British voice');
+ setAudioStatus('George · British English');
  a.onplaying=()=>{if(serial===playSerial)help.classList.toggle('playing',normal($('help-title')?.textContent||'')===normal(word));};
  a.onended=()=>{if(serial===playSerial){help.classList.remove('playing');currentAudio=null;}};
  a.onerror=()=>{if(serial===playSerial){help.classList.remove('playing');setAudioStatus('Recording unavailable. Tap Listen to retry.',true);notice('The recording could not load. Try again when connected.');}};
@@ -115,8 +103,8 @@ function showRhyme(){
  menu.querySelectorAll('[data-rhyme]').forEach(b=>b.onclick=()=>{speak(b.dataset.rhyme);b.classList.add('beat');setTimeout(()=>b.classList.remove('beat'),180);});
 }
 function showSettings(){
- const total=audioManifest.storyWordCount||0,covered=audioManifest.recordedStoryWords||0;
- showMenu('Reading settings',`<p class="empty">Choose a comfortable text size.</p><div class="size-options">${[26,30,34].map((n,i)=>`<button class="${state.size===n?'active':''}" data-size="${n}" aria-label="${['Small','Medium','Large'][i]} text">${['A','A+','A++'][i]}</button>`).join('')}</div><div class="setting-row"><p><strong>Audio</strong><br>${covered} of ${total} different story words have recorded voices. Other words use the device voice, labelled in word help. Picture buttons play the example word, not an isolated speech sound.</p></div><div class="setting-row"><p><strong>Keep a copy</strong><br>Reading position and word-help history stay on this device, separately from the original reader.</p><div class="backup"><button class="secondary" id="backup">Save progress backup</button><label class="secondary" for="restore" style="cursor:pointer">Restore backup</label><input type="file" id="restore" accept="application/json,.json" hidden></div></div><div class="setting-row"><button class="secondary" id="offline">Save this book for offline reading</button><p id="offline-status" role="status" class="helper-line"></p></div><p class="helper-line">A word tap records a request for help. It is not a reading score.</p><p class="version">${BUILD}</p>`);
+ const total=audioManifest.storyWordCount||0;
+ showMenu('Reading settings',`<p class="empty">Choose a comfortable text size.</p><div class="size-options">${[26,30,34].map((n,i)=>`<button class="${state.size===n?'active':''}" data-size="${n}" aria-label="${['Small','Medium','Large'][i]} text">${['A','A+','A++'][i]}</button>`).join('')}</div><div class="setting-row"><p><strong>Audio</strong><br>All ${total} different story words and the picture and practice words use the same recorded British voice: George. Picture buttons play the example word, not an isolated speech sound.</p></div><div class="setting-row"><p><strong>Keep a copy</strong><br>Reading position and word-help history stay on this device, separately from the original reader.</p><div class="backup"><button class="secondary" id="backup">Save progress backup</button><label class="secondary" for="restore" style="cursor:pointer">Restore backup</label><input type="file" id="restore" accept="application/json,.json" hidden></div></div><div class="setting-row"><button class="secondary" id="offline">Save this book for offline reading</button><p id="offline-status" role="status" class="helper-line"></p></div><p class="helper-line">A word tap records a request for help. It is not a reading score.</p><p class="version">${BUILD}</p>`);
  menu.querySelectorAll('[data-size]').forEach(b=>b.onclick=()=>{state.size=Number(b.dataset.size);save();renderPage();showSettings();});
  $('backup').onclick=()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='artus-reading-progress-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
  $('restore').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{if(f.size>1000000)throw Error();const imported=JSON.parse(await f.text());if(!validState(imported))throw Error();if(!window.confirm('Replace this pilot’s reading position and word-help history with the backup?'))return;state=imported;save();renderPage();showSettings();notice('Progress restored.');}catch{notice('That is not a valid Artus reading backup. Nothing was changed.');}};
@@ -127,10 +115,10 @@ async function saveOffline(){
  try{
   if(!registration||!('caches'in window))throw Error('Offline support has not started. Reopen the page while online.');
   const cache=await caches.open(CACHE);
-  const urls=['./','index.html','reader.js?v=6','styles.css?v=6','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
+  const urls=['./','index.html','reader.js?v=7','styles.css?v=7','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
   const unique=[...new Set(urls)];let completed=0;
   for(let i=0;i<unique.length;i+=4){await Promise.all(unique.slice(i,i+4).map(async u=>{const res=await fetch(u,{cache:'reload'});if(!res.ok)throw Error('A book file could not download. Please try again.');await cache.put(u,res);completed++;}));if(label.isConnected)label.textContent=`Saving… ${Math.round(completed/unique.length*100)}%`;}
-  if(label.isConnected)label.textContent='Book and recorded voices saved. Device-voice availability depends on your iPad.';
+  if(label.isConnected)label.textContent='Book and all recordings saved for offline reading.';
  }catch(e){if(label.isConnected)label.textContent=e.message||'Unable to save offline. Check your connection and storage.';}
  finally{if(button.isConnected)button.disabled=false;}
 }

@@ -30,7 +30,15 @@ for word,entry in teaching['words'].items():
  assert word in audio['words'],'Teaching target has no recorded audio: '+word
 assert [p['text'] for p in teaching['words']['through']['parts']]==['th','r','ough']
 assert teaching['words']['smooth']['parts'][-1]['sound']=='dh'
+story_words={w.lower().replace('’',"'") for p in book['pages'] for w in re.findall(r"[A-Za-z]+(?:[’'][A-Za-z]+)?",p['text'])}
+wanted=story_words|{w for e in teaching['words'].values() for w in e['family']}|{a['word'] for a in anchors}|set(teaching['rhyme']['words'])
+assert set(audio['words'])==wanted,'Every story, family, rhyme and anchor word needs a recording.'
+assert audio['recordedStoryWords']==audio['storyWordCount']==len(story_words)==264
+assert audio['missingStoryWords']==[]
+assert audio['voiceId']=='JBFqnCBsd6RMkjVDRZzb'
 for word,clip in audio['words'].items():
  assert clip['file'].startswith('audio/') and '..' not in clip['file']
  assert hashlib.sha256((ROOT/clip['file']).read_bytes()).hexdigest()==clip['sha256']
+ assert clip['voiceId']==audio['voiceId'] and clip['model']=='eleven_multilingual_v2','All word recordings must use George.'
+ assert clip['sha256'][:12] in clip['file'],'New audio bytes must have a new cache-safe filename.'
 print(f"PASS: 25 complete illustrated pages, 587 words, {len(teaching['words'])} teaching entries, {len(audio['words'])} audio files.")

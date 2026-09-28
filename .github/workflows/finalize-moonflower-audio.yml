@@ -1,8 +1,6 @@
 name: Complete saved Moonflower word audio
 on:
-  push:
-    branches: [codex/elevenlabs-word-test-20260928]
-    paths: [.github/workflows/finalize-moonflower-audio.yml]
+  workflow_dispatch:
 permissions:
   contents: write
   actions: read
@@ -11,30 +9,21 @@ concurrency:
   cancel-in-progress: false
 jobs:
   generate:
+    if: github.ref_name == 'codex/elevenlabs-word-test-20260928'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - name: Require an explicitly started run
         run: test "$GITHUB_RUN_ATTEMPT" = 1
-      - name: Reuse through
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ github.token }}
-          run-id: 36374806113
-          name: elevenlabs-through-test
-          path: /tmp/moonflower-seeds/through
-      - name: Reuse ten samples
-        uses: actions/download-artifact@v4
-        with:
-          github-token: ${{ github.token }}
-          run-id: 36375746705
-          name: elevenlabs-ten-word-test
-          path: /tmp/moonflower-seeds/ten
       - name: Resume missing vocabulary without repeating saved words
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY1 }}
-        run: python3 phonics/prepare-premium-audio.py --seed-dir /tmp/moonflower-seeds --max-total-credits 1100
+        run: python3 phonics/prepare-premium-audio.py --max-total-credits 1100
+      - name: Install audio validation dependency
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
       - name: Validate book and audio
         run: |
           python3 phonics/verify-content.py
@@ -64,11 +53,15 @@ jobs:
           fi
           git commit -m "Prepare George recordings and measured costs for Moonflower"
           git push origin "HEAD:$GITHUB_REF_NAME"
-      - name: Save generation report
+      - name: Preserve audio pack and generation report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: moonflower-audio-generation-report
-          path: docs/ELEVENLABS_AUDIO_GENERATION.json
+          path: |
+            docs/ELEVENLABS_AUDIO_GENERATION.json
+            phonics/audio.json
+            phonics/audio-provenance.json
+            phonics/audio/*-*.mp3
           if-no-files-found: warn
           retention-days: 30
