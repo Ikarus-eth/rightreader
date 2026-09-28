@@ -9,3 +9,12 @@ dialog{color:var(--ink);border:1px solid var(--line);padding:0;box-shadow:0 24px
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 
 .word-unit{white-space:nowrap;display:inline-block}
+.chunk.silent{background:transparent;border:1px dashed #a8afa6;color:#657568}
+.chunk.linked{border-bottom-style:double;border-bottom-width:5px}
+.part-explanation{font-size:14px;line-height:1.6;text-align:center;margin:18px 0 8px}
+.anchor-hints .anchor{margin:10px 0}
+.guide-label{font-size:14px;margin:24px 0 12px}
+.sound-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.sound-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:100px;padding:12px 4px;border:1px solid var(--line);border-radius:14px;background:#f5f2e9;font:18px Reader,Georgia,serif}
+.sound-card span{font:36px/1.2 sans-serif}
+@media(max-width:420px){.sound-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}

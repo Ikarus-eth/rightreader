@@ -2,42 +2,42 @@
 
 ## Original reader
 
-The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runtime, service worker and save format are unchanged by the Moonflower pilot.
+The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runtime, service worker, IndexedDB books and save format are unchanged by the Moonflower pilot.
 
 ## Moonflower phonics pilot — 28 September 2026
 
-Build `moonflower-20260928-r7` is deployed and verified at [the pilot URL](https://ikarus-eth.github.io/rightreader/phonics/). [Pages run 36381466298](https://github.com/Ikarus-eth/rightreader/actions/runs/36381466298) published commit `7ef28f262797ddf65432fd29b9f9676e3f8a226e`. All 339 checked public files match the tested source, including all 299 George recordings, book assets and original-reader runtime files. Live Chrome playback of through used its new content-hash audio URL without an error. The `audioUpdate` section of `MOONFLOWER_DEPLOYMENT.json` records the evidence; earlier release evidence is preserved. All 24 sound icons and anchor words remain unique.
-
-The separate `/rightreader/phonics/` reader contains the full user-provided **Artus and Pip: The Thirsty Moonflower** story: 25 illustrations and 587 story words. It uses extracted illustrations and native text; words are not baked into page images. The reflowable EPUB preserves every paragraph and illustration, includes a two-chapter contents list and page navigation, and is downloadable from the book menu.
+Build `moonflower-20260928-r8` is implemented and locally tested; production verification is pending. It supersedes r7’s 24-entry teaching set. The existing GitHub Pages route is [the pilot URL](https://ikarus-eth.github.io/rightreader/phonics/).
 
 ### Implemented
 
-- Every story word is tappable. A tap plays a word recording when available and shows a small help panel.
-- 24 manually authored teaching entries map printed groups to sounds. `through` is `th | r | ough`; `smooth` uses voiced final th. The accent is British English, with an explicit accent note for `path`.
-- Picture hints use 24 familiar-word anchors, each with a unique icon and word reserved for one sound. Sun represents /s/; up represents short /ʌ/. The other formerly shared anchors are separated into moon /m/ and boot /uː/, rock /r/ and rain /eɪ/, fox /f/ and fish /ɪ/. Printed spelling variants of the same sound always use that sound’s one anchor. The content check rejects shared icons or anchor words. The picture button plays the whole anchor word, **not** an isolated phoneme. The cue specifies which sound to listen for.
-- Related examples prioritise the same spelling and pronunciation. Through uses two fresh sentences instead of presenting unrelated spellings as its spelling family.
-- My words records help requests. The optional short review shows a word before any audio, has no timer or score, and makes no mastery claim. Rhyme time uses light/night/bright and an original short line.
-- Reading position, text size and help history persist separately under `rrp_moonflower_v1`. The original `rr_` records and IndexedDB books are not read or modified.
-- Pilot progress can be exported and restored after validation and confirmation. Offline download saves the book and recordings; the pilot service worker is scoped to `/phonics/` and never deletes other apps' caches.
+- All story and chapter-title words are tappable, including **Before the Dark** and **One Small Stone**.
+- All **265 distinct story/title words** have sound breakdowns. With anchors and practice examples, all **313 available words** have both authored breakdowns and George recordings.
+- **44 unique sound anchors**: 24 consonants and 20 vowels from the traditional British-English inventory. Each has its own icon and anchor word. Existing anchors are preserved: sun is /s/ and up is /ʌ/. Book menu → Sound pictures opens the full guide.
+- The story uses **43 of those 44 sounds**. Only traditional /ʊə/ (cure) is absent; cure is included in the guide with an accent-variation note. See [the complete coverage table](PHONICS_COVERAGE.md).
+- Silent letters, split vowel spellings and multiple sounds within one spelling group are represented explicitly. Stone has four sounds and linked o…e tiles; would has three sounds with silent l; fox has four sounds with x mapped to /k/ then /s/.
+- Artus is ar | t | u | s (/ɑː t ə s/), targeting the current English recording per the user’s decision. Through remains th | r | ough (/θ r uː/), with no extra g or h sounds.
+- Related words prioritize matching spellings and sounds. Tapping a related word now opens its own breakdown. Through uses two example sentences rather than unrelated spelling-family examples.
+- Picture buttons play the **whole anchor word**, not an isolated phoneme. Cues identify the relevant sound.
+- The full book retains 25 illustrations and 587 body-word occurrences. The reflowable EPUB preserves every paragraph and illustration and remains downloadable from the book menu.
+- My words saves help requests, with an optional three-word review and no score or mastery claim. Rhyme time uses light/night/bright.
+- Reading position, text size and help history keep the existing `rrp_moonflower_v1` save key. Backup and restore remain available. The pilot worker controls only `/phonics/`, and the offline cache advances to v8.
 
-### Audio — complete and deployed
+### Audio
 
-The deployed r7 audio update replaces the mixed voices with one George voice from ElevenLabs for the entire bounded vocabulary: 264 distinct story words and 35 additional current teaching/example/anchor words. The eleven approved samples are reused. The generator saves each completed recording and its reported credit cost immediately, does not retry speech requests automatically, and stops if the cost exceeds the reviewed one-credit variance or the approved 1,100-credit total budget would be exceeded. Generation completed with 299 recordings: 288 new and 11 reused samples. Total request-reported cost is 905 credits (863 for this completion, 42 for the earlier samples), one credit above the estimate because of the stretched recording. All costs are saved in `ELEVENLABS_AUDIO_GENERATION.json`; the earlier subscription counter did not independently confirm balance deductions.
+All 313 active clips use George (`JBFqnCBsd6RMkjVDRZzb`) and `eleven_multilingual_v2`, with content-hash URLs. Missing audio never switches to another voice. The r8 preparation added 14 missing title/anchor words and one context-guided retake of close, with “Stay” supplied as preceding context for the story’s nearby meaning.
 
-Audio filenames include a content hash so updated recordings cannot reuse cached older voices. The pilot cache advances to v7; its reading-position and word-history save key remains `rrp_moonflower_v1`. Missing or failed audio produces a retry message, without switching to a different voice. Settings and offline-download messages describe the complete recorded voice pack.
+[Audio preparation run 36390990313](https://github.com/Ikarus-eth/rightreader/actions/runs/36390990313) completed successfully, including full content validation and decoding all 313 recordings. This run reported **43 credits**, for a cumulative **948 credits**, including 3 credits for the retired close clip. The original 11 samples remain in use. The credit report and provenance preserve costs; the earlier subscription counter did not independently confirm balance deductions.
 
-The repository secret `ELEVENLABS_API_KEY1` is available only to the generation step in GitHub Actions. It is not included in the website, recordings or reports. Generation stages changes on the audio branch; production deployment still uses the existing Pages route after review and validation. The earlier limited-token workflow failures are superseded by the connected GitHub integration.
+The generator saves each completed recording immediately, skips already prepared matching clips, does not retry speech requests automatically and enforces the previously approved 1,100-credit total ceiling. The repository secret `ELEVENLABS_API_KEY1` is exposed only to the generation step in GitHub Actions; it is not shipped to the website. Generation is manual and constrained to the audio staging branch.
 
-Whole-word audio coverage and phonics-teaching coverage are different. This update completes recordings; the number of manually authored sound breakdowns remains 24. Picture hints still play the whole anchor word rather than an isolated phoneme.
+### Validation and limits
 
-### Validation
+The content validator checks all 313 mappings and recordings, exact reconstruction of every spelling, valid linked tiles, phoneme counts, all 44 anchors and their distinct icons/words, coverage of every story/title/related word, audio hashes and one voice/model. Regression cases include Artus, before, through, stone, fox, little, one, whole, close, smooth and would. All 313 MP3s decode locally and in Actions. JavaScript syntax and all four existing service-worker range/cache tests pass.
 
-R7 local validation confirms exact audio coverage for all 299 expected words, one voice/model throughout, unique content-hash URLs, and matching audio-file hashes. All 299 MP3 files decode with FFmpeg; durations range from 0.51 to 1.16 seconds. The pack is 4,292,880 bytes. JavaScript syntax and all four existing service-worker range/cache tests pass. Browser checks confirmed page-position persistence and recorded playback for through, its boot anchor, and the formerly unrecorded nudged. The complete offline pack downloaded successfully; with the preview server stopped, the reader reloaded at page 17 with its illustration and played the newly recorded would clip from its saved pack. The cloud generation completed; its subsequent audio decode step lacked FFmpeg, so decoding was completed locally and the manual workflow now installs that dependency.
+Local Chrome checks cover tappable chapter titles, Artus’s four-sound map and schwa hint, before’s new recording, all 44 unique guide cards, linked o…e in stone and the two x sounds in fox, plus silent l in would. The complete offline pack downloads successfully. Additional browser and public-deployment results are recorded in `MOONFLOWER_DEPLOYMENT.json` after verification.
 
-The local content check verifies the EPUB ZIP structure and XML, exact text matches on all 25 pages, matching illustration bytes, all teaching mappings, and audio file hashes. All recorded clips were decoded with FFmpeg. JavaScript syntax checks pass locally. EPUBCheck 5.4.0 passed locally with zero errors and zero warnings.
+The EPUB and illustrations are unchanged from the previously verified release: EPUBCheck 5.4.0 passed with zero errors/warnings; all 25 EPUB paragraphs and illustrations match the reader. Physical iPad/Safari and a complete human listening review remain outstanding. Authored British phonemic maps and programmatic checks do not certify every nuance of a generated recording; proper names and accent variants warrant listening review.
 
-All 25 reader pages were traversed in Chrome and checked for text, word targets and horizontal overflow. Recorded MP3 playback was observed in Chrome. The in-app preview browser rejected MP3 sources; it is not evidence that physical Safari playback fails. Portrait tablet and phone layouts were visually inspected. Landscape width and large-text persistence passed. The saved-word review → help → return flow passed with recorded playback. After saving the offline pack and stopping the local web server, the reader reloaded with its illustration, saved page/text size and working recorded audio. The first live audio test caught a service-worker issue with HTTP 206 range responses. Build r5 passes partial network responses through and creates correct byte-range responses from full offline recordings; regression tests cover bounded/open/suffix ranges, invalid ranges and cache quota failures. The public site then played the through recording successfully and displayed its th/r/ough breakdown and moon hint. All 164 public runtime/media files, including the EPUB and unchanged original reader files, match the verified source. Physical iPad/Safari and human listening review remain outstanding.
+### Outside this pilot
 
-### Deliberately outside this pilot
-
-Arbitrary PDF/EPUB import into the phonics mode, automatic phonics diagnosis, speech scoring, a complete phonics curriculum, isolated-phoneme recordings, generated song performances and animated illustrations are not implemented. The original reader retains its own EPUB import.
+Arbitrary PDF/EPUB import into phonics mode, automatic phonics diagnosis, speech scoring, a complete curriculum covering every English spelling, isolated-phoneme recordings, generated song performances and animated illustrations are not implemented. The original reader retains its own EPUB import.

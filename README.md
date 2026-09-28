@@ -2,7 +2,7 @@
 
 ## Artus phonics pilot
 
-The separate [Moonflower reading pilot](https://ikarus-eth.github.io/rightreader/phonics/) opens **The Thirsty Moonflower** with all 25 illustrations, tappable story words, 24 reviewed sound breakdowns, one consistent British voice for every story word, picture hints, spelling-family examples and a short optional review. [Download the EPUB](https://ikarus-eth.github.io/rightreader/phonics/book/Artus-and-Pip-The-Thirsty-Moonflower.epub).
+The separate [Moonflower reading pilot](https://ikarus-eth.github.io/rightreader/phonics/) opens **The Thirsty Moonflower** with all 25 illustrations, tappable story and chapter-title words, sound breakdowns for all 313 available words, one consistent British voice, all 44 unique sound pictures, spelling-family examples and a short optional review. [Download the EPUB](https://ikarus-eth.github.io/rightreader/phonics/book/Artus-and-Pip-The-Thirsty-Moonflower.epub). [See exact sound coverage](docs/PHONICS_COVERAGE.md).
 
 This pilot uses its own `rrp_moonflower_v1` progress record. It does not change the original reader's books, vocabulary, API key or reading position. Current audio coverage and verification limits are documented in [current status](docs/CURRENT_STATUS.md). The original reader below remains the default app.
 

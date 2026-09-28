@@ -1,6 +1,6 @@
-const BUILD='moonflower-20260928-r7';
+const BUILD='moonflower-20260928-r8';
 const KEY='rrp_moonflower_v1';
-const CACHE='rightreader-phonics-moonflower-v7';
+const CACHE='rightreader-phonics-moonflower-v8';
 const $=id=>document.getElementById(id);
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normal=s=>s.toLowerCase().replaceAll('’',"'");
@@ -45,7 +45,7 @@ function wordMarkup(text){
 }
 function renderPage(){
  const p=book.pages[state.page];document.documentElement.style.setProperty('--reader-size',state.size+'px');
- $('reader').innerHTML=`<article class="story-page" aria-label="Page ${p.number}"><div class="picture-panel"><img src="${p.image}" alt="${escapeHTML(p.alt)}" fetchpriority="high" decoding="async"></div><div class="reading-panel"><p class="eyebrow">${p.heading?'CHAPTER '+p.chapter:'ARTUS & PIP'}</p>${p.heading?`<h1 class="chapter-title">${escapeHTML(p.heading)}</h1>`:''}<p class="story-text">${wordMarkup(p.text)}</p>${state.page===24?`<p class="attribution">${escapeHTML(book.attribution)}</p>`:''}<p class="reading-tip">Tap a word whenever you need a little help.</p></div></article>`;
+ $('reader').innerHTML=`<article class="story-page" aria-label="Page ${p.number}"><div class="picture-panel"><img src="${p.image}" alt="${escapeHTML(p.alt)}" fetchpriority="high" decoding="async"></div><div class="reading-panel"><p class="eyebrow">${p.heading?'CHAPTER '+p.chapter:'ARTUS & PIP'}</p>${p.heading?`<h1 class="chapter-title">${wordMarkup(p.heading)}</h1>`:''}<p class="story-text">${wordMarkup(p.text)}</p>${state.page===24?`<p class="attribution">${escapeHTML(book.attribution)}</p>`:''}<p class="reading-tip">Tap a word whenever you need a little help.</p></div></article>`;
  $('previous').disabled=state.page===0;$('next').disabled=state.page===24;
  $('page-menu').innerHTML=`${p.number} <span>/ ${book.pages.length}</span>`;
  $('page-menu').setAttribute('aria-label',`Page ${p.number} of ${book.pages.length}. Choose a page.`);
@@ -62,7 +62,7 @@ function openWord(word,fromStory=false){
  if(fromStory){const old=state.words[selectedWord]||{taps:0,last:0};state.words[selectedWord]={taps:old.taps+1,last:Date.now(),page:state.page};save();}
  document.querySelectorAll('.word.selected').forEach(x=>x.classList.remove('selected'));
  if(lastWordButton&&fromStory)lastWordButton.classList.add('selected');
- const sounds=entry?`<section class="sound-section"><p class="section-label">${entry.parts.length} sounds · tap a part for a picture hint</p><div class="chunks">${entry.parts.map((p,i)=>`<button class="chunk ${i===entry.focus?'focus':''}" data-part="${i}" aria-label="Picture hint for ${escapeHTML(p.text)}" aria-pressed="false">${escapeHTML(p.text)}</button>`).join('')}</div><div id="anchor" hidden></div><button class="hint-toggle" id="hint-toggle">Show the tricky part</button><p class="note" id="word-note" hidden>${escapeHTML(entry.note)}</p></section>`:'';
+ const sounds=entry?`<section class="sound-section"><p class="section-label">${entry.phonemeCount} ${entry.phonemeCount===1?'sound':'sounds'} · tap a part for a hint</p><div class="chunks">${entry.parts.map((p,i)=>`<button class="chunk ${i===entry.focus?'focus':''} ${!p.sounds.length&&p.linkedTo===undefined?'silent':''} ${p.linkedTo!==undefined||entry.parts.some(q=>q.linkedTo===i)?'linked':''}" data-part="${i}" aria-label="Explain ${escapeHTML(p.text)}" aria-pressed="false">${escapeHTML(p.text)}</button>`).join('')}</div><div id="anchor" aria-live="polite" hidden></div><button class="hint-toggle" id="hint-toggle">Show a helpful hint</button><p class="note" id="word-note" hidden>${escapeHTML(entry.note)}</p></section>`:'';
  const family=entry?.family.length?`<section class="family"><h3>Try the same spelling pattern</h3><div class="family-words">${entry.family.map(w=>`<button class="family-word" data-related="${w}" aria-label="Hear ${w}">${markPattern(w,entry.pattern)}</button>`).join('')}</div></section>`:'';
  const sentences=entry?.sentences.length?`<section class="sentence-help"><h3>Meet this word again</h3>${entry.sentences.map(s=>`<p>${escapeHTML(s).replace(selectedWord,`<strong>${selectedWord}</strong>`)}</p>`).join('')}</section>`:'';
  help.innerHTML=`<div class="dialog-top"><p class="eyebrow">A LITTLE WORD HELP</p><button class="close" aria-label="Close word help">×</button></div><div class="help-body"><h2 id="help-title" class="help-word">${escapeHTML(word)}</h2><div class="listen-row"><button class="primary" id="listen-word">▶ Listen</button>${review?'<button class="secondary" id="back-review">Back to practice</button>':''}</div><p class="audio-status" id="audio-status" role="status"></p>${sounds}${family}${sentences}<button class="primary return-button" id="return-story">Back to the story</button></div>`;
@@ -72,18 +72,32 @@ function openWord(word,fromStory=false){
   help.querySelectorAll('[data-part]').forEach(b=>b.onclick=()=>showAnchor(entry,Number(b.dataset.part)));
   $('hint-toggle').onclick=()=>{showAnchor(entry,entry.focus);$('word-note').hidden=false;$('hint-toggle').hidden=true;};
  }
- help.querySelectorAll('[data-related]').forEach(b=>b.onclick=()=>speak(b.dataset.related));
+ help.querySelectorAll('[data-related]').forEach(b=>b.onclick=()=>openWord(b.dataset.related));
  if(!help.open)help.showModal();speak(word);
 }
 function showAnchor(entry,index){
- const part=entry.parts[index],a=teaching.anchors[part.sound];
- help.querySelectorAll('[data-part]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.part)===index)));
- const el=$('anchor');el.className='anchor';el.innerHTML=`<span class="anchor-picture" role="img" aria-label="${escapeHTML(a.word)}">${a.picture}</span><div class="anchor-copy"><p class="anchor-word">${escapeHTML(a.word)}</p><p class="anchor-cue">${escapeHTML(a.cue)}</p></div><button class="anchor-listen" aria-label="Hear the example word ${escapeHTML(a.word)}">▶</button>`;el.hidden=false;
- el.querySelector('button').onclick=()=>speak(a.word);
+ const target=entry.parts[index].linkedTo??index,part=entry.parts[target];
+ const linked=entry.parts.map((p,i)=>p.linkedTo===target?i:-1).filter(i=>i>=0);
+ help.querySelectorAll('[data-part]').forEach(b=>b.setAttribute('aria-pressed',String([target,...linked].includes(Number(b.dataset.part)))));
+ const el=$('anchor');el.className='anchor-hints';
+ const introduction=!part.sounds.length?`${part.text} is silent here. No extra sound.`:linked.length?`${part.text}…${linked.map(i=>entry.parts[i].text).join('')} work together. One sound.`:part.sounds.length>1?`${part.text} contains ${part.sounds.length} sounds. Try these in order.`:'';
+ el.innerHTML=(introduction?`<p class="part-explanation">${escapeHTML(introduction)}</p>`:'')+part.sounds.map((sound,i)=>{
+  const a=teaching.anchors[sound];return `<div class="anchor"><span class="anchor-picture" role="img" aria-label="${escapeHTML(a.word)}">${a.picture}</span><div class="anchor-copy"><p class="anchor-word">${part.sounds.length>1?(i+1)+'. ':''}${escapeHTML(a.word)}</p><p class="anchor-cue">${escapeHTML(a.cue)}</p></div><button class="anchor-listen" data-anchor="${a.word}" aria-label="Hear the example word ${escapeHTML(a.word)}">▶</button></div>`;
+ }).join('');el.hidden=false;
+ el.querySelectorAll('[data-anchor]').forEach(b=>b.onclick=()=>speak(b.dataset.anchor));
 }
 function showBookMenu(){
- showMenu('The Thirsty Moonflower',`<p class="empty">An adventure with Artus and Pip.</p><div class="menu-list"><button class="menu-item" id="continue-book">Continue reading<small>Page ${state.page+1} of 25</small></button><button class="menu-item" id="chapter-one">Chapter 1 · Before the Dark</button><button class="menu-item" id="chapter-two">Chapter 2 · One Small Stone</button><button class="menu-item" id="rhyme-button">Rhyme time<small>Light, night, bright</small></button><a class="menu-item" href="book/Artus-and-Pip-The-Thirsty-Moonflower.epub" download>Download the EPUB<small>Read it in another book app</small></a></div>`);
- $('continue-book').onclick=()=>menu.close();$('chapter-one').onclick=()=>goPage(0);$('chapter-two').onclick=()=>goPage(12);$('rhyme-button').onclick=showRhyme;
+ showMenu('The Thirsty Moonflower',`<p class="empty">An adventure with Artus and Pip.</p><div class="menu-list"><button class="menu-item" id="continue-book">Continue reading<small>Page ${state.page+1} of 25</small></button><button class="menu-item" id="chapter-one">Chapter 1 · Before the Dark</button><button class="menu-item" id="chapter-two">Chapter 2 · One Small Stone</button><button class="menu-item" id="sound-guide">Sound pictures<small>44 sounds, one picture each</small></button><button class="menu-item" id="rhyme-button">Rhyme time<small>Light, night, bright</small></button><a class="menu-item" href="book/Artus-and-Pip-The-Thirsty-Moonflower.epub" download>Download the EPUB<small>Read it in another book app</small></a></div>`);
+ $('continue-book').onclick=()=>menu.close();$('chapter-one').onclick=()=>goPage(0);$('chapter-two').onclick=()=>goPage(12);$('rhyme-button').onclick=showRhyme;$('sound-guide').onclick=showSoundGuide;
+}
+function showSoundGuide(){
+ review=null;
+ showMenu('44 sound pictures',`<p class="empty">One picture for each sound. Tap a picture to see its word and highlighted sound.</p>${['consonant','vowel'].map(kind=>`<h3 class="guide-label">${kind==='consonant'?'24 consonant sounds':'20 vowel sounds'}</h3><div class="sound-grid">${Object.entries(teaching.anchors).filter(([,a])=>a.kind===kind).map(([id,a])=>`<button class="sound-card" data-sound="${id}" aria-label="${escapeHTML(a.word)} sound picture"><span aria-hidden="true">${a.picture}</span>${escapeHTML(a.word)}</button>`).join('')}</div>`).join('')}<p class="helper-line">These are the traditional 44 British English sounds. Accents vary, especially the vowel in cure. Listen buttons play whole example words.</p>`);
+ menu.querySelectorAll('[data-sound]').forEach(b=>b.onclick=()=>{
+  const id=b.dataset.sound,word=teaching.anchors[id].word,entry=teaching.words[word];
+  openWord(word);showAnchor(entry,entry.parts.findIndex(p=>p.sounds.includes(id)));
+  $('return-story').textContent='Back to sound pictures';$('return-story').onclick=()=>{closeHelp();showSoundGuide();};
+ });
 }
 function showPages(){showMenu('Choose a page',`<div class="page-grid">${book.pages.map((p,i)=>`<button class="page-choice ${i===state.page?'active':''}" data-page="${i}" aria-label="Page ${i+1}">${i+1}</button>`).join('')}</div>`);menu.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>goPage(Number(b.dataset.page)));}
 function showWords(){
@@ -115,7 +129,7 @@ async function saveOffline(){
  try{
   if(!registration||!('caches'in window))throw Error('Offline support has not started. Reopen the page while online.');
   const cache=await caches.open(CACHE);
-  const urls=['./','index.html','reader.js?v=7','styles.css?v=7','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
+  const urls=['./','index.html','reader.js?v=8','styles.css?v=8','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
   const unique=[...new Set(urls)];let completed=0;
   for(let i=0;i<unique.length;i+=4){await Promise.all(unique.slice(i,i+4).map(async u=>{const res=await fetch(u,{cache:'reload'});if(!res.ok)throw Error('A book file could not download. Please try again.');await cache.put(u,res);completed++;}));if(label.isConnected)label.textContent=`Saving… ${Math.round(completed/unique.length*100)}%`;}
   if(label.isConnected)label.textContent='Book and all recordings saved for offline reading.';

@@ -1,9 +1,6 @@
 name: Complete saved Moonflower word audio
 on:
   workflow_dispatch:
-  push:
-    branches: [codex/elevenlabs-word-test-20260928]
-    paths: [.github/workflows/finalize-moonflower-audio.yml]
 permissions:
   contents: write
   actions: read
