@@ -6,15 +6,23 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 28 September 2026
 
+### R10 character animation — implemented, deployment pending
+
+Build `moonflower-20260928-r10` adds five ChatGPT-generated 2D head poses, playing for four seconds only when Next/ArrowRight advances page 1 → page 2. Pip turns from Artus toward the flower; Artus’s expression changes from happy to concerned. Registered masks keep the original garden and bodies still. The animation settles onto the original page-two illustration and never loops. Text clears briefly to show the characters, then returns; **Read now** skips immediately. Page selection, reload, text resizing and later pages do not trigger it. Menus, navigation, hidden tabs and reduced-motion preference stop or suppress it. Assets preload while page one is read; if they are unavailable or unready at the turn, the still remains readable without a delayed animation. The offline pack includes all five poses.
+
+The existing save key, all 315 recordings/breakdowns, 44 anchors and original reader remain unchanged. No ElevenLabs or Runway generation calls were made for this update. [Animation implementation, checks and limits](MOONFLOWER_ANIMATION.md); [ChatGPT image prompts](MOONFLOWER_ANIMATION_PROMPTS.json).
+
+### R9 verified release (historical)
+
 Build `moonflower-20260928-r9` is deployed and verified. [Pages run 36398484827](https://github.com/Ikarus-eth/rightreader/actions/runs/36398484827) published commit `814a9b2c8fd2a2146dcfc4143c1d4070fdf8290e`. All 13 checked public files match the tested source: changed runtime files, both new recordings and the original-reader runtime. All 315 recordings passed generation-workflow decoding and content validation. It adds the flower/power/shower/tower family and a full-page artwork layout with tappable text over a dark translucent reading area. The r8 details below are historical; `MOONFLOWER_DEPLOYMENT.json` records this release under `immersiveLayoutUpdate`.
 
-### R9 changes
+### R9 changes (historical)
 
 - Flower, power, shower and tower now share a reciprocal spelling family, with `ower` highlighted and complete sound breakdowns for all four.
 - Power and shower were recorded in the existing George voice. All **315 available words** now have recordings and sound maps; the **265 distinct story/title words** and all **44 unique sound anchors** are preserved.
 - The reader uses the illustration as the page, with live tappable text overlaid. Portrait artwork is kept intact; soft image extensions fill space on wider screens. A dark text area preserves contrast, and longer text can scroll inside it at larger sizes.
 - Header and navigation float over the artwork. The original reader and pilot save key are unchanged. Offline assets advance to cache v9.
-- **Requested character animation is pending:** the connected Runway workspace is on its free plan and exposes no video models. The user has been asked to choose a paid Runway upgrade for genuine character movement or a clearly labeled four-second illustrated dissolve. No substitute animation has been deployed without that decision. The intended trigger remains page 1 → page 2, automatic, 2–5 seconds, then a still frame; it must not loop.
+- Character animation was pending in r9. The user subsequently chose ChatGPT-only generated image poses for r10; no Runway upgrade or ElevenLabs video generation is required.
 
 Audio preparation [run 36397654292](https://github.com/Ikarus-eth/rightreader/actions/runs/36397654292) succeeded. The two new clips cost **7 request-reported credits**, bringing the cumulative total to **955**, including the previously retired close clip. Existing clips were reused.
 

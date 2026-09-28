@@ -1,6 +1,44 @@
-const BUILD='moonflower-20260928-r9';
+const BUILD='moonflower-20260928-r10';
 const KEY='rrp_moonflower_v1';
-const CACHE='rightreader-phonics-moonflower-v9';
+const CACHE='rightreader-phonics-moonflower-v10';
+const MOTION_FILES=[1,2,3,4,5].map(n=>`book/animation/page-02/pose-0${n}.jpg`);
+const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+let motionImages=[],motionLoading=null,motionFrame=0,motionLayer=null;
+function preloadMotion(){
+ if(reducedMotion.matches||motionLoading)return;
+ motionLoading=Promise.all(MOTION_FILES.map(async src=>{const img=new Image();img.alt='';img.src=src;await img.decode();return img;}))
+  .then(images=>{motionImages=images;}).catch(()=>{motionLoading=null;});
+}
+function stopMotion(){
+ cancelAnimationFrame(motionFrame);motionFrame=0;
+ motionLayer?.remove();motionLayer=null;
+ const page=document.querySelector('.story-page');
+ page?.classList.remove('scene-playing');page?.querySelector('.skip-motion')?.remove();
+ if(page)page.querySelector('.reading-panel').inert=false;
+}
+function playPageTwoMotion(){
+ // An unready or failed image must never delay a page turn or start motion late.
+ if(reducedMotion.matches||document.hidden||motionImages.length!==5)return;
+ const page=document.querySelector('.story-page'),layer=document.createElement('div');
+ layer.className='scene-motion';layer.setAttribute('aria-hidden','true');
+ motionImages.forEach((img,i)=>{img.style.opacity=i===0?'1':'0';layer.append(img);});
+ page.querySelector('.picture-panel').append(layer);motionLayer=layer;page.classList.add('scene-playing');
+ page.querySelector('.reading-panel').inert=true;
+ const skip=document.createElement('button');skip.className='skip-motion';skip.textContent='Read now';skip.onclick=stopMotion;page.append(skip);
+ const started=performance.now();
+ const tick=now=>{
+  if(motionLayer!==layer)return;
+  const elapsed=now-started;
+  if(elapsed>=4000){stopMotion();return;}
+  // Five authored poses blend into the original concerned illustration by 3.5s.
+  const slot=Math.min(4,Math.floor(elapsed/700));
+  const blend=Math.min(1,Math.max(0,(elapsed-slot*700-560)/140));
+  motionImages.forEach((img,i)=>{img.style.opacity=String(i===slot?(slot===4?1-blend:1):i===slot+1?blend:0);});
+  motionFrame=requestAnimationFrame(tick);
+ };
+ motionFrame=requestAnimationFrame(tick);
+}
+reducedMotion.addEventListener('change',e=>{if(e.matches)stopMotion();else if(state.page===0)preloadMotion();});
 const $=id=>document.getElementById(id);
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normal=s=>s.toLowerCase().replaceAll('’',"'");
@@ -44,6 +82,7 @@ function wordMarkup(text){
  return out+escapeHTML(text.slice(offset));
 }
 function renderPage(){
+ stopMotion();
  const p=book.pages[state.page];document.documentElement.style.setProperty('--reader-size',state.size+'px');
  $('reader').innerHTML=`<article class="story-page" aria-label="Page ${p.number}"><div class="picture-panel"><img class="scene-wash" src="${p.image}" alt="" aria-hidden="true" decoding="async"><img class="scene-artwork" src="${p.image}" alt="${escapeHTML(p.alt)}" fetchpriority="high" decoding="async"></div><div class="reading-panel"><p class="eyebrow">${p.heading?'CHAPTER '+p.chapter:'ARTUS & PIP'}</p>${p.heading?`<h1 class="chapter-title">${wordMarkup(p.heading)}</h1>`:''}<p class="story-text">${wordMarkup(p.text)}</p>${state.page===24?`<p class="attribution">${escapeHTML(book.attribution)}</p>`:''}<p class="reading-tip">Tap a word whenever you need a little help.</p></div></article>`;
  $('previous').disabled=state.page===0;$('next').disabled=state.page===24;
@@ -51,13 +90,15 @@ function renderPage(){
  $('page-menu').setAttribute('aria-label',`Page ${p.number} of ${book.pages.length}. Choose a page.`);
  $('reader').querySelectorAll('[data-word]').forEach(b=>b.addEventListener('click',()=>{lastWordButton=b;openWord(b.dataset.word,true);}));
  if(state.page<24){const im=new Image();im.src=book.pages[state.page+1].image;}
+ if(state.page===0)preloadMotion();
 }
-function goPage(n){if(n<0||n>=book.pages.length)return;stopAudio();help.close();menu.close();state.page=n;save();renderPage();window.scrollTo({top:0,behavior:'instant'});}
+function goPage(n,animate=false){if(n<0||n>=book.pages.length)return;const turn=animate&&state.page===0&&n===1;stopAudio();help.close();menu.close();state.page=n;save();renderPage();if(turn)playPageTwoMotion();window.scrollTo({top:0,behavior:'instant'});}
 function closeHelp(){stopAudio();help.close();document.querySelectorAll('.word.selected').forEach(x=>x.classList.remove('selected'));}
 function dialogFrame(title,body){return `<div class="dialog-top"><p class="eyebrow">RIGHT READER</p><button class="close" aria-label="Close">×</button></div><div class="menu-body"><h2 class="menu-title" id="menu-title">${title}</h2>${body}</div>`;}
-function showMenu(title,body){closeHelp();stopAudio();menu.innerHTML=dialogFrame(title,body);menu.querySelector('.close').onclick=()=>menu.close();if(!menu.open)menu.showModal();}
+function showMenu(title,body){stopMotion();closeHelp();stopAudio();menu.innerHTML=dialogFrame(title,body);menu.querySelector('.close').onclick=()=>menu.close();if(!menu.open)menu.showModal();}
 function markPattern(word,pattern){const i=word.indexOf(pattern);return i<0||!pattern?escapeHTML(word):escapeHTML(word.slice(0,i))+'<mark>'+escapeHTML(pattern)+'</mark>'+escapeHTML(word.slice(i+pattern.length));}
 function openWord(word,fromStory=false){
+ stopMotion();
  stopAudio();menu.close();selectedWord=normal(word);const entry=teaching.words[selectedWord];
  if(fromStory){const old=state.words[selectedWord]||{taps:0,last:0};state.words[selectedWord]={taps:old.taps+1,last:Date.now(),page:state.page};save();}
  document.querySelectorAll('.word.selected').forEach(x=>x.classList.remove('selected'));
@@ -129,10 +170,10 @@ async function saveOffline(){
  try{
   if(!registration||!('caches'in window))throw Error('Offline support has not started. Reopen the page while online.');
   const cache=await caches.open(CACHE);
-  const urls=['./','index.html','reader.js?v=9','styles.css?v=9','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
+  const urls=['./','index.html','reader.js?v=10','styles.css?v=10','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...MOTION_FILES,...Object.values(audioManifest.words).map(a=>a.file)];
   const unique=[...new Set(urls)];let completed=0;
   for(let i=0;i<unique.length;i+=4){await Promise.all(unique.slice(i,i+4).map(async u=>{const res=await fetch(u,{cache:'reload'});if(!res.ok)throw Error('A book file could not download. Please try again.');await cache.put(u,res);completed++;}));if(label.isConnected)label.textContent=`Saving… ${Math.round(completed/unique.length*100)}%`;}
-  if(label.isConnected)label.textContent='Book and all recordings saved for offline reading.';
+  if(label.isConnected)label.textContent='Book, animation and all recordings saved for offline reading.';
  }catch(e){if(label.isConnected)label.textContent=e.message||'Unable to save offline. Check your connection and storage.';}
  finally{if(button.isConnected)button.disabled=false;}
 }
@@ -140,13 +181,13 @@ for(const d of [help,menu]){
  d.addEventListener('cancel',()=>{review=null;stopAudio();});d.addEventListener('close',()=>{if(!help.open&&!menu.open)stopAudio();if(d===help)document.querySelectorAll('.word.selected').forEach(x=>x.classList.remove('selected'));});
  d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAudio();});window.addEventListener('pagehide',stopAudio);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopAudio();stopMotion();}});window.addEventListener('pagehide',()=>{stopAudio();stopMotion();});
 window.addEventListener('storage',e=>{if(e.key!==KEY)return;try{const next=JSON.parse(e.newValue);if(validState(next)&&next.updated>state.updated){state=next;updateCount();renderPage();}}catch{}});
-document.addEventListener('keydown',e=>{if(help.open||menu.open||!book)return;if(e.key==='ArrowRight')goPage(state.page+1);if(e.key==='ArrowLeft')goPage(state.page-1);});
+document.addEventListener('keydown',e=>{if(help.open||menu.open||!book)return;if(e.key==='ArrowRight')goPage(state.page+1,true);if(e.key==='ArrowLeft')goPage(state.page-1);});
 async function init(){
  try{
   [book,teaching,audioManifest]=await Promise.all(['book/story.json','teaching.json','audio.json'].map(async url=>{const r=await fetch(url);if(!r.ok)throw Error(url);return r.json();}));
-  $('home').onclick=showBookMenu;$('words-button').onclick=showWords;$('settings-button').onclick=showSettings;$('previous').onclick=()=>goPage(state.page-1);$('next').onclick=()=>goPage(state.page+1);$('page-menu').onclick=showPages;
+  $('home').onclick=showBookMenu;$('words-button').onclick=showWords;$('settings-button').onclick=showSettings;$('previous').onclick=()=>goPage(state.page-1);$('next').onclick=()=>goPage(state.page+1,true);$('page-menu').onclick=showPages;
   renderPage();updateCount();
   if('serviceWorker'in navigator){navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).then(r=>{registration=r;}).catch(()=>{});}
  }catch{ $('reader').innerHTML='<div class="loading"><div><p>The story could not load.</p><button class="primary" id="reload">Try again</button></div></div>';$('reload').onclick=()=>location.reload();$('previous').disabled=true;$('next').disabled=true; }

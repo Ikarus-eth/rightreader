@@ -1,0 +1,33 @@
+{
+  "tool": "ChatGPT built-in image_gen",
+  "mode": "image edit; no external image/video API",
+  "references": [
+    "phonics/book/images/page-02.jpg",
+    "phonics/book/images/page-01.jpg"
+  ],
+  "sourceOutputs": [
+    "exec-c6f9a490-c9c2-48b1-ae72-643235bca4f4.png",
+    "exec-b2ad1ebe-ee41-4a26-982f-6fac3d0edc26.png",
+    "exec-6f0ee0df-191c-4c8d-bbe9-d1cad52eaf4c.png",
+    "exec-21bb4707-36dd-4e32-b86c-79c3b3da3d39.png",
+    "exec-3f438344-9cea-4722-a4bd-b0f8e9c4afc3.png"
+  ],
+  "common": "Use case: identity-preserve. Asset type: ONE full-scene registered keyframe for a gentle 2D storybook animation. Image 1 is the EDIT TARGET, the exact final page-two composition. Image 2 is the first happy animation pose and supports character identity. Match image 1's exact 3:4 portrait canvas, camera, scale, positions, painterly style, garden and all edges. Change ONLY the heads/faces/upper neck of Artus the blond boy and Pip the orange dragon. Keep Artus's hand exactly at his chin. Every body, costume, staff, wing, foot, tail, flower, butterfly, stone, foliage and light remains in its exact original position. Do not move or redesign the characters. No new objects, text, panels, labels, blur or camera movement. ",
+  "stages": [
+    [
+      3,
+      "45% through the turn. Artus's little smile fades to a neutral curious closed mouth, eyes now look toward the flower at lower right, chin lowers slightly. Pip's head is facing almost FORWARD toward the viewer, just starting to turn to the right, eyes curiously noticing the flower, closed mouth, neutral brows. This FRONT-facing intermediate dragon head is essential; do not jump immediately to the final right-facing head."
+    ],
+    [
+      4,
+      "70% through the turn. Artus's head tilts slightly farther DOWN and RIGHT toward the flower, lips close thoughtfully, inside eyebrows begin to lift with mild concern. Pip has turned his head to THREE-QUARTER RIGHT toward the flower, head still slightly higher than in image 1, smile gone, concerned eyebrows starting to form. Keep a natural connected dragon neck."
+    ],
+    [
+      5,
+      "90% through the turn. Both characters now look DOWN and RIGHT toward the drooping white flower, concerned and thoughtful. Artus's inner eyebrows lift a little, lips small and closed, almost the final expression of image 1. Pip's snout points down toward the flower, worried raised inner eyebrows and closed slightly downturned mouth. Pip's head is almost, but slightly higher than, the final pose in image 1."
+    ]
+  ],
+  "frame2Revision": "Use case: identity-preserve. EDIT this exact image to create the next single 3:4 animation frame. Preserve every pixel of the garden, bodies, costumes and flower. Change only the orange dragon's HEAD rotation and expression: its snout currently points LEFT toward the boy. Turn its head only HALFWAY from left to front, about 25 degrees toward the viewer. The dragon should look diagonally LEFT and toward us, not right, with both eyes now visible but the left-facing muzzle clearly still pointing a little left. Maintain its happy closed-mouth smile, bright eyes, upright neck, matching horns and mane. Artus's expression should remain a small happy closed-mouth smile. Preserve exact head size, position, body, neck connection, scale, camera, framing, painterly style. No text or collage. A subtle intermediate pose, full scene, one image.",
+  "notes": "Five selected JPEG web assets in phonics/book/animation/page-02. Five original PNG outputs retained locally by ChatGPT. The first attempt at pose 2 jumped ahead and was replaced using frame2Revision. The original page-two image is the final still. Browser masks show only character-head regions over the unchanged original garden.",
+  "frame1Prompt": "Use case: identity-preserve. Asset type: one full-scene keyframe for a gentle 2D storybook animation. Image 1 is the EDIT TARGET and exact registered layout for ALL pixels, including bodies and garden. Image 2 is ONLY reference for the two characters’ initial happy facial expressions, not its composition. Generate a single portrait 3:4 image matching image 1’s exact canvas, camera, scale, detailed painterly style and positions. Change ONLY Artus’s head/face and Pip the orange dragon’s head/face. Frame 1 of 6, before noticing the flower: Artus lifts his chin a little and looks happily toward Pip with a small excited smile and relaxed eyebrows; Pip lifts his head and turns it toward Artus on the left, smiling with bright excited eyes. Keep Artus’s hand exactly at his chin as in image 1. Keep hair style, horns, clothing, staff, wings, bodies, feet, tail, flower, butterflies, garden background, lighting, layout and edges unchanged. The characters remain recognizable as EXACTLY the same little blond boy and little orange dragon. No text, labels, panels, inset pictures or new objects. Full finished scene, one image, no motion blur."
+}
