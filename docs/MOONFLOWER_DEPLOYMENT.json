@@ -1075,5 +1075,2070 @@
       }
     ],
     "browserCheck": "Public r6 reader: sun card s shows sun icon and first sound in sun; u shows up arrow and first sound in up. Up recording played, readyState 4, duration 0.603719 seconds. Saved reading position survived the update."
+  },
+  "audioUpdate": {
+    "verifiedAt": "2026-09-28T05:22:15.015589+00:00",
+    "build": "moonflower-20260928-r7",
+    "sourceCommit": "7ef28f262797ddf65432fd29b9f9676e3f8a226e",
+    "pagesRun": "https://github.com/Ikarus-eth/rightreader/actions/runs/36381466298",
+    "pagesConclusion": "success",
+    "url": "https://ikarus-eth.github.io/rightreader/phonics/",
+    "recordings": 299,
+    "coveredStoryWords": 264,
+    "reportedCredits": 905,
+    "verifiedFiles": 339,
+    "checks": [
+      {
+        "path": "phonics/index.html",
+        "status": 200,
+        "bytes": 1900,
+        "sha256": "f4092081b2d36858a12174bfd0bb189d0bfbd337de36f381eade470a11273c70"
+      },
+      {
+        "path": "phonics/reader.js",
+        "status": 200,
+        "bytes": 17844,
+        "sha256": "070f75c3d6368e85a6a753aa460e9e6810fc82a3600ef346ec98c02e7f8e9ffa"
+      },
+      {
+        "path": "phonics/styles.css",
+        "status": 200,
+        "bytes": 10086,
+        "sha256": "60f6dd457ca7b1e14f29fa805493cf1c61f7104fdfc40c8da606b6eed2a1de34"
+      },
+      {
+        "path": "phonics/sw.js",
+        "status": 200,
+        "bytes": 2356,
+        "sha256": "33e72b0b17d5e23217ec827e6d01aab2f58a110c3a5d58286aad6449c1a7e11a"
+      },
+      {
+        "path": "phonics/manifest.json",
+        "status": 200,
+        "bytes": 327,
+        "sha256": "3da14ec8d4897a76c4dde7a5212934661e9204089f95823e48facc4dd51ff630"
+      },
+      {
+        "path": "phonics/audio.json",
+        "status": 200,
+        "bytes": 144567,
+        "sha256": "1060fcece1f3e8a1f5fa3f0443d01c34496e690fd1447d7242786307fff4c011"
+      },
+      {
+        "path": "phonics/audio-provenance.json",
+        "status": 200,
+        "bytes": 144737,
+        "sha256": "1593067a39575339631c59ba227610bb3f299675db7d1be8c152adfad58ebaec"
+      },
+      {
+        "path": "phonics/teaching.json",
+        "status": 200,
+        "bytes": 13828,
+        "sha256": "1365c4fa4cf1b4ef407e80dcd90484a8e4197facd01313dc5769dc94b5fbe8e7"
+      },
+      {
+        "path": "phonics/book/story.json",
+        "status": 200,
+        "bytes": 8788,
+        "sha256": "464658b42c9cc4b470d77df9437bc62c6396253cea2c4a282ae159e32570fff1"
+      },
+      {
+        "path": "phonics/book/Artus-and-Pip-The-Thirsty-Moonflower.epub",
+        "status": 200,
+        "bytes": 13712578,
+        "sha256": "31717ef0641b2f334a4d87175447b71d3ad0513e02c9736b93e5d5a93b95fef9"
+      },
+      {
+        "path": "phonics/book/images/page-01.jpg",
+        "status": 200,
+        "bytes": 566993,
+        "sha256": "a8264756e4917d6d0e4bd0b4181d18291a692bc64f63312d6518518620712406"
+      },
+      {
+        "path": "phonics/book/images/page-02.jpg",
+        "status": 200,
+        "bytes": 555972,
+        "sha256": "a50aa53965314ff7a414961e009bec3296714efb6095df2bd60a4ffe7e774dd2"
+      },
+      {
+        "path": "phonics/book/images/page-03.jpg",
+        "status": 200,
+        "bytes": 558761,
+        "sha256": "35b2f32557a67ffdac55c353aa039543bfc451a0a9cc57a8961c7fe86fbc53bf"
+      },
+      {
+        "path": "phonics/book/images/page-04.jpg",
+        "status": 200,
+        "bytes": 625634,
+        "sha256": "396e6e063ccadb3c6db4249cbe4f03aaaf119864f0a792040f50401983bedd47"
+      },
+      {
+        "path": "phonics/book/images/page-05.jpg",
+        "status": 200,
+        "bytes": 539205,
+        "sha256": "3858f5e155fc7179592265449fb9d8a773f88af449129f2e626223dc74e4d215"
+      },
+      {
+        "path": "phonics/book/images/page-06.jpg",
+        "status": 200,
+        "bytes": 571999,
+        "sha256": "9fab470ca975ad480fd27cf7ab081a378b9d2b759ae50c328844d40659013371"
+      },
+      {
+        "path": "phonics/book/images/page-07.jpg",
+        "status": 200,
+        "bytes": 529791,
+        "sha256": "49c1efa0b5e25909f5c65b9d4925a1a5b4ad9f900e78441692c284378cc27a97"
+      },
+      {
+        "path": "phonics/book/images/page-08.jpg",
+        "status": 200,
+        "bytes": 586933,
+        "sha256": "a8427767f836a03321172aa37d4f135695586cd6698f4e0679bb71ef8678689b"
+      },
+      {
+        "path": "phonics/book/images/page-09.jpg",
+        "status": 200,
+        "bytes": 566387,
+        "sha256": "76f7ddd0dd8db8d41bf03994c80f9ecf04e23e49c9ef0d3e4598bf51ac81dc89"
+      },
+      {
+        "path": "phonics/book/images/page-10.jpg",
+        "status": 200,
+        "bytes": 582464,
+        "sha256": "b58d817721775bc7bc135a203777b71e64d06db2f746c7ad3c54763edda452ef"
+      },
+      {
+        "path": "phonics/book/images/page-11.jpg",
+        "status": 200,
+        "bytes": 587256,
+        "sha256": "6a4b8f92487870d01b2b06f5cfbf238d6647f51eec0ea38e892c0ea2c2d3fc58"
+      },
+      {
+        "path": "phonics/book/images/page-12.jpg",
+        "status": 200,
+        "bytes": 580466,
+        "sha256": "d7ea3c676284b9a3e29c427663d57817a9e85fe66020b5f05cc675c3c24b9f5f"
+      },
+      {
+        "path": "phonics/book/images/page-13.jpg",
+        "status": 200,
+        "bytes": 518043,
+        "sha256": "47dc2101b7ad05ebedbb3324be824e321d11ce57b3059f8e7a6a4177009437d8"
+      },
+      {
+        "path": "phonics/book/images/page-14.jpg",
+        "status": 200,
+        "bytes": 526868,
+        "sha256": "4d5b986d7240d625d7a89ecf8f4ff5356359356d42fef0fa2ea34dbb1f08f60d"
+      },
+      {
+        "path": "phonics/book/images/page-15.jpg",
+        "status": 200,
+        "bytes": 573545,
+        "sha256": "b295d02ddb1cc365ec0c3afa3579dcc749681bf5780d3bb499a2f45a13bc65b5"
+      },
+      {
+        "path": "phonics/book/images/page-16.jpg",
+        "status": 200,
+        "bytes": 514209,
+        "sha256": "b7f39503de6fb6f2fb41656a73043790e8eec5ce2107a5933ee7b4a7720d48be"
+      },
+      {
+        "path": "phonics/book/images/page-17.jpg",
+        "status": 200,
+        "bytes": 515442,
+        "sha256": "76a4b3432477b2824f605b2b997c0455f63c2df0f98caab5d69adeff808f3c44"
+      },
+      {
+        "path": "phonics/book/images/page-18.jpg",
+        "status": 200,
+        "bytes": 501978,
+        "sha256": "65a77e2e6c5d7df6660ca2e09e76199a8fb700475da819817628c22979233c1c"
+      },
+      {
+        "path": "phonics/book/images/page-19.jpg",
+        "status": 200,
+        "bytes": 498553,
+        "sha256": "9268a40d3c4abca2cbffd85163bc82c5b381c7e18ec80c7f2342774d8ddc29ae"
+      },
+      {
+        "path": "phonics/book/images/page-20.jpg",
+        "status": 200,
+        "bytes": 474720,
+        "sha256": "f15931b7067675d5becbe6cbf6303dfbdd4e94dd6f92b6b836cb159964002eaa"
+      },
+      {
+        "path": "phonics/book/images/page-21.jpg",
+        "status": 200,
+        "bytes": 587554,
+        "sha256": "5c6d7071557968c5cb32b34a0c872837169bcd047ad51aff9192c65374c963c7"
+      },
+      {
+        "path": "phonics/book/images/page-22.jpg",
+        "status": 200,
+        "bytes": 514791,
+        "sha256": "594f47cf3a4edff9fdb6b487d9f1d4244b4406aea09ce2d74a9ec737f08b5d02"
+      },
+      {
+        "path": "phonics/book/images/page-23.jpg",
+        "status": 200,
+        "bytes": 518053,
+        "sha256": "aa44f45693c01e7ed1da7c949ef10e4b40919ba0f553db5903228beba8a2d64a"
+      },
+      {
+        "path": "phonics/book/images/page-24.jpg",
+        "status": 200,
+        "bytes": 521010,
+        "sha256": "522ef90b1146e6ac4fdd7bd2b7ef6e402965140a0b7e466e3ef0d5bae3967f37"
+      },
+      {
+        "path": "phonics/book/images/page-25.jpg",
+        "status": 200,
+        "bytes": 578765,
+        "sha256": "d9d809aeb26380a8df5d9ddeae65fe7444dd5006df4d9cd8b0a11759d4359472"
+      },
+      {
+        "path": "phonics/audio/ca978112ca1bbdca-a5ef13665683.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "a5ef13665683295b5d584077e983ed547ac103b078f90cbd781702e78744bc20"
+      },
+      {
+        "path": "phonics/audio/b4c9e14061c2fd45-48ac9295b33d.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "48ac9295b33d9678d1e86fd53985e9e561187bbd376c8348a3a6e62915280268"
+      },
+      {
+        "path": "phonics/audio/a718e3e9aefa308a-be3f545dfbf3.mp3",
+        "status": 200,
+        "bytes": 17598,
+        "sha256": "be3f545dfbf327fdc3be454463a3ec4f88e2725b9969db35e815c3db80f3e078"
+      },
+      {
+        "path": "phonics/audio/5ef5ef0364b6939c-3864b7fb668e.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "3864b7fb668ebd077cdc97776b0dadd08d49dbe5d877a7e19f27a8025e68b151"
+      },
+      {
+        "path": "phonics/audio/ab6db599234d2636-0c711d407aa3.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "0c711d407aa38dbc42cb407913df3581c3a721b2d88a8f61ea40784f8cb67722"
+      },
+      {
+        "path": "phonics/audio/ea325d761f98c6b7-6f8e51b5be78.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "6f8e51b5be788b722e9b5ac05e7b101ee452235012b11625f3f9f3913ba1a51d"
+      },
+      {
+        "path": "phonics/audio/6201111b83a0cb5b-7c30fc84de14.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "7c30fc84de1424d25576fc497f6d84f621563cca8edd1815db5d3dc6b166916d"
+      },
+      {
+        "path": "phonics/audio/ae448ac86c4e8e4d-1f6e04f06e6c.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "1f6e04f06e6cf3df052e12fa75145c20dc3e26ec1b60363c2e497cff9c1335bc"
+      },
+      {
+        "path": "phonics/audio/ba78973ddcf98d4e-96d53bf0eaad.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "96d53bf0eaad76eacdd633bd0064a0cd58a2be30c34e84893db45f82a17b7143"
+      },
+      {
+        "path": "phonics/audio/34ef9736abc46e17-1201e2a9144e.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "1201e2a9144ef253041451aaab82da9d0f2ad72cc9f451894723f0ec4b628dfe"
+      },
+      {
+        "path": "phonics/audio/24ed4ce301110ef5-69e42e4dcf7d.mp3",
+        "status": 200,
+        "bytes": 19688,
+        "sha256": "69e42e4dcf7d24bcd86a5bd47260b9977f218e2e19f79bac38cc13c496f56ebf"
+      },
+      {
+        "path": "phonics/audio/d07bce046a93196a-bf528164dc21.mp3",
+        "status": 200,
+        "bytes": 17598,
+        "sha256": "bf528164dc2168a78c94daadaa1bc2cae4ab3fe05ed45f4abfcac5fed0efa295"
+      },
+      {
+        "path": "phonics/audio/b1d6b91b67c2afa5-68c34bfef3e4.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "68c34bfef3e4a2d2f321277be4ef62001e1db281dc72b26a891769bc6bbee84f"
+      },
+      {
+        "path": "phonics/audio/378ce56a9d146d51-25d7399d0684.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "25d7399d0684ba966198cac53130d6f986aa673ad6c5a466544c9088666c63fd"
+      },
+      {
+        "path": "phonics/audio/3c482346f3750276-77133781ce7a.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "77133781ce7a67ba11c8102f12c39a657f00178ecdb448884885cc64708bbdb1"
+      },
+      {
+        "path": "phonics/audio/e9de08263f4ad491-dd073fb2adaa.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "dd073fb2adaaedc4fb6159c28b040cbb57d1d4f0534f8e7d2c99372ce8c20aeb"
+      },
+      {
+        "path": "phonics/audio/0de8ab6315488d30-e5aded27e8de.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "e5aded27e8de3ececaabdad21d679f1aeba84383cfaa34fa440a27da348d3f40"
+      },
+      {
+        "path": "phonics/audio/05ec87c4dc85853e-3f4ea6194403.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "3f4ea61944032799c4f2a97ae4b0fa531f7c065b4ace515259943a4b1f524f5e"
+      },
+      {
+        "path": "phonics/audio/c5052532c2206140-59731b8e6785.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "59731b8e6785285798defb1e59642c84b23f27b2f2355b0ca8a3b2ad39818a94"
+      },
+      {
+        "path": "phonics/audio/8ada24bf6bf31392-a6243c48349f.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "a6243c48349fa0cc4ea4d03971b81436ff957264a5bfb765592690c29002925b"
+      },
+      {
+        "path": "phonics/audio/5bcaffed4d27f7b2-a055e2fc0f43.mp3",
+        "status": 200,
+        "bytes": 18852,
+        "sha256": "a055e2fc0f43833ea5298fddb372df7967bd7cfc8905c33c2e4781164d9881d6"
+      },
+      {
+        "path": "phonics/audio/fbb27fbdc4f4dd04-5cbffec5a082.mp3",
+        "status": 200,
+        "bytes": 17598,
+        "sha256": "5cbffec5a082ae410f826aa24529bed1ffc4e92acfaaea087674bea21d4ee1e7"
+      },
+      {
+        "path": "phonics/audio/2a21fe6d592a19b7-6160a80ce5f4.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "6160a80ce5f45c069f2429662ce38ccd60be56a1ca8a198a534a7f32e23b5fe1"
+      },
+      {
+        "path": "phonics/audio/d0013c2e0a387e4c-bce6f47b2486.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "bce6f47b2486291d35ef378abdbf33213c2e97bb6a08f015aedaccb432519e65"
+      },
+      {
+        "path": "phonics/audio/05b9458b3c7cd9d1-4f4ac7540da6.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "4f4ac7540da67822014d703d495b49afb983c3333d089f1da2b2ce1459ef56ff"
+      },
+      {
+        "path": "phonics/audio/25cdb46d8d2115a2-896bf027abcd.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "896bf027abcd02f733c83be9013c287b94ab7745959970500207512403cfa9ac"
+      },
+      {
+        "path": "phonics/audio/9a692cc5ecc3c159-03df45f2ffc2.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "03df45f2ffc292392c18dc90cf76b4ada5893c3ef708f17e4c69a61100af1bd5"
+      },
+      {
+        "path": "phonics/audio/4509beb0ab401d71-f321c6593665.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "f321c6593665bf5592760058260d070115a0a2396e08e21828e1ae6483514a1b"
+      },
+      {
+        "path": "phonics/audio/ff7772053abf7d81-dd02da503804.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "dd02da503804ea2030edaf09f8bad08d3029f986cc975630139b4ca63950fa7f"
+      },
+      {
+        "path": "phonics/audio/367a1c592458c1b0-5df11131d7c8.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "5df11131d7c8b8a7f52b787389f5d8042a1316810289e44c553cdcd9a2343103"
+      },
+      {
+        "path": "phonics/audio/a87b3e348ccb598e-92543d9a6ac6.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "92543d9a6ac6db3bc10302e3e0796a73761eb69d95b62116579bab6a7f2d534a"
+      },
+      {
+        "path": "phonics/audio/553f3e2340aa69a8-53e6497b3132.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "53e6497b3132d093b5ec8ad02e32c7aa2d034fa66df0e34908afb36fcd89a449"
+      },
+      {
+        "path": "phonics/audio/cdc29937887188ad-37b1da70e303.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "37b1da70e3035607bb7d5a38745e47a70f2654a43e41e2cc7b894b9515b3cef6"
+      },
+      {
+        "path": "phonics/audio/a7e2d26e8d15814d-dec7f82242f8.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "dec7f82242f8f8e2a8b475ff1904330f2d6419575f40eb3abe1263daaad6e023"
+      },
+      {
+        "path": "phonics/audio/7edb360f06acaef2-0506ac1626b2.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "0506ac1626b268d0377dad1b11fc22e3b2f6b86110318a845684c3e54f051d2b"
+      },
+      {
+        "path": "phonics/audio/76806e2c372db535-fb9dea8cd3d5.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "fb9dea8cd3d5bb8898094667ebff8969b9123ff14d676bdfd9fda78f530a6045"
+      },
+      {
+        "path": "phonics/audio/9f584196e7fe6de8-f358acdfdc23.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "f358acdfdc23a1ebadc29144e359023bfdaa3b31c475c10402a503407412f6ec"
+      },
+      {
+        "path": "phonics/audio/9a43b6dac4660897-14223b8b826c.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "14223b8b826c04fa2bd155c8ac10c428b52485388431a7f68be82f8ef399a7cd"
+      },
+      {
+        "path": "phonics/audio/191c415261817259-fbf3ea974108.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "fbf3ea9741082c04d9bcaafa6bcded5ca391158ed89d160fea5e6114ab0fb2f7"
+      },
+      {
+        "path": "phonics/audio/6ef49cacb4c39f8f-1e9822f81264.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "1e9822f8126496ca35dd8e08f1452a8fbe5a58bee377186383f3ec19527ab45e"
+      },
+      {
+        "path": "phonics/audio/77af778b51abd4a3-aa9c85556e9a.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "aa9c85556e9ad621f492d2bfb2f83ce22ddbcead71be9eedaf9c1a826ffce595"
+      },
+      {
+        "path": "phonics/audio/ef440597ea5c33b6-27c6e4769ae0.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "27c6e4769ae06e4e3b2f535d602f8782011c191adef361cc356d1ad0a101fb79"
+      },
+      {
+        "path": "phonics/audio/310ff200149b44a3-463867b0b49a.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "463867b0b49aa23adba993bbf4e2927dd724d1a93d97e9b9b65959c901ee8731"
+      },
+      {
+        "path": "phonics/audio/e272deecde720ffc-326754230cd2.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "326754230cd299ff64c89a147ba8bd8dc2f01bf8889008809660991602d400ef"
+      },
+      {
+        "path": "phonics/audio/f3a22c1ce8e0a5a9-25e52c101e23.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "25e52c101e23d036b4fcdbde3c8b307d78d86c111f79a84a21377206ff9fc160"
+      },
+      {
+        "path": "phonics/audio/cebb2c4c0871cd06-068e1426f19d.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "068e1426f19de6ded72d864c49f690965a7973133b5d602a00679e1dccd54a53"
+      },
+      {
+        "path": "phonics/audio/f00eb33218724145-01300c29904e.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "01300c29904e486461fecd56d58c15f3fa8c2441777ab4366299def5753dbd29"
+      },
+      {
+        "path": "phonics/audio/851d49d3087657e9-733c1da59467.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "733c1da5946776d953f2aa3621769b71e50a6abcc75ff0e1662ef17780083740"
+      },
+      {
+        "path": "phonics/audio/5bebb40bd68d3a40-c1c10a2defcb.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "c1c10a2defcbf7cc9a465dd8d69312c8180896a179874f7545585e013ec73574"
+      },
+      {
+        "path": "phonics/audio/c6171781d65f3ccc-a5d6bd6a05cb.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "a5d6bd6a05cbe74e183941230712d7ba932efbe130cd8fb536f0e25b43f266f4"
+      },
+      {
+        "path": "phonics/audio/cc1c2aa84ccdf19f-41e00ade517f.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "41e00ade517f01835c77b4978d85537b53a2884be6fe0d75038502b0f0794743"
+      },
+      {
+        "path": "phonics/audio/e6bb5689beec52c4-a2143f19f8e6.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "a2143f19f8e6910293849697e07380d0e79f552e163750ec0f57a264152af166"
+      },
+      {
+        "path": "phonics/audio/5f4d44dfaa1b1ed7-2c8454ec0707.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "2c8454ec07078501b57a0750b3a45d8b19663b4f5ba8c52b03ace34e3642134e"
+      },
+      {
+        "path": "phonics/audio/74611c1d6455b534-567286c0d2db.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "567286c0d2db8fea28d8bb6351fa8449f2fb4a671676ca242cf3a9334b84caf2"
+      },
+      {
+        "path": "phonics/audio/75ca3ca2ece24355-65f126af0bcd.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "65f126af0bcddbd8336b94f4ce52a72a80e469b0f8ddeca8772706f9da4657b4"
+      },
+      {
+        "path": "phonics/audio/ea16f864a5fe4070-4c6eda84ca31.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "4c6eda84ca31fb30a643c3dc53ffced0fdf2b13624c28a55d68c732f8b672b1b"
+      },
+      {
+        "path": "phonics/audio/edcf27a66a5453a8-be1ffa185412.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "be1ffa185412c93011a3d655f26ac03a6ddb8cc6e9d2e66d641e76ef4434f293"
+      },
+      {
+        "path": "phonics/audio/ac0b52a2ae6ef999-894f08286140.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "894f08286140fb50c658da779e30f638289096954ff36f6b5b196659f838e033"
+      },
+      {
+        "path": "phonics/audio/908aec4512d80ff4-c4b12acce869.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "c4b12acce8693e6f4f5310e13a175770396fd3bd81ed33098b279efdea93b6b0"
+      },
+      {
+        "path": "phonics/audio/30fde358b34772de-c2102bcd4bd9.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "c2102bcd4bd909f2947e427aabed3ca7276a72b7890940c40ba7bd3282d9149b"
+      },
+      {
+        "path": "phonics/audio/d90ee9ccf6bea1d2-e6802c7449eb.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "e6802c7449eb5af3130012dcd1a0316a4b17498ac768ef52dd1a74af18759ca7"
+      },
+      {
+        "path": "phonics/audio/e7cd9c3ab5da1895-d73da3d48857.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "d73da3d48857fedb7498c299236cf30a304bd669ec3160d0dcd483ed939ca87f"
+      },
+      {
+        "path": "phonics/audio/b755cb248c3c4a7d-c7cda2867d93.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "c7cda2867d9381977d69182a92e3e55340792007cb72a2d8fad2f061dffce151"
+      },
+      {
+        "path": "phonics/audio/bec1687971e36be5-b3d64f49c70f.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "b3d64f49c70fe82b1b540b9c199e94e12d6608642fdf300571ae41f4abafa272"
+      },
+      {
+        "path": "phonics/audio/ec38063c881f0a5e-4dd07348eb01.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "4dd07348eb013b1b9fb9666245d40f7e5d0c2fd4cd7dcf6f4b6a4f07375e93fe"
+      },
+      {
+        "path": "phonics/audio/5d67991ae967994c-a4525b47760c.mp3",
+        "status": 200,
+        "bytes": 18016,
+        "sha256": "a4525b47760c485902bc2fe8f38d886fdcf57b63a7598854aab2fbfd4633fab4"
+      },
+      {
+        "path": "phonics/audio/512eea46ceb3921d-bd89c4ea6258.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "bd89c4ea6258bd1b3205ddf23d5056b912e6ccf7c3c92cf64c6eeb8a55a4658d"
+      },
+      {
+        "path": "phonics/audio/b52115ea553c55b7-3f0ba534f7f0.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "3f0ba534f7f05c444b30e6cee323e0dfa290f6804428f538de8699a4b0d687b5"
+      },
+      {
+        "path": "phonics/audio/05970e30555fc7bf-5e07fea9aeac.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "5e07fea9aeac1d340cf5f2bef18b227fa4d4909cf335ff7689378805a7861a30"
+      },
+      {
+        "path": "phonics/audio/8a2f8bcb5572a89a-18f53d579beb.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "18f53d579bebaa5c21d42e074b6e65415dd9641b32286c9134c4578a9a5cd5fa"
+      },
+      {
+        "path": "phonics/audio/e6640de835ad09fb-295a94f14d8e.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "295a94f14d8e3fb4afed78b475b7543148b41cb8bdcfebc6eafb6e2dc5d89d60"
+      },
+      {
+        "path": "phonics/audio/b474a99a2705e23c-fef1f4d0c54d.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "fef1f4d0c54d39dbddfb8842a54501d346932f2070d3274b35a63703f1b57ded"
+      },
+      {
+        "path": "phonics/audio/da4270e3735a3418-45c472cad4f8.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "45c472cad4f8736db12b2b51eb257ff1eb52ba4a036cde14957646f96552bfe3"
+      },
+      {
+        "path": "phonics/audio/73c4e3f56229e596-bde1c7c98ee4.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "bde1c7c98ee4731c458d5414b5c014b68bc3b3d207de4562b9ce474b875b5e79"
+      },
+      {
+        "path": "phonics/audio/a8e15df13c8b7451-a658070747cc.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "a658070747cc72a8eb90444bfdf12a6c7e6b71718829689e26fcb58149057980"
+      },
+      {
+        "path": "phonics/audio/59d8d2a956b39b66-023d1db90fea.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "023d1db90fea7de945aede9c3127c44269424b496e961a5b24a1ec32179c54fe"
+      },
+      {
+        "path": "phonics/audio/8a1eb3d0b3d5c74a-7380408465de.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "7380408465de4083851dd93fce693288ab59e797e583d0fde6cfd33611eeff79"
+      },
+      {
+        "path": "phonics/audio/c06b0cfe0cc5e900-1b9a3d83f156.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "1b9a3d83f1560da8de0a6f09267890f29310c3cf4d1d4ee3712f3347e564fbb3"
+      },
+      {
+        "path": "phonics/audio/17b669561c95d3ac-160bf99f1d29.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "160bf99f1d2955504ccddf99e749fcd8e16eacb37711f042c083cc6a368a9929"
+      },
+      {
+        "path": "phonics/audio/10c22bcf4c768b51-2165e05e125e.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "2165e05e125ed0e95bc5f8e20b965c29bde1f0e3e9e25d362d4666b926b93023"
+      },
+      {
+        "path": "phonics/audio/58190a849fa33f10-a269b37fa63d.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "a269b37fa63d33d771e95787f1679c0544397b0222db61e743a0ac515f4ef307"
+      },
+      {
+        "path": "phonics/audio/bcc649cfdb8cc557-8849c489a12f.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "8849c489a12f8e224a0e57ce7c0947271bedf1b2786b4c55cf3d2162e1b1baf2"
+      },
+      {
+        "path": "phonics/audio/776cb326ab0cd5f0-ef483d59ac29.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "ef483d59ac29082f179da1bd77cb858f97cc962a79284a1dd7650d5d06614545"
+      },
+      {
+        "path": "phonics/audio/ad95d5fa651ba86d-0156a1b6be54.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "0156a1b6be54bcac74a074a596302e86cecf8bd0ef9da0a1fc06387ffe5ab66b"
+      },
+      {
+        "path": "phonics/audio/75857a45899985be-21a21e40c92b.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "21a21e40c92b57936126765c949ca421dd0254579fc162ff8d6f26b9c9c4cfe1"
+      },
+      {
+        "path": "phonics/audio/a18b869b2e81c0c5-34b42fd27bb2.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "34b42fd27bb2c9c33b4c0da07a5ce67114bc7253dc54ce78e303368a5ebac492"
+      },
+      {
+        "path": "phonics/audio/00c4285274fcc5d6-996a12d3b804.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "996a12d3b8049ae92739547bec2a47e7ada9a84d3045d813253882e3d2fdbcb7"
+      },
+      {
+        "path": "phonics/audio/23eeb69c681dfdb8-4fae06d668ee.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "4fae06d668eed8dc6bca0761c7f6dc34bc602f0a0d4680e7d34013dc1824995b"
+      },
+      {
+        "path": "phonics/audio/073bf0218cae74ec-8f5641fd0cdc.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "8f5641fd0cdc29b226e58b9241b2f7faf41bfe700a5a2eef4d9fc45773413bba"
+      },
+      {
+        "path": "phonics/audio/e559f1a651605ce2-dd2073bfc1fa.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "dd2073bfc1fa8234e0cbfba4e969581795f26ceb50ff027d9b132255a4ac53a5"
+      },
+      {
+        "path": "phonics/audio/2998b3232d29e8dc-3c764763fac5.mp3",
+        "status": 200,
+        "bytes": 10911,
+        "sha256": "3c764763fac56f56203f229c120436fc64fba7e4977e3682e104ab83d189622e"
+      },
+      {
+        "path": "phonics/audio/d27608cca9b65f91-e886a0cf2436.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "e886a0cf24368c15e008b1d0d0874ec8891ff3f28935b9ab5f229c47466a900f"
+      },
+      {
+        "path": "phonics/audio/5480f08f35968440-efceb2fbb34c.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "efceb2fbb34c567ba844ba84f771d23f852ae542f0ce5c6349be4c656d60b786"
+      },
+      {
+        "path": "phonics/audio/770e607624d68926-32106c1b5351.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "32106c1b53510b82c628a5daa90b53adc045ab5687a8e5e3c6c62be8b28271c3"
+      },
+      {
+        "path": "phonics/audio/87765da6ccf06682-379feb99a8c2.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "379feb99a8c23047de76dbb0e35a6e66957af7e5c0a8040e78950fc22e65c38c"
+      },
+      {
+        "path": "phonics/audio/b4da13b0fdf693ea-63ef3e3b67c3.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "63ef3e3b67c3d33c47a3ebb3bbe4590379d89719c8b4de9b1a2e41e612796feb"
+      },
+      {
+        "path": "phonics/audio/cfd0f416fe148db8-34d3bdd81dec.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "34d3bdd81dec8f91ad8885b4a9a06dd0469a0b45d9d235ff46c26be4da1295c1"
+      },
+      {
+        "path": "phonics/audio/e02a753f0c060173-1bc1117339e5.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "1bc1117339e5c90b42c35776e757f156852ee881b0fa6cd549c1c156c96d55dc"
+      },
+      {
+        "path": "phonics/audio/1b001706a418bdfc-b2a770092edd.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "b2a770092edd68cdc978bdf6d800a7a96b7f53ecbf37dd6de52a007c45f3cee5"
+      },
+      {
+        "path": "phonics/audio/45a229d57d35d935-35931efce071.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "35931efce0713b9533d579f1acef0dfac587f945b435eb3733a396f06062a213"
+      },
+      {
+        "path": "phonics/audio/193c45b5281908d2-b0f85798c15c.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "b0f85798c15cbfea5f73dcbe2ce6f62ffd897d5f76f5e42ab5c65def756895e4"
+      },
+      {
+        "path": "phonics/audio/372f7e2fd2d01ce2-fa7bd08a9a0f.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "fa7bd08a9a0fd55ecb34411b10db4efe2b718e949f56c5f093c5d8d46247e821"
+      },
+      {
+        "path": "phonics/audio/9f2e6d33a3717ee8-4b4518a87175.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "4b4518a87175ed3d1f467184ffee2737733d98b70618e8224f376c40498f8b9d"
+      },
+      {
+        "path": "phonics/audio/0040953a08da7b8f-f0656b8036be.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "f0656b8036be4e42d07821f5d07714edc0148e1be3eba623ba9c87f89d2f9025"
+      },
+      {
+        "path": "phonics/audio/61e44d5587aac95a-236ae118df01.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "236ae118df01ffe8d619accff97c3e30247f708243ff65dde788974e00435688"
+      },
+      {
+        "path": "phonics/audio/c20dea4d876b5b8f-b7045d138f62.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "b7045d138f62ace0bc5119bc8bff7435aabe6013fefdac9396063945d53326c2"
+      },
+      {
+        "path": "phonics/audio/106a5842fc5fce6f-48699bc1b20b.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "48699bc1b20b3f74abe5759f4c851b9fcd5d76487bd452f6d110f6420677835f"
+      },
+      {
+        "path": "phonics/audio/fcec91509759ad99-5347ab30ced8.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "5347ab30ced8f6bd34457eb0d49125e18c6730ab41ea870e4c23054acaca9815"
+      },
+      {
+        "path": "phonics/audio/f77fcbb21ddefc82-d03120c04520.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "d03120c0452013d90222c93970914e3f804dd1af0666953b3a305d7fc8ec68f3"
+      },
+      {
+        "path": "phonics/audio/5a7cf4ac138054a8-0949cff7733b.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "0949cff7733b4118bfc440251c549e95297adab9c2031312217758422e506202"
+      },
+      {
+        "path": "phonics/audio/73c9c98668a34c54-5a4dd105a572.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "5a4dd105a57209f4d5893271b101ccab6ea46c9db3af893cc97d1515c4a9b107"
+      },
+      {
+        "path": "phonics/audio/4ea140588150773c-0dec0e95501d.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "0dec0e95501dfc5d9addfe56cda6b008d9ddf9f82160d452444ebddf54f1ae2a"
+      },
+      {
+        "path": "phonics/audio/87a0acaec00fa34a-bffc204b2af1.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "bffc204b2af1a06fee151808b62abf1699557e2f5c3bfabaa6c8575dd68f36c9"
+      },
+      {
+        "path": "phonics/audio/d950206bb018d969-da7a3a048cb1.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "da7a3a048cb156c5756fcff37af1aeabb545061a56172036a728e1b630777b6c"
+      },
+      {
+        "path": "phonics/audio/cc97e39f7ef7602f-fb5a3da6ebe9.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "fb5a3da6ebe96cd8385d714d3c2c09b58fc14ae5ad5e81c518fa06ec3e66d37e"
+      },
+      {
+        "path": "phonics/audio/de7d1b721a1e0632-9b9955a55415.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "9b9955a55415227cebdecb3dde84ff9449cc0234c62b07bfdd81c2dc9121d0ed"
+      },
+      {
+        "path": "phonics/audio/ae0a9ad3227c5420-9f3b7120578a.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "9f3b7120578af68f8dd9f398cde62ae8c5e10ecd75fce5c78af7b31b6638612a"
+      },
+      {
+        "path": "phonics/audio/53d8ba9090b329f4-29ad6764efcf.mp3",
+        "status": 200,
+        "bytes": 18016,
+        "sha256": "29ad6764efcf27552e79d2ad3a6f3da376eb8afbe5216bda5a781d7c56c14df2"
+      },
+      {
+        "path": "phonics/audio/582967534d0f909d-8584d3399803.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "8584d339980353bf7c3a43dc19c79d375566ace5b7944398477c89a33c143f67"
+      },
+      {
+        "path": "phonics/audio/106b086224a4d945-8504643470d3.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "8504643470d36e3f8d29fb3e0ce88442ef63fdd6f89608bb70226a4156db608a"
+      },
+      {
+        "path": "phonics/audio/fa51fd49abf67705-b3594e14a954.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "b3594e14a9544b38a66aae5bb136b484927a34648de5b00855893e982ef20e84"
+      },
+      {
+        "path": "phonics/audio/2ad8a7049d7c5511-eb81dbfa0278.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "eb81dbfa0278050f8146f4d92f75d1eb0fe8d26922ebbf4bdb40aa7c470934d8"
+      },
+      {
+        "path": "phonics/audio/ea103d6cb5c3fb3d-54ee41924c7a.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "54ee41924c7a4111974ef420ab5e4c7f3b638cb7191d0e70d301c3f0770ee1eb"
+      },
+      {
+        "path": "phonics/audio/0163f1eea7894350-19d61bf52de1.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "19d61bf52de161d587c1707516567e4a0a7d46859b37cbf0d32e746d56e4cd64"
+      },
+      {
+        "path": "phonics/audio/b2c66dfd45dd07f5-d1a9f7a003dc.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "d1a9f7a003dc6d896893afdc7a2a45463efc81ce7236b7dd554e6ca680a1b7e2"
+      },
+      {
+        "path": "phonics/audio/6ca7ea2feefc88ec-427eb8683df4.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "427eb8683df4bcfa896e9583c57c1141454b9de9d062048c0c1508d44170bab5"
+      },
+      {
+        "path": "phonics/audio/e81dfe69841ad2f7-156386a1011e.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "156386a1011e2b7fdc7596c5002e34768dc11db69c199cb3c15ba36318466250"
+      },
+      {
+        "path": "phonics/audio/3547cb112ac4489a-865f7a4665db.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "865f7a4665db6440a659e5f7b6355d0dd7b1979fc65712105a62c301f89bcce3"
+      },
+      {
+        "path": "phonics/audio/360cdbba702f5889-fccb16a0d5d5.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "fccb16a0d5d59d8ec785fee0b237c246f954b84a3ecb395ef7433775e15b12b5"
+      },
+      {
+        "path": "phonics/audio/9f91161f43433e49-7a1233895e97.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "7a1233895e978b75ddaf6bbd15255e1f4de34489337dbadac3295e51b3c4f51c"
+      },
+      {
+        "path": "phonics/audio/2c2c98e508882f26-cb65d974c36c.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "cb65d974c36c5b99044e41845fcd276f123c4a625b8fcd28d1d849e56e8b56bb"
+      },
+      {
+        "path": "phonics/audio/5ed0a10b951bfe15-b86baf809793.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "b86baf809793a21ddae84b026a8ed63dd9c95e92b9f48e90da5997852c5c3b58"
+      },
+      {
+        "path": "phonics/audio/aedf7b6928f455df-b58ec9b4f2fa.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "b58ec9b4f2fa82907d2dc5b17c1dc9c2042707bc4037d6954351be096041de7c"
+      },
+      {
+        "path": "phonics/audio/5654d4106d7025c2-217a240cfc82.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "217a240cfc822eb43917807143bf46adca6865b1d39260bfe617db6fe941d24e"
+      },
+      {
+        "path": "phonics/audio/5364b92e50b1944f-65dc119040b1.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "65dc119040b14d71071c6fb787e3ee15f19e2313253a6cbca01879958158c96a"
+      },
+      {
+        "path": "phonics/audio/5f7f735b817289db-907aba7cc23f.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "907aba7cc23f6b4d249b4dd40dc01156b07ffadfb81cffc64f278dfd31a4069e"
+      },
+      {
+        "path": "phonics/audio/99a7026172d42714-c688cf8af249.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "c688cf8af249725df3a3e6bdc41aaa11e10e11b553e36be4fffc9b0efdccab83"
+      },
+      {
+        "path": "phonics/audio/32713804516cb755-51b4f385f099.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "51b4f385f099cb80e12d863e3e693ff0b6d4fe5949d0987d492a3afdef3d8a93"
+      },
+      {
+        "path": "phonics/audio/a3c7f8cabebcea52-561ede0c8098.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "561ede0c8098a25c79c93870e4782e9962d188574dde6752d299fc8faf872c76"
+      },
+      {
+        "path": "phonics/audio/180ca01b95f0dfdd-624db8b8a17e.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "624db8b8a17e002788f9507213330bcdf59c06eb5ac9b337bbd199241e16f110"
+      },
+      {
+        "path": "phonics/audio/90c4aee254cb95ab-8a0fc89121f2.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "8a0fc89121f29d282a70217e800a6d89982acfaf61af13f2a567bc4842bd5160"
+      },
+      {
+        "path": "phonics/audio/76f75e6129fe3013-c5305d9f6fae.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "c5305d9f6faeb6c575f76e1ec5902f2bb7caf2924a3d071c20ac353c7adebd67"
+      },
+      {
+        "path": "phonics/audio/db1a60bbff220d09-b6eacecb7543.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "b6eacecb7543511e270252a9eb303ba75f08d3e140e9ef5eef892bf9edce2863"
+      },
+      {
+        "path": "phonics/audio/6c1ff09db3a73dc4-ae66606e23ef.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "ae66606e23efdf1484d7e8f5f272c423d0982407317690d7dc9b102740f62bc3"
+      },
+      {
+        "path": "phonics/audio/00d8d3f11739d2f3-b90e5e3b3f27.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "b90e5e3b3f27e1b781035fcffe7536045414ec8da2644628367555fccbdd51bd"
+      },
+      {
+        "path": "phonics/audio/6201eb4dccc956cc-752d56f46ce3.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "752d56f46ce39ad75e9c901373ce7a55b5d53e79cbbae2c97ad61b6ba98eb354"
+      },
+      {
+        "path": "phonics/audio/9e78b43ea00edcac-c2b700eb0ac1.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "c2b700eb0ac172928d06c5c3211b71101ae907c219e4ef58f9bacc74e4c5eb35"
+      },
+      {
+        "path": "phonics/audio/187897ce0afcf20b-3c824323ee19.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "3c824323ee19e2baa73ac4347f7a428be5f6283c2e24d7f81f777048ec5e8a5c"
+      },
+      {
+        "path": "phonics/audio/c1975e0cc7e0a31c-a182bffae479.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "a182bffae4797bf48e0fbadd9341a9cdefcb43d05fb3dbf6bcd5d856643f08c2"
+      },
+      {
+        "path": "phonics/audio/683a62ce15fbabb1-49e07a68cfd3.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "49e07a68cfd38d896eaa732e02c8d37e5049e047b8e4d6b086c0634d7a3e6df8"
+      },
+      {
+        "path": "phonics/audio/4137b01e139589b7-29d74d3f61ea.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "29d74d3f61ea978c43deb36b4243303298cca1b909e0de109d3abb9d92df10e6"
+      },
+      {
+        "path": "phonics/audio/038468518ad8122e-66918e067d0a.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "66918e067d0a1b5998561fa88b68356099b447f52055dda29d2466f4a140e2f4"
+      },
+      {
+        "path": "phonics/audio/5eda958e9ddee772-522cebdca59c.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "522cebdca59ce7c1cf817978f2097a50e036ce7c91f0bc8996bee9075d45e920"
+      },
+      {
+        "path": "phonics/audio/bf33e11fa2942227-3fa0fb283852.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "3fa0fb2838528c6df35455d80da7d8ddc4fdaee363532e07e2533fdc81451954"
+      },
+      {
+        "path": "phonics/audio/f14896d8de9dc788-c1ba3044c6d5.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "c1ba3044c6d505aa7653741b19f87e3398734f99d25760649966482b9e4f3bcb"
+      },
+      {
+        "path": "phonics/audio/be8dff00b0d468b2-75f5527f82ad.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "75f5527f82ad84b8fb8a2e1f9076f1563dc10ff5439e1418a865789f39fe5961"
+      },
+      {
+        "path": "phonics/audio/266d1c70a4cbe7cd-36cfdcc366ba.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "36cfdcc366ba3af3187295ba43a9e590495d480f1f758197df44b2419d90caf8"
+      },
+      {
+        "path": "phonics/audio/11507a0e2f5e69d5-faf60a5daa86.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "faf60a5daa867eaa3b083bb6db7a7e5a4e6ee68c7bb032fe50514b8471bdf622"
+      },
+      {
+        "path": "phonics/audio/176473d7313395b6-6747b6d6fc23.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "6747b6d6fc238af6fe7da306ba08ad95c6afe6b3172b6dd76f88ec063aa35284"
+      },
+      {
+        "path": "phonics/audio/9390298f3fb0c5b1-6fc8a4dd03f9.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "6fc8a4dd03f94966a797f31d04de3026e0ab2091df8b9e92185c6e7824c95294"
+      },
+      {
+        "path": "phonics/audio/d77e22123e64d3d8-9a13eae06772.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "9a13eae06772ff1e7365ccb00753f323fddf328e89c70e36bcfd6ac7b3a68a6a"
+      },
+      {
+        "path": "phonics/audio/254bb97b57f12e16-f0b370d292a3.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "f0b370d292a3ef7e7d2f3e34f787ec4710cb93ce2a742ec196b273b06f4e1e9f"
+      },
+      {
+        "path": "phonics/audio/ed5eb9a37e2d8231-21990e8f5b79.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "21990e8f5b7931656a5b50072ff1bb97ce57ab1d0bba6dad14c034ff0d9933df"
+      },
+      {
+        "path": "phonics/audio/0fd917a6c4f2cc68-015fabdfd212.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "015fabdfd2120e4689d7683be14923350519009ff45ea9e986c466e0dd8fc8b1"
+      },
+      {
+        "path": "phonics/audio/990cb8ebd0afb715-973c1dbdc79d.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "973c1dbdc79d32674abb850d3467fd3b84d0ccb533037b372f586888b63e1b9c"
+      },
+      {
+        "path": "phonics/audio/28391d3bc64ec15c-90b0b5063dbe.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "90b0b5063dbe04ca63290da79c985a18b8e81702a43cb6aabf72202d5f66823a"
+      },
+      {
+        "path": "phonics/audio/cf04119a706e2c45-0e20e1cad500.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "0e20e1cad500dca951446724d01928acd94ff8ec9d5f293dd0e7ef186eeab84a"
+      },
+      {
+        "path": "phonics/audio/ab7902bcbd91137e-80ea2012c410.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "80ea2012c410188f25abcf8ac80a13f2755efd131319d0a839bfaaf207eb929e"
+      },
+      {
+        "path": "phonics/audio/cba06b5736faf67e-55de2abf1f58.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "55de2abf1f580ff6ad7099723317ffb76ff9b97f1eb80719b970766957d2c263"
+      },
+      {
+        "path": "phonics/audio/b8d31e852725afb1-1bcb268ba9f7.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "1bcb268ba9f7861ce1d0567b68b04a32a8047362191901b760ff1dbc706f1a63"
+      },
+      {
+        "path": "phonics/audio/7692c3ad3540bb80-f6f3a43d4606.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "f6f3a43d46064e89caf50dba54d6d614a85c7e739b708a188bde9106d5d5b46c"
+      },
+      {
+        "path": "phonics/audio/d413f65286221536-c3246af54f47.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "c3246af54f47d1814b21925070c43d5fbe176c82173c4eb656530b725091a95c"
+      },
+      {
+        "path": "phonics/audio/a44853642e540dd7-3f054cfbbc2a.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "3f054cfbbc2a0de0135a8495f78b39ff6a9cb4119fdcea51bfded44807cc9979"
+      },
+      {
+        "path": "phonics/audio/5023662705d96810-7a4c5beafd65.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "7a4c5beafd65db1f7e9830966c55eda22a38c9696e357b6953cad3d5ca68c22f"
+      },
+      {
+        "path": "phonics/audio/a6556e4852e26390-5c87c2ce72ae.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "5c87c2ce72aedaca87274e361a73ae6c5b11dbab72dab06de6129e41cce5765f"
+      },
+      {
+        "path": "phonics/audio/5fb6a47e368e12e5-c7c9f5a58698.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "c7c9f5a586987c8e45d6e45a6e82bff3e7a88d5d41262a5507723ace9dc18b1a"
+      },
+      {
+        "path": "phonics/audio/88cb8a087b6e8ceb-53da8beac4c2.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "53da8beac4c205ced85b8b31482b2c9f6c82c59543e92978535313ddd19dabb6"
+      },
+      {
+        "path": "phonics/audio/84ccdf8a849ffbc9-c3d6a206bb65.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "c3d6a206bb65932302a811153702a66886bc1378a39fb39be7505b70170bb93f"
+      },
+      {
+        "path": "phonics/audio/a0af9f865bf637e6-6158b2060e1d.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "6158b2060e1de7e417c8b25505f110341ee7c3f243502203a4ba5f0bd492f64f"
+      },
+      {
+        "path": "phonics/audio/35cb9009af685e67-371af7304189.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "371af7304189ea1fa9a1df2c15318730857da5bdad75f6099791eca30fc1484a"
+      },
+      {
+        "path": "phonics/audio/063ad863fd7a0c5c-1cc792c3cd40.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "1cc792c3cd403d282f9543e1394761e2f356d03d826b8d456978b1dfcfb6d1d2"
+      },
+      {
+        "path": "phonics/audio/c2b2e5ddebda4dc3-06b9521f7051.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "06b9521f705122b915ced2ffc1ec7c32318aed6c19c31dec55f24bdcccd3b0ee"
+      },
+      {
+        "path": "phonics/audio/36dfba10c11eb22c-741353a8a188.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "741353a8a188df97b90f1bf6102e985e301af38d32fd5141dd205e35af0d2e55"
+      },
+      {
+        "path": "phonics/audio/2f9bd590d4cbdb08-b21890e9ef89.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "b21890e9ef8962efce16a6567e6a3a86df596e41a649d67299c4709034a1eb76"
+      },
+      {
+        "path": "phonics/audio/8ce33c6c86e991f7-68ea966dcc5f.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "68ea966dcc5ff464f628c93040df11646e517e977adcc58f16cd2ccddec53dd2"
+      },
+      {
+        "path": "phonics/audio/5887e718dea1e7c3-ca4be6c24482.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "ca4be6c244822a89a264540aee6ef1bca0ef9cc94c7cabe99b11a6c1589b03ba"
+      },
+      {
+        "path": "phonics/audio/f0b8c9d84dd2b877-b63791b7148f.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "b63791b7148f751347432346490f7677a0d8b7c5caddf8169dedde2dcf8dc826"
+      },
+      {
+        "path": "phonics/audio/2eb8272d48d13634-cf1f3c9de2f4.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "cf1f3c9de2f4396268b7a7af531d4add59a59e0f69728e07c5cf3fa0071eef98"
+      },
+      {
+        "path": "phonics/audio/fed5038bf2f427ab-e74037169ea8.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "e74037169ea8bba5a5ef2a3c0b5f4fae827c814ed98da071838a1cc2bb8fa76c"
+      },
+      {
+        "path": "phonics/audio/18496197305510df-df14a04b075f.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "df14a04b075fa737a2fbd6ce24d3cfd5afab6eddfe1bb33a05a008bffc760f74"
+      },
+      {
+        "path": "phonics/audio/b88b11c0968741f0-10d9be6cdb32.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "10d9be6cdb3285278b573f97695c83ed1c766073cfe1051b0c77a42c55fe8e3f"
+      },
+      {
+        "path": "phonics/audio/1c7448ab5ad68636-ecb445c7498d.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "ecb445c7498dfdbd5eeaacdcabfe42a79e551b1aa735e31ebaa48774e98dd6a0"
+      },
+      {
+        "path": "phonics/audio/e68237473d40e76e-13490bfb726e.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "13490bfb726e4cb7759a1fea42e7a1d39a14df40131a94d28bb3666cd066aa90"
+      },
+      {
+        "path": "phonics/audio/e15348ae477f16c0-5f6ccc51e46f.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "5f6ccc51e46f8d21d1bece6884792b49458ec280211f89b034c46f7207758f59"
+      },
+      {
+        "path": "phonics/audio/d2b12197578af3b0-b61eab8f5698.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "b61eab8f56989f30645fb30f0f6956910d8e8a0815564fb16cba802ff3212d48"
+      },
+      {
+        "path": "phonics/audio/b77f399d988cdaef-ad3fd4416f3c.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "ad3fd4416f3c475a0799d0d6217ee426e416c1bf8c767963c9a8af5e46c53e97"
+      },
+      {
+        "path": "phonics/audio/319b44c570a417ff-35891e3e5873.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "35891e3e5873984dbb51ce8828dbc81d6755b1f6e3a82ced4cde54b862790897"
+      },
+      {
+        "path": "phonics/audio/d9325e0936a5cb48-84faa00a0bc8.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "84faa00a0bc8e1b4a99296bbf1f023f94f4a46e9554dd769f345125109aae68a"
+      },
+      {
+        "path": "phonics/audio/c8fc6bf296faa18d-9316c9fc06b6.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "9316c9fc06b6c2c2a432f0a4002328e6766060c67356c04d2f44f736e0e7ac6f"
+      },
+      {
+        "path": "phonics/audio/ed4561f685f13353-2b6a832c386d.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "2b6a832c386d0e2e02863ccb73286711e4786f7f4461f8c7c4996977bc5b37ce"
+      },
+      {
+        "path": "phonics/audio/52774637822c236d-da9e04845a18.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "da9e04845a180f685c52d376b8faeb7ede2531e841025f6cb8436443316de0aa"
+      },
+      {
+        "path": "phonics/audio/35379d9c009e290d-e01ee77b05d7.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "e01ee77b05d7109c7de29547e9ac8fe3aecabaf5e3dbefd0cf6d3b54bee3b19b"
+      },
+      {
+        "path": "phonics/audio/27042f4e6eca7d0b-874fe2df0517.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "874fe2df05176fd5e3ba468efff5fc4845fb4d127b789d580e7d9a3bd66b82be"
+      },
+      {
+        "path": "phonics/audio/16b974583155fdcb-9e63d53a3bd5.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "9e63d53a3bd5716b0368e522a4c2c42946dafae0432430aba03a89a1bd9add01"
+      },
+      {
+        "path": "phonics/audio/350a770c0ec9f353-ebd227a18947.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "ebd227a189474336e26feb1faca1cf4a7600eab19d28ea6b4ef1193276a13b2b"
+      },
+      {
+        "path": "phonics/audio/a4e3c20a32776660-72a5458bd113.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "72a5458bd11343bbf8f5fd8e24de5e39fd4d9c8571de93053eff43ba0f7894b6"
+      },
+      {
+        "path": "phonics/audio/618d663af0f1ec88-4ed1132d3d52.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "4ed1132d3d526dfac3d661a1240b947dc0a76c965a9c2e34a1d58e7035178793"
+      },
+      {
+        "path": "phonics/audio/c6e2f6c6afd8fd98-d7b7827da724.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "d7b7827da724a9c35538a77bf6045dcae29445ff520af1afe899f97a88637e88"
+      },
+      {
+        "path": "phonics/audio/acba25512100f80b-bde5c30f2125.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "bde5c30f21254bf3d345f2b87ba6aa0d4a1d32206c15150cfeda9ae7fec874b7"
+      },
+      {
+        "path": "phonics/audio/fb46c79b7eb7af17-5b60206095b5.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "5b60206095b5d64b7b4a0493b33acaac30aafa7f3c715c84cf7e9502fcc0a457"
+      },
+      {
+        "path": "phonics/audio/d0350a6064de8404-0e2b9b00e847.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "0e2b9b00e847f32a21706c583271f9ed529755678219a204fae7cfa4e4509299"
+      },
+      {
+        "path": "phonics/audio/339efeab70b4cc6e-ab9527b8af51.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "ab9527b8af5105688899c88de301ef9a372d2542a0e5ce1558cb37e0c3fd3766"
+      },
+      {
+        "path": "phonics/audio/e5d5b971139eefeb-f66b161ac375.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "f66b161ac375760d3805f6fb313eb7b658f78c8e23bedf60d1e5f2a3cb77cf41"
+      },
+      {
+        "path": "phonics/audio/b883197c66c95cbb-e88095733f2a.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "e88095733f2a673994afe78fb97e76fd4772a2670818bc852ac14479e57af887"
+      },
+      {
+        "path": "phonics/audio/8d9001d32c6a703d-2d9587efa0e3.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "2d9587efa0e3a93d30e3eec12594ab332e5c769129521d56626f3a837257882c"
+      },
+      {
+        "path": "phonics/audio/f9b0078b5df596d2-0cba154ad2bc.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "0cba154ad2bcbb407b8898aacabe5a14fde7ca6c0bfd6bb649f1d61db909f9c7"
+      },
+      {
+        "path": "phonics/audio/1c6333509debf060-2bf0a8196f12.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "2bf0a8196f120ea9fdf6cedaeb5c40dedc92072e5b01814a45e6dca010497411"
+      },
+      {
+        "path": "phonics/audio/2a1db49adbe0e828-3b9330af4fbf.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "3b9330af4fbfcecf1d7da81d2d58b255afa192485e0b2c6b99d196001a63b665"
+      },
+      {
+        "path": "phonics/audio/70dc3204070b0619-f26ac1e004da.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "f26ac1e004daa82f5e65bde07492a2854d1fd5acb348ab6236550b12592347a9"
+      },
+      {
+        "path": "phonics/audio/78cde64c3e47f2cb-cbbcddc9c46b.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "cbbcddc9c46b9e17c6b3a0a92e6827da0ac295287b5e4e5b13da9ab3dc9f4b62"
+      },
+      {
+        "path": "phonics/audio/6c126e81fa8dc29d-03978d7fe6ee.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "03978d7fe6ee90d260ad15649fbe808d3da9846ed1dc43c85210920f28cdf72a"
+      },
+      {
+        "path": "phonics/audio/0afa5bb5d5f17879-4218210dcb7d.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "4218210dcb7d0235bc1dcc17e0312992b2fb0a9088b3ae43c59cc12f96bbd7db"
+      },
+      {
+        "path": "phonics/audio/e8c459c31a6ba1f5-bb756e69a214.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "bb756e69a214495df9d43b8a9b59a9e658c8aaeb67ad3006c29a55d66b14c15a"
+      },
+      {
+        "path": "phonics/audio/81db8ebbbbc69c6c-b6e57db655e4.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "b6e57db655e4c57002c65211cedb09dcb5c1771b612e80515132d121e99e8ed9"
+      },
+      {
+        "path": "phonics/audio/fa1eadc4c6995667-a4f44e93d315.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "a4f44e93d315a93ee6a0cfc12becf1363852a1039e1d1bdf1a0053753286735b"
+      },
+      {
+        "path": "phonics/audio/04b1639a196cd4b7-ec9c2bd892ad.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "ec9c2bd892ad76104245c95728d8e9a1c5a57fd6c7e6206ab2d114c2d2595568"
+      },
+      {
+        "path": "phonics/audio/c0f1779c16d26bac-6f7012366b46.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "6f7012366b46335bb0d5379d96f9f8cfb1a377af518a4f2a016423280666e22c"
+      },
+      {
+        "path": "phonics/audio/f5f445528f4a0134-e256b83af93f.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "e256b83af93f63d8eb57775b308cc9aa96e833d362fe1e2add2f7f2a86e777f7"
+      },
+      {
+        "path": "phonics/audio/e93d59a02163f846-164a93e34c08.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "164a93e34c08514b1dd5d6d390250e42c641f99ae0a2fc6294a2825349ce31a7"
+      },
+      {
+        "path": "phonics/audio/a6b46dd0d1ae5e86-8d401573ada7.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "8d401573ada7e8f02a5f340dc7822a98b2e3d003d5ea7f12b7147b5d19bcca21"
+      },
+      {
+        "path": "phonics/audio/3f49dbbfe051cb20-de617d61774a.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "de617d61774aacfa2e867a6346ac9e375e8fb057dadb2066223a59024f3c3a5f"
+      },
+      {
+        "path": "phonics/audio/54f843159442a607-f99ac301ab44.mp3",
+        "status": 200,
+        "bytes": 17598,
+        "sha256": "f99ac301ab44f3435d7ec3e0c13638888cb0d6d5cb953f6855aabda35b74b15d"
+      },
+      {
+        "path": "phonics/audio/b6e8a050a73ce492-bbb410f80eb4.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "bbb410f80eb48194398b040e34d8b1a839683be9da794b374eca1329d50d81ab"
+      },
+      {
+        "path": "phonics/audio/909802b269dee093-9b04ed296e37.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "9b04ed296e37f48e5370f2616bc2eee953178b5989b199a108ae85aa3212741d"
+      },
+      {
+        "path": "phonics/audio/1562206543da7641-d6a484cffd96.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "d6a484cffd9636c75264bedfc056a26f7d2a4495849ec9ca9399ebbae92b63bd"
+      },
+      {
+        "path": "phonics/audio/525eca1d5089dbdc-2559698ca40b.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "2559698ca40b9062679bc6e24bce25b2ddaf5342a4ca43c21d6fdd4abae59d9d"
+      },
+      {
+        "path": "phonics/audio/39be15289c7942a8-51a7ea1b6f2e.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "51a7ea1b6f2e89d1b291b651820c121150e932b5feafb79d67234238687485c0"
+      },
+      {
+        "path": "phonics/audio/9fdaa51991822b2e-09898920f3ea.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "09898920f3ea09fe883a5066643e73897dc89ee3b151f22ec8030e0519ccf1e4"
+      },
+      {
+        "path": "phonics/audio/aaa84acb9758cff1-8dfec3b6dd13.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "8dfec3b6dd1314b34fba4294368bf24e7b1a9910402a44fc6bd8b975b7071049"
+      },
+      {
+        "path": "phonics/audio/3e64cc41cf8e07b4-2b278505f99b.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "2b278505f99b82d918d90d725676cb41eb7fc5cfef702377726e1dc6b058c0bc"
+      },
+      {
+        "path": "phonics/audio/94e8566ddfc123ed-93b0034d138f.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "93b0034d138ffa063f5cdb8fb3ff751f9d468f4d99ba16f439b9451983bea1d7"
+      },
+      {
+        "path": "phonics/audio/dc3d50da8dac041f-374cf606edf7.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "374cf606edf76f31b980fcf291b0baa6c8b7edb48344b6845f2126a2650a02e0"
+      },
+      {
+        "path": "phonics/audio/2101348579746d02-e61398695851.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "e61398695851910b958884e41156fc21f121c2f99032f5eb8135f5add042785f"
+      },
+      {
+        "path": "phonics/audio/96cbf33afdf16e94-3da67a1fc2fa.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "3da67a1fc2fa1e93afd3ee09249df5d1812041d36c7fb2eeb79467e13874807c"
+      },
+      {
+        "path": "phonics/audio/8322e87d24582952-604b63869496.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "604b63869496e0bed95ba7fc1a9f2433e77e8c633abb4c27efe70bf51123c6fa"
+      },
+      {
+        "path": "phonics/audio/dca83e717b1f64eb-ae241d2cf33a.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "ae241d2cf33af0380f76b985454b35d239165037aaa2629881f67345384add4c"
+      },
+      {
+        "path": "phonics/audio/3e3e491db5e709aa-fb28c4415b75.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "fb28c4415b759e860eb02994acdb4599b61318882ee0755248256bebe7932140"
+      },
+      {
+        "path": "phonics/audio/27756f050e14a1cb-56cb346fbb8e.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "56cb346fbb8e6d3b04725f775d61c410e2f8c7b71ab21a6eaffa49b34372a21a"
+      },
+      {
+        "path": "phonics/audio/0a7d003fcf77f7fb-fb6dbc934ead.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "fb6dbc934eaddf2151ba2e30711ea6822a115797a4f4ff93772db7248eb263da"
+      },
+      {
+        "path": "phonics/audio/985b7b1aa0fa2df1-183effe2d56f.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "183effe2d56f4d142faf38dd48cac2f7ddc4d49fc94b4795e37b7a8f80601309"
+      },
+      {
+        "path": "phonics/audio/0c62f876ef1dea83-29e1cce5848c.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "29e1cce5848c47b3878cec44be9f5fdcdf1d305b280df9e58d7695fab5d192b2"
+      },
+      {
+        "path": "phonics/audio/d1905cf90af29a5a-f6ada8647e85.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "f6ada8647e854691984bd79eb97a36ad3b37474becf46518857e38fe92218d1f"
+      },
+      {
+        "path": "phonics/audio/241daf2e753a6a2f-3f631dcfe5b3.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "3f631dcfe5b3823ca0c6a92c87dd36879c79ef03f466f72d4401447c8279c7cb"
+      },
+      {
+        "path": "phonics/audio/7383711c1b05e72a-058aaee491e1.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "058aaee491e11b4e72ecf627bd7e52cf1f46e9bdd54a8fffb217ac806f2c239c"
+      },
+      {
+        "path": "phonics/audio/8e7fc0236af43df9-27f60d77d530.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "27f60d77d530f6c08446e53ce0a47198be1839aeb7a2fa33d556b0457f01d1b7"
+      },
+      {
+        "path": "phonics/audio/b9776d7ddf459c9a-281948096af9.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "281948096af9e40f0ce0e93d49c01d1ee9fad6ac71c5785ce0bacf7146994bd9"
+      },
+      {
+        "path": "phonics/audio/c9a8dc336964db7f-da001cf6b0e0.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "da001cf6b0e0582320583bfecba9f25fddbd841eea6e4b9b5ee439edba63d520"
+      },
+      {
+        "path": "phonics/audio/21af6f1260f927f5-4d2c4f36df4c.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "4d2c4f36df4c5f2cc8f54c14e9f358ff81d4314b49336935554a06b539124183"
+      },
+      {
+        "path": "phonics/audio/e244f187f696561d-7a4825e05d8d.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "7a4825e05d8d1457b092868aae6f51033d061d3e8a6beb94c7c62b50084ae072"
+      },
+      {
+        "path": "phonics/audio/b808e156d18d1cec-ac3f7c432d8b.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "ac3f7c432d8b702ce7d24e60359a8cbe2a63248728944db12b8d4c273522563c"
+      },
+      {
+        "path": "phonics/audio/151e58a831306903-e9912d37e8cf.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "e9912d37e8cfb9cd973179ef7e63e514f9bc6fc30a1fab0c0c99babb71c75fb9"
+      },
+      {
+        "path": "phonics/audio/7b1291e7ed8a6f3e-bec92a85588e.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "bec92a85588e9ebfc10593c0f0cb3eba95ac0765aa0e6da0f0468f1adf244b11"
+      },
+      {
+        "path": "phonics/audio/1a0dc227b5aa78f8-efb1d8259368.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "efb1d82593688aeaeb7262c0d50c3d1d755f6224b298d73b5b4c48abd8f1ecfc"
+      },
+      {
+        "path": "phonics/audio/8b5b9db0c13db242-3202ec9477f6.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "3202ec9477f603bfa61ece180e53de8efc92d03f65977e0b6baecd1d16935dc4"
+      },
+      {
+        "path": "phonics/audio/9c6725dc269a48ce-a824bf409fb5.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "a824bf409fb5369b809d61c03daa0718813dd223ee565acbccb3f11ba1b27e97"
+      },
+      {
+        "path": "phonics/audio/05eeec2d70845694-67f4afafafbc.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "67f4afafafbc8951754fb05ef8d6f9734611024ecb098f0339197a51bd55e088"
+      },
+      {
+        "path": "phonics/audio/1b59efc442ea4d47-ce47f56d129b.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "ce47f56d129b3e4d390da7efcbca62ff0a71005b15693b0a5da0313b3c1cfa59"
+      },
+      {
+        "path": "phonics/audio/f15c16b99f82d820-942b054550d9.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "942b054550d9efea4128c1f3310bd88e2f81ea5efecbb74343672da98caf6e73"
+      },
+      {
+        "path": "phonics/audio/8950abfda7b72763-3a44d67a3951.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "3a44d67a3951e58629111aed24ee75b5d60e5d6812bb2fa31821ebb93df78b19"
+      },
+      {
+        "path": "phonics/audio/c405760daf9bc32b-8c7fd446a680.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "8c7fd446a680ef1c574f44e67285a278f3a7bba9c65df9db035c348d47aee32c"
+      },
+      {
+        "path": "phonics/audio/663ea1bfffe5038f-dc7541f67dea.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "dc7541f67dea36f294949d3289d409c60da7d030afc8116ed49a80ad9f8fb4f0"
+      },
+      {
+        "path": "phonics/audio/94c05f1c45a1d1a9-d23877c877a5.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "d23877c877a5ddd69b45a5830e2d12568128187a08b7d3d9137e4d670aa90e71"
+      },
+      {
+        "path": "phonics/audio/e0a6230e370d20de-b9c461b65684.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "b9c461b6568413d38bb9b262199c9fd67be7352abea8d565b9c073085614005d"
+      },
+      {
+        "path": "phonics/audio/2f2cd146e5e4c62f-0f70580eb77b.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "0f70580eb77b4daddf03e76c67dfd8c3d4dbd594686d04eaf3285a67d5a7db49"
+      },
+      {
+        "path": "phonics/audio/ad2015263f339bff-52d107499a13.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "52d107499a13f7b64be3e75e4c0e2e15d6e8c73205c53ba46ea87daf26686398"
+      },
+      {
+        "path": "phonics/audio/74ae323f9b9abcff-2bcd58e72817.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "2bcd58e72817a3a7f189d9a03c962fa4d36b05a15e8539c16531b7c449734427"
+      },
+      {
+        "path": "phonics/audio/dc9c5edb8b2d479e-de71c1009d33.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "de71c1009d3318b50fc0b3414ae800bec0bc4596174e5bf6ccde2d87423e5d05"
+      },
+      {
+        "path": "phonics/audio/9b473845f684444f-c91fc0847637.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "c91fc08476378048f9e82f09cff846c3ee738b7cbf49d04bc67d2053a4451994"
+      },
+      {
+        "path": "phonics/audio/3fc4ccfe745870e2-7b4c9253bf60.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "7b4c9253bf60002300fad32f64dbda7da5c49142ab33e2065438fd16b3ef491d"
+      },
+      {
+        "path": "phonics/audio/49e7635616e04250-f03ab4393294.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "f03ab4393294e819a79ae510eccf2d2ea46f946d4ef2974a6991a356764472d4"
+      },
+      {
+        "path": "phonics/audio/75a288c0d6898c5f-4ba6dfc3797d.mp3",
+        "status": 200,
+        "bytes": 9239,
+        "sha256": "4ba6dfc3797d4edcf76dbd22b3a4fb09fc0327696b5c856aeff83d376ba40290"
+      },
+      {
+        "path": "phonics/audio/79adb2a2fce5c6ba-92b13e3e6ed0.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "92b13e3e6ed01754e2b93efd3755d9c3513a1828dc7fba5a260eed7500937050"
+      },
+      {
+        "path": "phonics/audio/51391bf0ab33e827-1b5692f668c8.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "1b5692f668c8203a3d60df21cf43edc6c420162dae7ba922375413c2b3a9d316"
+      },
+      {
+        "path": "phonics/audio/4d8aaa64f68587b1-156a768a16a9.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "156a768a16a91917594f8ef9bbda34fdacd10287e69b84e8f11d71ee16fbc824"
+      },
+      {
+        "path": "phonics/audio/b63b99f6383ba713-120545c864de.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "120545c864de2f2aad239527b00bdb062cc9a8e2ddc28d6695de2f8043a4ad0d"
+      },
+      {
+        "path": "phonics/audio/0f4168490e38b844-a09192f99246.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "a09192f992468ca11776cf36476779ddef416442607b65f02d1c1d03a626c29c"
+      },
+      {
+        "path": "phonics/audio/44c5e7071f3a75a2-0da8efe30e72.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "0da8efe30e72a6701a2d505b94000cc24dcfb784e3985ec59051fa6e2768323a"
+      },
+      {
+        "path": "phonics/audio/dc7c811b9561739d-231678a4e1f9.mp3",
+        "status": 200,
+        "bytes": 13000,
+        "sha256": "231678a4e1f9c2f9f40b952650a4977f77cf3fc7e640e0bcc983152e8441bbc3"
+      },
+      {
+        "path": "phonics/audio/bd7e83102fa3e6aa-d0ab6b4313b0.mp3",
+        "status": 200,
+        "bytes": 11328,
+        "sha256": "d0ab6b4313b04968c910bc55169020ab4da365ba84404ec9df47d3bf14974ac1"
+      },
+      {
+        "path": "phonics/audio/018fa96a44715c90-34b0491c093a.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "34b0491c093a2e51efe13fb3e7467edbfcee64cc969377548ad9465f702e4c6a"
+      },
+      {
+        "path": "phonics/audio/5d5766cf2d787016-d47c05d4f1f7.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "d47c05d4f1f7cd3643ebfd368ad7024a9890da1c50e6f04ff0bf0efead6f1f2f"
+      },
+      {
+        "path": "phonics/audio/c047caef95b4d3e8-18e746559026.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "18e74655902696bcbfe77d9137afd713e24563186bbc7f6c696f9237c6d385fd"
+      },
+      {
+        "path": "phonics/audio/091e606752615c91-3bb1df67211b.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "3bb1df67211b19915d797509191b4c8dd2ba898cc13f363520d4630e7922f1c4"
+      },
+      {
+        "path": "phonics/audio/0695b563acde461f-f9590806e94c.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "f9590806e94cce64c0dc03ecd9e2a0d377a83f2a98a7717de03b062587873b3c"
+      },
+      {
+        "path": "phonics/audio/1216b2a88975f9d3-2f473a116a03.mp3",
+        "status": 200,
+        "bytes": 16762,
+        "sha256": "2f473a116a0360607d8ad6d0802d4e7ebb43a51c7e78dd38f78b8af0e2d1dcf5"
+      },
+      {
+        "path": "phonics/audio/4e7d92dde35af0f2-6408a2b73a7f.mp3",
+        "status": 200,
+        "bytes": 15926,
+        "sha256": "6408a2b73a7f1319180a5c41de3b437161b825b82b6e67f6cad1cadef73d0f62"
+      },
+      {
+        "path": "phonics/audio/93f6e11d9ce3e407-8a3e74f39dd8.mp3",
+        "status": 200,
+        "bytes": 12164,
+        "sha256": "8a3e74f39dd880403baef0a013616ec1825501534284e24b9ab49d47bbe16350"
+      },
+      {
+        "path": "phonics/audio/c6323a2117013ed6-7ca7572ddbd2.mp3",
+        "status": 200,
+        "bytes": 13836,
+        "sha256": "7ca7572ddbd21295eb9c6087c5784399c4eacdeaf6fbb81badd0ce821b8a245a"
+      },
+      {
+        "path": "phonics/audio/8a798890fe938171-51e0999a9368.mp3",
+        "status": 200,
+        "bytes": 14254,
+        "sha256": "51e0999a9368f0a8bdb7d5c450654cbdb95d78903ede8c638e617c5587e30157"
+      },
+      {
+        "path": "index.html",
+        "status": 200,
+        "bytes": 1767,
+        "sha256": "41f385ac1fa2a9b384197b4aa269eeff4068e93d5c4084af7a70f7f096d191f4"
+      },
+      {
+        "path": "app.js",
+        "status": 200,
+        "bytes": 546727,
+        "sha256": "5bc39857bcda416bb8b78a5a905833c8ec19af994a6b3b15e97c7995f4bf7a4a"
+      },
+      {
+        "path": "config.js",
+        "status": 200,
+        "bytes": 607,
+        "sha256": "fdb76088dbfbb31c8b4a1e0981e70476d9048d6320a68d95520722f5f9a4386e"
+      },
+      {
+        "path": "sw.js",
+        "status": 200,
+        "bytes": 2537,
+        "sha256": "092ec50d1bb126ba1132eebad8ed2e0b6be926c564f3b365f77dc269f4fc1504"
+      },
+      {
+        "path": "manifest.json",
+        "status": 200,
+        "bytes": 561,
+        "sha256": "1f3e93f7b6fffc2f75471c1d9a9044f834cc29d1bee67b132ae93636f2281af7"
+      }
+    ],
+    "browserChecks": {
+      "liveThroughPlayback": {
+        "readyState": 4,
+        "currentTimeObserved": 0.027262,
+        "error": null
+      },
+      "localOnlinePlayback": [
+        "through",
+        "boot",
+        "nudged"
+      ],
+      "localOfflinePlayback": "would",
+      "offlineMethod": "Saved all assets via the reader UI, stopped the local server, reloaded and played a word.",
+      "saveCompatibility": "Existing save key retained; local page 17 survived reload. Live reader opened its existing page and saved words.",
+      "physicalIPadSafariTested": false,
+      "fullHumanPronunciationReview": false
+    }
   }
 }
