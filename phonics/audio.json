@@ -3,8 +3,8 @@
   "voice": "George, British English",
   "voiceId": "JBFqnCBsd6RMkjVDRZzb",
   "model": "eleven_multilingual_v2",
-  "storyWordCount": 264,
-  "recordedStoryWords": 264,
+  "storyWordCount": 265,
+  "recordedStoryWords": 265,
   "missingStoryWords": [],
   "words": {
     "a": {
@@ -121,6 +121,21 @@
       "source": "ElevenLabs API",
       "text": "Another.",
       "credits": 4.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "apple": {
+      "file": "audio/3a7bd3e2360a3d29-8d707bb43a36.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "8d707bb43a3699182542e7382c38ca4de13247362f307e3164387c2b616855d0",
+      "source": "ElevenLabs API",
+      "text": "Apple.",
+      "credits": 3.0,
       "voiceSettings": {
         "stability": 0.75,
         "similarity_boost": 0.75,
@@ -247,6 +262,21 @@
         "speed": 0.85
       }
     },
+    "banana": {
+      "file": "audio/b493d48364afe44d-e2e9f6bec8a5.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "e2e9f6bec8a5db949a09cf3fb059bbfc3f2d13e009ffc7c801e031e2d7f5b408",
+      "source": "ElevenLabs API",
+      "text": "Banana.",
+      "credits": 4.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
     "bath": {
       "file": "audio/0de8ab6315488d30-e5aded27e8de.mp3",
       "voice": "George, British English",
@@ -286,6 +316,21 @@
       "source": "ElevenLabs API",
       "text": "Bed.",
       "credits": 2.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "before": {
+      "file": "audio/6db7d803e74f1ffa-d8847c705175.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "d8847c705175080e3971eae164d0972815449623c351f430775243762955c68d",
+      "source": "ElevenLabs API",
+      "text": "Before.",
+      "credits": 4.0,
       "voiceSettings": {
         "stability": 0.75,
         "similarity_boost": 0.75,
@@ -352,6 +397,21 @@
         "speed": 0.85
       }
     },
+    "bird": {
+      "file": "audio/7a5179eecc0fe187-432de1db9069.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "432de1db906959d7c4dd0c03ec9921200ccf6e457f9ce099fe6f615e7c2002ac",
+      "source": "ElevenLabs API",
+      "text": "Bird.",
+      "credits": 3.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
     "bit": {
       "file": "audio/d0013c2e0a387e4c-bce6f47b2486.mp3",
       "voice": "George, British English",
@@ -405,6 +465,21 @@
       "sha256": "03df45f2ffc292392c18dc90cf76b4ada5893c3ef708f17e4c69a61100af1bd5",
       "source": "ElevenLabs API",
       "text": "Boil.",
+      "credits": 3.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "book": {
+      "file": "audio/92719fe0cf8cd515-f1b83d7bbf9e.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "f1b83d7bbf9ed424160923070815acaf7d51d22c431d4fee73e97bcb597fb4ef",
+      "source": "ElevenLabs API",
+      "text": "Book.",
       "credits": 3.0,
       "voiceSettings": {
         "stability": 0.75,
@@ -637,12 +712,42 @@
         "speed": 0.85
       }
     },
-    "close": {
-      "file": "audio/310ff200149b44a3-463867b0b49a.mp3",
+    "chair": {
+      "file": "audio/3d7eb3d3dab17ee5-a1c12a8dec9b.mp3",
       "voice": "George, British English",
       "voiceId": "JBFqnCBsd6RMkjVDRZzb",
       "model": "eleven_multilingual_v2",
-      "sha256": "463867b0b49aa23adba993bbf4e2927dd724d1a93d97e9b9b65959c901ee8731",
+      "sha256": "a1c12a8dec9b0f774335e773ede5535d7b111dcc6ce84007b44ba577fadf2dda",
+      "source": "ElevenLabs API",
+      "text": "Chair.",
+      "credits": 3.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "cheese": {
+      "file": "audio/873ac9ffea4dd04f-77ef00022ee1.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "77ef00022ee1d667c3e83d33870db0b17d4cfbbd4ef96274958a1207b273ecef",
+      "source": "ElevenLabs API",
+      "text": "Cheese.",
+      "credits": 4.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "close": {
+      "file": "audio/310ff200149b44a3-698cfeedf35b.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "698cfeedf35b59d691683b40a28769d2a78e70623ce337ae7b43db63fc3460b6",
       "source": "ElevenLabs API",
       "text": "Close.",
       "credits": 3.0,
@@ -650,6 +755,9 @@
         "stability": 0.75,
         "similarity_boost": 0.75,
         "speed": 0.85
+      },
+      "context": {
+        "previous_text": "Stay "
       }
     },
     "cold": {
@@ -661,6 +769,21 @@
       "source": "ElevenLabs API",
       "text": "Cold.",
       "credits": 3.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "cow": {
+      "file": "audio/beb134754910a4b4-806c3dcb1c7b.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "806c3dcb1c7ba697fee4231be76c885ecd4d3fb44a87596e049b9c5755b8e164",
+      "source": "ElevenLabs API",
+      "text": "Cow.",
+      "credits": 2.0,
       "voiceSettings": {
         "stability": 0.75,
         "similarity_boost": 0.75,
@@ -751,6 +874,21 @@
       "source": "ElevenLabs API",
       "text": "Cup.",
       "credits": 2.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "cure": {
+      "file": "audio/15152e5a69166f09-99ec7ff1e817.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "99ec7ff1e8176c02295ee2e532d6e32ff658152f85bfde053f11e2814108834d",
+      "source": "ElevenLabs API",
+      "text": "Cure.",
+      "credits": 3.0,
       "voiceSettings": {
         "stability": 0.75,
         "similarity_boost": 0.75,
@@ -961,6 +1099,36 @@
       "source": "ElevenLabs API",
       "text": "Each.",
       "credits": 3.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "ear": {
+      "file": "audio/3c6a36b640fceaa8-455ff4397c94.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "455ff4397c94de1ec1883e43fda67a67f13ca0fa39a5ebc68782a5cf09406b07",
+      "source": "ElevenLabs API",
+      "text": "Ear.",
+      "credits": 2.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "egg": {
+      "file": "audio/34707c3f40dfa20c-9752b750297b.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "9752b750297b51278e21b535e1daba4a16087273796c3cf88d521d23da646e71",
+      "source": "ElevenLabs API",
+      "text": "Egg.",
+      "credits": 2.0,
       "voiceSettings": {
         "stability": 0.75,
         "similarity_boost": 0.75,
@@ -3412,6 +3580,21 @@
         "speed": 0.85
       }
     },
+    "sock": {
+      "file": "audio/06efe37f5e983469-06b531bcbb11.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "06b531bcbb118f73bd6819e0f3b28577d956dbef648323e7d748ae1f773d265b",
+      "source": "ElevenLabs API",
+      "text": "Sock.",
+      "credits": 3.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
     "soft": {
       "file": "audio/f5f445528f4a0134-e256b83af93f.mp3",
       "voice": "George, British English",
@@ -4237,6 +4420,21 @@
         "speed": 0.85
       }
     },
+    "van": {
+      "file": "audio/970b1897af0abab6-274017aa6ba8.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "274017aa6ba8bde9773c0f0b652dd03328d8d95540b21f440c292ad5e50bf865",
+      "source": "ElevenLabs API",
+      "text": "Van.",
+      "credits": 2.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
     "wake": {
       "file": "audio/51391bf0ab33e827-1b5692f668c8.mp3",
       "voice": "George, British English",
@@ -4320,6 +4518,21 @@
       "sha256": "231678a4e1f9c2f9f40b952650a4977f77cf3fc7e640e0bcc983152e8441bbc3",
       "source": "ElevenLabs API",
       "text": "We.",
+      "credits": 2.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "web": {
+      "file": "audio/4b5e57f6eb2f42b9-aa119a8f5f94.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "aa119a8f5f94a0a20931559d0bbc9d95cbcfbd1976c7eab87f985545b7b02583",
+      "source": "ElevenLabs API",
+      "text": "Web.",
       "credits": 2.0,
       "voiceSettings": {
         "stability": 0.75,
