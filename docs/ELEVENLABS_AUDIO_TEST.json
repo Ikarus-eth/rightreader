@@ -1,0 +1,26 @@
+{
+  "measured_ten_word_credits": 38.0,
+  "earlier_through_credits": 4,
+  "total_measured_credits": 42.0,
+  "basis": "Per-request character-cost headers; prior Through cost verified via generation history. Account subscription counter delta was zero, so it does not independently confirm deductions.",
+  "estimate_assumption": "Same voice, model and observed ceiling(0.5 * input characters) charge for each word plus period. One recording per distinct word.",
+  "estimates": [
+    {
+      "scope": "story_words",
+      "unique_words": 264,
+      "characters_with_periods": 1459,
+      "estimated_credits": 803,
+      "remaining_credits_reusing_11_clips": 761
+    },
+    {
+      "scope": "story_plus_current_teaching_words",
+      "unique_words": 299,
+      "characters_with_periods": 1639,
+      "estimated_credits": 904,
+      "remaining_credits_reusing_11_clips": 862
+    }
+  ],
+  "recommended_credit_budget_including_retakes": 1100,
+  "excluded": "Additional phoneme recordings, new teaching examples, full-story narration and text-model costs.",
+  "run_url": "https://github.com/Ikarus-eth/rightreader/actions/runs/36375746705"
+}

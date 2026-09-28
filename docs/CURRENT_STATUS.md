@@ -26,11 +26,17 @@ The separate `/rightreader/phonics/` reader contains the full user-provided **Ar
 
 Recordings combine existing approved British male clips from BlitzWord and newly generated British female clips. They are not a single consistent narrator. New generated batches were split at inter-word silences, checked for the expected clip count and decoded successfully; final parent listening review remains useful. Provenance and hashes are in `phonics/audio-provenance.json` and `phonics/audio.json`.
 
-The connected Runway workspace's included speech credits were exhausted preparing the target-word set. The GitHub token can deploy code but cannot list repository secret names (HTTP 403); no speech-service key was available locally.
+The connected Runway workspace's included speech credits were exhausted preparing the target-word set. Subsequent isolated ElevenLabs tests use the repository secret `ELEVENLABS_API_KEY1` through GitHub Actions; the key is never downloaded or published. The earlier token limitations below are historical.
 
 `phonics/prepare-premium-audio.py` can fill the entire bounded story/example vocabulary using an `ELEVENLABS_API_KEY` environment variable. It retains completed clips if quota runs out, does not retry failed speech requests, and uses a fixed British George voice. Run it only after a key and allowance are available, then validate and deploy the changed audio files through the existing Pages route.
 
-The provided GitHub token cannot create or update workflows (GitHub rejected the push for missing workflow scope). Creating a pull request also returned HTTP 403. No new Actions workflows are included; existing Pages publishing remains available. The user-authorized deployment uses a normal fast-forward push to main after checking current main.
+The earlier provided GitHub token could not modify workflows or create pull requests. The connected GitHub integration subsequently created an isolated audio-test workflow on `codex/elevenlabs-word-test-20260928`; that workflow is not deployed to main. The existing Pages deployment route remains unchanged.
+
+### ElevenLabs audio samples — tested, not deployed
+
+[Run 36375746705](https://github.com/Ikarus-eth/rightreader/actions/runs/36375746705) generated light, night, right, moon, smooth, water, brought, little, treasure and underneath with the George voice and `eleven_multilingual_v2`. Ten successful requests reported 38 credits in their `character-cost` headers. Generation history confirmed 4 credits for the earlier through sample, bringing the eleven samples to 42 reported credits. The overall subscription counter did not change during the test; per-request usage was measured, but a balance deduction was not independently confirmed.
+
+The measured rate matches half a credit per input character, rounded up per request. Applying that observed rate to the actual vocabulary gives an estimated 803 credits for 264 distinct story words, or 904 credits for all 299 current story/example/anchor words. Reusing the eleven samples leaves an estimated 862 credits for the latter set. Allow approximately 1,100 credits including retakes. This estimate covers whole-word recordings only, excluding additional phoneme recordings, new examples, narration and text-model costs. Details are in `ELEVENLABS_AUDIO_TEST.json`. All ten downloaded clips passed hash checks and FFmpeg decoding. Listening review is still needed; the production reader continues to use the r6 audio described above.
 
 ### Validation
 
