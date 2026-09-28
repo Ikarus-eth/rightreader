@@ -14,6 +14,6 @@ Text clears during the moment, with a **Read now** skip button; it returns autom
 - Four service-worker tests and the full content verifier preserve 25 pages, 587 body words, 265 distinct story/title words, all 315 sound maps/recordings and 44 unique anchors.
 - Local Chrome at 820 × 1180 and 390 × 844 was visually checked during the happy pose and after settling to the original concerned still. All five frames decode. Read now restores tappable text; flower's family and George recording still work. Reloading page two stays still.
 - After saving the offline pack, the local preview server was stopped. Reloading preserved the book, then page 1 → page 2 played all five decoded frames from the saved pack.
-- Public deployment verification will be recorded in `MOONFLOWER_DEPLOYMENT.json` after completion.
+- GitHub Pages run 36410997355 deployed commit `d3a89648b12e185e22bb3c67e2e2cbe297d74d75`. All 22 checked public files matched local hashes. Live Chrome played all five decoded poses, stopped on the original still and restored the text; page-one position and the existing two-word help count were preserved. Details are in `MOONFLOWER_DEPLOYMENT.json`, under `characterAnimationUpdate`.
 
 Physical iPad/Safari has not been tested. This is an intentionally simple picture-book animation: the generated head poses can show small drawing differences, and Artus's turn is subtler than Pip's.

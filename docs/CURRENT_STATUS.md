@@ -6,7 +6,9 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 28 September 2026
 
-### R10 character animation — implemented, deployment pending
+### R10 character animation — deployed and verified
+
+[Pages run 36410997355](https://github.com/Ikarus-eth/rightreader/actions/runs/36410997355) successfully deployed commit `d3a89648b12e185e22bb3c67e2e2cbe297d74d75`. All **22 checked public files** matched the tested source, including all five generated poses and the unchanged original-reader runtime. Live Chrome confirmed five decoded poses, automatic playback, a still ending and restored tappable text. Existing page-one position and two-word history count were preserved after the check. Offline playback also passed after stopping the local preview server. Seven automated checks and the full content verifier passed.
 
 Build `moonflower-20260928-r10` adds five ChatGPT-generated 2D head poses, playing for four seconds only when Next/ArrowRight advances page 1 → page 2. Pip turns from Artus toward the flower; Artus’s expression changes from happy to concerned. Registered masks keep the original garden and bodies still. The animation settles onto the original page-two illustration and never loops. Text clears briefly to show the characters, then returns; **Read now** skips immediately. Page selection, reload, text resizing and later pages do not trigger it. Menus, navigation, hidden tabs and reduced-motion preference stop or suppress it. Assets preload while page one is read; if they are unavailable or unready at the turn, the still remains readable without a delayed animation. The offline pack includes all five poses.
 

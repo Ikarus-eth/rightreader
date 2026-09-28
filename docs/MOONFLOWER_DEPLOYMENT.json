@@ -3151,7 +3151,7 @@
     "soundAnchors": 44,
     "uniqueIcons": 44,
     "storyPhonemes": 43,
-    "phonemeMissingFromStory": "/ʊə/ (cure), included in sound guide",
+    "phonemeMissingFromStory": "/\u028a\u0259/ (cure), included in sound guide",
     "coveredStoryAndTitleWords": 265,
     "wordBreakdowns": 313,
     "recordings": 313,
@@ -5414,6 +5414,160 @@
         "Chapter-title words remain tappable",
         "Saved page 1 and existing two-word help-history count preserved"
       ]
+    }
+  },
+  "characterAnimationUpdate": {
+    "build": "moonflower-20260928-r10",
+    "commit": "d3a89648b12e185e22bb3c67e2e2cbe297d74d75",
+    "pagesRun": 36410997355,
+    "pagesConclusion": "success",
+    "verifiedAt": "2026-09-28T10:40:55.605379+00:00",
+    "url": "https://ikarus-eth.github.io/rightreader/phonics/",
+    "publicFilesMatch": [
+      {
+        "path": "README.md",
+        "bytes": 16424,
+        "sha256": "b21e58900f45d45c78d0b05bebf2ec73524e2cc59aad2ca956c118093b8e3ecf"
+      },
+      {
+        "path": "docs/CURRENT_STATUS.md",
+        "bytes": 9911,
+        "sha256": "0214387fd304a9bd77cba7fae833e9d1bef47dae87aff96ec9399c2738f2aa08"
+      },
+      {
+        "path": "docs/MOONFLOWER_ANIMATION.md",
+        "bytes": 2693,
+        "sha256": "17dc75a2efde7950bfd42694c5a9974ccc8a6a7ec5aa61ba09a22873d9474962"
+      },
+      {
+        "path": "docs/MOONFLOWER_ANIMATION_PROMPTS.json",
+        "bytes": 4913,
+        "sha256": "5182580374e1b1b6cb145a5cbe03508f1829d4404e9f7c0fc2bfadd3967ae550"
+      },
+      {
+        "path": "phonics/index.html",
+        "bytes": 1903,
+        "sha256": "0e705d3a53c463b2aec66663b5d4d69b06c6bdc6f2c98292347e6ab357677dbb"
+      },
+      {
+        "path": "phonics/reader.js",
+        "bytes": 22571,
+        "sha256": "82d44e24e64a79f3ecfda8930185e3443f7f8b64e10d322abbac442561a33946"
+      },
+      {
+        "path": "phonics/styles.css",
+        "bytes": 16792,
+        "sha256": "b1696ae61c12636eb17981fc96a9c304d6e36b9c5fb7f697074c93934200c978"
+      },
+      {
+        "path": "phonics/sw.js",
+        "bytes": 2359,
+        "sha256": "7d8afe258411ad7c03f15e48930c639490eaf3e0bcd17926cf1d7287eaab02ff"
+      },
+      {
+        "path": "phonics/test-scene-motion.cjs",
+        "bytes": 3324,
+        "sha256": "4544a3922a51f5e8f98af18fbf1e09f112ff2ec505e47d0f48fdb901199bcaec"
+      },
+      {
+        "path": "phonics/book/animation/page-02/pose-01.jpg",
+        "bytes": 678090,
+        "sha256": "635a85b13db075101ed7c65c7b51208dcaacea8abd9f91c7e116fc51d22334a5"
+      },
+      {
+        "path": "phonics/book/animation/page-02/pose-02.jpg",
+        "bytes": 635076,
+        "sha256": "6d1cf063cd797b0707af6004e5c13ea703a9ae9689cf5e14b2a6abe2d34df2ea"
+      },
+      {
+        "path": "phonics/book/animation/page-02/pose-03.jpg",
+        "bytes": 725380,
+        "sha256": "47ec9c425e5ffd58e44b19e6006f4f209df2a8330a7b15bf76557d21ff0a02ea"
+      },
+      {
+        "path": "phonics/book/animation/page-02/pose-04.jpg",
+        "bytes": 723619,
+        "sha256": "0412a4fbb2acd7eb0f4c4a780c7e2c8e1b043369bbac156d4541b444406ebe55"
+      },
+      {
+        "path": "phonics/book/animation/page-02/pose-05.jpg",
+        "bytes": 704729,
+        "sha256": "fddb77c10a0d8c7ad7b7fff9fb0ae9f909dcaa7d353f8b4107316f25472af1be"
+      },
+      {
+        "path": "app.js",
+        "bytes": 546727,
+        "sha256": "5bc39857bcda416bb8b78a5a905833c8ec19af994a6b3b15e97c7995f4bf7a4a"
+      },
+      {
+        "path": "config.js",
+        "bytes": 607,
+        "sha256": "fdb76088dbfbb31c8b4a1e0981e70476d9048d6320a68d95520722f5f9a4386e"
+      },
+      {
+        "path": "index.html",
+        "bytes": 1767,
+        "sha256": "41f385ac1fa2a9b384197b4aa269eeff4068e93d5c4084af7a70f7f096d191f4"
+      },
+      {
+        "path": "manifest.json",
+        "bytes": 561,
+        "sha256": "1f3e93f7b6fffc2f75471c1d9a9044f834cc29d1bee67b132ae93636f2281af7"
+      },
+      {
+        "path": "sw.js",
+        "bytes": 2537,
+        "sha256": "092ec50d1bb126ba1132eebad8ed2e0b6be926c564f3b365f77dc269f4fc1504"
+      },
+      {
+        "path": "phonics/teaching.json",
+        "bytes": 196396,
+        "sha256": "ac9d2a56b6e5b20335405a143189d0820307ecd305b11d051c923d34e0d9f6cc"
+      },
+      {
+        "path": "phonics/audio.json",
+        "bytes": 152336,
+        "sha256": "d710989ec8094305fc70fca7375b71605d1bd232f3fb559f9630be26b7160abf"
+      },
+      {
+        "path": "phonics/book/story.json",
+        "bytes": 8788,
+        "sha256": "464658b42c9cc4b470d77df9437bc62c6396253cea2c4a282ae159e32570fff1"
+      }
+    ],
+    "generation": "ChatGPT built-in image_gen only; five selected poses; one discarded pose-two attempt",
+    "elevenLabsCreditsUsed": 0,
+    "durationMs": 4000,
+    "loops": false,
+    "trigger": "Next or ArrowRight from page 1 to page 2",
+    "offlineVerified": true,
+    "localChecks": [
+      "tablet 820x1180 and phone 390x844",
+      "five frames decoded, original ending still restored",
+      "Read now restores tappable text",
+      "flower sound map, spelling family and George recording",
+      "reload page two remains still",
+      "turning away cancels",
+      "offline reload and five-frame playback with server stopped"
+    ],
+    "tests": {
+      "motionController": 3,
+      "serviceWorker": 4,
+      "contentVerifier": "passed, 315 word maps and recordings; 44 anchors"
+    },
+    "limitations": [
+      "physical iPad/Safari not tested",
+      "five illustrated poses with short blends, not a skeletal rig",
+      "unready images leave static illustration instead of delaying navigation"
+    ],
+    "liveBrowserChecks": {
+      "build": "moonflower-20260928-r10",
+      "fivePosesDecoded": true,
+      "automaticPageOneToTwoPlayback": true,
+      "finishedOnOriginalStill": true,
+      "tappableTextRestored": true,
+      "readingPageRestoredTo": 1,
+      "existingHelpWordCountPreserved": 2
     }
   }
 }
