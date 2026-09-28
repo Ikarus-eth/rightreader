@@ -2,7 +2,7 @@
 
 The sound-picture guide covers all 44 phonemes in the traditional British-English inventory: 24 consonants and 20 vowels. Every phoneme has one unique anchor word and one unique icon. The book itself contains 43 of these sounds; only the traditional /ʊə/ vowel in cure is absent. The guide adds cure so the full inventory remains available.
 
-All 265 distinct words in the story and chapter titles have authored sound breakdowns. Including picture anchors and practice examples, all 313 available words have breakdowns and George recordings. This is coverage of the sound inventory and this book’s spellings, not every possible English spelling or a complete teaching curriculum.
+All 265 distinct words in the story and chapter titles have authored sound breakdowns. Including picture anchors and practice examples, all 315 available words have breakdowns and George recordings. This is coverage of the sound inventory and this book’s spellings, not every possible English spelling or a complete teaching curriculum.
 
 | Sound | Unique anchor | Example in this book |
 |---|---|---|

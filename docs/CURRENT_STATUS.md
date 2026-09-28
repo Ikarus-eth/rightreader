@@ -6,6 +6,22 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 28 September 2026
 
+Build `moonflower-20260928-r9` is implemented and locally tested; public deployment verification is pending. It adds the flower/power/shower/tower family and a full-page artwork layout with tappable text over a dark translucent reading area. The previous r8 deployment evidence below remains historical until this release is verified.
+
+### R9 changes
+
+- Flower, power, shower and tower now share a reciprocal spelling family, with `ower` highlighted and complete sound breakdowns for all four.
+- Power and shower were recorded in the existing George voice. All **315 available words** now have recordings and sound maps; the **265 distinct story/title words** and all **44 unique sound anchors** are preserved.
+- The reader uses the illustration as the page, with live tappable text overlaid. Portrait artwork is kept intact; soft image extensions fill space on wider screens. A dark text area preserves contrast, and longer text can scroll inside it at larger sizes.
+- Header and navigation float over the artwork. The original reader and pilot save key are unchanged. Offline assets advance to cache v9.
+- **Requested character animation is pending:** the connected Runway workspace is on its free plan and exposes no video models. The user has been asked to choose a paid Runway upgrade for genuine character movement or a clearly labeled four-second illustrated dissolve. No substitute animation has been deployed without that decision. The intended trigger remains page 1 → page 2, automatic, 2–5 seconds, then a still frame; it must not loop.
+
+Audio preparation [run 36397654292](https://github.com/Ikarus-eth/rightreader/actions/runs/36397654292) succeeded. The two new clips cost **7 request-reported credits**, bringing the cumulative total to **955**, including the previously retired close clip. Existing clips were reused.
+
+Local browser checks traversed all 25 pages at 820×1180, with all 587 body-word buttons and six chapter-title word buttons present and no horizontal overflow. Flower’s new family opens shower’s three-sound breakdown and plays its George recording. The 390×844 page-two layout was visually checked for readable text, visible characters and the flower. Physical iPad/Safari and a complete human listening review remain unverified.
+
+### R8 verified release (historical)
+
 Build `moonflower-20260928-r8` is deployed and verified. [Pages run 36391697463](https://github.com/Ikarus-eth/rightreader/actions/runs/36391697463) published commit `681a8b7d0fca46dbfb6597df4d913bb409e151d9`. All 353 checked public files match the tested source, including all 313 recordings and the unchanged original-reader runtime. It supersedes r7’s 24-entry teaching set. The existing GitHub Pages route is [the pilot URL](https://ikarus-eth.github.io/rightreader/phonics/).
 
 ### Implemented

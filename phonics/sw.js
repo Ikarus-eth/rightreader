@@ -1,6 +1,6 @@
 /* This worker only controls /phonics/ and never reads the original reader's saves. */
-const CACHE='rightreader-phonics-moonflower-v8';
-const SHELL=['./','index.html','styles.css?v=8','reader.js?v=8','book/story.json','teaching.json','audio.json','manifest.json'];
+const CACHE='rightreader-phonics-moonflower-v9';
+const SHELL=['./','index.html','styles.css?v=9','reader.js?v=9','book/story.json','teaching.json','audio.json','manifest.json'];
 self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
 async function withRange(response,range){

@@ -1,6 +1,6 @@
-const BUILD='moonflower-20260928-r8';
+const BUILD='moonflower-20260928-r9';
 const KEY='rrp_moonflower_v1';
-const CACHE='rightreader-phonics-moonflower-v8';
+const CACHE='rightreader-phonics-moonflower-v9';
 const $=id=>document.getElementById(id);
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normal=s=>s.toLowerCase().replaceAll('’',"'");
@@ -45,7 +45,7 @@ function wordMarkup(text){
 }
 function renderPage(){
  const p=book.pages[state.page];document.documentElement.style.setProperty('--reader-size',state.size+'px');
- $('reader').innerHTML=`<article class="story-page" aria-label="Page ${p.number}"><div class="picture-panel"><img src="${p.image}" alt="${escapeHTML(p.alt)}" fetchpriority="high" decoding="async"></div><div class="reading-panel"><p class="eyebrow">${p.heading?'CHAPTER '+p.chapter:'ARTUS & PIP'}</p>${p.heading?`<h1 class="chapter-title">${wordMarkup(p.heading)}</h1>`:''}<p class="story-text">${wordMarkup(p.text)}</p>${state.page===24?`<p class="attribution">${escapeHTML(book.attribution)}</p>`:''}<p class="reading-tip">Tap a word whenever you need a little help.</p></div></article>`;
+ $('reader').innerHTML=`<article class="story-page" aria-label="Page ${p.number}"><div class="picture-panel"><img class="scene-wash" src="${p.image}" alt="" aria-hidden="true" decoding="async"><img class="scene-artwork" src="${p.image}" alt="${escapeHTML(p.alt)}" fetchpriority="high" decoding="async"></div><div class="reading-panel"><p class="eyebrow">${p.heading?'CHAPTER '+p.chapter:'ARTUS & PIP'}</p>${p.heading?`<h1 class="chapter-title">${wordMarkup(p.heading)}</h1>`:''}<p class="story-text">${wordMarkup(p.text)}</p>${state.page===24?`<p class="attribution">${escapeHTML(book.attribution)}</p>`:''}<p class="reading-tip">Tap a word whenever you need a little help.</p></div></article>`;
  $('previous').disabled=state.page===0;$('next').disabled=state.page===24;
  $('page-menu').innerHTML=`${p.number} <span>/ ${book.pages.length}</span>`;
  $('page-menu').setAttribute('aria-label',`Page ${p.number} of ${book.pages.length}. Choose a page.`);
@@ -129,7 +129,7 @@ async function saveOffline(){
  try{
   if(!registration||!('caches'in window))throw Error('Offline support has not started. Reopen the page while online.');
   const cache=await caches.open(CACHE);
-  const urls=['./','index.html','reader.js?v=8','styles.css?v=8','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
+  const urls=['./','index.html','reader.js?v=9','styles.css?v=9','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...Object.values(audioManifest.words).map(a=>a.file)];
   const unique=[...new Set(urls)];let completed=0;
   for(let i=0;i<unique.length;i+=4){await Promise.all(unique.slice(i,i+4).map(async u=>{const res=await fetch(u,{cache:'reload'});if(!res.ok)throw Error('A book file could not download. Please try again.');await cache.put(u,res);completed++;}));if(label.isConnected)label.textContent=`Saving… ${Math.round(completed/unique.length*100)}%`;}
   if(label.isConnected)label.textContent='Book and all recordings saved for offline reading.';
