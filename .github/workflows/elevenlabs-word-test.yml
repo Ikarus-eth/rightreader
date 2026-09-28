@@ -1,0 +1,102 @@
+name: ElevenLabs one-word test
+
+on:
+  push:
+    branches: [codex/elevenlabs-word-test-20260928]
+    paths: [.github/workflows/elevenlabs-word-test.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  generate-one-word:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Generate through once
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY1 }}
+        shell: python
+        run: |
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import sys
+          import urllib.error
+          import urllib.request
+
+          output = pathlib.Path("voice-test")
+          output.mkdir()
+          key = os.environ.get("ELEVENLABS_API_KEY", "").strip()
+          result = {
+              "word": "through",
+              "text": "Through.",
+              "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+              "voice_name": "George",
+              "model_id": "eleven_multilingual_v2",
+              "requests_attempted": 0,
+          }
+
+          def finish(status, exit_code):
+              result["status"] = status
+              (output / "result.json").write_text(json.dumps(result, indent=2) + "\n")
+              print(json.dumps(result))
+              sys.exit(exit_code)
+
+          if not key:
+              finish("missing_repository_secret_ELEVENLABS_API_KEY1", 1)
+
+          payload = json.dumps({
+              "text": result["text"],
+              "model_id": result["model_id"],
+              "voice_settings": {
+                  "stability": 0.75,
+                  "similarity_boost": 0.75,
+                  "speed": 0.85,
+              },
+          }).encode()
+          request = urllib.request.Request(
+              "https://api.elevenlabs.io/v1/text-to-speech/"
+              + result["voice_id"] + "?output_format=mp3_44100_128",
+              data=payload,
+              headers={"xi-api-key": key, "Content-Type": "application/json"},
+              method="POST",
+          )
+          result["requests_attempted"] = 1
+          try:
+              with urllib.request.urlopen(request, timeout=90) as response:
+                  result["http_status"] = response.status
+                  content_type = response.headers.get("Content-Type", "")
+                  audio = response.read()
+          except urllib.error.HTTPError as exc:
+              result["http_status"] = exc.code
+              try:
+                  error = json.loads(exc.read().decode())
+                  detail = error.get("detail", {})
+                  status = detail.get("status") if isinstance(detail, dict) else None
+                  if isinstance(status, str) and status.replace("_", "").isalnum():
+                      result["api_error"] = status.replace(key, "[redacted]")[:80]
+              except (ValueError, AttributeError, UnicodeError):
+                  pass
+              finish("request_failed_no_retry", 1)
+          except (urllib.error.URLError, TimeoutError):
+              finish("connection_failed_no_retry", 1)
+
+          if not content_type.lower().startswith("audio/") or len(audio) < 100:
+              finish("unexpected_response_no_retry", 1)
+          (output / "through.mp3").write_bytes(audio)
+          result["audio_bytes"] = len(audio)
+          result["sha256"] = hashlib.sha256(audio).hexdigest()
+          finish("generated", 0)
+
+      - name: Save test result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elevenlabs-through-test
+          path: |
+            voice-test/through.mp3
+            voice-test/result.json
+          if-no-files-found: error
+          retention-days: 7
