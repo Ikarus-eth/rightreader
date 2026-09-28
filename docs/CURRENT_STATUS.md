@@ -6,7 +6,7 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 28 September 2026
 
-Build `moonflower-20260928-r9` is implemented and locally tested; public deployment verification is pending. It adds the flower/power/shower/tower family and a full-page artwork layout with tappable text over a dark translucent reading area. The previous r8 deployment evidence below remains historical until this release is verified.
+Build `moonflower-20260928-r9` is deployed and verified. [Pages run 36398484827](https://github.com/Ikarus-eth/rightreader/actions/runs/36398484827) published commit `814a9b2c8fd2a2146dcfc4143c1d4070fdf8290e`. All 13 checked public files match the tested source: changed runtime files, both new recordings and the original-reader runtime. All 315 recordings passed generation-workflow decoding and content validation. It adds the flower/power/shower/tower family and a full-page artwork layout with tappable text over a dark translucent reading area. The r8 details below are historical; `MOONFLOWER_DEPLOYMENT.json` records this release under `immersiveLayoutUpdate`.
 
 ### R9 changes
 
@@ -18,7 +18,7 @@ Build `moonflower-20260928-r9` is implemented and locally tested; public deploym
 
 Audio preparation [run 36397654292](https://github.com/Ikarus-eth/rightreader/actions/runs/36397654292) succeeded. The two new clips cost **7 request-reported credits**, bringing the cumulative total to **955**, including the previously retired close clip. Existing clips were reused.
 
-Local browser checks traversed all 25 pages at 820×1180, with all 587 body-word buttons and six chapter-title word buttons present and no horizontal overflow. Flower’s new family opens shower’s three-sound breakdown and plays its George recording. The 390×844 page-two layout was visually checked for readable text, visible characters and the flower. Physical iPad/Safari and a complete human listening review remain unverified.
+Local browser checks traversed all 25 pages at 820×1180, with all 587 body-word buttons and six chapter-title word buttons present and no horizontal overflow. Flower’s new family opens shower’s three-sound breakdown and plays its George recording. The 390×844 page-two layout was visually checked for readable text, visible characters and the flower. Offline reload preserved page two and played the new power recording after the preview server stopped. Live Chrome confirmed r9, full-height artwork with overlaid text, tappable title words and the unchanged existing help-history count. Physical iPad/Safari and a complete human listening review remain unverified.
 
 ### R8 verified release (historical)
 

@@ -5302,5 +5302,118 @@
       "Whole-anchor-word audio, not isolated phoneme recordings",
       "A complete human listening review remains outstanding"
     ]
+  },
+  "immersiveLayoutUpdate": {
+    "verifiedAt": "2026-09-28T08:42:26.438333+00:00",
+    "build": "moonflower-20260928-r9",
+    "sourceCommit": "814a9b2c8fd2a2146dcfc4143c1d4070fdf8290e",
+    "pagesRun": "https://github.com/Ikarus-eth/rightreader/actions/runs/36398484827",
+    "pagesConclusion": "success",
+    "url": "https://ikarus-eth.github.io/rightreader/phonics/",
+    "wordBreakdowns": 315,
+    "recordings": 315,
+    "reportedCredits": 955,
+    "flowerFamily": [
+      "power",
+      "shower",
+      "tower"
+    ],
+    "animation": "Pending user choice: connected Runway Free plan has no video models. No replacement animation deployed.",
+    "verifiedFiles": 13,
+    "verificationScope": "Changed runtime files, both new recordings and original-reader runtime. Full-pack validation and MP3 decode passed in Actions; unchanged assets retain previous verification.",
+    "checks": [
+      {
+        "path": "app.js",
+        "status": 200,
+        "bytes": 546727,
+        "sha256": "5bc39857bcda416bb8b78a5a905833c8ec19af994a6b3b15e97c7995f4bf7a4a"
+      },
+      {
+        "path": "config.js",
+        "status": 200,
+        "bytes": 607,
+        "sha256": "fdb76088dbfbb31c8b4a1e0981e70476d9048d6320a68d95520722f5f9a4386e"
+      },
+      {
+        "path": "index.html",
+        "status": 200,
+        "bytes": 1767,
+        "sha256": "41f385ac1fa2a9b384197b4aa269eeff4068e93d5c4084af7a70f7f096d191f4"
+      },
+      {
+        "path": "manifest.json",
+        "status": 200,
+        "bytes": 561,
+        "sha256": "1f3e93f7b6fffc2f75471c1d9a9044f834cc29d1bee67b132ae93636f2281af7"
+      },
+      {
+        "path": "phonics/audio.json",
+        "status": 200,
+        "bytes": 152336,
+        "sha256": "d710989ec8094305fc70fca7375b71605d1bd232f3fb559f9630be26b7160abf"
+      },
+      {
+        "path": "phonics/audio/07d715edb696fb5f-3e99a889de76.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "3e99a889de76c8fbb3fe33c0490f86434e0234be81770412908a77a033898446"
+      },
+      {
+        "path": "phonics/audio/528159b45697166b-1e78246ed228.mp3",
+        "status": 200,
+        "bytes": 15090,
+        "sha256": "1e78246ed228045cc0e906fbf5348960f024409861454ad8b55861f64c2b8747"
+      },
+      {
+        "path": "phonics/index.html",
+        "status": 200,
+        "bytes": 1900,
+        "sha256": "549359e30493136ceb39f81874670d97e15e43984c4fb748718f3eea8cab5168"
+      },
+      {
+        "path": "phonics/reader.js",
+        "status": 200,
+        "bytes": 20097,
+        "sha256": "8f1a13f8862f38c36a9cf609e36d8eef61b620fc04ed6b28ac9f7acef67ebc4f"
+      },
+      {
+        "path": "phonics/styles.css",
+        "status": 200,
+        "bytes": 15440,
+        "sha256": "efa9c564380e30b63f530f88192ace494648930e4577b84e9bcfaeacfde712da"
+      },
+      {
+        "path": "phonics/sw.js",
+        "status": 200,
+        "bytes": 2356,
+        "sha256": "45de98854039f8c86013a63027e51a17f2abb755faf5ff4249086afd9a380593"
+      },
+      {
+        "path": "phonics/teaching.json",
+        "status": 200,
+        "bytes": 196396,
+        "sha256": "ac9d2a56b6e5b20335405a143189d0820307ecd305b11d051c923d34e0d9f6cc"
+      },
+      {
+        "path": "sw.js",
+        "status": 200,
+        "bytes": 2537,
+        "sha256": "092ec50d1bb126ba1132eebad8ed2e0b6be926c564f3b365f77dc269f4fc1504"
+      }
+    ],
+    "browserChecks": {
+      "local": [
+        "All 25 pages traversed at 820x1180; all 587 body word buttons plus 6 heading word buttons; no horizontal overflow",
+        "Tablet and 390x844 phone layouts visually inspected",
+        "Flower family opens shower breakdown and George recording completes without error",
+        "Complete offline pack saved; server stopped; page 2 reloaded with image; power opens from flower and plays to completion with no error"
+      ],
+      "live": [
+        "R9 build metadata confirmed",
+        "Full-height illustration loaded with text overlaid",
+        "Chapter-title words remain tappable",
+        "Saved page 1 and existing two-word help-history count preserved"
+      ]
+    }
   }
 }

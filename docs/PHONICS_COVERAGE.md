@@ -1,4 +1,4 @@
-# Phonics coverage — Moonflower r8
+# Phonics coverage — Moonflower r9
 
 The sound-picture guide covers all 44 phonemes in the traditional British-English inventory: 24 consonants and 20 vowels. Every phoneme has one unique anchor word and one unique icon. The book itself contains 43 of these sounds; only the traditional /ʊə/ vowel in cure is absent. The guide adds cure so the full inventory remains available.
 
