@@ -6,15 +6,18 @@ ROOT = Path(__file__).resolve().parent
 VOICE = 'JBFqnCBsd6RMkjVDRZzb'
 MODEL = 'eleven_multilingual_v2'
 SETTINGS = {'stability': .75, 'similarity_boost': .75, 'speed': .85}
+# Match the story's adjective (nearby), rather than the verb (shut).
+CONTEXT = {'close': {'previous_text': 'Stay '}}
 
 def vocabulary():
     book = json.loads((ROOT/'book/story.json').read_text())
     teaching = json.loads((ROOT/'teaching.json').read_text())
     story = {w.lower().replace('’', "'") for p in book['pages']
-             for w in re.findall(r"[A-Za-z]+(?:[’'][A-Za-z]+)?", p['text'])}
+             for w in re.findall(r"[A-Za-z]+(?:[’'][A-Za-z]+)?", p['text']+' '+(p['heading'] or ''))}
     wanted = story | {w for e in teaching['words'].values() for w in e['family']}
     wanted |= {a['word'] for a in teaching['anchors'].values()} | set(teaching['rhyme']['words'])
-    assert len(wanted) == 299 and len(story) == 264, 'Re-review changed vocabulary.'
+    wanted |= set(teaching['words'])
+    assert len(wanted) == 313 and len(story) == 265, 'Re-review changed vocabulary.'
     return story, wanted
 
 def main():
@@ -27,6 +30,9 @@ def main():
         raise SystemExit('ELEVENLABS_API_KEY is not configured.')
     story, wanted = vocabulary()
     old = json.loads((ROOT/'audio.json').read_text())
+    provenance_path = ROOT/'audio-provenance.json'
+    prior_provenance = json.loads(provenance_path.read_text()) if provenance_path.exists() else {}
+    retired = prior_provenance.get('retiredClips', [])
     clips = {}
     for word, entry in old['words'].items():
         path = ROOT/entry['file']
@@ -39,9 +45,12 @@ def main():
         # New audio bytes get a new URL, including for devices with older offline packs.
         filename = 'audio/'+hashlib.sha256(word.encode()).hexdigest()[:16]+'-'+digest[:12]+'.mp3'
         (ROOT/filename).write_bytes(audio)
+        if word in clips:
+            retired.append(dict(word=word, **clips[word]))
         clips[word] = {'file': filename, 'voice': 'George, British English', 'voiceId': VOICE,
                       'model': MODEL, 'sha256': digest, 'source': source, 'text': text,
                       'credits': credits, 'voiceSettings': SETTINGS}
+        if word in CONTEXT: clips[word]['context'] = CONTEXT[word]
 
     if args.seed_dir:
         for report_path in sorted(args.seed_dir.glob('*/result.json')):
@@ -60,7 +69,9 @@ def main():
                     add_clip(word, audio, entry['text'], cost, 'ElevenLabs verified sample artifact')
 
     initial_count = len(clips)
-    initial_spent = sum(e['credits'] for e in clips.values())
+    initial_spent = sum(e['credits'] for e in clips.values()) + sum(e['credits'] for e in retired)
+    replacements = {w for w in clips if w in CONTEXT and clips[w].get('context') != CONTEXT[w]}
+    pending = (wanted-clips.keys()) | replacements
     generated, spent = 0, initial_spent
     def save():
         manifest = {'version': 2, 'voice': 'George, British English', 'voiceId': VOICE, 'model': MODEL,
@@ -70,12 +81,13 @@ def main():
         provenance = {'provider': 'ElevenLabs', 'voice': manifest['voice'], 'voiceId': VOICE,
                       'model': MODEL, 'voiceSettings': SETTINGS, 'reportedCredits': spent,
                       'creditSource': 'character-cost headers; original Through cost from history',
-                      'generationRun': os.environ.get('GITHUB_RUN_ID'), 'clips': manifest['words']}
+                      'generationRun': os.environ.get('GITHUB_RUN_ID'), 'clips': manifest['words'], 'retiredClips': retired}
         (ROOT/'audio-provenance.json').write_text(json.dumps(provenance, ensure_ascii=False, indent=2)+'\n')
         report = {'voice': manifest['voice'], 'model': MODEL, 'plannedWords': len(wanted),
                   'reusedWords': initial_count, 'newWords': generated, 'completedWords': len(clips),
                   'missingWords': sorted(wanted-clips.keys()), 'totalReportedCredits': spent,
                   'newReportedCredits': spent-initial_spent, 'maxTotalCredits': args.max_total_credits,
+                  'contextualRetakesPlanned': sorted(replacements), 'retiredReportedCredits': sum(e['credits'] for e in retired),
                   'originalSamplesReused': sum(e['source']=='ElevenLabs verified sample artifact' for e in clips.values()),
                   'generatedWordsTotal': sum(e['source']=='ElevenLabs API' for e in clips.values()),
                   'costVarianceNote': 'Stretched cost one more credit than the character estimate; measured total remains authoritative.',
@@ -85,12 +97,12 @@ def main():
 
     save()
     try:
-        for word in sorted(wanted-clips.keys()):
+        for word in sorted(pending):
             text = {'i':'I', 'artus':'Artus', "artus's":'Artus’s', 'pip':'Pip'}.get(word, word.capitalize())+'.'
             predicted = math.ceil(len(text)*.5)
             if spent+predicted+1 > args.max_total_credits:
                 raise RuntimeError('Stopped before exceeding the approved credit budget.')
-            data = json.dumps({'text':text, 'model_id':MODEL, 'voice_settings':SETTINGS}).encode()
+            data = json.dumps({'text':text, 'model_id':MODEL, 'voice_settings':SETTINGS, **CONTEXT.get(word,{})}).encode()
             req = urllib.request.Request(
                 'https://api.elevenlabs.io/v1/text-to-speech/'+VOICE+'?output_format=mp3_44100_128',
                 data=data, headers={'xi-api-key':key, 'Content-Type':'application/json', 'Accept':'audio/mpeg'}, method='POST')

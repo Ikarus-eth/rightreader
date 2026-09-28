@@ -1,0 +1,313 @@
+a a:ai
+again a:schwa g:g ai:e n:n
+against a:schwa g:g ai:e n:n s:s t:t
+all a:or ll:l
+am a:a m:m
+an a:a n:n
+and a:a n:n d:d
+another a:schwa n:n o:u th:dh er:schwa
+are are:ar
+artus ar:ar t:t u:schwa s:s
+artus's ar:ar t:t u:schwa s:s 's:z
+aside a:schwa s:s i:igh d:d e:@2
+at a:a t:t
+away a:schwa w:w ay:ai
+back b:b a:a ck:k
+ball b:b a:or ll:l
+bath b:b a:ar th:th
+beamed b:b ea:ee m:m ed:d
+bed b:b e:e d:d
+before b:b e:i f:f ore:or
+below b:b e:i l:l ow:oa
+beside b:b e:i s:s i:igh d:d e:@3
+between b:b e:i t:t w:w ee:ee n:n
+big b:b i:i g:g
+bit b:b i:i t:t
+blinked b:b l:l i:i n:ng k:k ed:t
+boat b:b oa:oa t:t
+boil b:b oi:oi l:l
+boot b:b oo:oo t:t
+both b:b o:oa th:th
+breath b:b r:r ea:e th:th
+bright b:b r:r igh:igh t:t
+brought b:b r:r ough:or t:t
+but b:b u:u t:t
+by b:b y:igh
+call c:k a:or ll:l
+came c:k a:ai m:m e:@1
+can c:k a:a n:n
+cannot c:k a:a nn:n o:o t:t
+careful c:k are:air f:f u:schwa l:l
+carry c:k a:a rr:r y:ee
+cat c:k a:a t:t
+caw c:k aw:or
+close c:k l:l o:oa s:s e:@2
+cold c:k o:oa l:l d:d
+cream c:k r:r ea:ee m:m
+crept c:k r:r e:e p:p t:t
+cried c:k r:r ie:igh d:d
+crow c:k r:r ow:oa
+crows c:k r:r ow:oa s:z
+cup c:k u:u p:p
+curled c:k ur:ur l:l ed:d
+dark d:d ar:ar k:k
+dear d:d ear:ear
+deep d:d ee:ee p:p
+did d:d i:i d:d
+dipped d:d i:i pp:p ed:t
+dish d:d i:i sh:sh
+do d:d o:oo
+down d:d ow:ow n:n
+dream d:d r:r ea:ee m:m
+drop d:d r:r o:o p:p
+dropped d:d r:r o:o pp:p ed:t
+dry d:d r:r y:igh
+each ea:ee ch:ch
+even e:ee v:v e:schwa n:n
+everyone e:e v:v e:- r:r y:ee o:w+u n:n e:-
+far f:f ar:ar
+feather f:f ea:e th:dh er:schwa
+felt f:f e:e l:l t:t
+filled f:f i:i ll:l ed:d
+find f:f i:igh n:n d:d
+fish f:f i:i sh:sh
+fit f:f i:i t:t
+flapped f:f l:l a:a pp:p ed:t
+flew f:f l:l ew:oo
+floated f:f l:l oa:oa t:t e:i d:d
+flock f:f l:l o:o ck:k
+flower f:f l:l ow:ow er:schwa
+followed f:f o:o ll:l ow:oa ed:d
+for f:f or:or
+forth f:f or:or th:th
+found f:f ou:ow n:n d:d
+fox f:f o:o x:k+s
+free f:f r:r ee:ee
+from f:f r:r o:o m:m
+full f:f u:shortoo ll:l
+fun f:f u:u n:n
+garden g:g ar:ar d:d e:schwa n:n
+gasped g:g a:ar s:s p:p ed:t
+gave g:g a:ai v:v e:@1
+get g:g e:e t:t
+glow g:g l:l ow:oa
+goat g:g oa:oa t:t
+good g:g oo:shortoo d:d
+great g:g r:r ea:ai t:t
+grew g:g r:r ew:oo
+grinned g:g r:r i:i nn:n ed:d
+had h:h a:a d:d
+hand h:h a:a n:n d:d
+hands h:h a:a n:n d:d s:z
+have h:h a:a v:v e:-
+he h:h e:ee
+head h:h ea:e d:d
+heard h:h ear:ur d:d
+heavier h:h ea:e v:v i:ee er:schwa
+held h:h e:e l:l d:d
+help h:h e:e l:l p:p
+here h:h ere:ear
+hill h:h i:i ll:l
+him h:h i:i m:m
+his h:h i:i s:z
+home h:h o:oa m:m e:@1
+hop h:h o:o p:p
+hopped h:h o:o pp:p ed:t
+huffed h:h u:u ff:f ed:t
+i i:igh
+idea i:igh d:d ea:ear
+ideas i:igh d:d ea:ear s:z
+in i:i n:n
+inside i:i n:n s:s i:igh d:d e:@3
+is i:i s:z
+it i:i t:t
+its i:i t:t s:s
+jar j:j ar:ar
+just j:j u:u s:s t:t
+keep k:k ee:ee p:p
+king k:k i:i ng:ng
+last l:l a:ar s:s t:t
+lay l:l ay:ai
+leaf l:l ea:ee f:f
+leaned l:l ea:ee n:n ed:d
+leaves l:l ea:ee v:v e:- s:z
+ledge l:l e:e dge:j
+let l:l e:e t:t
+lift l:l i:i f:f t:t
+lifted l:l i:i f:f t:t e:i d:d
+light l:l igh:igh t:t
+listened l:l i:i s:s t:- e:schwa n:n ed:d
+lit l:l i:i t:t
+little l:l i:i tt:t le:schwa+l
+looked l:l oo:shortoo k:k ed:t
+lost l:l o:o s:s t:t
+loud l:l ou:ow d:d
+low l:l ow:oa
+mail m:m ai:ai l:l
+mark m:m ar:ar k:k
+moon m:m oo:oo n:n
+more m:m ore:or
+moths m:m o:o th:th s:s
+move m:m o:oo v:v e:@1
+must m:m u:u s:s t:t
+my m:m y:igh
+narrow n:n a:a rr:r ow:oa
+nearly n:n ear:ear l:l y:ee
+neck n:n e:e ck:k
+need n:n ee:ee d:d
+needs n:n ee:ee d:d s:z
+new n:n ew:y+oo
+night n:n igh:igh t:t
+no n:n o:oa
+nose n:n o:oa s:z e:@1
+not n:n o:o t:t
+now n:n ow:ow
+nudged n:n u:u dge:j d:d
+odd o:o dd:d
+of o:o f:v
+oh oh:oa
+oil oi:oi l:l
+old o:oa l:l d:d
+on o:o n:n
+one o:w+u n:n e:-
+ones o:w+u n:n e:- s:z
+onto o:o n:n t:t o:oo
+opened o:oa p:p e:schwa n:n ed:d
+our our:ow+schwa
+over o:oa v:v er:schwa
+packed p:p a:a ck:k ed:t
+past p:p a:ar s:s t:t
+path p:p a:ar th:th
+paw p:p aw:or
+paws p:p aw:or s:z
+pebble p:p e:e bb:b le:schwa+l
+peered p:p eer:ear ed:d
+petal p:p e:e t:t a:schwa l:l
+pick p:p i:i ck:k
+picked p:p i:i ck:k ed:t
+pig p:p i:i g:g
+pile p:p i:igh l:l e:@1
+pip p:p i:i p:p
+plop p:p l:l o:o p:p
+plops p:p l:l o:o p:p s:s
+poked p:p o:oa k:k e:@1 d:d
+poured p:p our:or ed:d
+pressed p:p r:r e:e ss:s ed:t
+puffed p:p u:u ff:f ed:t
+pushed p:p u:shortoo sh:sh ed:t
+rain r:r ai:ai n:n
+raised r:r ai:ai s:z ed:d
+ran r:r a:a n:n
+reach r:r ea:ee ch:ch
+reached r:r ea:ee ch:ch ed:t
+remember r:r e:i m:m e:e m:m b:b er:schwa
+right r:r igh:igh t:t
+ring r:r i:i ng:ng
+rock r:r o:o ck:k
+roots r:r oo:oo t:t s:s
+rose r:r o:oa s:z e:@1
+rubbed r:r u:u bb:b ed:d
+run r:r u:u n:n
+said s:s ai:e d:d
+sail s:s ai:ai l:l
+sat s:s a:a t:t
+ship sh:sh i:i p:p
+shone sh:sh o:o n:n e:-
+shop sh:sh o:o p:p
+short sh:sh or:or t:t
+show sh:sh ow:oa
+shut sh:sh u:u t:t
+sighed s:s igh:igh ed:d
+silver s:s i:i l:l v:v er:schwa
+sip s:s i:i p:p
+sleep s:s l:l ee:ee p:p
+slowed s:s l:l ow:oa ed:d
+small s:s m:m a:or ll:l
+smile s:s m:m i:igh l:l e:@2
+smiled s:s m:m i:igh l:l e:@2 d:d
+smooth s:s m:m oo:oo th:dh
+soft s:s o:o f:f t:t
+soil s:s oi:oi l:l
+some s:s o:u m:m e:-
+space s:s p:p a:ai c:s e:@2
+spilled s:s p:p i:i ll:l ed:d
+splashed s:s p:p l:l a:a sh:sh ed:t
+spread s:s p:p r:r ea:e d:d
+staff s:s t:t a:ar ff:f
+star s:s t:t ar:ar
+stay s:s t:t ay:ai
+stayed s:s t:t ay:ai ed:d
+steep s:s t:t ee:ee p:p
+step s:s t:t e:e p:p
+still s:s t:t i:i ll:l
+stone s:s t:t o:oa n:n e:@2
+stones s:s t:t o:oa n:n e:@2 s:z
+stood s:s t:t oo:shortoo d:d
+stopped s:s t:t o:o pp:p ed:t
+stream s:s t:t r:r ea:ee m:m
+stretched s:s t:t r:r e:e tch:ch ed:t
+sun s:s u:u n:n
+swept s:s w:w e:e p:p t:t
+swooped s:s w:w oo:oo p:p ed:t
+tail t:t ai:ai l:l
+take t:t a:ai k:k e:@1
+tall t:t a:or ll:l
+than th:dh a:a n:n
+that th:dh a:a t:t
+the th:dh e:schwa
+them th:dh e:e m:m
+then th:dh e:e n:n
+there th:dh ere:air
+these th:dh e:ee s:z e:@1
+they th:dh ey:ai
+thick th:th i:i ck:k
+thin th:th i:i n:n
+three th:th r:r ee:ee
+through th:th r:r ough:oo
+thumb th:th u:u mb:m
+thump th:th u:u m:m p:p
+tiger t:t i:igh g:g er:schwa
+tiny t:t i:igh n:n y:ee
+tired t:t ire:igh+schwa d:d
+to t:t o:oo
+too t:t oo:oo
+took t:t oo:shortoo k:k
+touched t:t ou:u ch:ch ed:t
+tower t:t ow:ow er:schwa
+treasure t:t r:r ea:e s:zh ure:schwa
+tree t:t r:r ee:ee
+turn t:t ur:ur n:n
+two t:t w:- o:oo
+underneath u:u n:n d:d er:schwa n:n ea:ee th:th
+up u:u p:p
+us u:u s:s
+wake w:w a:ai k:k e:@1
+wall w:w a:or ll:l
+was w:w a:o s:z
+water w:w a:or t:t er:schwa
+way w:w ay:ai
+we w:w e:ee
+went w:w e:e n:n t:t
+white wh:w i:igh t:t e:@1
+whole wh:h o:oa l:l e:@1
+wing w:w i:i ng:ng
+wish w:w i:i sh:sh
+with w:w i:i th:dh
+without w:w i:i th:dh ou:ow t:t
+wooden w:w oo:shortoo d:d e:schwa n:n
+works w:w or:ur k:k s:s
+would w:w ou:shortoo l:- d:d
+yes y:y e:e s:s
+apple a:a pp:p le:schwa+l
+egg e:e gg:g
+sock s:s o:o ck:k
+book b:b oo:shortoo k:k
+bird b:b ir:ur d:d
+cow c:k ow:ow
+ear ear:ear
+chair ch:ch air:air
+van v:v a:a n:n
+web w:w e:e b:b
+cheese ch:ch ee:ee se:z
+banana b:b a:schwa n:n a:ar n:n a:schwa
+cure c:k ure:y+ure
