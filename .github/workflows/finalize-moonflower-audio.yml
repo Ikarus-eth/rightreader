@@ -1,4 +1,4 @@
-name: Finalize Moonflower word audio
+name: Complete saved Moonflower word audio
 on:
   push:
     branches: [codex/elevenlabs-word-test-20260928]
@@ -31,7 +31,7 @@ jobs:
           run-id: 36375746705
           name: elevenlabs-ten-word-test
           path: /tmp/moonflower-seeds/ten
-      - name: Generate remaining vocabulary once
+      - name: Resume missing vocabulary without repeating saved words
         env:
           ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY1 }}
         run: python3 phonics/prepare-premium-audio.py --seed-dir /tmp/moonflower-seeds --max-total-credits 1100
