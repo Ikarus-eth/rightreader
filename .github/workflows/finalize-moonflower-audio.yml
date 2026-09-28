@@ -1,0 +1,74 @@
+name: Finalize Moonflower word audio
+on:
+  push:
+    branches: [codex/elevenlabs-word-test-20260928]
+    paths: [.github/workflows/finalize-moonflower-audio.yml]
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: moonflower-audio-generation
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require an explicitly started run
+        run: test "$GITHUB_RUN_ATTEMPT" = 1
+      - name: Reuse through
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 36374806113
+          name: elevenlabs-through-test
+          path: /tmp/moonflower-seeds/through
+      - name: Reuse ten samples
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 36375746705
+          name: elevenlabs-ten-word-test
+          path: /tmp/moonflower-seeds/ten
+      - name: Generate remaining vocabulary once
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY1 }}
+        run: python3 phonics/prepare-premium-audio.py --seed-dir /tmp/moonflower-seeds --max-total-credits 1100
+      - name: Validate book and audio
+        run: |
+          python3 phonics/verify-content.py
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          manifest=json.loads(Path('phonics/audio.json').read_text())
+          assert len(manifest['words']) == 299
+          assert manifest['recordedStoryWords'] == manifest['storyWordCount'] == 264
+          assert not manifest['missingStoryWords']
+          for word, clip in manifest['words'].items():
+              assert clip['voiceId'] == 'JBFqnCBsd6RMkjVDRZzb'
+              subprocess.run(['ffmpeg','-v','error','-i','phonics/'+clip['file'],'-f','null','-'],check=True)
+          print('All 299 recordings decode and use the same George voice.')
+          PY
+      - name: Preserve generated files on the staging branch
+        if: always()
+        run: |
+          if [ ! -f docs/ELEVENLABS_AUDIO_GENERATION.json ]; then
+            exit 0
+          fi
+          git config user.name "RightReader audio preparation"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add phonics/audio phonics/audio.json phonics/audio-provenance.json docs/ELEVENLABS_AUDIO_GENERATION.json
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Prepare George recordings and measured costs for Moonflower"
+          git push origin "HEAD:$GITHUB_REF_NAME"
+      - name: Save generation report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: moonflower-audio-generation-report
+          path: docs/ELEVENLABS_AUDIO_GENERATION.json
+          if-no-files-found: warn
+          retention-days: 30
