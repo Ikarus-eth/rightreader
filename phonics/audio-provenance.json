@@ -8,9 +8,9 @@
     "similarity_boost": 0.75,
     "speed": 0.85
   },
-  "reportedCredits": 948.0,
+  "reportedCredits": 955.0,
   "creditSource": "character-cost headers; original Through cost from history",
-  "generationRun": "36390990313",
+  "generationRun": "36397654292",
   "clips": {
     "a": {
       "file": "audio/ca978112ca1bbdca-a5ef13665683.mp3",
@@ -3075,6 +3075,21 @@
         "speed": 0.85
       }
     },
+    "power": {
+      "file": "audio/07d715edb696fb5f-3e99a889de76.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "3e99a889de76c8fbb3fe33c0490f86434e0234be81770412908a77a033898446",
+      "source": "ElevenLabs API",
+      "text": "Power.",
+      "credits": 3.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
     "pressed": {
       "file": "audio/e15348ae477f16c0-5f6ccc51e46f.mp3",
       "voice": "George, British English",
@@ -3429,6 +3444,21 @@
       "source": "ElevenLabs API",
       "text": "Show.",
       "credits": 3.0,
+      "voiceSettings": {
+        "stability": 0.75,
+        "similarity_boost": 0.75,
+        "speed": 0.85
+      }
+    },
+    "shower": {
+      "file": "audio/528159b45697166b-1e78246ed228.mp3",
+      "voice": "George, British English",
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "model": "eleven_multilingual_v2",
+      "sha256": "1e78246ed228045cc0e906fbf5348960f024409861454ad8b55861f64c2b8747",
+      "source": "ElevenLabs API",
+      "text": "Shower.",
+      "credits": 4.0,
       "voiceSettings": {
         "stability": 0.75,
         "similarity_boost": 0.75,

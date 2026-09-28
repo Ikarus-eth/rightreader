@@ -1,21 +1,19 @@
 {
   "voice": "George, British English",
   "model": "eleven_multilingual_v2",
-  "plannedWords": 313,
-  "reusedWords": 299,
-  "newWords": 15,
-  "completedWords": 313,
+  "plannedWords": 315,
+  "reusedWords": 313,
+  "newWords": 2,
+  "completedWords": 315,
   "missingWords": [],
-  "totalReportedCredits": 948.0,
-  "newReportedCredits": 43.0,
+  "totalReportedCredits": 955.0,
+  "newReportedCredits": 7.0,
   "maxTotalCredits": 1100,
-  "contextualRetakesPlanned": [
-    "close"
-  ],
+  "contextualRetakesPlanned": [],
   "retiredReportedCredits": 3.0,
   "originalSamplesReused": 11,
-  "generatedWordsTotal": 302,
+  "generatedWordsTotal": 304,
   "costVarianceNote": "Stretched cost one more credit than the character estimate; measured total remains authoritative.",
   "billingNote": "Request-reported units; earlier subscription counter did not confirm balance deductions.",
-  "run": "36390990313"
+  "run": "36397654292"
 }
