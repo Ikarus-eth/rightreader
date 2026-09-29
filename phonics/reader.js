@@ -1,8 +1,10 @@
-const BUILD='moonflower-20260928-r10';
+import * as LivingScenes from './living-scenes.js?v=11';
+const BUILD='moonflower-20260929-r11';
 const KEY='rrp_moonflower_v1';
-const CACHE='rightreader-phonics-moonflower-v10';
+const CACHE='rightreader-phonics-moonflower-v11';
 const MOTION_FILES=[1,2,3,4,5].map(n=>`book/animation/page-02/pose-0${n}.jpg`);
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+let stopLivingScene=null;
 let motionImages=[],motionLoading=null,motionFrame=0,motionLayer=null;
 function preloadMotion(){
  if(reducedMotion.matches||motionLoading)return;
@@ -10,11 +12,13 @@ function preloadMotion(){
   .then(images=>{motionImages=images;}).catch(()=>{motionLoading=null;});
 }
 function stopMotion(){
+ const returnFocus=document.activeElement?.classList.contains('skip-motion');
+ const stop=stopLivingScene;stopLivingScene=null;stop?.();
  cancelAnimationFrame(motionFrame);motionFrame=0;
  motionLayer?.remove();motionLayer=null;
  const page=document.querySelector('.story-page');
  page?.classList.remove('scene-playing');page?.querySelector('.skip-motion')?.remove();
- if(page)page.querySelector('.reading-panel').inert=false;
+ if(page){page.querySelector('.reading-panel').inert=false;const replay=page.querySelector('.replay-motion');if(replay&&returnFocus)replay.focus();}
 }
 function playPageTwoMotion(){
  // An unready or failed image must never delay a page turn or start motion late.
@@ -38,7 +42,22 @@ function playPageTwoMotion(){
  };
  motionFrame=requestAnimationFrame(tick);
 }
-reducedMotion.addEventListener('change',e=>{if(e.matches)stopMotion();else if(state.page===0)preloadMotion();});
+function playLivingScene(number){
+ stopMotion();
+ const page=document.querySelector('.story-page');
+ const stop=LivingScenes.play(number,page.querySelector('.picture-panel'),stopMotion);
+ if(!stop)return;
+ stopLivingScene=stop;page.classList.add('scene-playing');page.querySelector('.reading-panel').inert=true;
+ const skip=document.createElement('button');skip.className='skip-motion';skip.textContent='Read now';skip.onclick=stopMotion;page.append(skip);
+ if(document.activeElement===page.querySelector('.replay-motion'))skip.focus();
+}
+function prepareLivingScene(p){
+ const page=document.querySelector('.story-page'),button=page.querySelector('.replay-motion');
+ if(!button||reducedMotion.matches)return;
+ LivingScenes.prepare(p.number,p.image).then(image=>{if(!page.isConnected||!image)return;button.disabled=false;});
+ button.onclick=()=>playLivingScene(p.number);
+}
+reducedMotion.addEventListener('change',e=>{if(e.matches)stopMotion();else{if(state.page===0)preloadMotion();if(book)prepareLivingScene(book.pages[state.page]);}});
 const $=id=>document.getElementById(id);
 const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const normal=s=>s.toLowerCase().replaceAll('’',"'");
@@ -84,15 +103,17 @@ function wordMarkup(text){
 function renderPage(){
  stopMotion();
  const p=book.pages[state.page];document.documentElement.style.setProperty('--reader-size',state.size+'px');
- $('reader').innerHTML=`<article class="story-page" aria-label="Page ${p.number}"><div class="picture-panel"><img class="scene-wash" src="${p.image}" alt="" aria-hidden="true" decoding="async"><img class="scene-artwork" src="${p.image}" alt="${escapeHTML(p.alt)}" fetchpriority="high" decoding="async"></div><div class="reading-panel"><p class="eyebrow">${p.heading?'CHAPTER '+p.chapter:'ARTUS & PIP'}</p>${p.heading?`<h1 class="chapter-title">${wordMarkup(p.heading)}</h1>`:''}<p class="story-text">${wordMarkup(p.text)}</p>${state.page===24?`<p class="attribution">${escapeHTML(book.attribution)}</p>`:''}<p class="reading-tip">Tap a word whenever you need a little help.</p></div></article>`;
+ $('reader').innerHTML=`<article class="story-page" aria-label="Page ${p.number}"><div class="picture-panel"><img class="scene-wash" src="${p.image}" alt="" aria-hidden="true" decoding="async"><img class="scene-artwork" src="${p.image}" alt="${escapeHTML(p.alt)}" fetchpriority="high" decoding="async"></div>${LivingScenes.SCENES[p.number]?'<button class="replay-motion" disabled>Watch scene</button>':''}<div class="reading-panel"><p class="eyebrow">${p.heading?'CHAPTER '+p.chapter:'ARTUS & PIP'}</p>${p.heading?`<h1 class="chapter-title">${wordMarkup(p.heading)}</h1>`:''}<p class="story-text">${wordMarkup(p.text)}</p>${state.page===24?`<p class="attribution">${escapeHTML(book.attribution)}</p>`:''}<p class="reading-tip">Tap a word whenever you need a little help.</p></div></article>`;
  $('previous').disabled=state.page===0;$('next').disabled=state.page===24;
  $('page-menu').innerHTML=`${p.number} <span>/ ${book.pages.length}</span>`;
  $('page-menu').setAttribute('aria-label',`Page ${p.number} of ${book.pages.length}. Choose a page.`);
  $('reader').querySelectorAll('[data-word]').forEach(b=>b.addEventListener('click',()=>{lastWordButton=b;openWord(b.dataset.word,true);}));
  if(state.page<24){const im=new Image();im.src=book.pages[state.page+1].image;}
  if(state.page===0)preloadMotion();
+ prepareLivingScene(p);
+ if(state.page<24&&!reducedMotion.matches){const next=book.pages[state.page+1];LivingScenes.prepare(next.number,next.image);}
 }
-function goPage(n,animate=false){if(n<0||n>=book.pages.length)return;const turn=animate&&state.page===0&&n===1;stopAudio();help.close();menu.close();state.page=n;save();renderPage();if(turn)playPageTwoMotion();window.scrollTo({top:0,behavior:'instant'});}
+function goPage(n,animate=false){if(n<0||n>=book.pages.length)return;const turn=animate&&state.page===0&&n===1;stopAudio();help.close();menu.close();state.page=n;save();renderPage();if(turn)playPageTwoMotion();else if(animate&&LivingScenes.SCENES[n+1])playLivingScene(n+1);window.scrollTo({top:0,behavior:'instant'});}
 function closeHelp(){stopAudio();help.close();document.querySelectorAll('.word.selected').forEach(x=>x.classList.remove('selected'));}
 function dialogFrame(title,body){return `<div class="dialog-top"><p class="eyebrow">RIGHT READER</p><button class="close" aria-label="Close">×</button></div><div class="menu-body"><h2 class="menu-title" id="menu-title">${title}</h2>${body}</div>`;}
 function showMenu(title,body){stopMotion();closeHelp();stopAudio();menu.innerHTML=dialogFrame(title,body);menu.querySelector('.close').onclick=()=>menu.close();if(!menu.open)menu.showModal();}
@@ -170,7 +191,7 @@ async function saveOffline(){
  try{
   if(!registration||!('caches'in window))throw Error('Offline support has not started. Reopen the page while online.');
   const cache=await caches.open(CACHE);
-  const urls=['./','index.html','reader.js?v=10','styles.css?v=10','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...MOTION_FILES,...Object.values(audioManifest.words).map(a=>a.file)];
+  const urls=['./','index.html','reader.js?v=11','living-scenes.js?v=11','styles.css?v=11','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...MOTION_FILES,...Object.values(audioManifest.words).map(a=>a.file)];
   const unique=[...new Set(urls)];let completed=0;
   for(let i=0;i<unique.length;i+=4){await Promise.all(unique.slice(i,i+4).map(async u=>{const res=await fetch(u,{cache:'reload'});if(!res.ok)throw Error('A book file could not download. Please try again.');await cache.put(u,res);completed++;}));if(label.isConnected)label.textContent=`Saving… ${Math.round(completed/unique.length*100)}%`;}
   if(label.isConnected)label.textContent='Book, animation and all recordings saved for offline reading.';

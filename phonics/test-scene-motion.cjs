@@ -9,9 +9,9 @@ function scene({reduced=false,decode=()=>Promise.resolve()}={}){
  const classes=new Set(),listeners={};
  const page={classList:{add:c=>classes.add(c),remove:c=>classes.delete(c)},querySelector:s=>s==='.reading-panel'?reading:s==='.picture-panel'?page:nodes.get(s),append:n=>nodes.set('.'+n.className,n)};
  const preference={matches:reduced,addEventListener:(name,fn)=>listeners[name]=fn};
- const ctx={window:{matchMedia:()=>preference},document:{hidden:false,querySelector:()=>page,createElement:()=>({setAttribute(){},append(){},remove(){nodes.delete('.'+this.className);}})},Image:class{constructor(){this.style={};}decode(){return decode();}},performance:{now:()=>0},requestAnimationFrame:fn=>{frames.set(++next,fn);return next;},cancelAnimationFrame:id=>frames.delete(id)};
+ const ctx={LivingScenes:{SCENES:{},play:()=>null},window:{matchMedia:()=>preference},document:{hidden:false,querySelector:()=>page,createElement:()=>({setAttribute(){},append(){},remove(){nodes.delete('.'+this.className);}})},Image:class{constructor(){this.style={};}decode(){return decode();}},performance:{now:()=>0},requestAnimationFrame:fn=>{frames.set(++next,fn);return next;},cancelAnimationFrame:id=>frames.delete(id)};
  vm.createContext(ctx);
- const source=fs.readFileSync(__dirname+'/reader.js','utf8');
+ const source=fs.readFileSync(__dirname+'/reader.js','utf8').replace(/^import .*\n/,'');
  vm.runInContext(source.slice(0,source.indexOf('const $=')),ctx);
  return {ctx,nodes,frames,reading,classes,preference,listeners,
   preload:async()=>{vm.runInContext('preloadMotion()',ctx);await vm.runInContext('motionLoading',ctx);},
