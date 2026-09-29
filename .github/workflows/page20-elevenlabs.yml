@@ -1,0 +1,19 @@
+name: Check ElevenLabs access for page 20
+on:
+  push:
+    branches: [codex/elevenlabs-page20]
+    paths:
+      - phonics/check-video-access.py
+      - .github/workflows/page20-elevenlabs.yml
+permissions:
+  contents: read
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read account tier and video API availability without generation
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY1 }}
+        run: python3 phonics/check-video-access.py
