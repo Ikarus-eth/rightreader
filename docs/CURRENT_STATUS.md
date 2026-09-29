@@ -6,7 +6,15 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 29 September 2026
 
-### R11 continuous story scenes — deployed and verified
+### R12 page 20 staged animation — implemented and locally tested
+
+Build `moonflower-20260929-r12` replaces page 20's whole-picture deformation with an authored twelve-second scene. A restored garden plate stays fixed. Two independently rigged crows fly in along curved paths, flap from attached shoulders, release individual pebbles, then depart. Artus and Pip change gaze, head angle and stance at those events. Each impact produces a short splash and ripples; the water rises twice and remains higher in the ending still. **Read now** skips to that result, and **Watch scene** replays it.
+
+Eight assets were made using ChatGPT's built-in image generation, then animated locally; no external paid image/video generator or runtime AI calls are involved. The layers total about 2.6 MiB. [Prompts and asset provenance](MOONFLOWER_PAGE20_PROMPTS.json). The existing page-two animation and pages 12, 15, 18 and 24 are retained. Story text, all 315 recordings, the EPUB, progress key and original reader are unchanged.
+
+Sixteen automated tests and the content verifier pass. The local reader played 1,441 frames over 11,996 ms on this browser, restored the text, and retained a still result. Skip and offline reload/replay passed. Exported initial/final frames have zero changed pixels in sampled sky, right garden/tower and foreground regions. The exported film is 1086 × 1448. These are browser measurements, not a physical iPad/Safari test. Deployment verification is pending. [Implementation and limits](MOONFLOWER_ANIMATION.md).
+
+### R11 continuous story scenes — historical; page 20 superseded by R12
 
 Build `moonflower-20260929-r11` animates the original artwork on **pages 12, 15, 18, 20 and 24**. Continuous connected texture meshes move Artus's and Pip's heads, wings, tails and selected arms/cape; crows, foliage, water and warm light provide scene-specific background motion. Each scene runs for eight seconds on a forward page turn, eases back to the exact original still, and offers **Watch scene** to replay and **Read now** to skip. Direct page selection and reload stay readable. Missing assets, reduced motion or unavailable WebGL leave the original still.
 

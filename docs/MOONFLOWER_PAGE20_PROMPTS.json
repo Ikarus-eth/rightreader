@@ -1,0 +1,81 @@
+{
+  "tool": "ChatGPT built-in image_gen",
+  "external_paid_generation_apis": false,
+  "reference": "phonics/book/images/page-20.jpg",
+  "assets": [
+    {
+      "key": "garden",
+      "transparent": false,
+      "prompt": "Use case: precise-object-edit. Edit target: attached page 20 of The Thirsty Moonflower. Create a CLEAN BACKGROUND PLATE for professional layered 2D animation. Retain the EXACT original portrait framing, camera, richly painted moon garden, blue-violet dusk sky and distant golden-lit castle, right stone tower, top foliage, foreground flowers and path. REMOVE ALL THREE CROWS, the BOY ARTUS, his tall STAFF, and the ORANGE DRAGON PIP completely; carefully reconstruct the scenery behind them. KEEP the large ivy-covered stone WATER JAR in exactly the same place and scale at lower right and keep the wooden cup on the right ledge. Make the open jar interior clearly visible: a dark inner stone wall and a LOW, still dark reflective water surface below the rim, so an animation can later show the water rising. Keep the same stone jar rim outline/perspective. No creatures, people, staff, airborne stones, ripples or particles. Preserve detail and palette. Output one full finished clean background illustration, 3:4 portrait, ideally 1086x1448. No borders, text, grid or labels.",
+      "tool": "built-in image_gen",
+      "asset": "phonics/book/animation/page-20/garden.webp",
+      "generated_output": "exec-db241526-bf80-4db6-aa61-e9ac2f13607e.png",
+      "sha256": "c581a72ff430e72317499982d351feeb3e8ea4ebbfd6b1e7d6dab5b67bd875f9"
+    },
+    {
+      "key": "artus",
+      "transparent": true,
+      "prompt": "Use case: background-extraction / identity-preserve. Reference: attached page 20 of The Thirsty Moonflower. Create a premium animation character layer of ONLY Artus, the blond boy, including his entire tall glowing wooden STAFF, both hands, embroidered green cloak, tunic, trousers and boots. Match his exact original face, age, blond haircut, warm painterly rendering, costume detail, sunset edge light and three-quarter pose facing toward the upper right. Full body, upright stance with both feet visible and his staff held in his LEFT IMAGE-SIDE hand as in the reference. His other hand holds his cloak near his chest. Keep his original happy attentive expression. Complete any areas occluded by the dragon or jar with coherent clothing. NO dragon, birds, jar, scenery, ground, cast shadow, vignette, labels or other props. Isolated on a GENUINELY TRANSPARENT RGBA background with clean antialiased edges, not a checkerboard. Center whole boy and entire staff comfortably within portrait canvas, no clipping. This layer will be rigged at the neck, shoulders, hips and ankles.",
+      "tool": "built-in image_gen",
+      "asset": "phonics/book/animation/page-20/artus.webp",
+      "generated_output": "exec-254d5f34-6018-4b2d-b2e4-1f07ec171ecb.png",
+      "sha256": "d4c61092a7e3ab8897814d1e0f94148daea0bd7209df2156c4484a704a118990"
+    },
+    {
+      "key": "pip",
+      "transparent": true,
+      "prompt": "Use case: background-extraction / identity-preserve. Reference: attached page 20 of The Thirsty Moonflower. Create ONLY PIP the exact little orange dragon as a complete full-body animation cutout. Match his golden-orange scales, ivory chest plates, two curved ivory horns, big warm amber eyes, orange back spikes, orange-and-gold membranous wings and curled flame-shaped tail. Keep original three-quarter pose facing RIGHT, looking happily UP at incoming crows. He stands upright on his hind feet, long body vertical, with BOTH small front paws raised and reaching forward at chest height to rest on an invisible jar rim. Both hind feet and entire tail and wings visible; complete hidden anatomy naturally. Match original highly detailed luminous children's storybook painting and warm rim light. GENUINELY transparent RGBA background, clean edges. No jar, rocks, scenery, birds, people, ground, labels or shadow. Full dragon centered with margin around tail and horns; nothing cropped. The neck/torso are continuous so the head can be rigged without a detached joint.",
+      "tool": "built-in image_gen",
+      "asset": "phonics/book/animation/page-20/pip.webp",
+      "generated_output": "exec-b5ded4ae-3968-4353-9d45-daecbecdb52d.png",
+      "sha256": "4cc6b7892e2641139646b6189233b7fd3bb176cdae8ecce4e1b5d50d25dacd78"
+    },
+    {
+      "key": "crow",
+      "transparent": true,
+      "prompt": "Use case: illustration-story, animation production asset. Reference image: page 20 of The Thirsty Moonflower, specifically the two flying BLACK CROWS. Generate ONE flying crow BODY CUTOUT, WITH ITS TWO WINGS OMITTED entirely so separate wings can be attached for continuous flapping. Match the reference's black/plum feather painting, subtle blue highlights, golden dusk rim light, bright dark eye, slightly cute natural crow anatomy. Pose a three-quarter view, heading LEFT and slightly toward the viewer, body horizontal, head to the lower left, tail trailing to upper right, two small curled legs tucked beneath body. The beak points diagonally down-left and is slightly open to hold a pebble, but NO PEBBLE in this asset. Smooth feathered shoulders remain visible, no bloody or cut surfaces, no wing stumps: just a feathered torso for a rig. Clear large readable body silhouette. Entire head, tail and feet within canvas with generous transparent margin. Premium detailed storybook painting, not a flat cartoon or vector. GENUINELY TRANSPARENT RGBA background. No scenery, labels, motion blur, extra birds or detached components.",
+      "tool": "built-in image_gen",
+      "asset": "phonics/book/animation/page-20/crow.webp",
+      "generated_output": "exec-d93fc7d7-c635-431e-b5dc-5750b04b38ea.png",
+      "sha256": "69c1bb5d324da2308cf88bf41129ef34aeb82756b16ced9d335daf9fac2f1972"
+    },
+    {
+      "key": "wing",
+      "transparent": true,
+      "prompt": "Use case: illustration-story, isolated 2D animation rig piece. Reference image: page 20 of The Thirsty Moonflower, flying crows. Generate ONE completely extended BLACK CROW WING, seen from the upper/dorsal three-quarter view. Soft rounded feathered SHOULDER ROOT is at the BOTTOM RIGHT, wing fans upward and left so the longest primary feather tips are at the TOP LEFT. Natural articulated bird anatomy: small compact shoulder root -> curved elbow -> long wrist and distinct tapered overlapping primary feathers. Feathers fan broadly, tips individually separated. Match the reference's rich black/plum/blue feathers, delicate golden dusk rim light and highly detailed luminous children's storybook painting. No body, head, feet, second wing, scenery, arrows or labels. Whole wing visible with transparent margin, clean feather edges, GENUINELY TRANSPARENT RGBA background. This one feathered piece will be continuously deformed at shoulder, elbow and wrist; clear correctly connected feather structure is essential.",
+      "tool": "built-in image_gen",
+      "asset": "phonics/book/animation/page-20/wing.webp",
+      "generated_output": "exec-4e05a151-307e-4ecf-ba6c-13053ec085c8.png",
+      "sha256": "0c1e57c555bf16ab20dff8c15a87cc50c461da44d1f18ad2a33399ead50728f6"
+    },
+    {
+      "key": "stone",
+      "transparent": true,
+      "prompt": "Use case: illustration-story, tiny animation prop. Reference: warm painterly gray pebbles carried by the crows in page 20. ONE smooth rounded slightly irregular gray-brown PEBBLE isolated against a GENUINELY TRANSPARENT RGBA background, soft golden highlight from upper left, subtle porous stone texture, shaded lower edge. Slightly oval natural river pebble, no flat base, not a gemstone, no cast shadow, no scenery, text or multiple objects. Center the single pebble; simple faithful premium storybook painting.",
+      "tool": "built-in image_gen",
+      "asset": "phonics/book/animation/page-20/stone.webp",
+      "generated_output": "exec-33b50970-88c4-4a56-bcfe-7e374d9aa94c.png",
+      "sha256": "c5193eedcebb1e068de911bec5b0b39f585f662751499147815a55dedbdb1070"
+    },
+    {
+      "key": "artus-gaze",
+      "transparent": true,
+      "prompt": "Use case: precise-object-edit / identity-preserve. EDIT the attached transparent Artus animation cutout. Change ONLY his EYE GAZE: both pupils/irises look distinctly DOWN AND TO THE RIGHT, toward something below his outstretched elbow, as he watches a falling pebble land in a jar. His head, hair, face outline, mouth, body, clothing, hands, staff, lighting and every other pixel must remain registered in exactly the same position, size and angle. Keep exactly the same 1024x1536 canvas and TRANSPARENT RGBA background. No new background or glow. Do not rotate or reposition his head, do not change identity, proportions or expression. This is a second texture for only the eyes of a rigged character; exact registration is essential.",
+      "tool": "built-in image_gen",
+      "asset": "phonics/book/animation/page-20/artus-gaze.webp",
+      "generated_output": "exec-3a012d6f-4903-4a32-a495-e36f5401bfb8.png",
+      "reference_output": "exec-254d5f34-6018-4b2d-b2e4-1f07ec171ecb.png",
+      "sha256": "05c6c15d9f1b339d8111c3afa6076c1cc94e76156ff149ef25d1ff4a983be846"
+    },
+    {
+      "key": "pip-gaze",
+      "transparent": true,
+      "prompt": "Use case: precise-object-edit / identity-preserve. EDIT the attached transparent Pip dragon animation cutout. Change ONLY his EYE GAZE: both pupils/irises look distinctly DOWN AND TO THE RIGHT toward the water below his raised paws. Keep head, horns, hair spikes, face outline, mouth, body, wings, scales, paws, tail, lighting and all other details in exactly the same position, angle and size. Keep exactly the same 1086x1448 canvas and TRANSPARENT RGBA background. No other creatures, no scenery, no glow. Do not rotate or reposition the head or change his happy attentive expression. This is a second texture for only the eyes of a rigged character; exact registration is essential.",
+      "tool": "built-in image_gen",
+      "asset": "phonics/book/animation/page-20/pip-gaze.webp",
+      "generated_output": "exec-aa008df4-5c1a-49f4-a36a-c5aed8345c6d.png",
+      "reference_output": "exec-b5ded4ae-3968-4353-9d45-daecbecdb52d.png",
+      "sha256": "debf29d2414344f7020e543143dbf3dc29d28a542f748088bd6fb81899263ad7"
+    }
+  ]
+}

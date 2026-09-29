@@ -84,3 +84,8 @@ body{background:#102419}
 .scene-playing .replay-motion{visibility:hidden}
 @media(max-width:900px),(orientation:portrait){.living-scene{top:0;transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.living-scene,.replay-motion{display:none}}
+
+/* Page 20 holds its completed, higher-water still while the text is read. */
+.scene20-settled{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(100%,75svh);aspect-ratio:3/4;pointer-events:none}
+.scene20-settled canvas{display:block;width:100%;height:100%}
+@media(max-width:900px),(orientation:portrait){.scene20-settled{top:0;transform:translateX(-50%)}}
