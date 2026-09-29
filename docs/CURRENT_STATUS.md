@@ -4,9 +4,15 @@
 
 The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runtime, service worker, IndexedDB books and save format are unchanged by the Moonflower pilot.
 
-## Moonflower phonics pilot — 28 September 2026
+## Moonflower phonics pilot — 29 September 2026
 
-### R10 character animation — deployed and verified
+### R11 continuous story scenes — implemented and locally verified
+
+Build `moonflower-20260929-r11` animates the original artwork on **pages 12, 15, 18, 20 and 24**. Continuous connected texture meshes move Artus's and Pip's heads, wings, tails and selected arms/cape; crows, foliage, water and warm light provide scene-specific background motion. Each scene runs for eight seconds on a forward page turn, eases back to the exact original still, and offers **Watch scene** to replay and **Read now** to skip. Direct page selection and reload stay readable. Missing assets, reduced motion or unavailable WebGL leave the original still.
+
+All five pages were checked in the local browser, with tablet portrait, desktop landscape and phone layout checks. One eight-second tablet preview rendered 962 frames on this 120 Hz browser. Skip, automatic page-turn playback, restored word help and offline replay after stopping the server passed. Eleven automated tests and the full content verifier pass. The existing story, all 315 recordings, 44 anchors, EPUB, save key and original reader are unchanged. No image/video generation or paid API calls are used by these scenes. Deployment verification is pending. [Implementation and limitations](MOONFLOWER_ANIMATION.md).
+
+### R10 character animation — deployed and verified (historical)
 
 [Pages run 36410997355](https://github.com/Ikarus-eth/rightreader/actions/runs/36410997355) successfully deployed commit `d3a89648b12e185e22bb3c67e2e2cbe297d74d75`. All **22 checked public files** matched the tested source, including all five generated poses and the unchanged original-reader runtime. Live Chrome confirmed five decoded poses, automatic playback, a still ending and restored tappable text. Existing page-one position and two-word history count were preserved after the check. Offline playback also passed after stopping the local preview server. Seven automated checks and the full content verifier passed.
 
