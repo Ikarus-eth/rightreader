@@ -1,3 +1,5 @@
+import * as CrowScene from './crow-scene.js?v=12';
+export const EXTRA_FILES=CrowScene.FILES;
 // Continuous, connected texture meshes. Coordinates are fractions of the original
 // 1086 × 1448 illustrations; rotations use image-height units to preserve shape.
 // Each part turns about a fixed joint and feathers into its attached body.
@@ -27,16 +29,7 @@ export const SCENES={
   part('Pip wing',[.197,.622,.119,.063],[.269,.651],.065,2.7,0,-.04),
   part('Pip tail',[.089,.658,.078,.072],[.182,.689],.065,3.8,.4),leaves()
  ],lights:[[.335,.315,.045],[.887,.115,.052]],motes:[[.68,.44],[.75,.335],[.17,.365]]},
- 20:{parts:[
-  part('Artus head',[.263,.365,.119,.08],[.279,.435],-.038,4.5),
-  part('Pip head',[.491,.493,.099,.054],[.501,.547],-.04,3.6),
-  part('Pip wing',[.342,.62,.126,.063],[.43,.596],.055,2.9,0,-.035),
-  part('Pip tail',[.266,.75,.07,.059],[.348,.765],.065,3.7),
-  part('left crow near wing',[.505,.225,.071,.071],[.555,.282],-.15,1.45,0,-.085),
-  part('left crow far wing',[.621,.259,.065,.042],[.565,.284],.13,1.45,.15,-.07),
-  part('right crow wing',[.917,.258,.068,.083],[.846,.31],.15,1.65,.5,-.08),
-  part('perched crow head',[.665,.503,.058,.046],[.716,.518],-.045,3.2),leaves()
- ],lights:[[.125,.315,.055]],water:[.656,.594,.122,.014]},
+ 20:{kind:'staged',parts:[]},
  24:{parts:[
   part('Artus head',[.424,.413,.136,.091],[.377,.497],.029,4.6),
   part('Pip head',[.639,.536,.099,.071],[.676,.595],-.042,3.9),
@@ -56,6 +49,7 @@ export function pose(scene,ms){
  return scene.parts.map(p=>{const wave=Math.sin(time*2*Math.PI/p.period+p.phase)*gain;return [p.angle*wave,p.stretch*wave];});
 }
 export function prepare(number,src){
+ if(number===20)return CrowScene.prepare();
  if(!SCENES[number])return Promise.resolve(null);
  if(!images.has(number)){
   const entry={image:null,promise:null};
@@ -139,6 +133,7 @@ function effects(ctx,scene,ms){
  ctx.restore();
 }
 export function play(number,parent,onEnd){
+ if(number===20)return CrowScene.play(parent,onEnd);
  const scene=SCENES[number],img=images.get(number)?.image;
  if(!scene||!img||document.hidden||window.matchMedia('(prefers-reduced-motion: reduce)').matches){parent.dataset.motionStatus=!img?'unready':document.hidden?'hidden':'reduced';return null;}
  const layer=document.createElement('div');layer.className='living-scene';layer.setAttribute('aria-hidden','true');layer.dataset.page=number;

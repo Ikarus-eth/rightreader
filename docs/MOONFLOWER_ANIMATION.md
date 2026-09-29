@@ -1,6 +1,20 @@
-# Moonflower continuous story animation
+# Moonflower story animation
 
-## R11 — pages 12, 15, 18, 20 and 24
+## R12 — page 20, crows and stones
+
+The user rejected synchronized whole-image movement and requested a staged action: crows arrive, Artus and Pip follow them, stones drop, and water rises. Page 20 now uses eight separate painted assets, with a completely fixed background. All were generated with ChatGPT's built-in image editor; full prompts and output IDs are in [the asset manifest](MOONFLOWER_PAGE20_PROMPTS.json). Runtime assets are in `phonics/book/animation/page-20/` (eight WebP files, about 2.6 MiB). No external image/video generation service, runtime generation, or recurring generation fee is used.
+
+`crow-timeline.js` defines a twelve-second action. Crow arrivals are staggered; each bird follows an eased cubic flight path. Separate near and far wings make full strokes with spanwise feather lag and foreshortening. Wing roots and the carried stone share the body transform, so the shoulder attachment and release point cannot drift. Pebbles release at 4.15 and 6.65 seconds, fall with acceleration, and hit at 4.83 and 7.33 seconds. Water rises after each impact, with brief splash droplets and expanding broken rings. The final higher level holds.
+
+`crow-scene.js` composites the scene with WebGL and small local water canvases. Artus and Pip use connected transparent character meshes with feathered head, torso, cape/wing and tail controls. Narrow eye masks blend registered gaze variants when the characters look from birds to falling stones. The jar's unchanged front lip occludes Pip. Only these separated character layers deform; the sky, castle, garden and camera do not move. The water reflects a static patch of the existing painted sky.
+
+On completion or **Read now**, the final scene is copied to one still canvas and all animation callbacks and graphics resources are released. The reading text returns. Forward entry and **Watch scene** start playback; direct page selection/reload stays still. Missing assets, reduced motion, hidden tabs or unavailable graphics keep reading available. Eight images and both new modules are included in offline saving. Original-reader code, book text/audio, page-two poses and the other four living illustrations are unchanged.
+
+Validation: sixteen deterministic tests cover stone release continuity, impact placement, attached wing roots, event-driven water/gaze, completion/skip/hidden/context loss, GPU cleanup, fallbacks and existing reader/audio behavior. The content validator preserves 25 pages, 587 body words, 265 distinct story/title words, 315 recordings/maps and 44 sound anchors. Local reader playback rendered 1,441 frames over 11,996 ms on this 120 Hz browser. Completion, skip, restored text and offline reload/replay were checked. A 1086 × 1448 film was exported; sampled background areas are pixel-identical in the opening and ending frames.
+
+This is layered 2D illustration animation with procedural posing, not a fully drawn character acting performance. Heads stay in the existing camera angle; generated layers have small drawing differences from the original page. Physical iPad/Safari performance remains untested. The EPUB stays static.
+
+## R11 — historical; retained on pages 12, 15, 18 and 24
 
 The user requested continuous animation of Pip, Artus and some background elements on these five pages, published at the existing `/rightreader/phonics/` link. `phonics/living-scenes.js` rigs the existing 1086 × 1448 illustrations; there are **no new generated images, videos, external dependencies, runtime generation calls or extra service fees**. The original artwork is the texture, preserving character identity and composition.
 

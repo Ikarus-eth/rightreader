@@ -1,7 +1,7 @@
-import * as LivingScenes from './living-scenes.js?v=11';
-const BUILD='moonflower-20260929-r11';
+import * as LivingScenes from './living-scenes.js?v=12';
+const BUILD='moonflower-20260929-r12';
 const KEY='rrp_moonflower_v1';
-const CACHE='rightreader-phonics-moonflower-v11';
+const CACHE='rightreader-phonics-moonflower-v12';
 const MOTION_FILES=[1,2,3,4,5].map(n=>`book/animation/page-02/pose-0${n}.jpg`);
 const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 let stopLivingScene=null;
@@ -191,7 +191,7 @@ async function saveOffline(){
  try{
   if(!registration||!('caches'in window))throw Error('Offline support has not started. Reopen the page while online.');
   const cache=await caches.open(CACHE);
-  const urls=['./','index.html','reader.js?v=11','living-scenes.js?v=11','styles.css?v=11','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...MOTION_FILES,...Object.values(audioManifest.words).map(a=>a.file)];
+  const urls=['./','index.html','reader.js?v=12','living-scenes.js?v=12','crow-scene.js?v=12','crow-timeline.js?v=12','styles.css?v=12','book/story.json','teaching.json','audio.json','manifest.json',...book.pages.map(p=>p.image),...MOTION_FILES,...LivingScenes.EXTRA_FILES,...Object.values(audioManifest.words).map(a=>a.file)];
   const unique=[...new Set(urls)];let completed=0;
   for(let i=0;i<unique.length;i+=4){await Promise.all(unique.slice(i,i+4).map(async u=>{const res=await fetch(u,{cache:'reload'});if(!res.ok)throw Error('A book file could not download. Please try again.');await cache.put(u,res);completed++;}));if(label.isConnected)label.textContent=`Saving… ${Math.round(completed/unique.length*100)}%`;}
   if(label.isConnected)label.textContent='Book, animation and all recordings saved for offline reading.';
