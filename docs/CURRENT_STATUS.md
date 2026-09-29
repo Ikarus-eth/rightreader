@@ -6,11 +6,11 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 29 September 2026
 
-### R11 continuous story scenes — implemented and locally verified
+### R11 continuous story scenes — deployed and verified
 
 Build `moonflower-20260929-r11` animates the original artwork on **pages 12, 15, 18, 20 and 24**. Continuous connected texture meshes move Artus's and Pip's heads, wings, tails and selected arms/cape; crows, foliage, water and warm light provide scene-specific background motion. Each scene runs for eight seconds on a forward page turn, eases back to the exact original still, and offers **Watch scene** to replay and **Read now** to skip. Direct page selection and reload stay readable. Missing assets, reduced motion or unavailable WebGL leave the original still.
 
-All five pages were checked in the local browser, with tablet portrait, desktop landscape and phone layout checks. One eight-second tablet preview rendered 962 frames on this 120 Hz browser. Skip, automatic page-turn playback, restored word help and offline replay after stopping the server passed. Eleven automated tests and the full content verifier pass. The existing story, all 315 recordings, 44 anchors, EPUB, save key and original reader are unchanged. No image/video generation or paid API calls are used by these scenes. Deployment verification is pending. [Implementation and limitations](MOONFLOWER_ANIMATION.md).
+All five pages were checked in the local browser, with tablet portrait, desktop landscape and phone layout checks. One eight-second tablet preview rendered 962 frames on this 120 Hz browser. Skip, automatic page-turn playback, restored word help and offline replay after stopping the server passed. Eleven automated tests and the full content verifier pass. The existing story, all 315 recordings, 44 anchors, EPUB, save key and original reader are unchanged. No image/video generation or paid API calls are used by these scenes. [GitHub Pages run 36536328833](https://github.com/Ikarus-eth/rightreader/actions/runs/36536328833) deployed merge commit `1f5e671b1eaee063666eacbd0d7498d7f40a51dc`. All 16 checked public files match the tested source. Live browser checks confirmed all five scenes render, settle and restore text; the existing page-two position and eight-word history count were preserved. [Implementation and limitations](MOONFLOWER_ANIMATION.md).
 
 ### R10 character animation — deployed and verified (historical)
 

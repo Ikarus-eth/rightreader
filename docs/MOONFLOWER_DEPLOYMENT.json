@@ -5569,5 +5569,132 @@
       "readingPageRestoredTo": 1,
       "existingHelpWordCountPreserved": 2
     }
+  },
+  "continuousScenesUpdate": {
+    "build": "moonflower-20260929-r11",
+    "commit": "1f5e671b1eaee063666eacbd0d7498d7f40a51dc",
+    "url": "https://ikarus-eth.github.io/rightreader/phonics/",
+    "pagesRun": 36536328833,
+    "verifiedAt": "2026-09-29T07:24:39.620180+00:00",
+    "files": [
+      {
+        "path": "phonics/index.html",
+        "sha256": "b05a528ad66cce2b0fc4be1cde6551f114b9faa3f63684d3c86482cd6df1351d",
+        "matches": true,
+        "bytes": 1903
+      },
+      {
+        "path": "phonics/reader.js",
+        "sha256": "100bd3bf3f08e347388fa41db93755aa318093528d7abe3fb456ea6a38dca9aa",
+        "matches": true,
+        "bytes": 24140
+      },
+      {
+        "path": "phonics/living-scenes.js",
+        "sha256": "5457907c7a74bb2bdecd94426ce1993ed197d7ac7c6600cb64e563d30846a5b1",
+        "matches": true,
+        "bytes": 10625
+      },
+      {
+        "path": "phonics/styles.css",
+        "sha256": "c07ee1fb8feb8a76379d35f0d2a1cd39a4bf96c044eabc5daf46a15e3d2ab4a3",
+        "matches": true,
+        "bytes": 17639
+      },
+      {
+        "path": "phonics/sw.js",
+        "sha256": "cf16f89c43786a76695548560e9405a0cae57b4e1ade23bdb18079fda55574bd",
+        "matches": true,
+        "bytes": 2383
+      },
+      {
+        "path": "phonics/book/story.json",
+        "sha256": "464658b42c9cc4b470d77df9437bc62c6396253cea2c4a282ae159e32570fff1",
+        "matches": true,
+        "bytes": 8788
+      },
+      {
+        "path": "phonics/audio.json",
+        "sha256": "d710989ec8094305fc70fca7375b71605d1bd232f3fb559f9630be26b7160abf",
+        "matches": true,
+        "bytes": 152336
+      },
+      {
+        "path": "phonics/teaching.json",
+        "sha256": "ac9d2a56b6e5b20335405a143189d0820307ecd305b11d051c923d34e0d9f6cc",
+        "matches": true,
+        "bytes": 196396
+      },
+      {
+        "path": "index.html",
+        "sha256": "41f385ac1fa2a9b384197b4aa269eeff4068e93d5c4084af7a70f7f096d191f4",
+        "matches": true,
+        "bytes": 1767
+      },
+      {
+        "path": "app.js",
+        "sha256": "5bc39857bcda416bb8b78a5a905833c8ec19af994a6b3b15e97c7995f4bf7a4a",
+        "matches": true,
+        "bytes": 546727
+      },
+      {
+        "path": "sw.js",
+        "sha256": "092ec50d1bb126ba1132eebad8ed2e0b6be926c564f3b365f77dc269f4fc1504",
+        "matches": true,
+        "bytes": 2537
+      },
+      {
+        "path": "phonics/book/images/page-12.jpg",
+        "sha256": "d7ea3c676284b9a3e29c427663d57817a9e85fe66020b5f05cc675c3c24b9f5f",
+        "matches": true,
+        "bytes": 580466
+      },
+      {
+        "path": "phonics/book/images/page-15.jpg",
+        "sha256": "b295d02ddb1cc365ec0c3afa3579dcc749681bf5780d3bb499a2f45a13bc65b5",
+        "matches": true,
+        "bytes": 573545
+      },
+      {
+        "path": "phonics/book/images/page-18.jpg",
+        "sha256": "65a77e2e6c5d7df6660ca2e09e76199a8fb700475da819817628c22979233c1c",
+        "matches": true,
+        "bytes": 501978
+      },
+      {
+        "path": "phonics/book/images/page-20.jpg",
+        "sha256": "f15931b7067675d5becbe6cbf6303dfbdd4e94dd6f92b6b836cb159964002eaa",
+        "matches": true,
+        "bytes": 474720
+      },
+      {
+        "path": "phonics/book/images/page-24.jpg",
+        "sha256": "522ef90b1146e6ac4fdd7bd2b7ef6e402965140a0b7e466e3ef0d5bae3967f37",
+        "matches": true,
+        "bytes": 521010
+      }
+    ],
+    "pullRequest": "https://github.com/Ikarus-eth/rightreader/pull/4",
+    "automatedTests": 11,
+    "contentVerifier": "passed",
+    "offlineReplay": "passed after stopping local server",
+    "livePages": [
+      12,
+      15,
+      18,
+      20,
+      24
+    ],
+    "liveFinalScene": {
+      "frames": 962,
+      "elapsedMs": 7995,
+      "remainingCanvases": 0,
+      "restoredWordButtons": 25
+    },
+    "preservedLiveState": {
+      "page": 2,
+      "wordCount": 8
+    },
+    "physicalIPadTested": false
   }
 }

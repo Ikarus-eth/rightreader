@@ -25,7 +25,8 @@ Forward Next/ArrowRight entry plays once when the next picture is decoded. A **W
 - Local browser: all five scenes visually inspected; 1280 × 720, 820 × 1180 and 390 × 844 layouts checked. Page 20 rendered 962 frames over 7995 ms on the test browser (approximately 120 Hz; physical device performance varies).
 - Automatic page 23 → 24 playback, manual replay, Read now, restored flower word help and its spelling family passed.
 - After Save this book for offline reading completed, the preview server was stopped. Reload restored page 24 and its saved word count; replay worked from the offline pack.
-- Physical iPad/Safari has not been tested. Public deployment verification is recorded separately in `MOONFLOWER_DEPLOYMENT.json` after publishing.
+- Live deployment: Pages run `36536328833` succeeded for commit `1f5e671b1eaee063666eacbd0d7498d7f40a51dc`; all 16 public-file hash checks matched. All five pages rendered in the live browser. Page 24 finished after 962 frames / 7995 ms, removed both canvases and restored 25 tappable words. The original page-two reading position and eight-word history count were restored. Details: `MOONFLOWER_DEPLOYMENT.json`, `continuousScenesUpdate`.
+- Physical iPad/Safari has not been tested.
 
 ## R10 — page-two animation (retained)
 
