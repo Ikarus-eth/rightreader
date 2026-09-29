@@ -6,13 +6,13 @@ The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runti
 
 ## Moonflower phonics pilot — 29 September 2026
 
-### R12 page 20 staged animation — implemented and locally tested
+### R12 page 20 staged animation — deployed and verified
 
 Build `moonflower-20260929-r12` replaces page 20's whole-picture deformation with an authored twelve-second scene. A restored garden plate stays fixed. Two independently rigged crows fly in along curved paths, flap from attached shoulders, release individual pebbles, then depart. Artus and Pip change gaze, head angle and stance at those events. Each impact produces a short splash and ripples; the water rises twice and remains higher in the ending still. **Read now** skips to that result, and **Watch scene** replays it.
 
 Eight assets were made using ChatGPT's built-in image generation, then animated locally; no external paid image/video generator or runtime AI calls are involved. The layers total about 2.6 MiB. [Prompts and asset provenance](MOONFLOWER_PAGE20_PROMPTS.json). The existing page-two animation and pages 12, 15, 18 and 24 are retained. Story text, all 315 recordings, the EPUB, progress key and original reader are unchanged.
 
-Sixteen automated tests and the content verifier pass. The local reader played 1,441 frames over 11,996 ms on this browser, restored the text, and retained a still result. Skip and offline reload/replay passed. Exported initial/final frames have zero changed pixels in sampled sky, right garden/tower and foreground regions. The exported film is 1086 × 1448. These are browser measurements, not a physical iPad/Safari test. Deployment verification is pending. [Implementation and limits](MOONFLOWER_ANIMATION.md).
+Sixteen automated tests and the content verifier pass. The local reader played 1,441 frames over 11,996 ms on this browser, restored the text, and retained a still result. Skip and offline reload/replay passed. Exported initial/final frames have zero changed pixels in sampled sky, right garden/tower and foreground regions. The exported film is 1086 × 1448. These are browser measurements, not a physical iPad/Safari test. [Pages run 36547527913](https://github.com/Ikarus-eth/rightreader/actions/runs/36547527913) deployed commit `1acf2ed924fa67780b01bf276b6d27c8b18aa134`. All 19 public-file hashes match the tested source. The live scene completed after 1,441 frames / 11,993 ms, held its final still and restored the text. The current page-20 position and eight-word history count were preserved. [Implementation and limits](MOONFLOWER_ANIMATION.md).
 
 ### R11 continuous story scenes — historical; page 20 superseded by R12
 
@@ -80,4 +80,4 @@ The EPUB and illustrations are unchanged from the previously verified release: E
 
 ### Outside this pilot
 
-Arbitrary PDF/EPUB import into phonics mode, automatic phonics diagnosis, speech scoring, a complete curriculum covering every English spelling, isolated-phoneme recordings, generated song performances and animated illustrations are not implemented. The original reader retains its own EPUB import.
+Arbitrary PDF/EPUB import into phonics mode, automatic phonics diagnosis, speech scoring, a complete curriculum covering every English spelling, isolated-phoneme recordings, generated song performances are not implemented. The original reader retains its own EPUB import.

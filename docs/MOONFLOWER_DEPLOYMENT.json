@@ -5696,5 +5696,176 @@
       "wordCount": 8
     },
     "physicalIPadTested": false
+  },
+  "page20StagedAnimationUpdate": {
+    "build": "moonflower-20260929-r12",
+    "commit": "1acf2ed924fa67780b01bf276b6d27c8b18aa134",
+    "url": "https://ikarus-eth.github.io/rightreader/phonics/",
+    "pagesRun": 36547527913,
+    "pagesConclusion": "success",
+    "verifiedAt": "2026-09-29T09:13:59.211482+00:00",
+    "files": [
+      {
+        "path": "phonics/index.html",
+        "sha256": "6cf8b6c08b13e6baac9ec7d6f7af40f6527c69865d7d400003d56521d083d103",
+        "matches": true,
+        "bytes": 1903
+      },
+      {
+        "path": "phonics/reader.js",
+        "sha256": "74928d5b00c12f79f77995111425051d51e4f6dbb4b4f2bf92ed5097f3b4eb7b",
+        "matches": true,
+        "bytes": 24213
+      },
+      {
+        "path": "phonics/styles.css",
+        "sha256": "23c94c8a9708b7c2346111c915e49b63754d3e15c1217ac59286fef7661909d3",
+        "matches": true,
+        "bytes": 18022
+      },
+      {
+        "path": "phonics/sw.js",
+        "sha256": "d015184b7133fa9e7126597bd10b9cfef5ec5a37f2fca221746372b8f99cfcd0",
+        "matches": true,
+        "bytes": 2428
+      },
+      {
+        "path": "phonics/living-scenes.js",
+        "sha256": "3c543d433baaf5eb40765f0ced75daa58586f099ac10c69ed9e4fa270b670753",
+        "matches": true,
+        "bytes": 10192
+      },
+      {
+        "path": "phonics/crow-scene.js",
+        "sha256": "4125343e86856246c9aad09b8e1f5c96716e208889b4677cccda6ff5ffb3ddd5",
+        "matches": true,
+        "bytes": 13343
+      },
+      {
+        "path": "phonics/crow-timeline.js",
+        "sha256": "97bfedff18307ded37b1e06166ab0eb5ad0bb071c30659a20eee5316a6928ecd",
+        "matches": true,
+        "bytes": 3140
+      },
+      {
+        "path": "phonics/book/story.json",
+        "sha256": "464658b42c9cc4b470d77df9437bc62c6396253cea2c4a282ae159e32570fff1",
+        "matches": true,
+        "bytes": 8788
+      },
+      {
+        "path": "phonics/book/Artus-and-Pip-The-Thirsty-Moonflower.epub",
+        "sha256": "31717ef0641b2f334a4d87175447b71d3ad0513e02c9736b93e5d5a93b95fef9",
+        "matches": true,
+        "bytes": 13712578
+      },
+      {
+        "path": "app.js",
+        "sha256": "5bc39857bcda416bb8b78a5a905833c8ec19af994a6b3b15e97c7995f4bf7a4a",
+        "matches": true,
+        "bytes": 546727
+      },
+      {
+        "path": "sw.js",
+        "sha256": "092ec50d1bb126ba1132eebad8ed2e0b6be926c564f3b365f77dc269f4fc1504",
+        "matches": true,
+        "bytes": 2537
+      },
+      {
+        "path": "phonics/book/animation/page-20/artus.webp",
+        "sha256": "d4c61092a7e3ab8897814d1e0f94148daea0bd7209df2156c4484a704a118990",
+        "matches": true,
+        "bytes": 362826
+      },
+      {
+        "path": "phonics/book/animation/page-20/pip-gaze.webp",
+        "sha256": "debf29d2414344f7020e543143dbf3dc29d28a542f748088bd6fb81899263ad7",
+        "matches": true,
+        "bytes": 338398
+      },
+      {
+        "path": "phonics/book/animation/page-20/pip.webp",
+        "sha256": "4cc6b7892e2641139646b6189233b7fd3bb176cdae8ecce4e1b5d50d25dacd78",
+        "matches": true,
+        "bytes": 361248
+      },
+      {
+        "path": "phonics/book/animation/page-20/wing.webp",
+        "sha256": "0c1e57c555bf16ab20dff8c15a87cc50c461da44d1f18ad2a33399ead50728f6",
+        "matches": true,
+        "bytes": 304386
+      },
+      {
+        "path": "phonics/book/animation/page-20/garden.webp",
+        "sha256": "c581a72ff430e72317499982d351feeb3e8ea4ebbfd6b1e7d6dab5b67bd875f9",
+        "matches": true,
+        "bytes": 507072
+      },
+      {
+        "path": "phonics/book/animation/page-20/stone.webp",
+        "sha256": "c5193eedcebb1e068de911bec5b0b39f585f662751499147815a55dedbdb1070",
+        "matches": true,
+        "bytes": 273706
+      },
+      {
+        "path": "phonics/book/animation/page-20/crow.webp",
+        "sha256": "69c1bb5d324da2308cf88bf41129ef34aeb82756b16ced9d335daf9fac2f1972",
+        "matches": true,
+        "bytes": 220874
+      },
+      {
+        "path": "phonics/book/animation/page-20/artus-gaze.webp",
+        "sha256": "05c6c15d9f1b339d8111c3afa6076c1cc94e76156ff149ef25d1ff4a983be846",
+        "matches": true,
+        "bytes": 351202
+      }
+    ],
+    "automatedTests": 16,
+    "contentVerifier": "PASS: 25 pages, 587 body words, 265 distinct story/title words, 315 recordings/maps, 44 sound anchors",
+    "browserChecks": {
+      "localEntryReplaySkip": true,
+      "localOfflineReloadAndReplayWithServerStopped": true,
+      "portrait820x1180": true,
+      "liveBuild": "moonflower-20260929-r12",
+      "liveFrames": 1441,
+      "liveLastFrameMs": 11993,
+      "liveFinalStill": true,
+      "liveReadingRestored": true,
+      "liveConsoleErrors": [],
+      "preservedPage": 20,
+      "preservedWordCount": 8
+    },
+    "backgroundPixelChecks": {
+      "upper garden and sky": {
+        "changed_pixels": 0,
+        "total_pixels": 320370
+      },
+      "right garden and tower": {
+        "changed_pixels": 0,
+        "total_pixels": 196928
+      },
+      "foreground": {
+        "changed_pixels": 0,
+        "total_pixels": 160728
+      },
+      "water opening": {
+        "changed_pixels": 15565,
+        "total_pixels": 18753
+      },
+      "film": {
+        "frames": 698,
+        "duration_seconds": 11.974,
+        "average_fps": 58.20945381660264,
+        "largest_gap_ms": 97.0,
+        "gap_p95_ms": 25.9999999999998
+      }
+    },
+    "generation": "Eight ChatGPT built-in image_gen assets; no external paid image/video generation service or runtime generation",
+    "limitations": [
+      "Layered 2D illustration animation with procedural posing; no new camera angles.",
+      "Small drawing differences from the source page remain.",
+      "Physical iPad/Safari untested.",
+      "EPUB remains static."
+    ]
   }
 }
