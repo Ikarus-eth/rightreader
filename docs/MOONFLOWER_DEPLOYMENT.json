@@ -5867,5 +5867,79 @@
       "Physical iPad/Safari untested.",
       "EPUB remains static."
     ]
+  },
+  "elevenLabsPage20Update": {
+    "date": "2026-09-30",
+    "build": "moonflower-20260930-r13",
+    "pullRequest": "https://github.com/Ikarus-eth/rightreader/pull/6",
+    "implementationCommit": "6f2fb5ca6b6e76ac1c5211da4dc0d7c861427bcd",
+    "pagesRun": "https://github.com/Ikarus-eth/rightreader/actions/runs/36654804474",
+    "pagesConclusion": "success",
+    "publicFileHashes": [
+      {
+        "path": "phonics/book/animation/page-20/elevenlabs-ending.webp",
+        "bytes": 428274,
+        "match": true,
+        "sha256": "76734d898a93cb40210f199d509c412163627a17da47a220c40e56a6adffab86"
+      },
+      {
+        "path": "phonics/book/animation/page-20/elevenlabs-scene.mp4",
+        "bytes": 5641935,
+        "match": true,
+        "sha256": "5e620e70838cc88956a22d881e5032e267a0dd53179e11ee1f03977d2ef0fbc4"
+      },
+      {
+        "path": "phonics/index.html",
+        "bytes": 1903,
+        "match": true,
+        "sha256": "9a5bf0802557ee3fb80266a229d92f5c13e2b9616c8dd7146a55052c3916de1d"
+      },
+      {
+        "path": "phonics/living-scenes.js",
+        "bytes": 10201,
+        "match": true,
+        "sha256": "532cc4447d76090d12a96e7bdfca2aaa3113e796421b54a1d372a98f66d6fce5"
+      },
+      {
+        "path": "phonics/page20-video.js",
+        "bytes": 2621,
+        "match": true,
+        "sha256": "adfde5ed1a1c214ebbb1214d081b8b7c618a92aa6d524befd6477ceba0bea50d"
+      },
+      {
+        "path": "phonics/reader.js",
+        "bytes": 24191,
+        "match": true,
+        "sha256": "f5e3d7dcf28d6d29391c9880476ea9ad1d9e1bc970e6f6d72d3a9c014099cfc2"
+      },
+      {
+        "path": "phonics/sw.js",
+        "bytes": 2406,
+        "match": true,
+        "sha256": "e3118e41d8a4463c9ff3692072c3205e00f2bd40305eac744e5fbf40906014a7"
+      }
+    ],
+    "liveBrowser": {
+      "browser": "Chrome",
+      "durationSeconds": 12.041667,
+      "dimensions": [
+        1248,
+        1664
+      ],
+      "completion": "finished; video element removed; ending still retained; all 26 tappable words restored",
+      "consoleErrors": [],
+      "savedWordCountBefore": 2,
+      "savedWordCountAfter": 2,
+      "readingPositionRestored": 1
+    },
+    "localBrowser": {
+      "offlineReplay": "passed after local server stopped and page reloaded",
+      "forwardPage19To20": "automatically plays",
+      "readNow": "holds ending and restores reading"
+    },
+    "limits": [
+      "Physical iPad/Safari not tested.",
+      "Some painted background texture and foliage is softened/reinterpreted by the generation."
+    ]
   }
 }

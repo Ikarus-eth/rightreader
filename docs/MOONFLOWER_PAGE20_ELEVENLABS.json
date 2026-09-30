@@ -67,7 +67,32 @@
     }
   },
   "encoding": "HEVC source converted to H.264, CRF 20, yuv420p, 24 fps, unchanged dimensions, fast start; no audio. Ending WebP quality 93.",
-  "deployment": "pending",
+  "deployment": {
+    "date": "2026-09-30",
+    "build": "moonflower-20260930-r13",
+    "pullRequest": "https://github.com/Ikarus-eth/rightreader/pull/6",
+    "implementationCommit": "6f2fb5ca6b6e76ac1c5211da4dc0d7c861427bcd",
+    "pagesRun": "https://github.com/Ikarus-eth/rightreader/actions/runs/36654804474",
+    "pagesConclusion": "success",
+    "liveBrowser": {
+      "browser": "Chrome",
+      "durationSeconds": 12.041667,
+      "dimensions": [
+        1248,
+        1664
+      ],
+      "completion": "finished; video element removed; ending still retained; all 26 tappable words restored",
+      "consoleErrors": [],
+      "savedWordCountBefore": 2,
+      "savedWordCountAfter": 2,
+      "readingPositionRestored": 1
+    },
+    "localBrowser": {
+      "offlineReplay": "passed after local server stopped and page reloaded",
+      "forwardPage19To20": "automatically plays",
+      "readNow": "holds ending and restores reading"
+    }
+  },
   "prompt": "Animate this exact storybook illustration in one continuous 12-second shot. Locked camera; preserve the composition, painted texture, warm sunset lighting, the boy Artus and small orange dragon Pip. The stone jar, tower, distant castle, mountains and garden stay stationary.\n\n0\u20133 seconds: the two airborne crows flap naturally and arc toward the opening of the water jar, slowing above it, each holding one pebble in its beak. The third crow stays perched. Artus and Pip track the approaching crows with their eyes and small natural head turns, then lean slightly toward the jar. Keep their faces, hair and anatomy consistent and solid.\n\n3\u20137 seconds: one flying crow opens its beak and releases its pebble directly over the jar; the second crow releases its pebble a moment later. Show each pebble detach clearly, fall under gravity and enter the water inside the rim. Each impact creates one small splash and expanding ripples. Artus and Pip follow the falling pebbles with their gaze.\n\n7\u201310 seconds: the water surface visibly rises within the fixed jar, reaching close to the inner rim. Both characters look down at the rising water with delighted surprise; Pip makes a small excited body movement while keeping his paws connected to the rim. The two flying crows bank gently away.\n\n10\u201312 seconds: settle into a calm ending with the higher water level visible. Fluid, carefully articulated storybook character animation; subtle blinks, coherent heads and joints, stable facial features and individual hair locks. No camera movement, cuts, dialogue, captions, background warping, facial stretching, melting hair, extra limbs or additional characters.",
   "localValidation": {
     "automatedTests": 14,
