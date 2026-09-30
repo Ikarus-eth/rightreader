@@ -9,7 +9,7 @@ function setup({reduced=false,hidden=false,decode=()=>Promise.resolve(),gpu=true
   drawElements:()=>draws++},{get:(o,k)=>k in o?o[k]:k.startsWith('create')?()=>({}):k.startsWith('delete')?r=>deleted.push(r):()=>{}});
  const ctx2d={clearRect(){},save(){},restore(){},createRadialGradient:()=>({addColorStop(){}}),fillRect(){},beginPath(){},stroke(){},fill(){},arc(){},ellipse(x,y,rx,ry){assert.ok(rx>=0&&ry>=0,'no negative ripple radius');}};
  const parent={dataset:{},append:node=>children.add(node)};
- const context={CrowScene:{FILES:[]},console,Float32Array,Uint16Array,Image:class{decode(){return decode();}},window:{matchMedia:()=>({matches:reduced})},document:{hidden,
+ const context={Page20Video:{FILES:[]},console,Float32Array,Uint16Array,Image:class{decode(){return decode();}},window:{matchMedia:()=>({matches:reduced})},document:{hidden,
   createElement:tag=>({dataset:{},setAttribute(){},append(){},remove(){children.delete(this);},getContext:type=>type==='webgl'?(gpu?gl:null):ctx2d,addEventListener:(type,fn)=>events[type]=fn,removeEventListener:type=>delete events[type]})},
   performance:{now:()=>100},requestAnimationFrame:fn=>{frames.set(++id,fn);return id;},cancelAnimationFrame:id=>frames.delete(id)};
  vm.createContext(context);vm.runInContext(source,context);const api=vm.runInContext('({SCENES,prepare,play,pose,envelope})',context);
@@ -43,7 +43,7 @@ test('missing, unready, reduced-motion, hidden or unsupported scenes never hide 
 });
 test('each scene starts and finishes at the exact still, with small continuous joint movements',()=>{
  const {api}=setup();assert.deepEqual(Object.keys(api.SCENES),['12','15','18','20','24']);
- for(const scene of Object.values(api.SCENES).filter(scene=>scene.kind!=='staged')){
+ for(const scene of Object.values(api.SCENES).filter(scene=>scene.kind!=='video')){
   assert.ok(scene.parts.some(p=>p.name.startsWith('Artus')));assert.ok(scene.parts.some(p=>p.name.startsWith('Pip')));
   for(const time of [0,8000])for(const pair of api.pose(scene,time))for(const value of pair)assert.equal(Math.abs(value),0);
   let previous=api.pose(scene,0);

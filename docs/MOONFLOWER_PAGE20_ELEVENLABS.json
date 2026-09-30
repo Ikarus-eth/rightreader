@@ -1,0 +1,83 @@
+{
+  "date": "2026-09-30",
+  "scope": "Replace only Moonflower page 20 animation. Preserve the original reference illustration, reader behavior and all other pages.",
+  "reference": "phonics/book/images/page-20.jpg",
+  "provider": "ElevenLabs website",
+  "generation": {
+    "date": "2026-09-30",
+    "status": "completed",
+    "browser": "Chrome",
+    "tabId": "288977839",
+    "model": "Seedance 2.5",
+    "aspectRatio": "Auto (original 3:4 reference)",
+    "resolution": "1080p",
+    "durationSeconds": 12,
+    "audio": false,
+    "generations": 1,
+    "promptEnhancement": false,
+    "generationRequests": 1,
+    "liveStoryChanged": false,
+    "referenceUploaded": true,
+    "historyURL": "https://elevenlabs.io/app/image-video/history?modality=video&generationId=WKK6f2d3yQs6fVYRBV7y",
+    "uploadMethod": "Native Chrome file chooser; extension settings were not changed.",
+    "generationId": "WKK6f2d3yQs6fVYRBV7y",
+    "creditsDisplayed": 75287
+  },
+  "review": {
+    "passedForIntegration": true,
+    "observations": [
+      "Face and hair retain coherent shape through head turns, lean and blink.",
+      "Both crows beat attached wings, drop separate stones into the jar, then fly away.",
+      "Artus and Pip track the action and react to the higher water.",
+      "Jar, distant castle, mountains and camera keep their framing.",
+      "Some painted background texture and foliage is softened or reinterpreted by the model; it is not pixel-identical to the still."
+    ],
+    "source": {
+      "width": 1248,
+      "height": 1664,
+      "fps": 24,
+      "durationSeconds": 12.041667,
+      "codec": "HEVC",
+      "bytes": 21898262
+    },
+    "reviewFiles": [
+      "review-contact.jpg",
+      "faces.jpg",
+      "stone-drops.jpg",
+      "page20-elevenlabs-review.mp4"
+    ]
+  },
+  "apiPreflight": {
+    "requestsGenerated": 0,
+    "result": "Creator API video access requires Pro; no upgrade or API generation used."
+  },
+  "websiteGenerationRequests": 1,
+  "files": {
+    "phonics/book/images/page-20.jpg": {
+      "bytes": 474720,
+      "sha256": "f15931b7067675d5becbe6cbf6303dfbdd4e94dd6f92b6b836cb159964002eaa"
+    },
+    "phonics/book/animation/page-20/elevenlabs-scene.mp4": {
+      "bytes": 5641935,
+      "sha256": "5e620e70838cc88956a22d881e5032e267a0dd53179e11ee1f03977d2ef0fbc4"
+    },
+    "phonics/book/animation/page-20/elevenlabs-ending.webp": {
+      "bytes": 428274,
+      "sha256": "76734d898a93cb40210f199d509c412163627a17da47a220c40e56a6adffab86"
+    }
+  },
+  "encoding": "HEVC source converted to H.264, CRF 20, yuv420p, 24 fps, unchanged dimensions, fast start; no audio. Ending WebP quality 93.",
+  "deployment": "pending",
+  "prompt": "Animate this exact storybook illustration in one continuous 12-second shot. Locked camera; preserve the composition, painted texture, warm sunset lighting, the boy Artus and small orange dragon Pip. The stone jar, tower, distant castle, mountains and garden stay stationary.\n\n0\u20133 seconds: the two airborne crows flap naturally and arc toward the opening of the water jar, slowing above it, each holding one pebble in its beak. The third crow stays perched. Artus and Pip track the approaching crows with their eyes and small natural head turns, then lean slightly toward the jar. Keep their faces, hair and anatomy consistent and solid.\n\n3\u20137 seconds: one flying crow opens its beak and releases its pebble directly over the jar; the second crow releases its pebble a moment later. Show each pebble detach clearly, fall under gravity and enter the water inside the rim. Each impact creates one small splash and expanding ripples. Artus and Pip follow the falling pebbles with their gaze.\n\n7\u201310 seconds: the water surface visibly rises within the fixed jar, reaching close to the inner rim. Both characters look down at the rising water with delighted surprise; Pip makes a small excited body movement while keeping his paws connected to the rim. The two flying crows bank gently away.\n\n10\u201312 seconds: settle into a calm ending with the higher water level visible. Fluid, carefully articulated storybook character animation; subtle blinks, coherent heads and joints, stable facial features and individual hair locks. No camera movement, cuts, dialogue, captions, background warping, facial stretching, melting hair, extra limbs or additional characters.",
+  "localValidation": {
+    "automatedTests": 14,
+    "contentVerifier": "passed",
+    "browser": {
+      "build": "moonflower-20260930-r13",
+      "completion": "finished; video removed; ending still retained; 26 word buttons restored",
+      "skip": "passed",
+      "offline": "Saved complete pack, stopped local HTTP server, reloaded page 20 and replayed video from cache (readyState 4)."
+    },
+    "physicalIPadSafari": "not tested"
+  }
+}

@@ -4,9 +4,15 @@
 
 The default app at `/rightreader/` remains the EPUB vocabulary reader. Its runtime, service worker, IndexedDB books and save format are unchanged by the Moonflower pilot.
 
-## Moonflower phonics pilot — 29 September 2026
+## Moonflower phonics pilot — 30 September 2026
 
-### R12 page 20 staged animation — deployed and verified
+### R13 page 20 ElevenLabs film — implemented and tested locally; deployment pending
+
+The user rejected R12's stretched face/hair and authorized one page-20 generation through ElevenLabs using the existing plan. A single Seedance 2.5 website generation produced a silent 12.04-second, 1248 × 1664, 24 fps film. Artus and Pip turn and lean coherently, both crows flap and release separate pebbles, and the water rises before the birds leave. The camera and background framing stay fixed; the model softens/reinterprets some foliage and painted texture. The frame review found no R12-style stretched-face artifact. This is generated character motion, not a deforming still.
+
+The reader uses a 5.4 MiB H.264 film and an ending WebP. Forward entry plays when preloaded; Watch scene replays; Read now skips to the ending still and restores the tappable text. Full-film preload and the existing offline pack cover offline replay. Missing/failed playback keeps reading available. The other story animations, text, recordings, EPUB, saved-word key and original reader are unchanged. Fourteen focused tests and the content verifier pass. Local Chrome completed the film, retained its ending still and restored all 26 tappable words; skip and offline reload/replay after stopping the server also passed. Deployment verification is pending. [Generation, review and credit provenance](MOONFLOWER_PAGE20_ELEVENLABS.json).
+
+### R12 page 20 staged animation — historical, visually rejected by the user
 
 Build `moonflower-20260929-r12` replaces page 20's whole-picture deformation with an authored twelve-second scene. A restored garden plate stays fixed. Two independently rigged crows fly in along curved paths, flap from attached shoulders, release individual pebbles, then depart. Artus and Pip change gaze, head angle and stance at those events. Each impact produces a short splash and ripples; the water rises twice and remains higher in the ending still. **Read now** skips to that result, and **Watch scene** replays it.
 
