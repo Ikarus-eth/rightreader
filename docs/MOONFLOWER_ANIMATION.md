@@ -1,6 +1,14 @@
 # Moonflower story animation
 
-## R12 — page 20, crows and stones
+## R13 — page 20 ElevenLabs film
+
+One authorized website generation used the unchanged original page-20 illustration as its start frame, Seedance 2.5, Auto aspect, 1080p, 12 seconds, audio off and prompt enhancement off. ElevenLabs returned a 1248 × 1664 HEVC source at 24 fps. The site serves an H.264 conversion at the same size/rate (CRF 20, yuv420p, fast start) plus a final-frame WebP. No runtime API calls or additional generations are involved. The website displayed 75,287 credits for this generation. [Full provenance and review](MOONFLOWER_PAGE20_ELEVENLABS.json).
+
+The review inspected full-scene frames, face/head crops and a four-frame-per-second crop of the stone drops. Faces and hair keep coherent shape while Artus and Pip track the crows, lean, blink and react. Crows release two separate stones, splashes/ripples follow, and the water reaches the rim. The camera and background geometry remain fixed, but painted texture/foliage is softened or reinterpreted; this is not a pixel-identical background.
+
+`page20-video.js` preloads the full film and ending still, uses muted inline playback once, then releases the video and holds the ending frame. Skip behaves the same way. Playback failure/stall restores reading, and reduced motion or hidden pages keep the original still. `living-scenes.js` delegates only page 20 to this film. Reader and service-worker versions advance to R13; book/save data and all other animations are preserved. Fourteen playback/cache tests and the full content validator pass. Physical iPad/Safari is not tested.
+
+## R12 — historical, rejected for face/hair deformation
 
 The user rejected synchronized whole-image movement and requested a staged action: crows arrive, Artus and Pip follow them, stones drop, and water rises. Page 20 now uses eight separate painted assets, with a completely fixed background. All were generated with ChatGPT's built-in image editor; full prompts and output IDs are in [the asset manifest](MOONFLOWER_PAGE20_PROMPTS.json). Runtime assets are in `phonics/book/animation/page-20/` (eight WebP files, about 2.6 MiB). No external image/video generation service, runtime generation, or recurring generation fee is used.
 
