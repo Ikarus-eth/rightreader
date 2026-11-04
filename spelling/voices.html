@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spelling Voices</title>
+<style>
+body{margin:0;padding:24px max(16px,env(safe-area-inset-left));font:18px/1.5 system-ui,-apple-system,sans-serif;background:#eef2fa;color:#1d2742}
+main{max-width:560px;margin:0 auto;display:grid;gap:16px}
+h1{margin:0;font-size:1.6rem}
+section{background:#fff;border-radius:12px;padding:16px;display:grid;gap:8px}
+h2{margin:0;font-size:1.1rem} p{margin:0;color:#5a6786} audio{width:100%}
+.missing{color:#c03d2a}
+</style></head><body><main>
+<h1>Pick a voice</h1>
+<p>Each sample says the word, the test sentence, then the word again.</p>
+<section><h2>A · af_heart</h2><p>Warm female voice</p><audio controls preload="metadata" src="audio/samples/af_heart.mp3"></audio></section>
+<section><h2>B · am_michael</h2><p>Calm, clear male voice</p><audio controls preload="metadata" src="audio/samples/am_michael.mp3"></audio></section>
+<section><h2>C · af_bella</h2><p>Brighter, livelier female voice</p><audio controls preload="metadata" src="audio/samples/af_bella.mp3"></audio></section>
+<p class="missing" id="miss" hidden>The samples haven't been made yet. Run the "Spelling audio" workflow on GitHub first.</p>
+</main>
+<script>
+fetch("audio/samples/af_heart.mp3",{method:"HEAD",cache:"no-store"}).then(r=>{if(!r.ok)document.getElementById("miss").hidden=false}).catch(()=>{document.getElementById("miss").hidden=false});
+</script>
+</body></html>
