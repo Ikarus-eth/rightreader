@@ -35,7 +35,8 @@ self.addEventListener("fetch", e => {
   const isFreshShell =
     /\/(?:index\.html|app\.js|config\.js|manifest\.json)$/.test(url.pathname) ||
     /\/icons\//.test(url.pathname) ||
-    url.pathname.endsWith("/rightreader/");
+    url.pathname.endsWith("/rightreader/") ||
+    /\/spelling\//.test(url.pathname);
 
   if (isFreshShell) {
     e.respondWith(
