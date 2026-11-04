@@ -375,7 +375,34 @@ function say(parts, rate) {
     speechSynthesis.speak(u);
   });
 }
-function sayTest(rate) { const w = W[current]; say([w.word, w.sentence, w.word], rate || 0.85); }
+/* Recorded fal.ai audio, when present, replaces the browser voice. One reused
+   element, so iPad Safari keeps permission after the first tap. */
+let rec = null; const player = new Audio(); player.preservesPitch = true;
+fetch("audio/manifest.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(m => {
+  if (m && m.words) { rec = m; document.querySelector(".seg").parentElement.hidden = true; $("noVoice").hidden = true; }
+}).catch(() => {});
+function playClips(files, rate) {
+  if (canSpeak) speechSynthesis.cancel();
+  const btn = $("replayBtn"); let i = 0; const token = {}; playClips.token = token;
+  const step = () => {
+    if (playClips.token !== token) return;
+    if (i >= files.length) { btn.classList.remove("speaking"); return; }
+    player.src = files[i++]; player.playbackRate = rate;
+    player.onended = () => setTimeout(step, 350);
+    player.play().catch(() => btn.classList.remove("speaking"));
+  };
+  btn.classList.add("speaking"); step();
+}
+function clips(kind) { const c = rec && rec.words[W[current].word]; return c ? c[kind] : null; }
+function sayTest(rate) {
+  const w = W[current];
+  if (clips("word")) return playClips([clips("word"), clips("sentence"), clips("word")], rate ? rate / 0.85 : 1);
+  say([w.word, w.sentence, w.word], rate || 0.85);
+}
+function sayWord(rate) {
+  if (clips("word")) return playClips([clips("word")], rate / 0.85);
+  say([W[current].word], rate);
+}
 
 /* ---------- views ---------- */
 function show(id) { ["vStart", "vListen", "vReveal", "vDone"].forEach(v => $(v).hidden = v !== id); window.scrollTo({ top: 0 }); }
@@ -429,7 +456,7 @@ function reveal(mode) {
   $("undoBtn").hidden = true;
   if (unknown) markMissed();
   show("vReveal");
-  say([w.word], 0.8);
+  sayWord(0.8);
 }
 
 function markMissed() { store.missed[current] = (store.missed[current] || 0) + 1; session.practise++; save(); updateProgress(); }
@@ -437,10 +464,10 @@ function markMissed() { store.missed[current] = (store.missed[current] || 0) + 1
 $("startBtn").onclick = nextWord;
 $("replayBtn").onclick = () => sayTest();
 $("slowBtn").onclick = () => sayTest(0.55);
-$("wordOnlyBtn").onclick = () => say([W[current].word], 0.7);
+$("wordOnlyBtn").onclick = () => sayWord(0.7);
 $("wroteBtn").onclick = () => reveal("written");
 $("dontKnowBtn").onclick = () => reveal("unknown");
-$("wordBtn").onclick = () => say([W[current].word], 0.7);
+$("wordBtn").onclick = () => sayWord(0.7);
 $("rightBtn").onclick = () => {
   if (!store.learned.includes(current)) store.learned.push(current);
   session.right++; save(); updateProgress();
