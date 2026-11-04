@@ -206,7 +206,10 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
         <div><dt>In a sentence</dt><dd id="exSentence"></dd></div>
         <div class="tip"><dt>Spelling tip</dt><dd id="exTip"></dd></div>
       </dl>
-      <button class="btn primary" id="nextBtn" hidden>Next word</button>
+      <div class="row" id="afterRow" hidden>
+        <button class="btn primary" id="nextBtn">Next word</button>
+        <button class="btn" id="undoBtn" hidden>Oops, I made a mistake</button>
+      </div>
     </section>
 
     <!-- DONE -->
@@ -422,7 +425,8 @@ function reveal(mode) {
   $("checkRow").hidden = unknown;
   $("explain").hidden = !unknown;
   $("mark").hidden = true;
-  $("nextBtn").hidden = !unknown;
+  $("afterRow").hidden = !unknown;
+  $("undoBtn").hidden = true;
   if (unknown) markMissed();
   show("vReveal");
   say([w.word], 0.8);
@@ -442,14 +446,20 @@ $("rightBtn").onclick = () => {
   session.right++; save(); updateProgress();
   $("checkRow").hidden = true;
   const m = $("mark"); m.className = "mark good"; m.textContent = ["Well done!", "Perfect!", "Great spelling!", "Yes, that's right!"][Math.floor(Math.random() * 4)]; m.hidden = false;
-  $("nextBtn").hidden = false; $("nextBtn").focus();
+  $("afterRow").hidden = false; $("undoBtn").hidden = false; $("nextBtn").focus();
 };
-$("wrongBtn").onclick = () => {
+function markWrong() {
   markMissed();
   $("checkRow").hidden = true;
   const m = $("mark"); m.className = "mark bad"; m.textContent = "No problem. This word will come back later."; m.hidden = false;
   $("explain").hidden = false;
-  $("nextBtn").hidden = false;
+  $("afterRow").hidden = false; $("undoBtn").hidden = true;
+}
+$("wrongBtn").onclick = markWrong;
+$("undoBtn").onclick = () => {
+  store.learned = store.learned.filter(i => i !== current);
+  session.right = Math.max(0, session.right - 1);
+  markWrong();
 };
 $("nextBtn").onclick = nextWord;
 

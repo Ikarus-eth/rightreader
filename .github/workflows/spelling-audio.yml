@@ -1,0 +1,48 @@
+name: Spelling audio (fal.ai Kokoro)
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "samples or all"
+        default: samples
+      voice:
+        description: "Kokoro voice for mode=all (af_heart, am_michael, af_bella)"
+        default: af_heart
+  push:
+    branches: [main]
+    paths: [spelling/audio-request.json]
+permissions:
+  contents: write
+concurrency:
+  group: spelling-audio
+  cancel-in-progress: false
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read request
+        id: req
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "mode=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"; echo "voice=${{ inputs.voice }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=$(jq -r .mode spelling/audio-request.json)" >> "$GITHUB_OUTPUT"
+            echo "voice=$(jq -r .voice spelling/audio-request.json)" >> "$GITHUB_OUTPUT"
+          fi
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Generate
+        env:
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+        run: |
+          test -n "$FAL_KEY" || { echo "Add the FAL_KEY repository secret first."; exit 1; }
+          python3 spelling/tools/make_audio.py "${{ steps.req.outputs.mode }}" "${{ steps.req.outputs.voice }}"
+      - name: Commit audio
+        run: |
+          git config user.name "Spelling audio"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add spelling/audio
+          git diff --cached --quiet && exit 0
+          git commit -m "Spelling audio: ${{ steps.req.outputs.mode }} ${{ steps.req.outputs.voice }}"
+          git push origin HEAD:main
