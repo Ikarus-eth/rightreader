@@ -1,4 +1,4 @@
-name: Spelling audio (fal.ai Kokoro)
+name: Spelling audio (fal.ai Kokoro, paid, manual only)
 on:
   workflow_dispatch:
     inputs:
@@ -8,9 +8,7 @@ on:
       voice:
         description: "Kokoro voice for mode=all (af_heart, am_michael, af_bella)"
         default: af_heart
-  push:
-    branches: [main]
-    paths: [spelling/audio-request.json]
+  # No push trigger: fal.ai bills per request, so this only runs when started by hand.
 permissions:
   contents: write
   pages: write

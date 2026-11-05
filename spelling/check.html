@@ -12,15 +12,24 @@ button{font:inherit;font-size:.95rem;font-weight:700;min-height:44px;padding:6px
 .ver{display:block;font-size:.8rem;color:#5a6786;font-weight:400}
 </style></head><body><main>
 <h1>Check 20 words</h1>
-<p>Play each word and its sentence. Reply in the chat with the numbers that sound wrong or unclear.</p>
+<p id="intro">Play each word and its sentence. Reply in the chat with the numbers that sound wrong or unclear.</p>
 <div id="list" style="display:grid;gap:8px"></div>
 </main>
 <script>
-const WORDS=["know","important","definitely","immediately","occasionally","individual","community","other","toward","every","tomorrow","eye","of","who","I'd","its","o'clock","queue","rhythm","the boys' room"];
+const FALLBACK=["know","important","definitely","immediately","occasionally","individual","community","other","toward","every","tomorrow","eye","of","who","I'd","its","o'clock","queue","rhythm","the boys' room"];
 const a=new Audio();
-fetch("audio/manifest.json",{cache:"no-store"}).then(r=>r.json()).then(m=>{
-  document.getElementById("list").innerHTML=WORDS.map((w,i)=>{const c=m.words[w];const fresh=c.word.endsWith("-word.mp3");
-    return '<div class="it"><span class="n">'+(i+1)+'.</span><span class="w">'+w+'<span class="ver">'+(fresh?"new":"old")+' recording</span></span><button data-f="'+c.word+'">Word</button><button data-f="'+c.sentence+'">Sentence</button></div>';}).join("");
+Promise.all([
+  fetch("audio/manifest.json",{cache:"no-store"}).then(r=>r.json()),
+  fetch("audio/asr-report.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)
+]).then(([m,rep])=>{
+  const info=rep?Object.fromEntries(rep.words.map(x=>[x.word,x])):{};
+  const list=rep?rep.uncertain:FALLBACK;
+  document.getElementById("intro").textContent=rep
+    ?"A speech recogniser listened to all 312 clips. These are the 20 it was least sure about. Play each word and its sentence, then reply in the chat with the numbers that sound wrong or unclear."
+    :"Play each word and its sentence. Reply in the chat with the numbers that sound wrong or unclear.";
+  document.getElementById("list").innerHTML=list.map((w,i)=>{const c=m.words[w];const fresh=c.word.endsWith("-word.mp3");const x=info[w];
+    const heard=x?' · computer heard “'+x.heard+'”':'';
+    return '<div class="it"><span class="n">'+(i+1)+'.</span><span class="w">'+w+'<span class="ver">'+(fresh?"new":"old")+' recording'+heard+'</span></span><button data-f="'+c.word+'">Word</button><button data-f="'+c.sentence+'">Sentence</button></div>';}).join("");
   document.querySelectorAll("button[data-f]").forEach(b=>b.onclick=()=>{a.src=b.dataset.f;a.play();});
 });
 </script>
