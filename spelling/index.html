@@ -798,8 +798,12 @@ function renderCheck() {
     const i = +li.dataset.i;
     li.querySelector(".ear").onclick = () => sayWord(b.items[i].w);
     li.querySelector(".tick").onclick = () => {
-      b.ticks = b.ticks.includes(i) ? b.ticks.filter(x => x !== i) : b.ticks.concat(i);
-      save(); renderCheck();
+      // Update this row in place: re-rendering the list would jump back to the top.
+      const on = !b.ticks.includes(i);
+      b.ticks = on ? b.ticks.concat(i) : b.ticks.filter(x => x !== i);
+      save();
+      li.classList.toggle("right", on);
+      li.querySelector(".tick").setAttribute("aria-pressed", on);
     };
   });
   show("vCheck");
