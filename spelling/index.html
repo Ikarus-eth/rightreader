@@ -18,7 +18,7 @@ img{max-width:100%}
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Gochi+Hand&display=swap">
 <style>
-/* Layout: one exercise-book page on a desk — ruled lines, red margin, teacher's pen marks. */
+/* Layout: one exercise-book page on a desk — ruled lines, red margin, pen-written labels. */
 :root {
   --desk: #e6ecf5;
   --paper: #fdfdf8;
@@ -30,11 +30,12 @@ img{max-width:100%}
   --accent-ink: #ffffff;
   --good: #1d7f47;
   --good-soft: #e3f4ea;
-  --bad: #c03d2a;
-  --bad-soft: #fbe8e4;
+  --learn: #9a5b00;
+  --learn-soft: #fdf1dc;
   --btn: #eef2fa;
   --btn-line: #c5d1e8;
   --shadow: 0 1px 2px rgba(29,39,66,.08), 0 8px 24px rgba(29,39,66,.08);
+  --l1: #3d9b6a; --l2: #2f86b8; --l3: #5b5fc7; --l4: #b0569a; --l5: #c9563a;
   --f-word: "Andika", "Trebuchet MS", "Segoe UI", sans-serif;
   --f-body: "Andika", "Trebuchet MS", "Segoe UI", sans-serif;
   --f-pen: "Gochi Hand", "Comic Sans MS", cursive;
@@ -43,16 +44,18 @@ img{max-width:100%}
   :root:not([data-theme="light"]) {
     --desk: #10151f; --paper: #19202e; --rule: #243049; --margin: #6c3537;
     --ink: #e8edf8; --muted: #9ba7c3; --accent: #7f9dff; --accent-ink: #0f1526;
-    --good: #57c98a; --good-soft: #17301f; --bad: #ff8068; --bad-soft: #3a1d18;
+    --good: #57c98a; --good-soft: #17301f; --learn: #f0b357; --learn-soft: #34270f;
     --btn: #222b3d; --btn-line: #34405a; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
+    --l1: #5cc48c; --l2: #5aaee0; --l3: #8f93f0; --l4: #e07fc6; --l5: #f08566;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --desk: #10151f; --paper: #19202e; --rule: #243049; --margin: #6c3537;
   --ink: #e8edf8; --muted: #9ba7c3; --accent: #7f9dff; --accent-ink: #0f1526;
-  --good: #57c98a; --good-soft: #17301f; --bad: #ff8068; --bad-soft: #3a1d18;
+  --good: #57c98a; --good-soft: #17301f; --learn: #f0b357; --learn-soft: #34270f;
   --btn: #222b3d; --btn-line: #34405a; --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
+  --l1: #5cc48c; --l2: #5aaee0; --l3: #8f93f0; --l4: #e07fc6; --l5: #f08566;
   color-scheme: dark;
 }
 html, body { min-height: 100%; }
@@ -64,7 +67,6 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .wrap { max-width: 680px; margin: 0 auto; display: grid; gap: 16px; }
-
 header { display: grid; gap: 10px; }
 .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 h1 { font-family: var(--f-pen); font-weight: 400; font-size: 2rem; line-height: 1.1; margin: 0; text-wrap: balance; }
@@ -78,54 +80,96 @@ h1 { font-family: var(--f-pen); font-weight: 400; font-size: 2rem; line-height: 
   background-image: repeating-linear-gradient(to bottom, transparent 0 35px, var(--rule) 35px 36px);
   background-position: 0 18px;
   padding: 28px 24px 28px 52px; min-height: 420px;
-  display: grid; align-content: start; gap: 22px;
 }
 .page::before { content: ""; position: absolute; top: 0; bottom: 0; left: 34px; width: 2px; background: var(--margin); }
+.page > section { display: grid; gap: 20px; align-content: start; }
 @media (max-width: 480px) { .page { padding: 22px 16px 22px 34px; } .page::before { left: 20px; } }
 
-.label { font-family: var(--f-pen); font-size: 1.25rem; color: var(--muted); margin: 0; }
-.note { color: var(--muted); margin: 0; }
+.label { font-family: var(--f-pen); font-size: 1.3rem; color: var(--muted); margin: 0; }
+.note { color: var(--muted); margin: 0; max-width: 60ch; }
+.pen { font-family: var(--f-pen); font-size: 1.6rem; line-height: 1.2; margin: 0; }
 
 button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
 button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+button:disabled { opacity: .35; cursor: default; }
 .btn {
-  min-height: 64px; padding: 12px 20px; border-radius: 14px; font-size: 1.1rem; font-weight: 700;
-  display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-align: center;
+  min-height: 60px; padding: 10px 18px; border-radius: 14px; font-size: 1.05rem; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-align: center;
   background: var(--btn); border: 2px solid var(--btn-line); transition: transform .08s ease;
 }
-.btn:active { transform: scale(.97); }
+.btn:not(:disabled):active { transform: scale(.97); }
 .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.btn.good { background: var(--good-soft); border-color: var(--good); color: var(--good); }
-.btn.bad { background: var(--bad-soft); border-color: var(--bad); color: var(--bad); }
-.btn svg { width: 26px; height: 26px; flex: none; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 420px) { .row { grid-template-columns: 1fr; } }
+.btn svg { width: 24px; height: 24px; flex: none; }
+.row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.row.two { grid-template-columns: 1fr 1fr; }
+@media (max-width: 420px) { .row.two { grid-template-columns: 1fr; } .row .btn { padding-inline: 8px; font-size: .95rem; } }
 
 .big-play {
-  justify-self: center; width: 150px; height: 150px; border-radius: 50%;
+  justify-self: center; width: 140px; height: 140px; border-radius: 50%;
   background: var(--accent); color: var(--accent-ink); display: grid; place-items: center;
   box-shadow: 0 6px 0 color-mix(in srgb, var(--accent) 60%, #000 40%);
   transition: transform .08s ease, box-shadow .08s ease;
 }
 .big-play:active { transform: translateY(4px); box-shadow: 0 2px 0 color-mix(in srgb, var(--accent) 60%, #000 40%); }
-.big-play svg { width: 64px; height: 64px; }
+.big-play svg { width: 60px; height: 60px; }
 .big-play.speaking { animation: pulse 1s ease-in-out infinite; }
 @keyframes pulse { 50% { transform: scale(1.05); } }
-.under-play { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.chips { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 .chip { min-height: 44px; padding: 6px 16px; border-radius: 99px; background: var(--btn); border: 2px solid var(--btn-line); font-weight: 700; font-size: .95rem; }
+.chip[aria-pressed="true"] { background: var(--learn-soft); border-color: var(--learn); color: var(--learn); }
 
-.word { font-family: var(--f-word); font-weight: 700; font-size: clamp(2.6rem, 11vw, 4.2rem); line-height: 1.1; margin: 0; overflow-wrap: anywhere; }
-.word-btn { text-align: left; display: grid; gap: 4px; }
-.letters { font-family: var(--f-word); font-size: 1.3rem; letter-spacing: .02em; color: var(--muted); overflow-wrap: anywhere; }
-.letters span { display: inline-block; min-width: 1.15em; text-align: center; border-bottom: 2px solid var(--rule); margin-right: 4px; color: var(--ink); }
-.mark { font-family: var(--f-pen); font-size: 1.6rem; line-height: 1.2; margin: 0; }
-.mark.good { color: var(--good); } .mark.bad { color: var(--bad); }
+/* level picker and level badge */
+.levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.lv {
+  display: grid; gap: 2px; justify-items: center; padding: 10px 4px; border-radius: 12px;
+  border: 2px solid var(--btn-line); background: var(--btn); min-height: 76px;
+}
+.lv b { font-size: 1.5rem; line-height: 1; color: var(--lvc); }
+.lv span { font-size: .78rem; color: var(--muted); }
+.lv small { font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lv[aria-pressed="true"] { border-color: var(--lvc); background: color-mix(in srgb, var(--lvc) 14%, var(--paper)); }
+.badge { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: .95rem; color: var(--lvc); }
+.dots { display: inline-flex; gap: 4px; }
+.dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--btn-line); }
+.dots i.on { background: var(--lvc); }
+.lv1 { --lvc: var(--l1); } .lv2 { --lvc: var(--l2); } .lv3 { --lvc: var(--l3); } .lv4 { --lvc: var(--l4); } .lv5 { --lvc: var(--l5); }
+.head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.next-label { font-family: var(--f-pen); font-size: 1.2rem; color: var(--muted); margin: 0 0 -10px; }
 
-.explain { display: grid; gap: 14px; margin: 0; }
-.explain div { display: grid; gap: 2px; }
-.explain dt { font-family: var(--f-pen); font-size: 1.15rem; color: var(--muted); }
-.explain dd { margin: 0; font-size: 1.1rem; max-width: 60ch; }
-.explain .tip dd { background: color-mix(in srgb, var(--accent) 12%, transparent); border-radius: 8px; padding: 8px 12px; }
+/* check list */
+.list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.item {
+  display: grid; grid-template-columns: 2.2em 1fr auto auto; align-items: center; gap: 10px;
+  background: var(--paper); border: 2px solid var(--btn-line); border-radius: 12px; padding: 6px 8px 6px 10px;
+}
+.item .n { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; text-align: right; }
+.item .w { font-family: var(--f-word); font-weight: 700; font-size: 1.45rem; min-width: 0; overflow-wrap: anywhere; }
+.item .w small { display: block; font-weight: 400; font-size: .8rem; color: var(--muted); }
+.ear { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--muted); }
+.ear svg { width: 24px; height: 24px; }
+.tick {
+  width: 52px; height: 52px; border-radius: 12px; border: 2px solid var(--btn-line); background: var(--btn);
+  display: grid; place-items: center; color: transparent;
+}
+.tick svg { width: 30px; height: 30px; }
+.item.right { border-color: var(--good); background: var(--good-soft); }
+.item.right .tick { background: var(--good); border-color: var(--good); color: var(--paper); }
+.item.skipped .tick { visibility: hidden; }
+
+/* results */
+.score { font-family: var(--f-pen); font-size: clamp(3rem, 14vw, 5rem); line-height: 1; margin: 0; color: var(--good); }
+.cards { display: grid; gap: 12px; }
+.card { background: var(--paper); border: 2px solid var(--learn); border-radius: 14px; padding: 14px 16px; display: grid; gap: 10px; }
+.card .top { align-items: center; }
+.card .word { font-family: var(--f-word); font-weight: 700; font-size: 2rem; line-height: 1.1; margin: 0; overflow-wrap: anywhere; }
+.letters { font-family: var(--f-word); font-size: 1.15rem; overflow-wrap: anywhere; }
+.letters span { display: inline-block; min-width: 1.1em; text-align: center; border-bottom: 2px solid var(--rule); margin-right: 3px; }
+.explain { display: grid; gap: 8px; margin: 0; }
+.explain div { display: grid; grid-template-columns: 7.5em 1fr; gap: 8px; }
+.explain dt { font-family: var(--f-pen); font-size: 1.1rem; color: var(--muted); }
+.explain dd { margin: 0; min-width: 0; }
+.explain .tip dd { background: color-mix(in srgb, var(--accent) 12%, transparent); border-radius: 8px; padding: 4px 10px; }
+@media (max-width: 480px) { .explain div { grid-template-columns: 1fr; gap: 0; } }
 
 footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: .9rem; }
 .seg { display: inline-flex; border: 2px solid var(--btn-line); border-radius: 99px; overflow: hidden; }
@@ -133,7 +177,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
 .link { text-decoration: underline; text-underline-offset: 3px; padding: 8px 4px; font-size: .9rem; color: var(--muted); }
 .confirm { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.warn { background: var(--bad-soft); color: var(--bad); border-radius: 10px; padding: 10px 14px; margin: 0; }
+.warn { background: var(--learn-soft); color: var(--learn); border-radius: 10px; padding: 10px 14px; margin: 0; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 
@@ -142,85 +186,85 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 <div class="wrap">
   <header>
     <div class="top">
-      <h1>My Spelling Test</h1>
-      <div class="count"><b id="nLearned">0</b> of 100 words learned</div>
+      <h1>My Spelling Practice</h1>
+      <div class="count"><b id="nLearned">0</b> of 200 words learned</div>
     </div>
     <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
   </header>
 
-  <main class="page" id="page">
+  <main class="page">
     <!-- START -->
-    <section id="vStart" style="display:grid;gap:22px">
-      <p class="label">Get your pencil and paper ready.</p>
-      <p class="note" style="margin:0">Tap the big button. You will hear a word, then a sentence with the word, then the word again. Write it down, just like in the test.</p>
-      <button class="big-play" id="startBtn" aria-label="Hear a word">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
-      <p class="note" id="sessionLine" style="text-align:center"></p>
+    <section id="vStart">
+      <p class="label">Get a pencil and number your paper from 1 to 20.</p>
+      <p class="note">You will hear 20 words. Write each one down, then pick if the next word should be easier, the same or harder. You check them all together at the end.</p>
+      <div>
+        <p class="next-label" style="margin-bottom:8px">Start with level</p>
+        <div class="levels" id="levels"></div>
+      </div>
+      <p class="note" id="suggestLine" hidden></p>
+      <div class="row two">
+        <button class="btn primary" id="startBtn">Start 20 words</button>
+        <button class="btn" id="resumeBtn" hidden>Continue</button>
+      </div>
+      <p class="note" id="lastLine"></p>
       <p class="warn" id="noVoice" hidden>This browser can't read words out loud. Please open the page in Safari or Chrome.</p>
     </section>
 
     <!-- LISTEN -->
-    <section id="vListen" hidden style="display:grid;gap:22px">
-      <p class="label" id="listenLabel">Listen and write it down</p>
+    <section id="vListen" hidden>
+      <div class="head">
+        <p class="label" id="listenLabel">Word 1 of 20</p>
+        <span class="badge" id="levelBadge"></span>
+      </div>
       <button class="big-play" id="replayBtn" aria-label="Hear the word again">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
-      <div class="under-play">
+      <div class="chips">
         <button class="chip" id="slowBtn">Say it slowly</button>
         <button class="chip" id="wordOnlyBtn">Just the word</button>
+        <button class="chip" id="skipBtn" aria-pressed="false">I don't know this one</button>
       </div>
-      <div class="row">
-        <button class="btn primary" id="wroteBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>
-          I've written it down
-        </button>
-        <button class="btn" id="dontKnowBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5V14"/><path d="M12 17.5h.01"/></svg>
-          I don't know it
-        </button>
+      <p class="note" id="skipNote" hidden style="text-align:center">That's fine. Draw a line next to this number and keep going.</p>
+      <div id="nextArea">
+        <p class="next-label">Written it down? Next word:</p>
+        <div class="row" style="margin-top:14px">
+          <button class="btn" id="easierBtn">Easier</button>
+          <button class="btn primary" id="sameBtn">Same</button>
+          <button class="btn" id="harderBtn">Harder</button>
+        </div>
       </div>
+      <button class="btn primary" id="toCheckBtn" hidden>Check my 20 words</button>
     </section>
 
-    <!-- REVEAL -->
-    <section id="vReveal" hidden style="display:grid;gap:22px">
-      <p class="label" id="revealLabel">Check your spelling</p>
-      <button class="word-btn" id="wordBtn" aria-label="Hear the word">
-        <p class="word" id="wordText"></p>
-        <div class="letters" id="letters"></div>
-      </button>
-      <div id="checkRow" class="row">
-        <button class="btn good" id="rightBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>
-          I spelled it right
-        </button>
-        <button class="btn bad" id="wrongBtn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-          I made a mistake
-        </button>
+    <!-- CHECK -->
+    <section id="vCheck" hidden>
+      <p class="label">Now check your paper.</p>
+      <p class="note">Look at each word letter by letter. Tap the box for every word you spelled right. Tap again if you change your mind.</p>
+      <ol class="list" id="checkList"></ol>
+      <button class="btn primary" id="doneCheckBtn">Done checking</button>
+    </section>
+
+    <!-- RESULT -->
+    <section id="vResult" hidden>
+      <p class="label" id="resultCheer"></p>
+      <p class="score" id="resultScore"></p>
+      <p class="note" id="resultNote"></p>
+      <div id="learnBlock" style="display:grid;gap:12px">
+        <p class="label">Words to learn</p>
+        <div class="cards" id="learnCards"></div>
       </div>
-      <p class="mark" id="mark" hidden></p>
-      <dl class="explain" id="explain" hidden>
-        <div><dt>What it means</dt><dd id="exMeaning"></dd></div>
-        <div><dt>Auf Deutsch</dt><dd id="exGerman"></dd></div>
-        <div><dt>In a sentence</dt><dd id="exSentence"></dd></div>
-        <div class="tip"><dt>Spelling tip</dt><dd id="exTip"></dd></div>
-      </dl>
-      <div class="row" id="afterRow" hidden>
-        <button class="btn primary" id="nextBtn">Next word</button>
-        <button class="btn" id="undoBtn" hidden>Oops, I made a mistake</button>
-      </div>
+      <button class="btn primary" id="againBtn">Next 20 words</button>
     </section>
 
     <!-- DONE -->
-    <section id="vDone" hidden style="display:grid;gap:22px">
-      <p class="mark good" style="font-size:2.2rem">All 100 words learned!</p>
+    <section id="vDone" hidden>
+      <p class="pen" style="color:var(--good);font-size:2.2rem">All 200 words learned!</p>
       <p class="note">You are ready for the test. Tap “Start over” below to practise all the words again.</p>
     </section>
   </main>
 
   <footer>
-    <div style="display:flex;align-items:center;gap:8px">
+    <div style="display:flex;align-items:center;gap:8px" id="voiceBox">
       <span>Voice</span>
       <div class="seg" role="group" aria-label="Voice accent">
         <button id="accUS" aria-pressed="true">US</button>
@@ -234,263 +278,405 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 </div>
 
 <script>
+/* level|word|meaning|German|sentence|tip — 5 levels x 40 words, about grade 3 up to grade 6+ */
 const RAW = [
-"accept|to take something that someone gives you, or to say yes to it|annehmen, akzeptieren|Please accept this small gift.|Double c: a-c-c-e-p-t. Don’t mix it up with ‘except’.",
-"accident|something bad that happens by chance, like a crash|der Unfall|He broke his arm in a bike accident.|Double c: a-c-c-i-d-e-n-t.",
-"address|where someone lives, so letters can find them|die Adresse|Write your address on the envelope.|Double d and double s. German ‘Adresse’ has only one d.",
-"although|even though|obwohl|I went outside, although it was raining.|Only one l: al + though.",
-"among|in the middle of a group|unter, zwischen (mehreren)|She sat among her friends.|It sounds like ‘a-mung’ but it is spelled with an o: a-m-o-n-g.",
-"answer|what you say or write back to a question|die Antwort|I knew the answer to every question.|Silent w: a-n-s-w-e-r.",
-"appear|to come into view|erscheinen|A rainbow appeared after the storm.|Double p: a-p-p-e-a-r.",
-"argument|when people disagree with angry words|der Streit|The twins had an argument about the toy.|‘argue’ loses its e: argu + ment.",
-"attention|looking, listening and thinking carefully|die Aufmerksamkeit|Please pay attention to the teacher.|Double t, and it ends in -tion.",
-"beautiful|very nice to look at|schön, wunderschön|The sunset over the sea was beautiful.|Starts with b-e-a-u, then ‘tiful’ with only one l.",
-"because|for the reason that|weil|I stayed home because I was sick.|Big Elephants Can Always Understand Small Elephants.",
-"beginning|the start of something|der Anfang|Let’s go back to the beginning of the story.|Two n’s before -ing: begin + n + ing.",
-"believe|to think that something is true|glauben|I believe you.|Never believe a lie: ‘lie’ is hidden inside be-LIE-ve.",
-"breathe|to take air in and out|atmen|Breathe in slowly through your nose.|The verb ends with e. Without e, ‘breath’ means der Atem.",
-"build|to make something by putting parts together|bauen|We will build a sandcastle.|u comes before i: b-u-i-l-d.",
-"business|buying and selling things; a company|das Geschäft, die Firma|My uncle runs a small business.|busy → busi + ness: b-u-s-i-n-e-s-s.",
-"calendar|a chart that shows the days and months|der Kalender|Mark the test on the calendar.|Starts with c and ends in -ar (German: K and -er).",
-"caught|the past of ‘catch’|fing, gefangen|She caught the ball with one hand.|-aught, just like ‘taught’: c-a-u-g-h-t.",
-"ceiling|the top inside surface of a room|die Zimmerdecke|A gecko is walking on the ceiling.|After c, e comes before i: c-e-i-l-i-n-g.",
-"certain|completely sure|sicher|Are you certain the door is locked?|Ends in -ain: c-e-r-t-a-i-n.",
-"character|a person in a story; what someone is like|die Figur; der Charakter|Harry is the main character in the book.|ch sounds like k. Ends in -er.",
-"choose|to pick one thing|wählen, aussuchen|Choose one card from the pile.|Double o. With one o, ‘chose’ is the past.",
-"climb|to go up using your hands and feet|klettern|We climbed to the top of the hill.|Silent b at the end.",
-"complete|whole; with nothing missing|vollständig|My puzzle is finally complete.|Ends in -ete: c-o-m-p-l-e-t-e.",
-"consider|to think carefully about something|überlegen, bedenken|Consider both choices before you decide.|One s, ends in -er.",
-"continue|to keep going|weitermachen, fortsetzen|Please continue reading.|Ends in -ue.",
-"decide|to make up your mind|entscheiden|I can’t decide which ice cream to get.|Starts with de-, and the c sounds like s.",
-"describe|to say what something is like|beschreiben|Describe your best holiday.|Starts with de-, not di-.",
-"different|not the same|anders, verschieden|My brother and I have different hobbies.|differ + ent: two f’s and an e in the middle you can hardly hear.",
-"difficult|hard to do|schwierig|This puzzle is difficult.|Two f’s, and only one l at the end.",
-"disappear|to go out of sight|verschwinden|The magician made the coin disappear.|dis + appear: one s, two p’s.",
-"discover|to find something for the first time|entdecken|They discovered a cave by the beach.|dis + cover.",
-"doubt|a feeling of not being sure|der Zweifel; zweifeln|I doubt it will rain today.|Silent b: d-o-u-b-t.",
-"during|while something is happening|während|Don’t talk during the test.|dur + ing, only one r.",
-"early|before the usual time|früh|We got up early to watch the sunrise.|Starts with ‘ear’: e-a-r-l-y.",
-"earth|the planet we live on; soil|die Erde|The Earth goes around the Sun.|Starts with ‘ear’, then th.",
-"eight|the number 8|acht|Spiders have eight legs.|e-i-g-h-t. The same ‘eigh’ is in ‘weight’ and ‘height’.",
-"enough|as much as you need|genug|Have you had enough to eat?|-ough here sounds like ‘uff’.",
-"environment|the world around us: air, water, land and plants|die Umwelt|We must protect the environment.|Hidden n: environ + ment. Say ‘en-vi-ron-ment’ slowly.",
-"especially|more than anything else|besonders|I love fruit, especially mangoes.|e + special + ly, so it has two l’s.",
-"exercise|movement to keep your body fit; a practice task|die Übung; Sport|Swimming is good exercise.|ex-er-cise: the end is -cise with a c.",
-"experience|something that happens to you|das Erlebnis, die Erfahrung|Snorkelling was an amazing experience.|Ends in -ence: ex-per-i-ence.",
-"experiment|a test to find something out|das Experiment|In science we did an experiment with ice.|Same letters as in German, just with a small e.",
-"famous|known by very many people|berühmt|The Eiffel Tower is very famous.|fame loses its e + ous: f-a-m-o-u-s.",
-"February|the second month of the year|der Februar|Carnival is in February.|Don’t forget the first r: Feb-ru-ar-y. Months start with a capital letter.",
-"foreign|from another country|ausländisch, fremd|She speaks two foreign languages.|Silent g: f-o-r-e-i-g-n.",
-"forward|toward the front|vorwärts|Take one step forward.|for + ward.",
-"friend|a person you like and trust|der Freund, die Freundin|My friend lives next door.|A friend to the END: fri-END.",
-"government|the people who run a country|die Regierung|The government built a new school.|govern + ment. Don’t forget the n.",
-"grammar|the rules of a language|die Grammatik|German grammar has three genders.|Double m, and it ends in -ar.",
-"guard|a person who protects something|die Wache|A guard stood at the gate.|Silent u after g: g-u-a-r-d.",
-"guess|to give an answer when you are not sure|raten|Guess what is in the box!|Silent u, double s: g-u-e-s-s.",
-"guide|a person or book that shows you the way|der Führer, der Reiseführer|Our guide showed us the temple.|Silent u: g-u-i-d-e.",
-"height|how tall something is|die Höhe, die Größe|Measure your height against the wall.|h + eight. It ends in t, not th.",
-"history|what happened in the past|die Geschichte|In history we are learning about ancient Egypt.|his + tory.",
-"imagine|to make a picture in your mind|sich vorstellen|Imagine you could fly.|Ends in -ine: i-m-a-g-i-n-e.",
-"important|mattering a lot|wichtig|Sleep is important for growing.|im + port + ant. It ends in -ant.",
-"increase|to get bigger or make bigger|steigen, erhöhen|The price of mangoes will increase.|in + crease. It ends in -ease.",
-"interest|wanting to know more about something|das Interesse|She has a big interest in sharks.|inter + est: one s, one t at the end.",
-"island|land with water all around it|die Insel|Bali is an island.|Silent s: i-s-l-a-n-d.",
-"knowledge|everything you know|das Wissen|Reading books gives you knowledge.|know + ledge: silent k, and a d before the g.",
-"language|a way of speaking and writing, like English|die Sprache|English is my second language.|u after the first g: l-a-n-g-u-a-g-e.",
-"library|a place where you borrow books|die Bibliothek, die Bücherei|I borrowed three books from the library.|Two r’s: lib-rar-y.",
-"machine|a tool with moving parts|die Maschine|The washing machine is noisy.|ch sounds like sh: m-a-c-h-i-n-e.",
-"measure|to find out the size or amount of something|messen|Measure the table with a ruler.|m-e-a-s-u-r-e. It ends in -sure.",
-"minute|sixty seconds|die Minute|Wait a minute, please.|Same letters as in German, just with a small m.",
-"natural|made by nature, not by people|natürlich|The beach has natural rock pools.|nature loses its e + al.",
-"necessary|needed|nötig, notwendig|Sun cream is necessary at the beach.|One c and two s’s, like a shirt with one collar and two sleeves.",
-"nervous|worried and a little scared|nervös, aufgeregt|I feel nervous before a test.|nerve loses its e + ous.",
-"ocean|a very big sea|der Ozean|The Indian Ocean is south of Bali.|The c sounds like sh: o-c-e-a-n.",
-"often|many times|oft|We often go to the beach.|o-f-t-e-n. Many people don’t say the t, but it is there.",
-"opposite|completely different; across from|das Gegenteil; gegenüber|Hot is the opposite of cold.|Double p, and it ends in -site.",
-"ordinary|normal, not special|gewöhnlich, normal|It was an ordinary school day.|ordin + ary.",
-"particular|one special thing and not others|bestimmt|Is there a particular book you want?|par-tic-u-lar. It ends in -ar.",
-"people|men, women and children|die Leute, die Menschen|Many people live in Jakarta.|There is a hidden o: p-e-o-p-l-e.",
-"perhaps|maybe|vielleicht|Perhaps we can go swimming later.|per + haps.",
-"piece|a part of something|das Stück|Can I have a piece of cake?|A PIEce of PIE: p-i-e-c-e.",
-"position|the place where something is|die Position, die Lage|Put the chairs back in position.|Only one s: pos-i-tion.",
-"possible|can happen or can be done|möglich|Is it possible to swim to that island?|Double s, and it ends in -ible.",
-"potatoes|more than one potato|die Kartoffeln|We had roast potatoes for dinner.|potato + es.",
-"probably|almost certainly|wahrscheinlich|It will probably rain later.|pro-bab-ly.",
-"promise|to say you will really do something|versprechen|I promise I will tidy my room.|Ends in -ise: p-r-o-m-i-s-e.",
-"quarter|one of four equal parts|das Viertel|Cut the pizza into quarters.|Starts with qu, ends in -er.",
-"question|something you ask|die Frage|Raise your hand if you have a question.|qu + es + tion.",
-"receive|to get something|bekommen, erhalten|Did you receive my message?|After c, e comes before i: r-e-c-e-i-v-e.",
-"recent|happened not long ago|neu, aktuell|This is a recent photo of my family.|re + cent. The c sounds like s.",
-"remember|to keep something in your mind|sich erinnern|Remember to bring your hat.|re + member.",
-"rhythm|a regular beat in music|der Rhythmus|Clap along to the rhythm.|Rhythm Helps Your Two Hips Move: r-h-y-t-h-m.",
-"science|the study of how the world works|die Naturwissenschaft|We have science on Mondays.|s and c together: s-c-i-e-n-c-e.",
-"separate|apart, not together|getrennt|Keep the eggs separate from the flour.|There is A RAT in sep-A-RAT-e.",
-"special|different from or better than usual|besonders|Today is a special day.|Ends in -cial: s-p-e-c-i-a-l.",
-"straight|not bent or curved|gerade|Draw a straight line with a ruler.|-aight: s-t-r-a-i-g-h-t.",
-"strength|how strong someone is|die Kraft, die Stärke|It takes strength to lift that box.|strong → strength. Don’t forget the g before th.",
-"surprise|something you did not expect|die Überraschung|We planned a surprise party.|There is an r after the u: sur + prise.",
-"though|but; even if|obwohl; aber|It was sunny, though a bit windy.|th + ough.",
-"thought|the past of ‘think’; an idea|dachte; der Gedanke|I thought about it all night.|th + ought.",
-"through|in one side and out the other|durch|We walked through the rice fields.|thr + ough. Don’t mix it up with ‘threw’ (warf).",
-"Wednesday|the day after Tuesday|der Mittwoch|We have swimming on Wednesday.|Say it in your head as Wed-nes-day so you remember the d. Days start with a capital letter.",
-"weight|how heavy something is|das Gewicht|The weight of the bag is two kilos.|w + eight. Don’t mix it up with ‘wait’ (warten).",
-"whether|if (when there is a choice)|ob|I don’t know whether to laugh or cry.|Starts with wh. Don’t mix it up with ‘weather’ (das Wetter)."
+"1|answer|what you say or write back to a question|die Antwort|I knew the answer to every question.|Silent w: a-n-s-w-e-r.",
+"1|because|for the reason that|weil|I stayed home because I was sick.|Big Elephants Can Always Understand Small Elephants.",
+"1|caught|the past of ‘catch’|fing, gefangen|She caught the ball with one hand.|-aught, just like ‘taught’: c-a-u-g-h-t.",
+"1|early|before the usual time|früh|We got up early to watch the sunrise.|Starts with ‘ear’: e-a-r-l-y.",
+"1|earth|the planet we live on; soil|die Erde|The Earth goes around the Sun.|Starts with ‘ear’, then th.",
+"1|eight|the number 8|acht|Spiders have eight legs.|e-i-g-h-t. The same ‘eigh’ is in ‘weight’ and ‘height’.",
+"1|friend|a person you like and trust|der Freund, die Freundin|My friend lives next door.|A friend to the END: fri-END.",
+"1|people|men, women and children|die Leute, die Menschen|Many people live in Jakarta.|There is a hidden o: p-e-o-p-l-e.",
+"1|often|many times|oft|We often go to the beach.|o-f-t-e-n. Many people don’t say the t, but it is there.",
+"1|minute|sixty seconds|die Minute|Wait a minute, please.|Same letters as in German, just with a small m.",
+"1|piece|a part of something|das Stück|Can I have a piece of cake?|A PIEce of PIE: p-i-e-c-e.",
+"1|guess|to give an answer when you are not sure|raten|Guess what is in the box!|Silent u, double s: g-u-e-s-s.",
+"1|choose|to pick one thing|wählen, aussuchen|Choose one card from the pile.|Double o. With one o, ‘chose’ is the past.",
+"1|climb|to go up using your hands and feet|klettern|We climbed to the top of the hill.|Silent b at the end.",
+"1|famous|known by very many people|berühmt|The Eiffel Tower is very famous.|fame loses its e + ous: f-a-m-o-u-s.",
+"1|history|what happened in the past|die Geschichte|In history we are learning about ancient Egypt.|his + tory.",
+"1|ocean|a very big sea|der Ozean|The Indian Ocean is south of Bali.|The c sounds like sh: o-c-e-a-n.",
+"1|perhaps|maybe|vielleicht|Perhaps we can go swimming later.|per + haps.",
+"1|promise|to say you will really do something|versprechen|I promise I will tidy my room.|Ends in -ise: p-r-o-m-i-s-e.",
+"1|question|something you ask|die Frage|Raise your hand if you have a question.|qu + es + tion.",
+"1|remember|to keep something in your mind|sich erinnern|Remember to bring your hat.|re + member.",
+"1|forward|toward the front|vorwärts|Take one step forward.|for + ward.",
+"1|during|while something is happening|während|Don’t talk during the test.|dur + ing, only one r.",
+"1|build|to make something by putting parts together|bauen|We will build a sandcastle.|u comes before i: b-u-i-l-d.",
+"1|decide|to make up your mind|entscheiden|I can’t decide which ice cream to get.|Starts with de-, and the c sounds like s.",
+"1|laugh|to make sounds because something is funny|lachen|We laugh at Dad's silly jokes.|Here -augh sounds like 'aff': l-a-u-g-h.",
+"1|brought|the past of 'bring'|brachte, gebracht|She brought snacks to the beach.|br + ought, like 'thought'.",
+"1|heard|the past of 'hear'|hörte, gehört|I heard a gecko in the night.|hear + d. The word 'ear' is inside it.",
+"1|really|very; in fact|wirklich|The water is really warm today.|real + ly, so it has two l's.",
+"1|finally|at last, after a long time|endlich|We finally reached the top.|final + ly, so it has two l's.",
+"1|tomorrow|the day after today|morgen|We have a spelling test tomorrow.|One m and two r's: to-mor-row.",
+"1|breakfast|the first meal of the day|das Frühstück|I eat mango for breakfast.|break + fast. It sounds like 'brekfast', but there is an a after the e.",
+"1|children|more than one child|die Kinder|The children played in the pool.|child + ren.",
+"1|listen|to pay attention to sounds|zuhören|Listen to the rain on the roof.|Silent t: l-i-s-t-e-n.",
+"1|knife|a tool for cutting|das Messer|Cut the papaya with a knife.|Silent k at the start.",
+"1|busy|having a lot to do|beschäftigt|Mum is busy on the phone.|It sounds like 'bizzy' but is spelled b-u-s-y.",
+"1|whole|all of something|ganz|I ate the whole pizza!|Silent w. 'hole' (das Loch) has no w.",
+"1|world|the earth and everyone on it|die Welt|I want to travel around the world.|w-o-r-l-d: the l comes after the r.",
+"1|quiet|making little or no noise|leise, ruhig|Please be quiet in the library.|qui-et has two parts. 'quite' (ziemlich) has the e at the end.",
+"1|village|a very small town|das Dorf|We cycled to the next village.|Double l, and it ends in -age.",
+"2|though|but; even if|obwohl; aber|It was sunny, though a bit windy.|th + ough.",
+"2|thought|the past of ‘think’; an idea|dachte; der Gedanke|I thought about it all night.|th + ought.",
+"2|through|in one side and out the other|durch|We walked through the rice fields.|thr + ough. Don’t mix it up with ‘threw’ (warf).",
+"2|enough|as much as you need|genug|Have you had enough to eat?|-ough here sounds like ‘uff’.",
+"2|height|how tall something is|die Höhe, die Größe|Measure your height against the wall.|h + eight. It ends in t, not th.",
+"2|weight|how heavy something is|das Gewicht|The weight of the bag is two kilos.|w + eight. Don’t mix it up with ‘wait’ (warten).",
+"2|quarter|one of four equal parts|das Viertel|Cut the pizza into quarters.|Starts with qu, ends in -er.",
+"2|believe|to think that something is true|glauben|I believe you.|Never believe a lie: ‘lie’ is hidden inside be-LIE-ve.",
+"2|complete|whole; with nothing missing|vollständig|My puzzle is finally complete.|Ends in -ete: c-o-m-p-l-e-t-e.",
+"2|continue|to keep going|weitermachen, fortsetzen|Please continue reading.|Ends in -ue.",
+"2|describe|to say what something is like|beschreiben|Describe your best holiday.|Starts with de-, not di-.",
+"2|different|not the same|anders, verschieden|My brother and I have different hobbies.|differ + ent: two f’s and an e in the middle you can hardly hear.",
+"2|discover|to find something for the first time|entdecken|They discovered a cave by the beach.|dis + cover.",
+"2|guide|a person or book that shows you the way|der Führer, der Reiseführer|Our guide showed us the temple.|Silent u: g-u-i-d-e.",
+"2|imagine|to make a picture in your mind|sich vorstellen|Imagine you could fly.|Ends in -ine: i-m-a-g-i-n-e.",
+"2|important|mattering a lot|wichtig|Sleep is important for growing.|im + port + ant. It ends in -ant.",
+"2|increase|to get bigger or make bigger|steigen, erhöhen|The price of mangoes will increase.|in + crease. It ends in -ease.",
+"2|interest|wanting to know more about something|das Interesse|She has a big interest in sharks.|inter + est: one s, one t at the end.",
+"2|island|land with water all around it|die Insel|Bali is an island.|Silent s: i-s-l-a-n-d.",
+"2|natural|made by nature, not by people|natürlich|The beach has natural rock pools.|nature loses its e + al.",
+"2|nervous|worried and a little scared|nervös, aufgeregt|I feel nervous before a test.|nerve loses its e + ous.",
+"2|position|the place where something is|die Position, die Lage|Put the chairs back in position.|Only one s: pos-i-tion.",
+"2|possible|can happen or can be done|möglich|Is it possible to swim to that island?|Double s, and it ends in -ible.",
+"2|potatoes|more than one potato|die Kartoffeln|We had roast potatoes for dinner.|potato + es.",
+"2|probably|almost certainly|wahrscheinlich|It will probably rain later.|pro-bab-ly.",
+"2|recent|happened not long ago|neu, aktuell|This is a recent photo of my family.|re + cent. The c sounds like s.",
+"2|special|different from or better than usual|besonders|Today is a special day.|Ends in -cial: s-p-e-c-i-a-l.",
+"2|surprise|something you did not expect|die Überraschung|We planned a surprise party.|There is an r after the u: sur + prise.",
+"2|bought|the past of 'buy'|kaufte, gekauft|We bought fresh fish at the market.|b + ought.",
+"2|daughter|a girl, when you talk about her parents|die Tochter|They have one son and two daughters.|-augh with a silent gh: d-a-u-g-h-t-e-r.",
+"2|castle|a big strong building where kings lived|die Burg, das Schloss|The king lived in a castle on a hill.|Silent t: c-a-s-t-l-e.",
+"2|sign|a board with words or pictures that tell you something|das Schild; das Zeichen|The sign says no swimming.|Silent g. You can hear it in 'signal'.",
+"2|half|one of two equal parts|die Hälfte; halb|Cut the apple in half.|Silent l: h-a-l-f.",
+"2|thousand|the number 1,000|tausend|There are a thousand stars tonight.|th + ousand.",
+"2|clothes|the things you wear|die Kleidung|Put your wet clothes on the line.|cloth + es. Don't forget the e.",
+"2|toward|in the direction of|in Richtung, auf … zu|The dog ran toward me.|to + ward. 'towards' is also correct.",
+"2|dangerous|could hurt you|gefährlich|Big waves can be dangerous.|danger + ous.",
+"2|honest|always telling the truth|ehrlich|Thank you for being honest.|Silent h at the start.",
+"2|wrong|not right|falsch|That answer is wrong, so try again.|Silent w at the start.",
+"2|bicycle|a bike|das Fahrrad|I ride my bicycle to school.|bi + cycle: the y comes after the first c.",
+"3|beautiful|very nice to look at|schön, wunderschön|The sunset over the sea was beautiful.|Starts with b-e-a-u, then ‘tiful’ with only one l.",
+"3|certain|completely sure|sicher|Are you certain the door is locked?|Ends in -ain: c-e-r-t-a-i-n.",
+"3|accept|to take something that someone gives you, or to say yes to it|annehmen, akzeptieren|Please accept this small gift.|Double c: a-c-c-e-p-t. Don’t mix it up with ‘except’.",
+"3|among|in the middle of a group|unter, zwischen (mehreren)|She sat among her friends.|It sounds like ‘a-mung’ but it is spelled with an o: a-m-o-n-g.",
+"3|appear|to come into view|erscheinen|A rainbow appeared after the storm.|Double p: a-p-p-e-a-r.",
+"3|guard|a person who protects something|die Wache|A guard stood at the gate.|Silent u after g: g-u-a-r-d.",
+"3|machine|a tool with moving parts|die Maschine|The washing machine is noisy.|ch sounds like sh: m-a-c-h-i-n-e.",
+"3|measure|to find out the size or amount of something|messen|Measure the table with a ruler.|m-e-a-s-u-r-e. It ends in -sure.",
+"3|science|the study of how the world works|die Naturwissenschaft|We have science on Mondays.|s and c together: s-c-i-e-n-c-e.",
+"3|straight|not bent or curved|gerade|Draw a straight line with a ruler.|-aight: s-t-r-a-i-g-h-t.",
+"3|opposite|completely different; across from|das Gegenteil; gegenüber|Hot is the opposite of cold.|Double p, and it ends in -site.",
+"3|address|where someone lives, so letters can find them|die Adresse|Write your address on the envelope.|Double d and double s. German ‘Adresse’ has only one d.",
+"3|although|even though|obwohl|I went outside, although it was raining.|Only one l: al + though.",
+"3|attention|looking, listening and thinking carefully|die Aufmerksamkeit|Please pay attention to the teacher.|Double t, and it ends in -tion.",
+"3|breathe|to take air in and out|atmen|Breathe in slowly through your nose.|The verb ends with e. Without e, ‘breath’ means der Atem.",
+"3|calendar|a chart that shows the days and months|der Kalender|Mark the test on the calendar.|Starts with c and ends in -ar (German: K and -er).",
+"3|ceiling|the top inside surface of a room|die Zimmerdecke|A gecko is walking on the ceiling.|After c, e comes before i: c-e-i-l-i-n-g.",
+"3|character|a person in a story; what someone is like|die Figur; der Charakter|Harry is the main character in the book.|ch sounds like k. Ends in -er.",
+"3|February|the second month of the year|der Februar|Carnival is in February.|Don’t forget the first r: Feb-ru-ar-y. Months start with a capital letter.",
+"3|Wednesday|the day after Tuesday|der Mittwoch|We have swimming on Wednesday.|Say it in your head as Wed-nes-day so you remember the d. Days start with a capital letter.",
+"3|whether|if (when there is a choice)|ob|I don’t know whether to laugh or cry.|Starts with wh. Don’t mix it up with ‘weather’ (das Wetter).",
+"3|library|a place where you borrow books|die Bibliothek, die Bücherei|I borrowed three books from the library.|Two r’s: lib-rar-y.",
+"3|ordinary|normal, not special|gewöhnlich, normal|It was an ordinary school day.|ordin + ary.",
+"3|strength|how strong someone is|die Kraft, die Stärke|It takes strength to lift that box.|strong → strength. Don’t forget the g before th.",
+"3|language|a way of speaking and writing, like English|die Sprache|English is my second language.|u after the first g: l-a-n-g-u-a-g-e.",
+"3|accident|something bad that happens by chance, like a crash|der Unfall|He broke his arm in a bike accident.|Double c: a-c-c-i-d-e-n-t.",
+"3|beginning|the start of something|der Anfang|Let’s go back to the beginning of the story.|Two n’s before -ing: begin + n + ing.",
+"3|consider|to think carefully about something|überlegen, bedenken|Consider both choices before you decide.|One s, ends in -er.",
+"3|doubt|a feeling of not being sure|der Zweifel; zweifeln|I doubt it will rain today.|Silent b: d-o-u-b-t.",
+"3|experiment|a test to find something out|das Experiment|In science we did an experiment with ice.|Same letters as in German, just with a small e.",
+"3|grammar|the rules of a language|die Grammatik|German grammar has three genders.|Double m, and it ends in -ar.",
+"3|difficult|hard to do|schwierig|This puzzle is difficult.|Two f’s, and only one l at the end.",
+"3|disappear|to go out of sight|verschwinden|The magician made the coin disappear.|dis + appear: one s, two p’s.",
+"3|shoulder|where your arm joins your body|die Schulter|The parrot sat on his shoulder.|-ould, like 'could': sh-o-u-l-d-e-r.",
+"3|tongue|the part of your mouth you taste with|die Zunge|Don't stick your tongue out!|It ends in -gue: t-o-n-g-u-e.",
+"3|juice|the liquid from fruit|der Saft|I'd like a glass of orange juice.|j-u-i-c-e. The c sounds like s.",
+"3|lightning|the flash of light in a storm|der Blitz|Lightning lit up the whole sky.|light + ning. There is no e after the t.",
+"3|vegetable|a plant you eat, like a carrot|das Gemüse|Broccoli is a green vegetable.|Say it slowly in your head: veg-e-ta-ble.",
+"3|dictionary|a book that tells you what words mean|das Wörterbuch|Look the word up in the dictionary.|diction + ary.",
+"3|decision|the choice you make|die Entscheidung|It was a hard decision.|decide → decision: the d turns into s.",
+"4|argument|when people disagree with angry words|der Streit|The twins had an argument about the toy.|‘argue’ loses its e: argu + ment.",
+"4|business|buying and selling things; a company|das Geschäft, die Firma|My uncle runs a small business.|busy → busi + ness: b-u-s-i-n-e-s-s.",
+"4|exercise|movement to keep your body fit; a practice task|die Übung; Sport|Swimming is good exercise.|ex-er-cise: the end is -cise with a c.",
+"4|experience|something that happens to you|das Erlebnis, die Erfahrung|Snorkelling was an amazing experience.|Ends in -ence: ex-per-i-ence.",
+"4|knowledge|everything you know|das Wissen|Reading books gives you knowledge.|know + ledge: silent k, and a d before the g.",
+"4|particular|one special thing and not others|bestimmt|Is there a particular book you want?|par-tic-u-lar. It ends in -ar.",
+"4|receive|to get something|bekommen, erhalten|Did you receive my message?|After c, e comes before i: r-e-c-e-i-v-e.",
+"4|government|the people who run a country|die Regierung|The government built a new school.|govern + ment. Don’t forget the n.",
+"4|environment|the world around us: air, water, land and plants|die Umwelt|We must protect the environment.|Hidden n: environ + ment. Say ‘en-vi-ron-ment’ slowly.",
+"4|especially|more than anything else|besonders|I love fruit, especially mangoes.|e + special + ly, so it has two l’s.",
+"4|foreign|from another country|ausländisch, fremd|She speaks two foreign languages.|Silent g: f-o-r-e-i-g-n.",
+"4|achieve|to reach a goal by working hard|erreichen, schaffen|You can achieve a lot if you keep trying.|i before e: a-c-h-i-e-v-e.",
+"4|awkward|clumsy, or a bit embarrassing|ungeschickt; peinlich|There was an awkward silence.|Two w's: a-w-k-w-a-r-d.",
+"4|muscle|the part of your body that makes you move|der Muskel|Swimming makes your muscles strong.|Silent c: m-u-s-c-l-e.",
+"4|stomach|your belly, where food goes|der Magen, der Bauch|My stomach is rumbling.|ch sounds like k: s-t-o-m-a-c-h.",
+"4|temperature|how hot or cold something is|die Temperatur|The temperature today is thirty-one degrees.|tem-per-a-ture: don't forget the a.",
+"4|signature|your name written in your own way|die Unterschrift|Put your signature at the bottom.|sign + ature.",
+"4|vehicle|a car, bus, truck or bike|das Fahrzeug|A scooter is a small vehicle.|Silent h: ve-hi-cle.",
+"4|average|the usual or middle amount|der Durchschnitt; durchschnittlich|The average class has twenty pupils.|av-er-age.",
+"4|available|free to use or get|verfügbar, frei|Is this seat available?|avail + able.",
+"4|ancient|very, very old|uralt, antik|We visited an ancient temple.|-cient: the c sounds like sh.",
+"4|bargain|something you buy cheaply|das Schnäppchen|This shirt was a real bargain.|It ends in -gain: bar + gain.",
+"4|category|a group of things that belong together|die Kategorie|Sort the animals into categories.|cat + e + gory. It ends in y, not ie.",
+"4|community|the people who live in one place|die Gemeinschaft|Our school is a friendly community.|Double m: com-mu-ni-ty.",
+"4|competition|a contest to find the winner|der Wettbewerb|She won the drawing competition.|compete → compet + ition.",
+"4|determined|wanting to do something and not giving up|entschlossen|He was determined to finish the race.|deter + mined.",
+"4|develop|to grow or change slowly|entwickeln|Tadpoles develop into frogs.|No e at the end: d-e-v-e-l-o-p.",
+"4|equipment|the things you need for a job or sport|die Ausrüstung|Pack your snorkel equipment.|equip + ment, with only one p.",
+"4|familiar|known to you|vertraut, bekannt|That song sounds familiar.|Like 'family': fam-il-iar.",
+"4|frequently|often|häufig|It frequently rains in December.|fre-quent-ly.",
+"4|individual|one single person or thing|einzeln; der Einzelne|Each individual gets a ticket.|in-di-vid-u-al.",
+"4|interrupt|to stop someone while they are talking|unterbrechen|Please don't interrupt me.|Double r: inter + rupt.",
+"4|persuade|to get someone to agree with you|überreden|I persuaded Mum to buy ice cream.|per + suade. The u is easy to forget.",
+"4|physical|about your body|körperlich|Running is good physical exercise.|ph sounds like f, and y sounds like i: p-h-y-s-i-c-a-l.",
+"4|exhausted|very, very tired|erschöpft|I was exhausted after the long hike.|Silent h: ex-haust-ed.",
+"4|soldier|a person in an army|der Soldat|The soldier stood very still.|-dier: s-o-l-d-i-e-r.",
+"4|suggest|to give an idea|vorschlagen|I suggest we go swimming.|Double g: sug-gest.",
+"4|mysterious|strange and hard to explain|geheimnisvoll|We heard a mysterious noise.|mystery → myster + ious.",
+"4|rhyme|words that end with the same sound|der Reim; sich reimen|Cat rhymes with hat.|rh + yme, like the start of 'rhythm'.",
+"4|forty|the number 40|vierzig|There are forty pupils in the hall.|four loses its u: f-o-r-t-y.",
+"5|necessary|needed|nötig, notwendig|Sun cream is necessary at the beach.|One c and two s’s, like a shirt with one collar and two sleeves.",
+"5|rhythm|a regular beat in music|der Rhythmus|Clap along to the rhythm.|Rhythm Helps Your Two Hips Move: r-h-y-t-h-m.",
+"5|separate|apart, not together|getrennt|Keep the eggs separate from the flour.|There is A RAT in sep-A-RAT-e.",
+"5|accommodate|to have space for someone|unterbringen, Platz bieten|The villa can accommodate ten guests.|Two c's and two m's.",
+"5|rhinoceros|a large animal with a horn on its nose|das Nashorn|A rhinoceros has very thick skin.|rhino + ceros: silent h, and the c sounds like s.",
+"5|apparent|clear to see|offensichtlich|It was apparent that she was tired.|Double p, one r: ap-par-ent.",
+"5|appreciate|to be thankful for something|schätzen, dankbar sein|I appreciate your help.|Double p: ap-pre-ci-ate.",
+"5|bruise|a dark mark on your skin after a bump|der blaue Fleck|I got a bruise on my knee.|u and i together: b-r-u-i-s-e.",
+"5|cemetery|a place where people are buried|der Friedhof|There is an old cemetery near the church.|Three e's: c-e-m-e-t-e-r-y.",
+"5|committee|a group chosen to make decisions|der Ausschuss, das Komitee|The school committee planned the fair.|Double m, double t, double e.",
+"5|conscience|the voice inside you that knows right from wrong|das Gewissen|My conscience told me to say sorry.|con + science.",
+"5|conscious|awake and knowing what is happening|bei Bewusstsein; bewusst|He was conscious after the fall.|con + scious: s-c-i-o-u-s.",
+"5|curiosity|wanting to know things|die Neugier|Curiosity makes you a good scientist.|curious drops its u: curi-os-ity.",
+"5|definitely|for sure|definitiv, auf jeden Fall|I will definitely come.|There is 'finite' inside: de-finite-ly.",
+"5|desperate|wanting something very badly|verzweifelt|The dog was desperate for water.|des-per-ate.",
+"5|disastrous|very bad, like a disaster|katastrophal|The storm was disastrous for the farmers.|disaster drops its e: disastr + ous.",
+"5|embarrass|to make someone feel shy and silly|in Verlegenheit bringen|Please don't embarrass me!|Two r's and two s's.",
+"5|exaggerate|to say something is bigger than it is|übertreiben|Don't exaggerate, it was only a small spider!|Double g: ex-ag-ger-ate.",
+"5|existence|being real or alive|die Existenz|Do you believe in the existence of dragons?|It ends in -ence.",
+"5|guarantee|a promise that something will work|die Garantie|The watch has a two-year guarantee.|gu + ar + antee: u after the g, double e at the end.",
+"5|immediately|right now|sofort|Come here immediately!|Double m: im-me-di-ate-ly.",
+"5|interfere|to get involved when you are not wanted|sich einmischen|Don't interfere in their game.|inter + fere.",
+"5|leisure|free time|die Freizeit|We read books in our leisure time.|e before i: l-e-i-s-u-r-e.",
+"5|mischievous|naughty in a playful way|frech, schelmisch|The mischievous monkey stole my hat.|mis-chie-vous. There is no i after the v.",
+"5|nuisance|something annoying|das Ärgernis, die Plage|Mosquitoes are a nuisance.|nu + i + sance.",
+"5|occasionally|sometimes|gelegentlich|We occasionally eat out.|Two c's, one s, two l's.",
+"5|occur|to happen|geschehen, vorkommen|Earthquakes occur in Indonesia.|Two c's. In 'occurred' the r doubles too.",
+"5|opportunity|a good chance to do something|die Gelegenheit|This is a great opportunity.|Double p: op-por-tu-ni-ty.",
+"5|privilege|a special right|das Privileg|It is a privilege to meet you.|No d in it: p-r-i-v-i-l-e-g-e.",
+"5|pronunciation|how a word is said|die Aussprache|Her English pronunciation is excellent.|pronounce loses an o: pro-nun-ci-a-tion.",
+"5|queue|a line of people waiting|die Warteschlange|We waited in a long queue.|q-u-e-u-e: four vowels in a row.",
+"5|recommend|to say something is good|empfehlen|I recommend this book.|One c, two m's: re + commend.",
+"5|sincerely|honestly; truly|aufrichtig|Yours sincerely is a way to end a letter.|sincere + ly: keep the e.",
+"5|sufficient|enough|ausreichend|Is one bottle of water sufficient?|Double f, then -cient.",
+"5|thorough|careful and complete|gründlich|Do a thorough check of your work.|thor + ough. Don't mix it up with 'through'.",
+"5|twelfth|number 12 in a row|der, die, das zwölfte|Today is the twelfth of November.|Don't forget the f: t-w-e-l-f-t-h.",
+"5|yacht|a sailing boat|die Jacht|A white yacht sailed past.|Strange letters: y-a-c-h-t.",
+"5|explanation|words that make something clear|die Erklärung|The teacher gave a clear explanation.|explain loses its i: expla-nation.",
+"5|convenience|being easy and useful|die Bequemlichkeit|A shop on the corner is a real convenience.|con-ven-i-ence.",
+"5|correspond|to write letters to each other; to match|sich schreiben; entsprechen|I correspond with a pen pal.|Double r: cor-re-spond."
 ];
-const W = RAW.map(s => { const [word, meaning, de, sentence, tip] = s.split("|"); return { word, meaning, de, sentence, tip }; });
+const W = RAW.map(s => { const [level, word, meaning, de, sentence, tip] = s.split("|"); return { level: +level, word, meaning, de, sentence, tip }; });
+const BYWORD = Object.fromEntries(W.map(w => [w.word, w]));
+const LEVEL_NAMES = ["", "Warm-up", "Steady", "Strong", "Tricky", "Champion"];
+const BATCH = 20;
 
 const $ = id => document.getElementById(id);
-const KEY = "spelling5-v1";
-let store = { learned: [], missed: {}, accent: "us" };
+const KEY = "spelling5-v2";
+let store = { learned: [], missed: {}, accent: "us", level: 2, batch: null, last: null, suggest: null };
 try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) store = Object.assign(store, s); } catch (e) {}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
-let current = -1, last = -1, session = { right: 0, practise: 0 };
-
-/* ---------- speech ---------- */
+/* ---------- voice: recorded clips if published, otherwise the browser voice ---------- */
 const canSpeak = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
-let voice = null;
+let voice = null, rec = null;
+const player = new Audio(); player.preservesPitch = true; player.webkitPreservesPitch = true;
 function pickVoice() {
   if (!canSpeak) return;
   const vs = speechSynthesis.getVoices();
   const want = store.accent === "uk" ? "en-GB" : "en-US";
   const pref = store.accent === "uk" ? ["Daniel", "Serena", "Kate", "Google UK English Female", "Arthur"] : ["Samantha", "Ava", "Allison", "Google US English", "Nicky"];
   const norm = v => v.lang.replace("_", "-");
-  voice = vs.find(v => norm(v) === want && pref.some(p => v.name.includes(p)))
-       || vs.find(v => norm(v) === want)
-       || vs.find(v => norm(v).startsWith("en")) || null;
+  voice = vs.find(v => norm(v) === want && pref.some(p => v.name.includes(p))) || vs.find(v => norm(v) === want) || vs.find(v => norm(v).startsWith("en")) || null;
 }
-if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; } else { $("noVoice").hidden = false; }
+if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+fetch("audio/manifest.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(m => {
+  if (m && m.words) { rec = m; $("voiceBox").hidden = true; $("noVoice").hidden = true; }
+}).catch(() => {});
+if (!canSpeak) setTimeout(() => { if (!rec) $("noVoice").hidden = false; }, 1500);
 
-function say(parts, rate) {
-  if (!canSpeak) return;
-  if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
+let playToken = 0;
+function stopAll() { playToken++; try { player.pause(); } catch (e) {} if (canSpeak) speechSynthesis.cancel(); $("replayBtn").classList.remove("speaking"); }
+function speak(parts, rate) {
+  stopAll(); if (!canSpeak) return;
   const btn = $("replayBtn");
   parts.forEach((text, i) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = voice ? voice.lang : (store.accent === "uk" ? "en-GB" : "en-US");
     if (voice) u.voice = voice;
-    u.rate = rate; u.pitch = 1;
+    u.rate = rate;
     if (i === 0) u.onstart = () => btn.classList.add("speaking");
-    if (i === parts.length - 1) { u.onend = u.onerror = () => btn.classList.remove("speaking"); }
+    if (i === parts.length - 1) u.onend = u.onerror = () => btn.classList.remove("speaking");
     speechSynthesis.speak(u);
   });
 }
-/* Recorded fal.ai audio, when present, replaces the browser voice. One reused
-   element, so iPad Safari keeps permission after the first tap. */
-let rec = null; const player = new Audio(); player.preservesPitch = true;
-fetch("audio/manifest.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(m => {
-  if (m && m.words) { rec = m; document.querySelector(".seg").parentElement.hidden = true; $("noVoice").hidden = true; }
-}).catch(() => {});
 function playClips(files, rate) {
-  if (canSpeak) speechSynthesis.cancel();
-  const btn = $("replayBtn"); let i = 0; const token = {}; playClips.token = token;
+  stopAll(); const token = playToken, btn = $("replayBtn"); let i = 0;
   const step = () => {
-    if (playClips.token !== token) return;
+    if (token !== playToken) return;
     if (i >= files.length) { btn.classList.remove("speaking"); return; }
     player.src = files[i++]; player.playbackRate = rate;
-    player.onended = () => setTimeout(step, 350);
+    player.onended = () => setTimeout(step, 400);
     player.play().catch(() => btn.classList.remove("speaking"));
   };
   btn.classList.add("speaking"); step();
 }
-function clips(kind) { const c = rec && rec.words[W[current].word]; return c ? c[kind] : null; }
-function sayTest(rate) {
-  const w = W[current];
-  if (clips("word")) return playClips([clips("word"), clips("sentence"), clips("word")], rate ? rate / 0.85 : 1);
-  say([w.word, w.sentence, w.word], rate || 0.85);
+const clip = (w, kind) => rec && rec.words[w] ? rec.words[w][kind] : null;
+/* rate: 1 = normal dictation pace, 0.7 = slowly */
+function sayTest(w, rate = 1) {
+  const e = BYWORD[w];
+  if (clip(w, "word")) playClips([clip(w, "word"), clip(w, "sentence"), clip(w, "word")], 0.92 * rate);
+  else speak([e.word, e.sentence, e.word], 0.85 * rate);
 }
-function sayWord(rate) {
-  if (clips("word")) return playClips([clips("word")], rate / 0.85);
-  say([W[current].word], rate);
+function sayWord(w, rate = 0.85) {
+  if (clip(w, "word")) playClips([clip(w, "word")], rate);
+  else speak([w], 0.85 * rate);
 }
 
 /* ---------- views ---------- */
-function show(id) { ["vStart", "vListen", "vReveal", "vDone"].forEach(v => $(v).hidden = v !== id); window.scrollTo({ top: 0 }); }
+const VIEWS = ["vStart", "vListen", "vCheck", "vResult", "vDone"];
+function show(id) { VIEWS.forEach(v => $(v).hidden = v !== id); window.scrollTo({ top: 0 }); }
+function levelCount(l) { return W.filter(w => w.level === l && store.learned.includes(w.word)).length; }
 function updateProgress() {
   const n = store.learned.length;
   $("nLearned").textContent = n;
-  $("barFill").style.width = n + "%";
-  const bits = [];
-  if (session.right) bits.push(session.right + " right today");
-  if (session.practise) bits.push(session.practise + " to practise again");
-  $("sessionLine").textContent = bits.join(" · ");
+  $("barFill").style.width = (n / W.length * 100) + "%";
+}
+function dots(l) { return '<span class="dots">' + [1,2,3,4,5].map(i => '<i class="' + (i <= l ? "on" : "") + '"></i>').join("") + "</span>"; }
+function setBadge(el, l) { el.className = "badge lv" + l; el.innerHTML = dots(l) + " Level " + l + " · " + LEVEL_NAMES[l]; }
+
+function renderStart() {
+  $("levels").innerHTML = [1,2,3,4,5].map(l =>
+    '<button class="lv lv' + l + '" data-l="' + l + '" aria-pressed="' + (store.level === l) + '"><b>' + l + "</b><span>" + LEVEL_NAMES[l] + "</span><small>" + levelCount(l) + "/40</small></button>").join("");
+  $("levels").querySelectorAll(".lv").forEach(b => b.onclick = () => { store.level = +b.dataset.l; save(); renderStart(); });
+  const b = store.batch;
+  $("resumeBtn").hidden = !b;
+  if (b) $("resumeBtn").textContent = b.phase === "check" ? "Continue checking" : "Continue at word " + (b.items.length);
+  $("startBtn").textContent = b ? "Start a new 20" : "Start 20 words";
+  $("suggestLine").hidden = !store.suggest;
+  if (store.suggest) $("suggestLine").textContent = "Suggested start for this round: level " + store.suggest + ".";
+  $("lastLine").textContent = store.last ? "Last round: " + store.last.right + " of " + store.last.total + " right." : "";
+  show(store.learned.length >= W.length ? "vDone" : "vStart");
 }
 
-function pickWord() {
-  const pool = [];
-  W.forEach((w, i) => {
-    if (store.learned.includes(i) || i === last) return;
-    const weight = 1 + Math.min(store.missed[i] || 0, 3);   // missed words come back more often
-    for (let k = 0; k < weight; k++) pool.push(i);
-  });
-  if (!pool.length) {
-    const left = W.map((_, i) => i).filter(i => !store.learned.includes(i));
-    return left.length ? left[0] : -1;
-  }
-  return pool[Math.floor(Math.random() * pool.length)];
+/* ---------- picking words ---------- */
+function pickWord(level, used) {
+  const inLevel = W.filter(w => w.level === level && !used.includes(w.word));
+  let pool = inLevel.filter(w => !store.learned.includes(w.word));
+  if (!pool.length) pool = inLevel;
+  const bag = [];
+  pool.forEach(w => { const k = 1 + Math.min(store.missed[w.word] || 0, 3); for (let i = 0; i < k; i++) bag.push(w.word); });
+  return bag[Math.floor(Math.random() * bag.length)];
 }
 
-function nextWord() {
-  current = pickWord();
-  if (current < 0) { show("vDone"); return; }
-  last = current;
-  $("listenLabel").textContent = "Word " + (store.learned.length + 1) + " · listen and write it down";
+/* ---------- round ---------- */
+function startBatch() {
+  store.batch = { items: [], level: store.level, phase: "listen", ticks: [] };
+  store.suggest = null;
+  addWord(store.level);
+}
+function addWord(level) {
+  const b = store.batch;
+  b.level = Math.max(1, Math.min(5, level));
+  const w = pickWord(b.level, b.items.map(i => i.w));
+  b.items.push({ w, level: b.level, skipped: false });
+  save(); renderListen(); sayTest(w);
+}
+function cur() { const b = store.batch; return b.items[b.items.length - 1]; }
+function renderListen() {
+  const b = store.batch, it = cur(), n = b.items.length;
+  $("listenLabel").textContent = "Word " + n + " of " + BATCH;
+  setBadge($("levelBadge"), it.level);
+  $("skipBtn").setAttribute("aria-pressed", it.skipped);
+  $("skipBtn").textContent = it.skipped ? "Skipped" : "I don't know this one";
+  $("skipNote").hidden = !it.skipped;
+  const last = n >= BATCH;
+  $("nextArea").hidden = last; $("toCheckBtn").hidden = !last;
+  $("easierBtn").disabled = it.level <= 1; $("harderBtn").disabled = it.level >= 5;
   show("vListen");
-  sayTest();
 }
+$("replayBtn").onclick = () => sayTest(cur().w);
+$("slowBtn").onclick = () => sayTest(cur().w, 0.7);
+$("wordOnlyBtn").onclick = () => sayWord(cur().w, 0.75);
+$("skipBtn").onclick = () => { cur().skipped = !cur().skipped; save(); renderListen(); };
+$("easierBtn").onclick = () => addWord(cur().level - 1);
+$("sameBtn").onclick = () => addWord(cur().level);
+$("harderBtn").onclick = () => addWord(cur().level + 1);
+$("toCheckBtn").onclick = () => { stopAll(); store.batch.phase = "check"; save(); renderCheck(); };
 
-function reveal(mode) {
-  const w = W[current];
-  $("wordText").textContent = w.word;
-  $("letters").innerHTML = [...w.word].map(c => "<span>" + c + "</span>").join("");
-  $("exMeaning").textContent = w.meaning;
-  $("exGerman").textContent = w.de;
-  $("exSentence").textContent = w.sentence;
-  $("exTip").textContent = w.tip;
-  const unknown = mode === "unknown";
-  $("revealLabel").textContent = unknown ? "Here is the word" : "Check your spelling, letter by letter";
-  $("checkRow").hidden = unknown;
-  $("explain").hidden = !unknown;
-  $("mark").hidden = true;
-  $("afterRow").hidden = !unknown;
-  $("undoBtn").hidden = true;
-  if (unknown) markMissed();
-  show("vReveal");
-  sayWord(0.8);
+const EAR = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+const TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg>';
+function renderCheck() {
+  const b = store.batch;
+  $("checkList").innerHTML = b.items.map((it, i) => {
+    const right = b.ticks.includes(i);
+    return '<li class="item' + (right ? " right" : "") + (it.skipped ? " skipped" : "") + '" data-i="' + i + '">' +
+      '<span class="n">' + (i + 1) + '.</span><span class="w">' + esc(it.w) + (it.skipped ? "<small>skipped</small>" : "") + "</span>" +
+      '<button class="ear" aria-label="Hear ' + esc(it.w) + '">' + EAR + "</button>" +
+      '<button class="tick" aria-label="I spelled ' + esc(it.w) + ' right" aria-pressed="' + right + '">' + TICK + "</button></li>";
+  }).join("");
+  $("checkList").querySelectorAll(".item").forEach(li => {
+    const i = +li.dataset.i;
+    li.querySelector(".ear").onclick = () => sayWord(b.items[i].w);
+    li.querySelector(".tick").onclick = () => {
+      b.ticks = b.ticks.includes(i) ? b.ticks.filter(x => x !== i) : b.ticks.concat(i);
+      save(); renderCheck();
+    };
+  });
+  show("vCheck");
 }
-
-function markMissed() { store.missed[current] = (store.missed[current] || 0) + 1; session.practise++; save(); updateProgress(); }
-
-$("startBtn").onclick = nextWord;
-$("replayBtn").onclick = () => sayTest();
-$("slowBtn").onclick = () => sayTest(0.55);
-$("wordOnlyBtn").onclick = () => sayWord(0.7);
-$("wroteBtn").onclick = () => reveal("written");
-$("dontKnowBtn").onclick = () => reveal("unknown");
-$("wordBtn").onclick = () => sayWord(0.7);
-$("rightBtn").onclick = () => {
-  if (!store.learned.includes(current)) store.learned.push(current);
-  session.right++; save(); updateProgress();
-  $("checkRow").hidden = true;
-  const m = $("mark"); m.className = "mark good"; m.textContent = ["Well done!", "Perfect!", "Great spelling!", "Yes, that's right!"][Math.floor(Math.random() * 4)]; m.hidden = false;
-  $("afterRow").hidden = false; $("undoBtn").hidden = false; $("nextBtn").focus();
+$("doneCheckBtn").onclick = () => {
+  const b = store.batch, right = b.ticks.length, total = b.items.length;
+  let fresh = 0;
+  const toLearn = [];
+  b.items.forEach((it, i) => {
+    if (b.ticks.includes(i)) { if (!store.learned.includes(it.w)) { store.learned.push(it.w); fresh++; } }
+    else { store.missed[it.w] = (store.missed[it.w] || 0) + 1; toLearn.push(it.w); }
+  });
+  const avg = b.items.reduce((s, it) => s + it.level, 0) / total, ratio = right / total;
+  let sug = Math.round(avg) + (ratio >= 0.8 ? 1 : ratio <= 0.4 ? -1 : 0);
+  store.suggest = Math.max(1, Math.min(5, sug)); store.level = store.suggest;
+  store.last = { right, total };
+  store.batch = null; save(); updateProgress();
+  renderResult(right, total, fresh, toLearn);
 };
-function markWrong() {
-  markMissed();
-  $("checkRow").hidden = true;
-  const m = $("mark"); m.className = "mark bad"; m.textContent = "No problem. This word will come back later."; m.hidden = false;
-  $("explain").hidden = false;
-  $("afterRow").hidden = false; $("undoBtn").hidden = true;
+function renderResult(right, total, fresh, toLearn) {
+  $("resultCheer").textContent = right >= 18 ? "Amazing work!" : right >= 14 ? "Great work!" : right >= 8 ? "Good effort!" : "Every round makes you better.";
+  $("resultScore").textContent = right + " right";
+  $("resultNote").textContent = (fresh ? fresh + (fresh === 1 ? " new word" : " new words") + " learned. " : "") +
+    (toLearn.length ? "Here are " + toLearn.length + " words to practise. They will come back in later rounds." : "No words to practise this time.");
+  $("learnBlock").hidden = !toLearn.length;
+  $("learnCards").innerHTML = toLearn.map(w => {
+    const e = BYWORD[w];
+    return '<article class="card"><div class="top"><p class="word">' + esc(w) + '</p><button class="ear" data-w="' + esc(w) + '" aria-label="Hear ' + esc(w) + '">' + EAR + "</button></div>" +
+      '<div class="letters">' + [...w].map(c => "<span>" + esc(c) + "</span>").join("") + "</div>" +
+      '<dl class="explain"><div><dt>Means</dt><dd>' + esc(e.meaning) + "</dd></div><div><dt>Auf Deutsch</dt><dd>" + esc(e.de) +
+      "</dd></div><div><dt>Sentence</dt><dd>" + esc(e.sentence) + '</dd></div><div class="tip"><dt>Spelling tip</dt><dd>' + esc(e.tip) + "</dd></div></dl></article>";
+  }).join("");
+  $("learnCards").querySelectorAll(".ear").forEach(b => b.onclick = () => sayWord(b.dataset.w));
+  show("vResult");
 }
-$("wrongBtn").onclick = markWrong;
-$("undoBtn").onclick = () => {
-  store.learned = store.learned.filter(i => i !== current);
-  session.right = Math.max(0, session.right - 1);
-  markWrong();
-};
-$("nextBtn").onclick = nextWord;
+$("againBtn").onclick = renderStart;
+$("startBtn").onclick = startBatch;
+$("resumeBtn").onclick = () => { const b = store.batch; if (b.phase === "check") renderCheck(); else { renderListen(); sayTest(cur().w); } };
 
-/* ---------- accent ---------- */
+/* ---------- accent (only used without recordings) ---------- */
 function setAccent(a) {
   store.accent = a; save(); pickVoice();
   $("accUS").setAttribute("aria-pressed", a === "us"); $("accUK").setAttribute("aria-pressed", a === "uk");
@@ -500,19 +686,16 @@ $("accUK").onclick = () => setAccent("uk");
 setAccent(store.accent);
 
 /* ---------- reset with in-page confirm ---------- */
-function resetUI() {
-  $("resetArea").innerHTML = '<button class="link" id="resetBtn">Start over</button>';
-  $("resetBtn").onclick = askReset;
-}
+function resetUI() { $("resetArea").innerHTML = '<button class="link" id="resetBtn">Start over</button>'; $("resetBtn").onclick = askReset; }
 function askReset() {
   $("resetArea").innerHTML = '<span>Forget all learned words?</span><button class="chip" id="yesReset">Yes, start over</button><button class="chip" id="noReset">Cancel</button>';
-  $("yesReset").onclick = () => { store.learned = []; store.missed = {}; session = { right: 0, practise: 0 }; save(); updateProgress(); resetUI(); show("vStart"); };
+  $("yesReset").onclick = () => { stopAll(); store = Object.assign(store, { learned: [], missed: {}, batch: null, last: null, suggest: null, level: 2 }); save(); updateProgress(); resetUI(); renderStart(); };
   $("noReset").onclick = resetUI;
 }
 $("resetBtn").onclick = askReset;
 
 updateProgress();
-if (store.learned.length >= W.length) show("vDone");
+renderStart();
 </script>
 
 </body>
