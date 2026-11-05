@@ -35,7 +35,7 @@ img{max-width:100%}
   --btn: #eef2fa;
   --btn-line: #c5d1e8;
   --shadow: 0 1px 2px rgba(29,39,66,.08), 0 8px 24px rgba(29,39,66,.08);
-  --l1: #3d9b6a; --l2: #2f86b8; --l3: #5b5fc7; --l4: #b0569a; --l5: #c9563a;
+  --l1: #c99a1a; --l2: #e07b2a; --l3: #3d9b6a; --l4: #2f86b8; --l5: #5b5fc7; --l6: #b0569a; --l7: #c9563a;
   --f-word: "Andika", "Trebuchet MS", "Segoe UI", sans-serif;
   --f-body: "Andika", "Trebuchet MS", "Segoe UI", sans-serif;
   --f-pen: "Gochi Hand", "Comic Sans MS", cursive;
@@ -119,20 +119,23 @@ button:disabled { opacity: .35; cursor: default; }
 .chip[aria-pressed="true"] { background: var(--learn-soft); border-color: var(--learn); color: var(--learn); }
 
 /* level picker and level badge */
-.levels { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.levels { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+@media (max-width: 560px) { .levels { grid-template-columns: repeat(4, 1fr); } }
+.who { justify-self: start; }
+.who button { min-height: 52px; padding: 8px 26px; font-size: 1.15rem; }
 .lv {
   display: grid; gap: 2px; justify-items: center; padding: 10px 4px; border-radius: 12px;
   border: 2px solid var(--btn-line); background: var(--btn); min-height: 76px;
 }
 .lv b { font-size: 1.5rem; line-height: 1; color: var(--lvc); }
-.lv span { font-size: .78rem; color: var(--muted); }
+.lv span { font-size: .74rem; color: var(--muted); text-align: center; line-height: 1.15; }
 .lv small { font-size: .72rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .lv[aria-pressed="true"] { border-color: var(--lvc); background: color-mix(in srgb, var(--lvc) 14%, var(--paper)); }
 .badge { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: .95rem; color: var(--lvc); }
 .dots { display: inline-flex; gap: 4px; }
 .dots i { width: 10px; height: 10px; border-radius: 50%; background: var(--btn-line); }
 .dots i.on { background: var(--lvc); }
-.lv1 { --lvc: var(--l1); } .lv2 { --lvc: var(--l2); } .lv3 { --lvc: var(--l3); } .lv4 { --lvc: var(--l4); } .lv5 { --lvc: var(--l5); }
+.lv1 { --lvc: var(--l1); } .lv2 { --lvc: var(--l2); } .lv3 { --lvc: var(--l3); } .lv4 { --lvc: var(--l4); } .lv5 { --lvc: var(--l5); } .lv6 { --lvc: var(--l6); } .lv7 { --lvc: var(--l7); }
 .head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
 .next-label { font-family: var(--f-pen); font-size: 1.2rem; color: var(--muted); margin: 0 0 -10px; }
 
@@ -198,7 +201,11 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
   <main class="page">
     <!-- START -->
     <section id="vStart">
-      <p class="label">Get a pencil and number your paper from 1 to 20.</p>
+      <div class="seg who" role="group" aria-label="Who is practising">
+        <button id="whoJuna" aria-pressed="true">Juna</button>
+        <button id="whoArtus" aria-pressed="false">Artus</button>
+      </div>
+      <p class="label" id="paperLabel">Get a pencil and number your paper from 1 to 20.</p>
       <p class="note" id="introNote">You will hear 20 words. Write each one down, then pick if the next word should be easier, the same or harder. You check them all together at the end.</p>
       <div class="seg modes" role="group" aria-label="What to practise">
         <button id="modeLevels" aria-pressed="true">Levels</button>
@@ -242,7 +249,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
           <button class="btn" id="harderBtn">Harder</button>
         </div>
       </div>
-      <button class="btn primary" id="toCheckBtn" hidden>Check my 20 words</button>
+      <button class="btn primary" id="toCheckBtn" hidden>Check my words</button>
     </section>
 
     <!-- CHECK -->
@@ -287,208 +294,288 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 </div>
 
 <script>
-/* level|word|meaning|German|sentence|tip — 5 levels x 40 words (about grade 3 up to grade 6+), then level A = apostrophe chapter */
+/* level|word|meaning|German|sentence|tip — 5 levels x 40 words (about grade 3 up to grade 6+), then level A = apostrophe chapter. Levels 1-2 are grade 1-2 words for younger children. */
 const RAW = [
-"1|answer|what you say or write back to a question|die Antwort|I knew the answer to every question.|Silent w: a-n-s-w-e-r.",
-"1|because|for the reason that|weil|I stayed home because I was sick.|Big Elephants Can Always Understand Small Elephants.",
-"1|caught|the past of ‘catch’|fing, gefangen|She caught the ball with one hand.|-aught, just like ‘taught’: c-a-u-g-h-t.",
-"1|early|before the usual time|früh|We got up early to watch the sunrise.|Starts with ‘ear’: e-a-r-l-y.",
-"1|earth|the planet we live on; soil|die Erde|The Earth goes around the Sun.|Starts with ‘ear’, then th.",
-"1|eight|the number 8|acht|Spiders have eight legs.|e-i-g-h-t. The same ‘eigh’ is in ‘weight’ and ‘height’.",
-"1|friend|a person you like and trust|der Freund, die Freundin|My friend lives next door.|A friend to the END: fri-END.",
-"1|people|men, women and children|die Leute, die Menschen|Many people live in Jakarta.|There is a hidden o: p-e-o-p-l-e.",
-"1|often|many times|oft|We often go to the beach.|o-f-t-e-n. Many people don’t say the t, but it is there.",
-"1|minute|sixty seconds|die Minute|Wait a minute, please.|Same letters as in German, just with a small m.",
-"1|piece|a part of something|das Stück|Can I have a piece of cake?|A PIEce of PIE: p-i-e-c-e.",
-"1|guess|to give an answer when you are not sure|raten|Guess what is in the box!|Silent u, double s: g-u-e-s-s.",
-"1|choose|to pick one thing|wählen, aussuchen|Choose one card from the pile.|Double o. With one o, ‘chose’ is the past.",
-"1|climb|to go up using your hands and feet|klettern|We climbed to the top of the hill.|Silent b at the end.",
-"1|famous|known by very many people|berühmt|The Eiffel Tower is very famous.|fame loses its e + ous: f-a-m-o-u-s.",
-"1|history|what happened in the past|die Geschichte|In history we are learning about ancient Egypt.|his + tory.",
-"1|ocean|a very big sea|der Ozean|The Indian Ocean is south of Bali.|The c sounds like sh: o-c-e-a-n.",
-"1|perhaps|maybe|vielleicht|Perhaps we can go swimming later.|per + haps.",
-"1|promise|to say you will really do something|versprechen|I promise I will tidy my room.|Ends in -ise: p-r-o-m-i-s-e.",
-"1|question|something you ask|die Frage|Raise your hand if you have a question.|qu + es + tion.",
-"1|remember|to keep something in your mind|sich erinnern|Remember to bring your hat.|re + member.",
-"1|forward|toward the front|vorwärts|Take one step forward.|for + ward.",
-"1|during|while something is happening|während|Don’t talk during the test.|dur + ing, only one r.",
-"1|build|to make something by putting parts together|bauen|We will build a sandcastle.|u comes before i: b-u-i-l-d.",
-"1|decide|to make up your mind|entscheiden|I can’t decide which ice cream to get.|Starts with de-, and the c sounds like s.",
-"1|laugh|to make sounds because something is funny|lachen|We laugh at Dad's silly jokes.|Here -augh sounds like 'aff': l-a-u-g-h.",
-"1|brought|the past of 'bring'|brachte, gebracht|She brought snacks to the beach.|br + ought, like 'thought'.",
-"1|heard|the past of 'hear'|hörte, gehört|I heard a gecko in the night.|hear + d. The word 'ear' is inside it.",
-"1|really|very; in fact|wirklich|The water is really warm today.|real + ly, so it has two l's.",
-"1|finally|at last, after a long time|endlich|We finally reached the top.|final + ly, so it has two l's.",
-"1|tomorrow|the day after today|morgen|We have a spelling test tomorrow.|One m and two r's: to-mor-row.",
-"1|breakfast|the first meal of the day|das Frühstück|I eat mango for breakfast.|break + fast. It sounds like 'brekfast', but there is an a after the e.",
-"1|children|more than one child|die Kinder|The children played in the pool.|child + ren.",
-"1|listen|to pay attention to sounds|zuhören|Listen to the rain on the roof.|Silent t: l-i-s-t-e-n.",
-"1|knife|a tool for cutting|das Messer|Cut the papaya with a knife.|Silent k at the start.",
-"1|busy|having a lot to do|beschäftigt|Mum is busy on the phone.|It sounds like 'bizzy' but is spelled b-u-s-y.",
-"1|whole|all of something|ganz|I ate the whole pizza!|Silent w. 'hole' (das Loch) has no w.",
-"1|world|the earth and everyone on it|die Welt|I want to travel around the world.|w-o-r-l-d: the l comes after the r.",
-"1|quiet|making little or no noise|leise, ruhig|Please be quiet in the library.|qui-et has two parts. 'quite' (ziemlich) has the e at the end.",
-"1|village|a very small town|das Dorf|We cycled to the next village.|Double l, and it ends in -age.",
-"2|though|but; even if|obwohl; aber|It was sunny, though a bit windy.|th + ough.",
-"2|thought|the past of ‘think’; an idea|dachte; der Gedanke|I thought about it all night.|th + ought.",
-"2|through|in one side and out the other|durch|We walked through the rice fields.|thr + ough. Don’t mix it up with ‘threw’ (warf).",
-"2|enough|as much as you need|genug|Have you had enough to eat?|-ough here sounds like ‘uff’.",
-"2|height|how tall something is|die Höhe, die Größe|Measure your height against the wall.|h + eight. It ends in t, not th.",
-"2|weight|how heavy something is|das Gewicht|The weight of the bag is two kilos.|w + eight. Don’t mix it up with ‘wait’ (warten).",
-"2|quarter|one of four equal parts|das Viertel|Cut the pizza into quarters.|Starts with qu, ends in -er.",
-"2|believe|to think that something is true|glauben|I believe you.|Never believe a lie: ‘lie’ is hidden inside be-LIE-ve.",
-"2|complete|whole; with nothing missing|vollständig|My puzzle is finally complete.|Ends in -ete: c-o-m-p-l-e-t-e.",
-"2|continue|to keep going|weitermachen, fortsetzen|Please continue reading.|Ends in -ue.",
-"2|describe|to say what something is like|beschreiben|Describe your best holiday.|Starts with de-, not di-.",
-"2|different|not the same|anders, verschieden|My brother and I have different hobbies.|differ + ent: two f’s and an e in the middle you can hardly hear.",
-"2|discover|to find something for the first time|entdecken|They discovered a cave by the beach.|dis + cover.",
-"2|guide|a person or book that shows you the way|der Führer, der Reiseführer|Our guide showed us the temple.|Silent u: g-u-i-d-e.",
-"2|imagine|to make a picture in your mind|sich vorstellen|Imagine you could fly.|Ends in -ine: i-m-a-g-i-n-e.",
-"2|important|mattering a lot|wichtig|Sleep is important for growing.|im + port + ant. It ends in -ant.",
-"2|increase|to get bigger or make bigger|steigen, erhöhen|The price of mangoes will increase.|in + crease. It ends in -ease.",
-"2|interest|wanting to know more about something|das Interesse|She has a big interest in sharks.|inter + est: one s, one t at the end.",
-"2|island|land with water all around it|die Insel|Bali is an island.|Silent s: i-s-l-a-n-d.",
-"2|natural|made by nature, not by people|natürlich|The beach has natural rock pools.|nature loses its e + al.",
-"2|nervous|worried and a little scared|nervös, aufgeregt|I feel nervous before a test.|nerve loses its e + ous.",
-"2|position|the place where something is|die Position, die Lage|Put the chairs back in position.|Only one s: pos-i-tion.",
-"2|possible|can happen or can be done|möglich|Is it possible to swim to that island?|Double s, and it ends in -ible.",
-"2|potatoes|more than one potato|die Kartoffeln|We had roast potatoes for dinner.|potato + es.",
-"2|probably|almost certainly|wahrscheinlich|It will probably rain later.|pro-bab-ly.",
-"2|recent|happened not long ago|neu, aktuell|This is a recent photo of my family.|re + cent. The c sounds like s.",
-"2|special|different from or better than usual|besonders|Today is a special day.|Ends in -cial: s-p-e-c-i-a-l.",
-"2|surprise|something you did not expect|die Überraschung|We planned a surprise party.|There is an r after the u: sur + prise.",
-"2|bought|the past of 'buy'|kaufte, gekauft|We bought fresh fish at the market.|b + ought.",
-"2|daughter|a girl, when you talk about her parents|die Tochter|They have one son and two daughters.|-augh with a silent gh: d-a-u-g-h-t-e-r.",
-"2|castle|a big strong building where kings lived|die Burg, das Schloss|The king lived in a castle on a hill.|Silent t: c-a-s-t-l-e.",
-"2|sign|a board with words or pictures that tell you something|das Schild; das Zeichen|The sign says no swimming.|Silent g. You can hear it in 'signal'.",
-"2|half|one of two equal parts|die Hälfte; halb|Cut the apple in half.|Silent l: h-a-l-f.",
-"2|thousand|the number 1,000|tausend|There are a thousand stars tonight.|th + ousand.",
-"2|clothes|the things you wear|die Kleidung|Put your wet clothes on the line.|cloth + es. Don't forget the e.",
-"2|toward|in the direction of|in Richtung, auf … zu|The dog ran toward me.|to + ward. 'towards' is also correct.",
-"2|dangerous|could hurt you|gefährlich|Big waves can be dangerous.|danger + ous.",
-"2|honest|always telling the truth|ehrlich|Thank you for being honest.|Silent h at the start.",
-"2|wrong|not right|falsch|That answer is wrong, so try again.|Silent w at the start.",
-"2|bicycle|a bike|das Fahrrad|I ride my bicycle to school.|bi + cycle: the y comes after the first c.",
-"3|beautiful|very nice to look at|schön, wunderschön|The sunset over the sea was beautiful.|Starts with b-e-a-u, then ‘tiful’ with only one l.",
-"3|certain|completely sure|sicher|Are you certain the door is locked?|Ends in -ain: c-e-r-t-a-i-n.",
-"3|accept|to take something that someone gives you, or to say yes to it|annehmen, akzeptieren|Please accept this small gift.|Double c: a-c-c-e-p-t. Don’t mix it up with ‘except’.",
-"3|among|in the middle of a group|unter, zwischen (mehreren)|She sat among her friends.|It sounds like ‘a-mung’ but it is spelled with an o: a-m-o-n-g.",
-"3|appear|to come into view|erscheinen|A rainbow appeared after the storm.|Double p: a-p-p-e-a-r.",
-"3|guard|a person who protects something|die Wache|A guard stood at the gate.|Silent u after g: g-u-a-r-d.",
-"3|machine|a tool with moving parts|die Maschine|The washing machine is noisy.|ch sounds like sh: m-a-c-h-i-n-e.",
-"3|measure|to find out the size or amount of something|messen|Measure the table with a ruler.|m-e-a-s-u-r-e. It ends in -sure.",
-"3|science|the study of how the world works|die Naturwissenschaft|We have science on Mondays.|s and c together: s-c-i-e-n-c-e.",
-"3|straight|not bent or curved|gerade|Draw a straight line with a ruler.|-aight: s-t-r-a-i-g-h-t.",
-"3|opposite|completely different; across from|das Gegenteil; gegenüber|Hot is the opposite of cold.|Double p, and it ends in -site.",
-"3|address|where someone lives, so letters can find them|die Adresse|Write your address on the envelope.|Double d and double s. German ‘Adresse’ has only one d.",
-"3|although|even though|obwohl|I went outside, although it was raining.|Only one l: al + though.",
-"3|attention|looking, listening and thinking carefully|die Aufmerksamkeit|Please pay attention to the teacher.|Double t, and it ends in -tion.",
-"3|breathe|to take air in and out|atmen|Breathe in slowly through your nose.|The verb ends with e. Without e, ‘breath’ means der Atem.",
-"3|calendar|a chart that shows the days and months|der Kalender|Mark the test on the calendar.|Starts with c and ends in -ar (German: K and -er).",
-"3|ceiling|the top inside surface of a room|die Zimmerdecke|A gecko is walking on the ceiling.|After c, e comes before i: c-e-i-l-i-n-g.",
-"3|character|a person in a story; what someone is like|die Figur; der Charakter|Harry is the main character in the book.|ch sounds like k. Ends in -er.",
-"3|February|the second month of the year|der Februar|Carnival is in February.|Don’t forget the first r: Feb-ru-ar-y. Months start with a capital letter.",
-"3|Wednesday|the day after Tuesday|der Mittwoch|We have swimming on Wednesday.|Say it in your head as Wed-nes-day so you remember the d. Days start with a capital letter.",
-"3|whether|if (when there is a choice)|ob|I don’t know whether to laugh or cry.|Starts with wh. Don’t mix it up with ‘weather’ (das Wetter).",
-"3|library|a place where you borrow books|die Bibliothek, die Bücherei|I borrowed three books from the library.|Two r’s: lib-rar-y.",
-"3|ordinary|normal, not special|gewöhnlich, normal|It was an ordinary school day.|ordin + ary.",
-"3|strength|how strong someone is|die Kraft, die Stärke|It takes strength to lift that box.|strong → strength. Don’t forget the g before th.",
-"3|language|a way of speaking and writing, like English|die Sprache|English is my second language.|u after the first g: l-a-n-g-u-a-g-e.",
-"3|accident|something bad that happens by chance, like a crash|der Unfall|He broke his arm in a bike accident.|Double c: a-c-c-i-d-e-n-t.",
-"3|beginning|the start of something|der Anfang|Let’s go back to the beginning of the story.|Two n’s before -ing: begin + n + ing.",
-"3|consider|to think carefully about something|überlegen, bedenken|Consider both choices before you decide.|One s, ends in -er.",
-"3|doubt|a feeling of not being sure|der Zweifel; zweifeln|I doubt it will rain today.|Silent b: d-o-u-b-t.",
-"3|experiment|a test to find something out|das Experiment|In science we did an experiment with ice.|Same letters as in German, just with a small e.",
-"3|grammar|the rules of a language|die Grammatik|German grammar has three genders.|Double m, and it ends in -ar.",
-"3|difficult|hard to do|schwierig|This puzzle is difficult.|Two f’s, and only one l at the end.",
-"3|disappear|to go out of sight|verschwinden|The magician made the coin disappear.|dis + appear: one s, two p’s.",
-"3|shoulder|where your arm joins your body|die Schulter|The parrot sat on his shoulder.|-ould, like 'could': sh-o-u-l-d-e-r.",
-"3|tongue|the part of your mouth you taste with|die Zunge|Don't stick your tongue out!|It ends in -gue: t-o-n-g-u-e.",
-"3|juice|the liquid from fruit|der Saft|I'd like a glass of orange juice.|j-u-i-c-e. The c sounds like s.",
-"3|lightning|the flash of light in a storm|der Blitz|Lightning lit up the whole sky.|light + ning. There is no e after the t.",
-"3|vegetable|a plant you eat, like a carrot|das Gemüse|Broccoli is a green vegetable.|Say it slowly in your head: veg-e-ta-ble.",
-"3|dictionary|a book that tells you what words mean|das Wörterbuch|Look the word up in the dictionary.|diction + ary.",
-"3|decision|the choice you make|die Entscheidung|It was a hard decision.|decide → decision: the d turns into s.",
-"4|argument|when people disagree with angry words|der Streit|The twins had an argument about the toy.|‘argue’ loses its e: argu + ment.",
-"4|business|buying and selling things; a company|das Geschäft, die Firma|My uncle runs a small business.|busy → busi + ness: b-u-s-i-n-e-s-s.",
-"4|exercise|movement to keep your body fit; a practice task|die Übung; Sport|Swimming is good exercise.|ex-er-cise: the end is -cise with a c.",
-"4|experience|something that happens to you|das Erlebnis, die Erfahrung|Snorkelling was an amazing experience.|Ends in -ence: ex-per-i-ence.",
-"4|knowledge|everything you know|das Wissen|Reading books gives you knowledge.|know + ledge: silent k, and a d before the g.",
-"4|particular|one special thing and not others|bestimmt|Is there a particular book you want?|par-tic-u-lar. It ends in -ar.",
-"4|receive|to get something|bekommen, erhalten|Did you receive my message?|After c, e comes before i: r-e-c-e-i-v-e.",
-"4|government|the people who run a country|die Regierung|The government built a new school.|govern + ment. Don’t forget the n.",
-"4|environment|the world around us: air, water, land and plants|die Umwelt|We must protect the environment.|Hidden n: environ + ment. Say ‘en-vi-ron-ment’ slowly.",
-"4|especially|more than anything else|besonders|I love fruit, especially mangoes.|e + special + ly, so it has two l’s.",
-"4|foreign|from another country|ausländisch, fremd|She speaks two foreign languages.|Silent g: f-o-r-e-i-g-n.",
-"4|achieve|to reach a goal by working hard|erreichen, schaffen|You can achieve a lot if you keep trying.|i before e: a-c-h-i-e-v-e.",
-"4|awkward|clumsy, or a bit embarrassing|ungeschickt; peinlich|There was an awkward silence.|Two w's: a-w-k-w-a-r-d.",
-"4|muscle|the part of your body that makes you move|der Muskel|Swimming makes your muscles strong.|Silent c: m-u-s-c-l-e.",
-"4|stomach|your belly, where food goes|der Magen, der Bauch|My stomach is rumbling.|ch sounds like k: s-t-o-m-a-c-h.",
-"4|temperature|how hot or cold something is|die Temperatur|The temperature today is thirty-one degrees.|tem-per-a-ture: don't forget the a.",
-"4|signature|your name written in your own way|die Unterschrift|Put your signature at the bottom.|sign + ature.",
-"4|vehicle|a car, bus, truck or bike|das Fahrzeug|A scooter is a small vehicle.|Silent h: ve-hi-cle.",
-"4|average|the usual or middle amount|der Durchschnitt; durchschnittlich|The average class has twenty pupils.|av-er-age.",
-"4|available|free to use or get|verfügbar, frei|Is this seat available?|avail + able.",
-"4|ancient|very, very old|uralt, antik|We visited an ancient temple.|-cient: the c sounds like sh.",
-"4|bargain|something you buy cheaply|das Schnäppchen|This shirt was a real bargain.|It ends in -gain: bar + gain.",
-"4|category|a group of things that belong together|die Kategorie|Sort the animals into categories.|cat + e + gory. It ends in y, not ie.",
-"4|community|the people who live in one place|die Gemeinschaft|Our school is a friendly community.|Double m: com-mu-ni-ty.",
-"4|competition|a contest to find the winner|der Wettbewerb|She won the drawing competition.|compete → compet + ition.",
-"4|determined|wanting to do something and not giving up|entschlossen|He was determined to finish the race.|deter + mined.",
-"4|develop|to grow or change slowly|entwickeln|Tadpoles develop into frogs.|No e at the end: d-e-v-e-l-o-p.",
-"4|equipment|the things you need for a job or sport|die Ausrüstung|Pack your snorkel equipment.|equip + ment, with only one p.",
-"4|familiar|known to you|vertraut, bekannt|That song sounds familiar.|Like 'family': fam-il-iar.",
-"4|frequently|often|häufig|It frequently rains in December.|fre-quent-ly.",
-"4|individual|one single person or thing|einzeln; der Einzelne|Each individual gets a ticket.|in-di-vid-u-al.",
-"4|interrupt|to stop someone while they are talking|unterbrechen|Please don't interrupt me.|Double r: inter + rupt.",
-"4|persuade|to get someone to agree with you|überreden|I persuaded Mum to buy ice cream.|per + suade. The u is easy to forget.",
-"4|physical|about your body|körperlich|Running is good physical exercise.|ph sounds like f, and y sounds like i: p-h-y-s-i-c-a-l.",
-"4|exhausted|very, very tired|erschöpft|I was exhausted after the long hike.|Silent h: ex-haust-ed.",
-"4|soldier|a person in an army|der Soldat|The soldier stood very still.|-dier: s-o-l-d-i-e-r.",
-"4|suggest|to give an idea|vorschlagen|I suggest we go swimming.|Double g: sug-gest.",
-"4|mysterious|strange and hard to explain|geheimnisvoll|We heard a mysterious noise.|mystery → myster + ious.",
-"4|rhyme|words that end with the same sound|der Reim; sich reimen|Cat rhymes with hat.|rh + yme, like the start of 'rhythm'.",
-"4|forty|the number 40|vierzig|There are forty pupils in the hall.|four loses its u: f-o-r-t-y.",
-"5|necessary|needed|nötig, notwendig|Sun cream is necessary at the beach.|One c and two s’s, like a shirt with one collar and two sleeves.",
-"5|rhythm|a regular beat in music|der Rhythmus|Clap along to the rhythm.|Rhythm Helps Your Two Hips Move: r-h-y-t-h-m.",
-"5|separate|apart, not together|getrennt|Keep the eggs separate from the flour.|There is A RAT in sep-A-RAT-e.",
-"5|accommodate|to have space for someone|unterbringen, Platz bieten|The villa can accommodate ten guests.|Two c's and two m's.",
-"5|rhinoceros|a large animal with a horn on its nose|das Nashorn|A rhinoceros has very thick skin.|rhino + ceros: silent h, and the c sounds like s.",
-"5|apparent|clear to see|offensichtlich|It was apparent that she was tired.|Double p, one r: ap-par-ent.",
-"5|appreciate|to be thankful for something|schätzen, dankbar sein|I appreciate your help.|Double p: ap-pre-ci-ate.",
-"5|bruise|a dark mark on your skin after a bump|der blaue Fleck|I got a bruise on my knee.|u and i together: b-r-u-i-s-e.",
-"5|cemetery|a place where people are buried|der Friedhof|There is an old cemetery near the church.|Three e's: c-e-m-e-t-e-r-y.",
-"5|committee|a group chosen to make decisions|der Ausschuss, das Komitee|The school committee planned the fair.|Double m, double t, double e.",
-"5|conscience|the voice inside you that knows right from wrong|das Gewissen|My conscience told me to say sorry.|con + science.",
-"5|conscious|awake and knowing what is happening|bei Bewusstsein; bewusst|He was conscious after the fall.|con + scious: s-c-i-o-u-s.",
-"5|curiosity|wanting to know things|die Neugier|Curiosity makes you a good scientist.|curious drops its u: curi-os-ity.",
-"5|definitely|for sure|definitiv, auf jeden Fall|I will definitely come.|There is 'finite' inside: de-finite-ly.",
-"5|desperate|wanting something very badly|verzweifelt|The dog was desperate for water.|des-per-ate.",
-"5|disastrous|very bad, like a disaster|katastrophal|The storm was disastrous for the farmers.|disaster drops its e: disastr + ous.",
-"5|embarrass|to make someone feel shy and silly|in Verlegenheit bringen|Please don't embarrass me!|Two r's and two s's.",
-"5|exaggerate|to say something is bigger than it is|übertreiben|Don't exaggerate, it was only a small spider!|Double g: ex-ag-ger-ate.",
-"5|existence|being real or alive|die Existenz|Do you believe in the existence of dragons?|It ends in -ence.",
-"5|guarantee|a promise that something will work|die Garantie|The watch has a two-year guarantee.|gu + ar + antee: u after the g, double e at the end.",
-"5|immediately|right now|sofort|Come here immediately!|Double m: im-me-di-ate-ly.",
-"5|interfere|to get involved when you are not wanted|sich einmischen|Don't interfere in their game.|inter + fere.",
-"5|leisure|free time|die Freizeit|We read books in our leisure time.|e before i: l-e-i-s-u-r-e.",
-"5|mischievous|naughty in a playful way|frech, schelmisch|The mischievous monkey stole my hat.|mis-chie-vous. There is no i after the v.",
-"5|nuisance|something annoying|das Ärgernis, die Plage|Mosquitoes are a nuisance.|nu + i + sance.",
-"5|occasionally|sometimes|gelegentlich|We occasionally eat out.|Two c's, one s, two l's.",
-"5|occur|to happen|geschehen, vorkommen|Earthquakes occur in Indonesia.|Two c's. In 'occurred' the r doubles too.",
-"5|opportunity|a good chance to do something|die Gelegenheit|This is a great opportunity.|Double p: op-por-tu-ni-ty.",
-"5|privilege|a special right|das Privileg|It is a privilege to meet you.|No d in it: p-r-i-v-i-l-e-g-e.",
-"5|pronunciation|how a word is said|die Aussprache|Her English pronunciation is excellent.|pronounce loses an o: pro-nun-ci-a-tion.",
-"5|queue|a line of people waiting|die Warteschlange|We waited in a long queue.|q-u-e-u-e: four vowels in a row.",
-"5|recommend|to say something is good|empfehlen|I recommend this book.|One c, two m's: re + commend.",
-"5|sincerely|honestly; truly|aufrichtig|Yours sincerely is a way to end a letter.|sincere + ly: keep the e.",
-"5|sufficient|enough|ausreichend|Is one bottle of water sufficient?|Double f, then -cient.",
-"5|thorough|careful and complete|gründlich|Do a thorough check of your work.|thor + ough. Don't mix it up with 'through'.",
-"5|twelfth|number 12 in a row|der, die, das zwölfte|Today is the twelfth of November.|Don't forget the f: t-w-e-l-f-t-h.",
-"5|yacht|a sailing boat|die Jacht|A white yacht sailed past.|Strange letters: y-a-c-h-t.",
-"5|explanation|words that make something clear|die Erklärung|The teacher gave a clear explanation.|explain loses its i: expla-nation.",
-"5|convenience|being easy and useful|die Bequemlichkeit|A shop on the corner is a real convenience.|con-ven-i-ence.",
-"5|correspond|to write letters to each other; to match|sich schreiben; entsprechen|I correspond with a pen pal.|Double r: cor-re-spond.",
+"1|said|the past of 'say'|sagte|Mum said it is time for bed.|s-a-i-d. It sounds like 'sed' but has ai.",
+"1|was|the past of 'is'|war|The cake was yummy.|w-a-s. It sounds like 'woz'.",
+"1|they|more than one person or thing|sie (mehrere)|They are my friends.|th + ey.",
+"1|have|to own something|haben|I have a red bike.|There is a silent e at the end: h-a-v-e.",
+"1|come|to move toward here|kommen|Come and play with me!|Silent e at the end: c-o-m-e.",
+"1|some|a few, or a bit of|einige, etwas|Can I have some milk?|s-o-m-e, like 'come'.",
+"1|one|the number 1|eins|I have one brother.|It sounds like 'won' but is spelled o-n-e.",
+"1|two|the number 2|zwei|I have two hands.|Silent w: t-w-o.",
+"1|what|a question word|was|What is your name?|wh + at.",
+"1|where|a question word for places|wo|Where is my shoe?|wh + ere.",
+"1|there|in that place|dort, da|Look over there!|t + here.",
+"1|here|in this place|hier|Come over here.|h-e-r-e.",
+"1|she|a girl or woman|sie (eine)|She is my sister.|sh + e.",
+"1|like|to enjoy something|mögen|I like ice cream.|Silent e at the end: l-i-k-e.",
+"1|little|small|klein|A little frog jumped.|Double t: l-i-t-t-l-e.",
+"1|look|to use your eyes|schauen|Look at the moon!|Double o: l-o-o-k.",
+"1|play|to have fun with games|spielen|Let us play outside.|p-l-a-y. It ends in ay.",
+"1|want|to wish for something|wollen|I want a banana.|w-a-n-t.",
+"1|went|the past of 'go'|ging|We went to the beach.|w-e-n-t.",
+"1|with|together|mit|Come with me.|w-i-t-h.",
+"1|from|starting at|von, aus|I am from Germany.|f-r-o-m.",
+"1|does|a form of 'do'|tut, macht|Does the dog bite?|d-o-e-s. It sounds like 'duz'.",
+"1|going|moving somewhere|gehend|We are going home.|go + ing.",
+"1|are|a form of 'be'|sind, bist|You are funny.|a-r-e.",
+"1|were|the past of 'are'|waren|We were at school.|w-e-r-e.",
+"1|of|belonging to|von|A cup of tea.|o-f. It sounds like 'ov'.",
+"1|do|to make or act|tun, machen|What do you want?|d-o.",
+"1|who|a question word for people|wer|Who is at the door?|w-h-o. The w is silent.",
+"1|call|to shout or phone|rufen, anrufen|Call me later.|Double l: c-a-l-l.",
+"1|day|the time when it is light|der Tag|Today is a sunny day.|d-a-y.",
+"1|jump|to go up in the air with your legs|springen|Frogs can jump high.|j-u-m-p.",
+"1|yellow|the color of a banana|gelb|The sun is yellow.|Double l: y-e-l-l-o-w.",
+"1|blue|the color of the sky|blau|The sea is blue.|b-l-u-e. Don't forget the e.",
+"1|green|the color of grass|grün|Frogs are green.|Double e: g-r-e-e-n.",
+"1|house|a building people live in|das Haus|Our house has a pool.|h-o-u-s-e, like German 'Haus' with o.",
+"1|school|where children learn|die Schule|I walk to school.|sch + ool.",
+"1|water|what we drink and swim in|das Wasser|I drink a lot of water.|w-a-t-e-r.",
+"1|eat|to put food in your mouth|essen|We eat rice for dinner.|e-a-t.",
+"1|sleep|to rest at night|schlafen|Cats sleep a lot.|Double e: s-l-e-e-p.",
+"1|fish|an animal that swims|der Fisch|I saw a big fish.|f-i-s-h.",
+"2|again|one more time|wieder, noch einmal|Can you say it again?|a + gain.",
+"2|about|on the topic of|über|This book is about sharks.|a + bout.",
+"2|after|later than|nach|We swim after school.|a-f-t-e-r.",
+"2|any|some, or even one|irgendein|Do you have any snacks?|It sounds like 'enny' but is spelled a-n-y.",
+"2|many|a lot of|viele|There are many shells on the beach.|m + any.",
+"2|could|was able to|konnte|I could see the boat.|c + ould. The l is silent.",
+"2|would|a word for wishes|würde|I would like a drink.|w + ould, like 'could'.",
+"2|should|ought to|sollte|You should brush your teeth.|sh + ould, like 'could'.",
+"2|every|each one|jeder, jede|I swim every day.|e-v-e-r-y.",
+"2|first|number 1 in a row|erste|I came first in the race.|f-i-r-s-t.",
+"2|found|the past of 'find'|fand, gefunden|I found a shell.|f + ound.",
+"2|girl|a young female child|das Mädchen|The girl has long hair.|g-i-r-l.",
+"2|know|to have something in your head|wissen, kennen|I know the answer.|Silent k: k-n-o-w.",
+"2|light|what helps us see|das Licht; hell|Turn on the light.|l + ight.",
+"2|night|when it is dark|die Nacht|The stars come out at night.|n + ight, like 'light'.",
+"2|right|correct; not left|richtig; rechts|That is right!|r + ight.",
+"2|write|to put words on paper|schreiben|Write your name here.|Silent w: w-r-i-t-e.",
+"2|live|to have your home somewhere|wohnen, leben|We live in Bali.|l-i-v-e. Silent e at the end.",
+"2|mother|your mum|die Mutter|My mother reads to me.|m + other.",
+"2|brother|a boy in your family|der Bruder|My brother is older than me.|b-r + other.",
+"2|sister|a girl in your family|die Schwester|My sister likes horses.|s-i-s-t-e-r.",
+"2|open|not closed|offen; öffnen|Open the door, please.|o-p-e-n.",
+"2|other|the second one, or a different one|andere|Where is my other sock?|o + ther.",
+"2|pretty|nice to look at|hübsch|What a pretty flower!|Double t: p-r-e-t-t-y.",
+"2|put|to place something|legen, stellen|Put your shoes by the door.|p-u-t.",
+"2|small|little|klein|A mouse is small.|Double l: s-m-a-l-l.",
+"2|thank|to say you are happy for something|danken|Thank you for the gift.|th + ank.",
+"2|think|to use your mind|denken|I think it will rain.|th + ink.",
+"2|three|the number 3|drei|I am three years older than my brother.|th + ree, double e.",
+"2|very|really|sehr|It is very hot today.|v-e-r-y.",
+"2|walk|to go on foot|gehen, laufen|We walk to the beach.|Silent l: w-a-l-k.",
+"2|talk|to speak|sprechen, reden|Let us talk about it.|Silent l: t-a-l-k, like 'walk'.",
+"2|warm|a little bit hot|warm|The sea is warm.|w-a-r-m, like in German.",
+"2|wash|to clean with water|waschen|Wash your hands.|w-a-s-h.",
+"2|which|a question word to choose|welche, welcher|Which one do you want?|wh + ich.",
+"2|why|a question word for reasons|warum|Why is the sky blue?|w-h-y.",
+"2|year|365 days|das Jahr|I am seven this year.|y + ear.",
+"2|once|one time|einmal|I have been to Paris once.|o-n-c-e. It sounds like 'wunss'.",
+"2|eye|what you see with|das Auge|Close one eye.|e-y-e. It reads the same backwards!",
+"2|door|you open it to go into a room|die Tür|Please close the door.|Double o: d-o-o-r.",
+"3|answer|what you say or write back to a question|die Antwort|I knew the answer to every question.|Silent w: a-n-s-w-e-r.",
+"3|because|for the reason that|weil|I stayed home because I was sick.|Big Elephants Can Always Understand Small Elephants.",
+"3|caught|the past of ‘catch’|fing, gefangen|She caught the ball with one hand.|-aught, just like ‘taught’: c-a-u-g-h-t.",
+"3|early|before the usual time|früh|We got up early to watch the sunrise.|Starts with ‘ear’: e-a-r-l-y.",
+"3|earth|the planet we live on; soil|die Erde|The Earth goes around the Sun.|Starts with ‘ear’, then th.",
+"3|eight|the number 8|acht|Spiders have eight legs.|e-i-g-h-t. The same ‘eigh’ is in ‘weight’ and ‘height’.",
+"3|friend|a person you like and trust|der Freund, die Freundin|My friend lives next door.|A friend to the END: fri-END.",
+"3|people|men, women and children|die Leute, die Menschen|Many people live in Jakarta.|There is a hidden o: p-e-o-p-l-e.",
+"3|often|many times|oft|We often go to the beach.|o-f-t-e-n. Many people don’t say the t, but it is there.",
+"3|minute|sixty seconds|die Minute|Wait a minute, please.|Same letters as in German, just with a small m.",
+"3|piece|a part of something|das Stück|Can I have a piece of cake?|A PIEce of PIE: p-i-e-c-e.",
+"3|guess|to give an answer when you are not sure|raten|Guess what is in the box!|Silent u, double s: g-u-e-s-s.",
+"3|choose|to pick one thing|wählen, aussuchen|Choose one card from the pile.|Double o. With one o, ‘chose’ is the past.",
+"3|climb|to go up using your hands and feet|klettern|We climbed to the top of the hill.|Silent b at the end.",
+"3|famous|known by very many people|berühmt|The Eiffel Tower is very famous.|fame loses its e + ous: f-a-m-o-u-s.",
+"3|history|what happened in the past|die Geschichte|In history we are learning about ancient Egypt.|his + tory.",
+"3|ocean|a very big sea|der Ozean|The Indian Ocean is south of Bali.|The c sounds like sh: o-c-e-a-n.",
+"3|perhaps|maybe|vielleicht|Perhaps we can go swimming later.|per + haps.",
+"3|promise|to say you will really do something|versprechen|I promise I will tidy my room.|Ends in -ise: p-r-o-m-i-s-e.",
+"3|question|something you ask|die Frage|Raise your hand if you have a question.|qu + es + tion.",
+"3|remember|to keep something in your mind|sich erinnern|Remember to bring your hat.|re + member.",
+"3|forward|toward the front|vorwärts|Take one step forward.|for + ward.",
+"3|during|while something is happening|während|Don’t talk during the test.|dur + ing, only one r.",
+"3|build|to make something by putting parts together|bauen|We will build a sandcastle.|u comes before i: b-u-i-l-d.",
+"3|decide|to make up your mind|entscheiden|I can’t decide which ice cream to get.|Starts with de-, and the c sounds like s.",
+"3|laugh|to make sounds because something is funny|lachen|We laugh at Dad's silly jokes.|Here -augh sounds like 'aff': l-a-u-g-h.",
+"3|brought|the past of 'bring'|brachte, gebracht|She brought snacks to the beach.|br + ought, like 'thought'.",
+"3|heard|the past of 'hear'|hörte, gehört|I heard a gecko in the night.|hear + d. The word 'ear' is inside it.",
+"3|really|very; in fact|wirklich|The water is really warm today.|real + ly, so it has two l's.",
+"3|finally|at last, after a long time|endlich|We finally reached the top.|final + ly, so it has two l's.",
+"3|tomorrow|the day after today|morgen|We have a spelling test tomorrow.|One m and two r's: to-mor-row.",
+"3|breakfast|the first meal of the day|das Frühstück|I eat mango for breakfast.|break + fast. It sounds like 'brekfast', but there is an a after the e.",
+"3|children|more than one child|die Kinder|The children played in the pool.|child + ren.",
+"3|listen|to pay attention to sounds|zuhören|Listen to the rain on the roof.|Silent t: l-i-s-t-e-n.",
+"3|knife|a tool for cutting|das Messer|Cut the papaya with a knife.|Silent k at the start.",
+"3|busy|having a lot to do|beschäftigt|Mum is busy on the phone.|It sounds like 'bizzy' but is spelled b-u-s-y.",
+"3|whole|all of something|ganz|I ate the whole pizza!|Silent w. 'hole' (das Loch) has no w.",
+"3|world|the earth and everyone on it|die Welt|I want to travel around the world.|w-o-r-l-d: the l comes after the r.",
+"3|quiet|making little or no noise|leise, ruhig|Please be quiet in the library.|qui-et has two parts. 'quite' (ziemlich) has the e at the end.",
+"3|village|a very small town|das Dorf|We cycled to the next village.|Double l, and it ends in -age.",
+"4|though|but; even if|obwohl; aber|It was sunny, though a bit windy.|th + ough.",
+"4|thought|the past of ‘think’; an idea|dachte; der Gedanke|I thought about it all night.|th + ought.",
+"4|through|in one side and out the other|durch|We walked through the rice fields.|thr + ough. Don’t mix it up with ‘threw’ (warf).",
+"4|enough|as much as you need|genug|Have you had enough to eat?|-ough here sounds like ‘uff’.",
+"4|height|how tall something is|die Höhe, die Größe|Measure your height against the wall.|h + eight. It ends in t, not th.",
+"4|weight|how heavy something is|das Gewicht|The weight of the bag is two kilos.|w + eight. Don’t mix it up with ‘wait’ (warten).",
+"4|quarter|one of four equal parts|das Viertel|Cut the pizza into quarters.|Starts with qu, ends in -er.",
+"4|believe|to think that something is true|glauben|I believe you.|Never believe a lie: ‘lie’ is hidden inside be-LIE-ve.",
+"4|complete|whole; with nothing missing|vollständig|My puzzle is finally complete.|Ends in -ete: c-o-m-p-l-e-t-e.",
+"4|continue|to keep going|weitermachen, fortsetzen|Please continue reading.|Ends in -ue.",
+"4|describe|to say what something is like|beschreiben|Describe your best holiday.|Starts with de-, not di-.",
+"4|different|not the same|anders, verschieden|My brother and I have different hobbies.|differ + ent: two f’s and an e in the middle you can hardly hear.",
+"4|discover|to find something for the first time|entdecken|They discovered a cave by the beach.|dis + cover.",
+"4|guide|a person or book that shows you the way|der Führer, der Reiseführer|Our guide showed us the temple.|Silent u: g-u-i-d-e.",
+"4|imagine|to make a picture in your mind|sich vorstellen|Imagine you could fly.|Ends in -ine: i-m-a-g-i-n-e.",
+"4|important|mattering a lot|wichtig|Sleep is important for growing.|im + port + ant. It ends in -ant.",
+"4|increase|to get bigger or make bigger|steigen, erhöhen|The price of mangoes will increase.|in + crease. It ends in -ease.",
+"4|interest|wanting to know more about something|das Interesse|She has a big interest in sharks.|inter + est: one s, one t at the end.",
+"4|island|land with water all around it|die Insel|Bali is an island.|Silent s: i-s-l-a-n-d.",
+"4|natural|made by nature, not by people|natürlich|The beach has natural rock pools.|nature loses its e + al.",
+"4|nervous|worried and a little scared|nervös, aufgeregt|I feel nervous before a test.|nerve loses its e + ous.",
+"4|position|the place where something is|die Position, die Lage|Put the chairs back in position.|Only one s: pos-i-tion.",
+"4|possible|can happen or can be done|möglich|Is it possible to swim to that island?|Double s, and it ends in -ible.",
+"4|potatoes|more than one potato|die Kartoffeln|We had roast potatoes for dinner.|potato + es.",
+"4|probably|almost certainly|wahrscheinlich|It will probably rain later.|pro-bab-ly.",
+"4|recent|happened not long ago|neu, aktuell|This is a recent photo of my family.|re + cent. The c sounds like s.",
+"4|special|different from or better than usual|besonders|Today is a special day.|Ends in -cial: s-p-e-c-i-a-l.",
+"4|surprise|something you did not expect|die Überraschung|We planned a surprise party.|There is an r after the u: sur + prise.",
+"4|bought|the past of 'buy'|kaufte, gekauft|We bought fresh fish at the market.|b + ought.",
+"4|daughter|a girl, when you talk about her parents|die Tochter|They have one son and two daughters.|-augh with a silent gh: d-a-u-g-h-t-e-r.",
+"4|castle|a big strong building where kings lived|die Burg, das Schloss|The king lived in a castle on a hill.|Silent t: c-a-s-t-l-e.",
+"4|sign|a board with words or pictures that tell you something|das Schild; das Zeichen|The sign says no swimming.|Silent g. You can hear it in 'signal'.",
+"4|half|one of two equal parts|die Hälfte; halb|Cut the apple in half.|Silent l: h-a-l-f.",
+"4|thousand|the number 1,000|tausend|There are a thousand stars tonight.|th + ousand.",
+"4|clothes|the things you wear|die Kleidung|Put your wet clothes on the line.|cloth + es. Don't forget the e.",
+"4|toward|in the direction of|in Richtung, auf … zu|The dog ran toward me.|to + ward. 'towards' is also correct.",
+"4|dangerous|could hurt you|gefährlich|Big waves can be dangerous.|danger + ous.",
+"4|honest|always telling the truth|ehrlich|Thank you for being honest.|Silent h at the start.",
+"4|wrong|not right|falsch|That answer is wrong, so try again.|Silent w at the start.",
+"4|bicycle|a bike|das Fahrrad|I ride my bicycle to school.|bi + cycle: the y comes after the first c.",
+"5|beautiful|very nice to look at|schön, wunderschön|The sunset over the sea was beautiful.|Starts with b-e-a-u, then ‘tiful’ with only one l.",
+"5|certain|completely sure|sicher|Are you certain the door is locked?|Ends in -ain: c-e-r-t-a-i-n.",
+"5|accept|to take something that someone gives you, or to say yes to it|annehmen, akzeptieren|Please accept this small gift.|Double c: a-c-c-e-p-t. Don’t mix it up with ‘except’.",
+"5|among|in the middle of a group|unter, zwischen (mehreren)|She sat among her friends.|It sounds like ‘a-mung’ but it is spelled with an o: a-m-o-n-g.",
+"5|appear|to come into view|erscheinen|A rainbow appeared after the storm.|Double p: a-p-p-e-a-r.",
+"5|guard|a person who protects something|die Wache|A guard stood at the gate.|Silent u after g: g-u-a-r-d.",
+"5|machine|a tool with moving parts|die Maschine|The washing machine is noisy.|ch sounds like sh: m-a-c-h-i-n-e.",
+"5|measure|to find out the size or amount of something|messen|Measure the table with a ruler.|m-e-a-s-u-r-e. It ends in -sure.",
+"5|science|the study of how the world works|die Naturwissenschaft|We have science on Mondays.|s and c together: s-c-i-e-n-c-e.",
+"5|straight|not bent or curved|gerade|Draw a straight line with a ruler.|-aight: s-t-r-a-i-g-h-t.",
+"5|opposite|completely different; across from|das Gegenteil; gegenüber|Hot is the opposite of cold.|Double p, and it ends in -site.",
+"5|address|where someone lives, so letters can find them|die Adresse|Write your address on the envelope.|Double d and double s. German ‘Adresse’ has only one d.",
+"5|although|even though|obwohl|I went outside, although it was raining.|Only one l: al + though.",
+"5|attention|looking, listening and thinking carefully|die Aufmerksamkeit|Please pay attention to the teacher.|Double t, and it ends in -tion.",
+"5|breathe|to take air in and out|atmen|Breathe in slowly through your nose.|The verb ends with e. Without e, ‘breath’ means der Atem.",
+"5|calendar|a chart that shows the days and months|der Kalender|Mark the test on the calendar.|Starts with c and ends in -ar (German: K and -er).",
+"5|ceiling|the top inside surface of a room|die Zimmerdecke|A gecko is walking on the ceiling.|After c, e comes before i: c-e-i-l-i-n-g.",
+"5|character|a person in a story; what someone is like|die Figur; der Charakter|Harry is the main character in the book.|ch sounds like k. Ends in -er.",
+"5|February|the second month of the year|der Februar|Carnival is in February.|Don’t forget the first r: Feb-ru-ar-y. Months start with a capital letter.",
+"5|Wednesday|the day after Tuesday|der Mittwoch|We have swimming on Wednesday.|Say it in your head as Wed-nes-day so you remember the d. Days start with a capital letter.",
+"5|whether|if (when there is a choice)|ob|I don’t know whether to laugh or cry.|Starts with wh. Don’t mix it up with ‘weather’ (das Wetter).",
+"5|library|a place where you borrow books|die Bibliothek, die Bücherei|I borrowed three books from the library.|Two r’s: lib-rar-y.",
+"5|ordinary|normal, not special|gewöhnlich, normal|It was an ordinary school day.|ordin + ary.",
+"5|strength|how strong someone is|die Kraft, die Stärke|It takes strength to lift that box.|strong → strength. Don’t forget the g before th.",
+"5|language|a way of speaking and writing, like English|die Sprache|English is my second language.|u after the first g: l-a-n-g-u-a-g-e.",
+"5|accident|something bad that happens by chance, like a crash|der Unfall|He broke his arm in a bike accident.|Double c: a-c-c-i-d-e-n-t.",
+"5|beginning|the start of something|der Anfang|Let’s go back to the beginning of the story.|Two n’s before -ing: begin + n + ing.",
+"5|consider|to think carefully about something|überlegen, bedenken|Consider both choices before you decide.|One s, ends in -er.",
+"5|doubt|a feeling of not being sure|der Zweifel; zweifeln|I doubt it will rain today.|Silent b: d-o-u-b-t.",
+"5|experiment|a test to find something out|das Experiment|In science we did an experiment with ice.|Same letters as in German, just with a small e.",
+"5|grammar|the rules of a language|die Grammatik|German grammar has three genders.|Double m, and it ends in -ar.",
+"5|difficult|hard to do|schwierig|This puzzle is difficult.|Two f’s, and only one l at the end.",
+"5|disappear|to go out of sight|verschwinden|The magician made the coin disappear.|dis + appear: one s, two p’s.",
+"5|shoulder|where your arm joins your body|die Schulter|The parrot sat on his shoulder.|-ould, like 'could': sh-o-u-l-d-e-r.",
+"5|tongue|the part of your mouth you taste with|die Zunge|Don't stick your tongue out!|It ends in -gue: t-o-n-g-u-e.",
+"5|juice|the liquid from fruit|der Saft|I'd like a glass of orange juice.|j-u-i-c-e. The c sounds like s.",
+"5|lightning|the flash of light in a storm|der Blitz|Lightning lit up the whole sky.|light + ning. There is no e after the t.",
+"5|vegetable|a plant you eat, like a carrot|das Gemüse|Broccoli is a green vegetable.|Say it slowly in your head: veg-e-ta-ble.",
+"5|dictionary|a book that tells you what words mean|das Wörterbuch|Look the word up in the dictionary.|diction + ary.",
+"5|decision|the choice you make|die Entscheidung|It was a hard decision.|decide → decision: the d turns into s.",
+"6|argument|when people disagree with angry words|der Streit|The twins had an argument about the toy.|‘argue’ loses its e: argu + ment.",
+"6|business|buying and selling things; a company|das Geschäft, die Firma|My uncle runs a small business.|busy → busi + ness: b-u-s-i-n-e-s-s.",
+"6|exercise|movement to keep your body fit; a practice task|die Übung; Sport|Swimming is good exercise.|ex-er-cise: the end is -cise with a c.",
+"6|experience|something that happens to you|das Erlebnis, die Erfahrung|Snorkelling was an amazing experience.|Ends in -ence: ex-per-i-ence.",
+"6|knowledge|everything you know|das Wissen|Reading books gives you knowledge.|know + ledge: silent k, and a d before the g.",
+"6|particular|one special thing and not others|bestimmt|Is there a particular book you want?|par-tic-u-lar. It ends in -ar.",
+"6|receive|to get something|bekommen, erhalten|Did you receive my message?|After c, e comes before i: r-e-c-e-i-v-e.",
+"6|government|the people who run a country|die Regierung|The government built a new school.|govern + ment. Don’t forget the n.",
+"6|environment|the world around us: air, water, land and plants|die Umwelt|We must protect the environment.|Hidden n: environ + ment. Say ‘en-vi-ron-ment’ slowly.",
+"6|especially|more than anything else|besonders|I love fruit, especially mangoes.|e + special + ly, so it has two l’s.",
+"6|foreign|from another country|ausländisch, fremd|She speaks two foreign languages.|Silent g: f-o-r-e-i-g-n.",
+"6|achieve|to reach a goal by working hard|erreichen, schaffen|You can achieve a lot if you keep trying.|i before e: a-c-h-i-e-v-e.",
+"6|awkward|clumsy, or a bit embarrassing|ungeschickt; peinlich|There was an awkward silence.|Two w's: a-w-k-w-a-r-d.",
+"6|muscle|the part of your body that makes you move|der Muskel|Swimming makes your muscles strong.|Silent c: m-u-s-c-l-e.",
+"6|stomach|your belly, where food goes|der Magen, der Bauch|My stomach is rumbling.|ch sounds like k: s-t-o-m-a-c-h.",
+"6|temperature|how hot or cold something is|die Temperatur|The temperature today is thirty-one degrees.|tem-per-a-ture: don't forget the a.",
+"6|signature|your name written in your own way|die Unterschrift|Put your signature at the bottom.|sign + ature.",
+"6|vehicle|a car, bus, truck or bike|das Fahrzeug|A scooter is a small vehicle.|Silent h: ve-hi-cle.",
+"6|average|the usual or middle amount|der Durchschnitt; durchschnittlich|The average class has twenty pupils.|av-er-age.",
+"6|available|free to use or get|verfügbar, frei|Is this seat available?|avail + able.",
+"6|ancient|very, very old|uralt, antik|We visited an ancient temple.|-cient: the c sounds like sh.",
+"6|bargain|something you buy cheaply|das Schnäppchen|This shirt was a real bargain.|It ends in -gain: bar + gain.",
+"6|category|a group of things that belong together|die Kategorie|Sort the animals into categories.|cat + e + gory. It ends in y, not ie.",
+"6|community|the people who live in one place|die Gemeinschaft|Our school is a friendly community.|Double m: com-mu-ni-ty.",
+"6|competition|a contest to find the winner|der Wettbewerb|She won the drawing competition.|compete → compet + ition.",
+"6|determined|wanting to do something and not giving up|entschlossen|He was determined to finish the race.|deter + mined.",
+"6|develop|to grow or change slowly|entwickeln|Tadpoles develop into frogs.|No e at the end: d-e-v-e-l-o-p.",
+"6|equipment|the things you need for a job or sport|die Ausrüstung|Pack your snorkel equipment.|equip + ment, with only one p.",
+"6|familiar|known to you|vertraut, bekannt|That song sounds familiar.|Like 'family': fam-il-iar.",
+"6|frequently|often|häufig|It frequently rains in December.|fre-quent-ly.",
+"6|individual|one single person or thing|einzeln; der Einzelne|Each individual gets a ticket.|in-di-vid-u-al.",
+"6|interrupt|to stop someone while they are talking|unterbrechen|Please don't interrupt me.|Double r: inter + rupt.",
+"6|persuade|to get someone to agree with you|überreden|I persuaded Mum to buy ice cream.|per + suade. The u is easy to forget.",
+"6|physical|about your body|körperlich|Running is good physical exercise.|ph sounds like f, and y sounds like i: p-h-y-s-i-c-a-l.",
+"6|exhausted|very, very tired|erschöpft|I was exhausted after the long hike.|Silent h: ex-haust-ed.",
+"6|soldier|a person in an army|der Soldat|The soldier stood very still.|-dier: s-o-l-d-i-e-r.",
+"6|suggest|to give an idea|vorschlagen|I suggest we go swimming.|Double g: sug-gest.",
+"6|mysterious|strange and hard to explain|geheimnisvoll|We heard a mysterious noise.|mystery → myster + ious.",
+"6|rhyme|words that end with the same sound|der Reim; sich reimen|Cat rhymes with hat.|rh + yme, like the start of 'rhythm'.",
+"6|forty|the number 40|vierzig|There are forty pupils in the hall.|four loses its u: f-o-r-t-y.",
+"7|necessary|needed|nötig, notwendig|Sun cream is necessary at the beach.|One c and two s’s, like a shirt with one collar and two sleeves.",
+"7|rhythm|a regular beat in music|der Rhythmus|Clap along to the rhythm.|Rhythm Helps Your Two Hips Move: r-h-y-t-h-m.",
+"7|separate|apart, not together|getrennt|Keep the eggs separate from the flour.|There is A RAT in sep-A-RAT-e.",
+"7|accommodate|to have space for someone|unterbringen, Platz bieten|The villa can accommodate ten guests.|Two c's and two m's.",
+"7|rhinoceros|a large animal with a horn on its nose|das Nashorn|A rhinoceros has very thick skin.|rhino + ceros: silent h, and the c sounds like s.",
+"7|apparent|clear to see|offensichtlich|It was apparent that she was tired.|Double p, one r: ap-par-ent.",
+"7|appreciate|to be thankful for something|schätzen, dankbar sein|I appreciate your help.|Double p: ap-pre-ci-ate.",
+"7|bruise|a dark mark on your skin after a bump|der blaue Fleck|I got a bruise on my knee.|u and i together: b-r-u-i-s-e.",
+"7|cemetery|a place where people are buried|der Friedhof|There is an old cemetery near the church.|Three e's: c-e-m-e-t-e-r-y.",
+"7|committee|a group chosen to make decisions|der Ausschuss, das Komitee|The school committee planned the fair.|Double m, double t, double e.",
+"7|conscience|the voice inside you that knows right from wrong|das Gewissen|My conscience told me to say sorry.|con + science.",
+"7|conscious|awake and knowing what is happening|bei Bewusstsein; bewusst|He was conscious after the fall.|con + scious: s-c-i-o-u-s.",
+"7|curiosity|wanting to know things|die Neugier|Curiosity makes you a good scientist.|curious drops its u: curi-os-ity.",
+"7|definitely|for sure|definitiv, auf jeden Fall|I will definitely come.|There is 'finite' inside: de-finite-ly.",
+"7|desperate|wanting something very badly|verzweifelt|The dog was desperate for water.|des-per-ate.",
+"7|disastrous|very bad, like a disaster|katastrophal|The storm was disastrous for the farmers.|disaster drops its e: disastr + ous.",
+"7|embarrass|to make someone feel shy and silly|in Verlegenheit bringen|Please don't embarrass me!|Two r's and two s's.",
+"7|exaggerate|to say something is bigger than it is|übertreiben|Don't exaggerate, it was only a small spider!|Double g: ex-ag-ger-ate.",
+"7|existence|being real or alive|die Existenz|Do you believe in the existence of dragons?|It ends in -ence.",
+"7|guarantee|a promise that something will work|die Garantie|The watch has a two-year guarantee.|gu + ar + antee: u after the g, double e at the end.",
+"7|immediately|right now|sofort|Come here immediately!|Double m: im-me-di-ate-ly.",
+"7|interfere|to get involved when you are not wanted|sich einmischen|Don't interfere in their game.|inter + fere.",
+"7|leisure|free time|die Freizeit|We read books in our leisure time.|e before i: l-e-i-s-u-r-e.",
+"7|mischievous|naughty in a playful way|frech, schelmisch|The mischievous monkey stole my hat.|mis-chie-vous. There is no i after the v.",
+"7|nuisance|something annoying|das Ärgernis, die Plage|Mosquitoes are a nuisance.|nu + i + sance.",
+"7|occasionally|sometimes|gelegentlich|We occasionally eat out.|Two c's, one s, two l's.",
+"7|occur|to happen|geschehen, vorkommen|Earthquakes occur in Indonesia.|Two c's. In 'occurred' the r doubles too.",
+"7|opportunity|a good chance to do something|die Gelegenheit|This is a great opportunity.|Double p: op-por-tu-ni-ty.",
+"7|privilege|a special right|das Privileg|It is a privilege to meet you.|No d in it: p-r-i-v-i-l-e-g-e.",
+"7|pronunciation|how a word is said|die Aussprache|Her English pronunciation is excellent.|pronounce loses an o: pro-nun-ci-a-tion.",
+"7|queue|a line of people waiting|die Warteschlange|We waited in a long queue.|q-u-e-u-e: four vowels in a row.",
+"7|recommend|to say something is good|empfehlen|I recommend this book.|One c, two m's: re + commend.",
+"7|sincerely|honestly; truly|aufrichtig|Yours sincerely is a way to end a letter.|sincere + ly: keep the e.",
+"7|sufficient|enough|ausreichend|Is one bottle of water sufficient?|Double f, then -cient.",
+"7|thorough|careful and complete|gründlich|Do a thorough check of your work.|thor + ough. Don't mix it up with 'through'.",
+"7|twelfth|number 12 in a row|der, die, das zwölfte|Today is the twelfth of November.|Don't forget the f: t-w-e-l-f-t-h.",
+"7|yacht|a sailing boat|die Jacht|A white yacht sailed past.|Strange letters: y-a-c-h-t.",
+"7|explanation|words that make something clear|die Erklärung|The teacher gave a clear explanation.|explain loses its i: expla-nation.",
+"7|convenience|being easy and useful|die Bequemlichkeit|A shop on the corner is a real convenience.|con-ven-i-ence.",
+"7|correspond|to write letters to each other; to match|sich schreiben; entsprechen|I correspond with a pen pal.|Double r: cor-re-spond.",
 "A|don't|do not|nicht (tun)|Please don't run near the pool.|do not → don't. The apostrophe sits where the o was.",
 "A|can't|cannot|kann nicht|I can't find my shoes.|cannot → can't. The apostrophe replaces 'no'.",
 "A|won't|will not|wird nicht, will nicht|The baby won't stop crying.|A strange one: will not → won't.",
@@ -525,14 +612,35 @@ const RAW = [
 const W = RAW.map(s => { const [level, word, meaning, de, sentence, tip] = s.split("|"); return { level: level === "A" ? 0 : +level, word, meaning, de, sentence, tip }; });
 const APOS_TOTAL = W.filter(w => w.level === 0).length;
 const BYWORD = Object.fromEntries(W.map(w => [w.word, w]));
-const LEVEL_NAMES = ["", "Warm-up", "Steady", "Strong", "Tricky", "Champion"];
-const BATCH = 20;
+const LEVEL_NAMES = ["", "First words", "Explorer", "Warm-up", "Steady", "Strong", "Tricky", "Champion"];
+const MAXL = 7;
+const PLAYERS = { juna: { name: "Juna", level: 4, size: 20 }, artus: { name: "Artus", level: 1, size: 10 } };
 
 const $ = id => document.getElementById(id);
-const KEY = "spelling5-v2";
-let store = { learned: [], missed: {}, accent: "us", level: 2, mode: "levels", batch: null, last: null, suggest: null };
-try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) store = Object.assign(store, s); } catch (e) {}
-function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+/* One saved profile per child. Version 2 had one profile (Juna's) with levels 1-5; those are now 3-7. */
+const KEY = "spelling-v3";
+let root = { player: "juna", profiles: {} };
+try {
+  const r = JSON.parse(localStorage.getItem(KEY) || "null");
+  if (r && r.profiles) root = r;
+  else {
+    const old = JSON.parse(localStorage.getItem("spelling5-v2") || "null");
+    if (old) {
+      const up = l => l ? Math.min(MAXL, l + 2) : l;
+      old.level = up(old.level || 2); old.suggest = old.suggest ? up(old.suggest) : null;
+      if (old.batch) { if (old.batch.level) old.batch.level = up(old.batch.level); old.batch.items.forEach(i => { if (i.level) i.level = up(i.level); }); }
+      root.profiles.juna = old;
+    }
+  }
+} catch (e) {}
+function profile(p) {
+  return Object.assign({ learned: [], missed: {}, accent: "us", level: PLAYERS[p].level, mode: "levels", batch: null, last: null, suggest: null }, root.profiles[p] || {});
+}
+if (!PLAYERS[root.player]) root.player = "juna";
+let store = root.profiles[root.player] = profile(root.player);
+function save() { root.profiles[root.player] = store; try { localStorage.setItem(KEY, JSON.stringify(root)); } catch (e) {} }
+const size = () => (store.batch && store.batch.size) || PLAYERS[root.player].size;
+function switchPlayer(p) { stopAll(); save(); root.player = p; store = root.profiles[p] = profile(p); save(); updateProgress(); resetUI(); renderStart(); }
 const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
 /* ---------- voice: recorded clips if published, otherwise the browser voice ---------- */
@@ -600,23 +708,25 @@ function updateProgress() {
   $("nLearned").textContent = n; $("nTotal").textContent = W.length;
   $("barFill").style.width = (n / W.length * 100) + "%";
 }
-function dots(l) { return '<span class="dots">' + [1,2,3,4,5].map(i => '<i class="' + (i <= l ? "on" : "") + '"></i>').join("") + "</span>"; }
+function dots(l) { return '<span class="dots">' + [1,2,3,4,5,6,7].map(i => '<i class="' + (i <= l ? "on" : "") + '"></i>').join("") + "</span>"; }
 function setBadge(el, l) { el.className = "badge lv" + l; el.innerHTML = l ? dots(l) + " Level " + l + " · " + LEVEL_NAMES[l] : "Apostrophes"; }
 
 function renderStart() {
-  $("levels").innerHTML = [1,2,3,4,5].map(l =>
+  $("levels").innerHTML = [1,2,3,4,5,6,7].map(l =>
     '<button class="lv lv' + l + '" data-l="' + l + '" aria-pressed="' + (store.level === l) + '"><b>' + l + "</b><span>" + LEVEL_NAMES[l] + "</span><small>" + levelCount(l) + "/40</small></button>").join("");
   $("levels").querySelectorAll(".lv").forEach(b => b.onclick = () => { store.level = +b.dataset.l; save(); renderStart(); });
-  const apos = store.mode === "apos";
+  const apos = store.mode === "apos", n = PLAYERS[root.player].size;
+  $("whoJuna").setAttribute("aria-pressed", root.player === "juna"); $("whoArtus").setAttribute("aria-pressed", root.player === "artus");
+  $("paperLabel").textContent = "Get a pencil and number your paper from 1 to " + n + ".";
   $("modeLevels").setAttribute("aria-pressed", !apos); $("modeApos").setAttribute("aria-pressed", apos);
   $("levelBlock").hidden = apos; $("aposNote").hidden = !apos;
-  $("introNote").textContent = apos ? "You will hear 20 words or short phrases. Write each one down, then tap Next word. You check them all together at the end."
-    : "You will hear 20 words. Write each one down, then pick if the next word should be easier, the same or harder. You check them all together at the end.";
+  $("introNote").textContent = apos ? "You will hear " + n + " words or short phrases. Write each one down, then tap Next word. You check them all together at the end."
+    : "You will hear " + n + " words. Write each one down, then pick if the next word should be easier, the same or harder. You check them all together at the end.";
   $("aposNote").textContent = "Words like don't, it's and the dog's bone, plus some that look like they need an apostrophe but don't, like its and your. Listen to the sentence: it tells you which one to write. Learned so far: " + levelCount(0) + " of " + APOS_TOTAL + ".";
   const b = store.batch;
   $("resumeBtn").hidden = !b;
   if (b) $("resumeBtn").textContent = b.phase === "check" ? "Continue checking" : "Continue at word " + (b.items.length);
-  $("startBtn").textContent = b ? "Start a new 20" : "Start 20 words";
+  $("startBtn").textContent = b ? "Start a new " + n : "Start " + n + " words";
   $("suggestLine").hidden = !store.suggest || apos;
   if (store.suggest) $("suggestLine").textContent = "Suggested start for this round: level " + store.suggest + ".";
   $("lastLine").textContent = store.last ? "Last round: " + store.last.right + " of " + store.last.total + " right." : "";
@@ -636,13 +746,13 @@ function pickWord(level, used) {
 /* ---------- round ---------- */
 function startBatch() {
   const apos = store.mode === "apos";
-  store.batch = { items: [], mode: store.mode, level: apos ? 0 : store.level, phase: "listen", ticks: [] };
+  store.batch = { items: [], mode: store.mode, size: PLAYERS[root.player].size, level: apos ? 0 : store.level, phase: "listen", ticks: [] };
   if (!apos) store.suggest = null;
   addWord(apos ? 0 : store.level);
 }
 function addWord(level) {
   const b = store.batch;
-  b.level = b.mode === "apos" ? 0 : Math.max(1, Math.min(5, level));
+  b.level = b.mode === "apos" ? 0 : Math.max(1, Math.min(MAXL, level));
   const w = pickWord(b.level, b.items.map(i => i.w));
   b.items.push({ w, level: b.level, skipped: false });
   save(); renderListen(); sayTest(w);
@@ -650,17 +760,17 @@ function addWord(level) {
 function cur() { const b = store.batch; return b.items[b.items.length - 1]; }
 function renderListen() {
   const b = store.batch, it = cur(), n = b.items.length;
-  $("listenLabel").textContent = "Word " + n + " of " + BATCH;
+  $("listenLabel").textContent = "Word " + n + " of " + size();
   setBadge($("levelBadge"), it.level);
   $("skipBtn").setAttribute("aria-pressed", it.skipped);
   $("skipBtn").textContent = it.skipped ? "Skipped" : "I don't know this one";
   $("skipNote").hidden = !it.skipped;
-  const last = n >= BATCH;
+  const last = n >= size();
   $("nextArea").hidden = last; $("toCheckBtn").hidden = !last;
   const apos = b.mode === "apos";
   $("levelRow").hidden = apos; $("nextOneBtn").hidden = !apos;
   $("nextLabel").textContent = apos ? "Written it down?" : "Written it down? Next word:";
-  $("easierBtn").disabled = it.level <= 1; $("harderBtn").disabled = it.level >= 5;
+  $("easierBtn").disabled = it.level <= 1; $("harderBtn").disabled = it.level >= MAXL;
   show("vListen");
 }
 $("replayBtn").onclick = () => sayTest(cur().w);
@@ -705,7 +815,7 @@ $("doneCheckBtn").onclick = () => {
   if (b.mode !== "apos") {
     const avg = b.items.reduce((s, it) => s + it.level, 0) / total, ratio = right / total;
     const sug = Math.round(avg) + (ratio >= 0.8 ? 1 : ratio <= 0.4 ? -1 : 0);
-    store.suggest = Math.max(1, Math.min(5, sug)); store.level = store.suggest;
+    store.suggest = Math.max(1, Math.min(MAXL, sug)); store.level = store.suggest;
   }
   store.last = { right, total };
   store.batch = null; save(); updateProgress();
@@ -715,7 +825,7 @@ function renderResult(right, total, fresh, toLearn) {
   $("resultCheer").textContent = right >= 18 ? "Amazing work!" : right >= 14 ? "Great work!" : right >= 8 ? "Good effort!" : "Every round makes you better.";
   $("resultScore").textContent = right + " right";
   $("resultNote").textContent = (fresh ? fresh + (fresh === 1 ? " new word" : " new words") + " learned. " : "") +
-    (toLearn.length ? "Here are " + toLearn.length + " words to practise. They will come back in later rounds." : "No words to practise this time.");
+    (toLearn.length ? (toLearn.length === 1 ? "Here is 1 word to practise. It will come back in later rounds." : "Here are " + toLearn.length + " words to practise. They will come back in later rounds.") : "No words to practise this time.");
   $("learnBlock").hidden = !toLearn.length;
   $("learnCards").innerHTML = toLearn.map(w => {
     const e = BYWORD[w];
@@ -728,6 +838,8 @@ function renderResult(right, total, fresh, toLearn) {
   show("vResult");
 }
 $("againBtn").onclick = renderStart;
+$("whoJuna").onclick = () => { if (root.player !== "juna") switchPlayer("juna"); };
+$("whoArtus").onclick = () => { if (root.player !== "artus") switchPlayer("artus"); };
 $("modeLevels").onclick = () => { store.mode = "levels"; save(); renderStart(); };
 $("modeApos").onclick = () => { store.mode = "apos"; save(); renderStart(); };
 $("startBtn").onclick = startBatch;
@@ -745,8 +857,8 @@ setAccent(store.accent);
 /* ---------- reset with in-page confirm ---------- */
 function resetUI() { $("resetArea").innerHTML = '<button class="link" id="resetBtn">Start over</button>'; $("resetBtn").onclick = askReset; }
 function askReset() {
-  $("resetArea").innerHTML = '<span>Forget all learned words?</span><button class="chip" id="yesReset">Yes, start over</button><button class="chip" id="noReset">Cancel</button>';
-  $("yesReset").onclick = () => { stopAll(); store = Object.assign(store, { learned: [], missed: {}, batch: null, last: null, suggest: null, level: 2 }); save(); updateProgress(); resetUI(); renderStart(); };
+  $("resetArea").innerHTML = '<span>Forget all of ' + PLAYERS[root.player].name + '’s learned words?</span><button class="chip" id="yesReset">Yes, start over</button><button class="chip" id="noReset">Cancel</button>';
+  $("yesReset").onclick = () => { stopAll(); store = Object.assign(store, { learned: [], missed: {}, batch: null, last: null, suggest: null, level: PLAYERS[root.player].level, mode: "levels" }); save(); updateProgress(); resetUI(); renderStart(); };
   $("noReset").onclick = resetUI;
 }
 $("resetBtn").onclick = askReset;
