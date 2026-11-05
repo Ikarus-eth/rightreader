@@ -20,11 +20,15 @@ const FALLBACK=["know","important","definitely","immediately","occasionally","in
 const a=new Audio();
 Promise.all([
   fetch("audio/manifest.json",{cache:"no-store"}).then(r=>r.json()),
-  fetch("audio/asr-report.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)
-]).then(([m,rep])=>{
+  fetch("audio/asr-report.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null),
+  fetch("audio/fix-report.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)
+]).then(([m,rep,fix])=>{
   const info=rep?Object.fromEntries(rep.words.map(x=>[x.word,x])):{};
-  const list=rep?rep.uncertain:FALLBACK;
-  document.getElementById("intro").textContent=rep
+  const list=fix&&fix.changed.length?fix.changed:rep?rep.uncertain:FALLBACK;
+  if(fix&&fix.changed.length){document.querySelector("h1").textContent="Check the "+fix.changed.length+" re-recorded words";}
+  document.getElementById("intro").textContent=fix&&fix.changed.length
+    ?"These words were re-recorded. Play each one, then reply in the chat with the numbers that still sound wrong."
+    :rep
     ?"A speech recogniser listened to all 312 clips. These are the 20 it was least sure about. Play each word and its sentence, then reply in the chat with the numbers that sound wrong or unclear."
     :"Play each word and its sentence. Reply in the chat with the numbers that sound wrong or unclear.";
   document.getElementById("list").innerHTML=list.map((w,i)=>{const c=m.words[w];const fresh=c.word.endsWith("-word.mp3");const x=info[w];

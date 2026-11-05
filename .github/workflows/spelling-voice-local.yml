@@ -28,6 +28,7 @@ jobs:
         run: |
           mode=$(jq -r '.mode // "words"' spelling/voice-request.json)
           if [ "$mode" = "words" ]; then python spelling/tools/local_voice.py; fi
+          if [ "$mode" = "fix" ]; then python spelling/tools/fix_words.py; fi
       - name: Listen to every clip
         if: always()
         run: python spelling/tools/asr_check.py
