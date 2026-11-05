@@ -1,6 +1,326 @@
 {
  "voice": "af_heart",
  "words": {
+  "said": {
+   "word": "audio/af_heart/said.mp3",
+   "sentence": "audio/af_heart/said-sentence.mp3"
+  },
+  "was": {
+   "word": "audio/af_heart/was.mp3",
+   "sentence": "audio/af_heart/was-sentence.mp3"
+  },
+  "they": {
+   "word": "audio/af_heart/they.mp3",
+   "sentence": "audio/af_heart/they-sentence.mp3"
+  },
+  "have": {
+   "word": "audio/af_heart/have.mp3",
+   "sentence": "audio/af_heart/have-sentence.mp3"
+  },
+  "come": {
+   "word": "audio/af_heart/come.mp3",
+   "sentence": "audio/af_heart/come-sentence.mp3"
+  },
+  "some": {
+   "word": "audio/af_heart/some.mp3",
+   "sentence": "audio/af_heart/some-sentence.mp3"
+  },
+  "one": {
+   "word": "audio/af_heart/one.mp3",
+   "sentence": "audio/af_heart/one-sentence.mp3"
+  },
+  "two": {
+   "word": "audio/af_heart/two.mp3",
+   "sentence": "audio/af_heart/two-sentence.mp3"
+  },
+  "what": {
+   "word": "audio/af_heart/what.mp3",
+   "sentence": "audio/af_heart/what-sentence.mp3"
+  },
+  "where": {
+   "word": "audio/af_heart/where.mp3",
+   "sentence": "audio/af_heart/where-sentence.mp3"
+  },
+  "there": {
+   "word": "audio/af_heart/there.mp3",
+   "sentence": "audio/af_heart/there-sentence.mp3"
+  },
+  "here": {
+   "word": "audio/af_heart/here.mp3",
+   "sentence": "audio/af_heart/here-sentence.mp3"
+  },
+  "she": {
+   "word": "audio/af_heart/she.mp3",
+   "sentence": "audio/af_heart/she-sentence.mp3"
+  },
+  "like": {
+   "word": "audio/af_heart/like.mp3",
+   "sentence": "audio/af_heart/like-sentence.mp3"
+  },
+  "little": {
+   "word": "audio/af_heart/little.mp3",
+   "sentence": "audio/af_heart/little-sentence.mp3"
+  },
+  "look": {
+   "word": "audio/af_heart/look.mp3",
+   "sentence": "audio/af_heart/look-sentence.mp3"
+  },
+  "play": {
+   "word": "audio/af_heart/play.mp3",
+   "sentence": "audio/af_heart/play-sentence.mp3"
+  },
+  "want": {
+   "word": "audio/af_heart/want.mp3",
+   "sentence": "audio/af_heart/want-sentence.mp3"
+  },
+  "went": {
+   "word": "audio/af_heart/went.mp3",
+   "sentence": "audio/af_heart/went-sentence.mp3"
+  },
+  "with": {
+   "word": "audio/af_heart/with.mp3",
+   "sentence": "audio/af_heart/with-sentence.mp3"
+  },
+  "from": {
+   "word": "audio/af_heart/from.mp3",
+   "sentence": "audio/af_heart/from-sentence.mp3"
+  },
+  "does": {
+   "word": "audio/af_heart/does.mp3",
+   "sentence": "audio/af_heart/does-sentence.mp3"
+  },
+  "going": {
+   "word": "audio/af_heart/going.mp3",
+   "sentence": "audio/af_heart/going-sentence.mp3"
+  },
+  "are": {
+   "word": "audio/af_heart/are.mp3",
+   "sentence": "audio/af_heart/are-sentence.mp3"
+  },
+  "were": {
+   "word": "audio/af_heart/were.mp3",
+   "sentence": "audio/af_heart/were-sentence.mp3"
+  },
+  "of": {
+   "word": "audio/af_heart/of.mp3",
+   "sentence": "audio/af_heart/of-sentence.mp3"
+  },
+  "do": {
+   "word": "audio/af_heart/do.mp3",
+   "sentence": "audio/af_heart/do-sentence.mp3"
+  },
+  "who": {
+   "word": "audio/af_heart/who.mp3",
+   "sentence": "audio/af_heart/who-sentence.mp3"
+  },
+  "call": {
+   "word": "audio/af_heart/call.mp3",
+   "sentence": "audio/af_heart/call-sentence.mp3"
+  },
+  "day": {
+   "word": "audio/af_heart/day.mp3",
+   "sentence": "audio/af_heart/day-sentence.mp3"
+  },
+  "jump": {
+   "word": "audio/af_heart/jump.mp3",
+   "sentence": "audio/af_heart/jump-sentence.mp3"
+  },
+  "yellow": {
+   "word": "audio/af_heart/yellow.mp3",
+   "sentence": "audio/af_heart/yellow-sentence.mp3"
+  },
+  "blue": {
+   "word": "audio/af_heart/blue.mp3",
+   "sentence": "audio/af_heart/blue-sentence.mp3"
+  },
+  "green": {
+   "word": "audio/af_heart/green.mp3",
+   "sentence": "audio/af_heart/green-sentence.mp3"
+  },
+  "house": {
+   "word": "audio/af_heart/house.mp3",
+   "sentence": "audio/af_heart/house-sentence.mp3"
+  },
+  "school": {
+   "word": "audio/af_heart/school.mp3",
+   "sentence": "audio/af_heart/school-sentence.mp3"
+  },
+  "water": {
+   "word": "audio/af_heart/water.mp3",
+   "sentence": "audio/af_heart/water-sentence.mp3"
+  },
+  "eat": {
+   "word": "audio/af_heart/eat.mp3",
+   "sentence": "audio/af_heart/eat-sentence.mp3"
+  },
+  "sleep": {
+   "word": "audio/af_heart/sleep.mp3",
+   "sentence": "audio/af_heart/sleep-sentence.mp3"
+  },
+  "fish": {
+   "word": "audio/af_heart/fish.mp3",
+   "sentence": "audio/af_heart/fish-sentence.mp3"
+  },
+  "again": {
+   "word": "audio/af_heart/again.mp3",
+   "sentence": "audio/af_heart/again-sentence.mp3"
+  },
+  "about": {
+   "word": "audio/af_heart/about.mp3",
+   "sentence": "audio/af_heart/about-sentence.mp3"
+  },
+  "after": {
+   "word": "audio/af_heart/after.mp3",
+   "sentence": "audio/af_heart/after-sentence.mp3"
+  },
+  "any": {
+   "word": "audio/af_heart/any.mp3",
+   "sentence": "audio/af_heart/any-sentence.mp3"
+  },
+  "many": {
+   "word": "audio/af_heart/many.mp3",
+   "sentence": "audio/af_heart/many-sentence.mp3"
+  },
+  "could": {
+   "word": "audio/af_heart/could.mp3",
+   "sentence": "audio/af_heart/could-sentence.mp3"
+  },
+  "would": {
+   "word": "audio/af_heart/would.mp3",
+   "sentence": "audio/af_heart/would-sentence.mp3"
+  },
+  "should": {
+   "word": "audio/af_heart/should.mp3",
+   "sentence": "audio/af_heart/should-sentence.mp3"
+  },
+  "every": {
+   "word": "audio/af_heart/every.mp3",
+   "sentence": "audio/af_heart/every-sentence.mp3"
+  },
+  "first": {
+   "word": "audio/af_heart/first.mp3",
+   "sentence": "audio/af_heart/first-sentence.mp3"
+  },
+  "found": {
+   "word": "audio/af_heart/found.mp3",
+   "sentence": "audio/af_heart/found-sentence.mp3"
+  },
+  "girl": {
+   "word": "audio/af_heart/girl.mp3",
+   "sentence": "audio/af_heart/girl-sentence.mp3"
+  },
+  "know": {
+   "word": "audio/af_heart/know.mp3",
+   "sentence": "audio/af_heart/know-sentence.mp3"
+  },
+  "light": {
+   "word": "audio/af_heart/light.mp3",
+   "sentence": "audio/af_heart/light-sentence.mp3"
+  },
+  "night": {
+   "word": "audio/af_heart/night.mp3",
+   "sentence": "audio/af_heart/night-sentence.mp3"
+  },
+  "right": {
+   "word": "audio/af_heart/right.mp3",
+   "sentence": "audio/af_heart/right-sentence.mp3"
+  },
+  "write": {
+   "word": "audio/af_heart/write.mp3",
+   "sentence": "audio/af_heart/write-sentence.mp3"
+  },
+  "live": {
+   "word": "audio/af_heart/live.mp3",
+   "sentence": "audio/af_heart/live-sentence.mp3"
+  },
+  "mother": {
+   "word": "audio/af_heart/mother.mp3",
+   "sentence": "audio/af_heart/mother-sentence.mp3"
+  },
+  "brother": {
+   "word": "audio/af_heart/brother.mp3",
+   "sentence": "audio/af_heart/brother-sentence.mp3"
+  },
+  "sister": {
+   "word": "audio/af_heart/sister.mp3",
+   "sentence": "audio/af_heart/sister-sentence.mp3"
+  },
+  "open": {
+   "word": "audio/af_heart/open.mp3",
+   "sentence": "audio/af_heart/open-sentence.mp3"
+  },
+  "other": {
+   "word": "audio/af_heart/other.mp3",
+   "sentence": "audio/af_heart/other-sentence.mp3"
+  },
+  "pretty": {
+   "word": "audio/af_heart/pretty.mp3",
+   "sentence": "audio/af_heart/pretty-sentence.mp3"
+  },
+  "put": {
+   "word": "audio/af_heart/put.mp3",
+   "sentence": "audio/af_heart/put-sentence.mp3"
+  },
+  "small": {
+   "word": "audio/af_heart/small.mp3",
+   "sentence": "audio/af_heart/small-sentence.mp3"
+  },
+  "thank": {
+   "word": "audio/af_heart/thank.mp3",
+   "sentence": "audio/af_heart/thank-sentence.mp3"
+  },
+  "think": {
+   "word": "audio/af_heart/think.mp3",
+   "sentence": "audio/af_heart/think-sentence.mp3"
+  },
+  "three": {
+   "word": "audio/af_heart/three.mp3",
+   "sentence": "audio/af_heart/three-sentence.mp3"
+  },
+  "very": {
+   "word": "audio/af_heart/very.mp3",
+   "sentence": "audio/af_heart/very-sentence.mp3"
+  },
+  "walk": {
+   "word": "audio/af_heart/walk.mp3",
+   "sentence": "audio/af_heart/walk-sentence.mp3"
+  },
+  "talk": {
+   "word": "audio/af_heart/talk.mp3",
+   "sentence": "audio/af_heart/talk-sentence.mp3"
+  },
+  "warm": {
+   "word": "audio/af_heart/warm.mp3",
+   "sentence": "audio/af_heart/warm-sentence.mp3"
+  },
+  "wash": {
+   "word": "audio/af_heart/wash.mp3",
+   "sentence": "audio/af_heart/wash-sentence.mp3"
+  },
+  "which": {
+   "word": "audio/af_heart/which.mp3",
+   "sentence": "audio/af_heart/which-sentence.mp3"
+  },
+  "why": {
+   "word": "audio/af_heart/why.mp3",
+   "sentence": "audio/af_heart/why-sentence.mp3"
+  },
+  "year": {
+   "word": "audio/af_heart/year.mp3",
+   "sentence": "audio/af_heart/year-sentence.mp3"
+  },
+  "once": {
+   "word": "audio/af_heart/once.mp3",
+   "sentence": "audio/af_heart/once-sentence.mp3"
+  },
+  "eye": {
+   "word": "audio/af_heart/eye.mp3",
+   "sentence": "audio/af_heart/eye-sentence.mp3"
+  },
+  "door": {
+   "word": "audio/af_heart/door.mp3",
+   "sentence": "audio/af_heart/door-sentence.mp3"
+  },
   "answer": {
    "word": "audio/af_heart/answer.mp3",
    "sentence": "audio/af_heart/answer-sentence.mp3"
