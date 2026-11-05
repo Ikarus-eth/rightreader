@@ -174,6 +174,33 @@ button:disabled { opacity: .35; cursor: default; }
 .explain .tip dd { background: color-mix(in srgb, var(--accent) 12%, transparent); border-radius: 8px; padding: 4px 10px; }
 @media (max-width: 480px) { .explain div { grid-template-columns: 1fr; gap: 0; } }
 
+/* parent view */
+.ptop { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+@media (max-width: 560px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
+.tile { background: var(--paper); border: 2px solid var(--btn-line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; }
+.tile b { font-size: 1.6rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile span { font-size: .8rem; color: var(--muted); }
+.ph { font-family: var(--f-pen); font-size: 1.35rem; margin: 6px 0 -6px; color: var(--ink); font-weight: 400; }
+.bars { display: grid; gap: 6px; }
+.bars details { background: var(--paper); border: 2px solid var(--btn-line); border-radius: 10px; padding: 6px 10px; }
+.bars summary { display: grid; grid-template-columns: 8.5em 1fr 2.5em; gap: 10px; align-items: center; cursor: pointer; list-style: none; }
+.bars summary::-webkit-details-marker { display: none; }
+.bars .track { height: 14px; background: var(--btn); border-radius: 99px; overflow: hidden; }
+.bars .fill { display: block; height: 100%; border-radius: 99px; background: var(--good); }
+.bars .b0 .fill { background: var(--learn); }
+.bars .n { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.wordlist { margin: 8px 0 2px; font-family: var(--f-word); line-height: 1.7; overflow-wrap: anywhere; }
+.tablewrap { overflow-x: auto; }
+.ptable { width: 100%; border-collapse: collapse; font-size: .95rem; font-variant-numeric: tabular-nums; background: var(--paper); border-radius: 10px; }
+.ptable th, .ptable td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.ptable th { font-size: .8rem; color: var(--muted); font-weight: 700; }
+.ptable td.num, .ptable th.num { text-align: right; }
+.res { display: inline-flex; gap: 3px; }
+.res i { width: 12px; height: 12px; border-radius: 3px; background: var(--btn-line); }
+.res i.r1 { background: var(--good); } .res i.r0 { background: var(--learn); }
+#exportText { width: 100%; min-height: 140px; font: .85rem/1.4 ui-monospace, Menlo, monospace; color: var(--ink); background: var(--paper); border: 2px solid var(--btn-line); border-radius: 10px; padding: 10px; }
+.toast { color: var(--good); font-weight: 700; margin: 0; }
 footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: .9rem; }
 .seg { display: inline-flex; border: 2px solid var(--btn-line); border-radius: 99px; overflow: hidden; }
 .seg button { padding: 6px 14px; min-height: 40px; font-weight: 700; font-size: .9rem; }
@@ -272,6 +299,37 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
       <button class="btn primary" id="againBtn">Next 20 words</button>
     </section>
 
+    <!-- PARENT VIEW -->
+    <section id="vParent" hidden>
+      <div class="ptop">
+        <p class="pen" id="pTitle">Parent view</p>
+        <div class="seg" role="group" aria-label="Child">
+          <button id="pJuna" aria-pressed="true">Juna</button>
+          <button id="pArtus" aria-pressed="false">Artus</button>
+        </div>
+      </div>
+      <div class="tiles" id="pTiles"></div>
+      <p class="ph">Right on which try?</p>
+      <p class="note">Each word counts once, by the round in which it was first spelled right. Tap a row to see the words.</p>
+      <div class="bars" id="pBars"></div>
+      <p class="ph">By level</p>
+      <div class="tablewrap"><table class="ptable" id="pLevels"></table></div>
+      <p class="ph">Hardest words</p>
+      <div class="tablewrap"><table class="ptable" id="pHard"></table></div>
+      <p class="ph">Recent rounds</p>
+      <div class="tablewrap"><table class="ptable" id="pRounds"></table></div>
+      <p class="ph">Share progress</p>
+      <p class="note">Send the data file or paste the summary into a chat to adjust levels and word lists later.</p>
+      <div class="row">
+        <button class="btn primary" id="shareBtn">Share</button>
+        <button class="btn" id="downloadBtn">Download file</button>
+        <button class="btn" id="copyBtn">Copy summary</button>
+      </div>
+      <p class="toast" id="exportToast" hidden></p>
+      <textarea id="exportText" readonly aria-label="Progress summary"></textarea>
+      <button class="btn" id="parentBackBtn">Back to practice</button>
+    </section>
+
     <!-- DONE -->
     <section id="vDone" hidden>
       <p class="pen" style="color:var(--good);font-size:2.2rem">All words learned!</p>
@@ -287,6 +345,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
         <button id="accUK" aria-pressed="false">UK</button>
       </div>
     </div>
+    <button class="link" id="parentBtn">Parent view</button>
     <div class="confirm" id="resetArea">
       <button class="link" id="resetBtn">Start over</button>
     </div>
@@ -576,40 +635,41 @@ const RAW = [
 "7|explanation|words that make something clear|die Erklärung|The teacher gave a clear explanation.|explain loses its i: expla-nation.",
 "7|convenience|being easy and useful|die Bequemlichkeit|A shop on the corner is a real convenience.|con-ven-i-ence.",
 "7|correspond|to write letters to each other; to match|sich schreiben; entsprechen|I correspond with a pen pal.|Double r: cor-re-spond.",
-"A|don't|do not|nicht (tun)|Please don't run near the pool.|do not → don't. The apostrophe sits where the o was.",
-"A|can't|cannot|kann nicht|I can't find my shoes.|cannot → can't. The apostrophe replaces 'no'.",
-"A|won't|will not|wird nicht, will nicht|The baby won't stop crying.|A strange one: will not → won't.",
-"A|isn't|is not|ist nicht|The shop isn't open yet.|is not → isn't.",
-"A|didn't|did not|hat nicht, tat nicht|I didn't hear the bell.|did not → didn't.",
-"A|doesn't|does not|tut nicht|My brother doesn't like fish.|does not → doesn't. Keep the e: d-o-e-s-n-'-t.",
-"A|aren't|are not|sind nicht|We aren't ready yet.|are not → aren't.",
-"A|haven't|have not|habe nicht, haben nicht|I haven't finished my homework.|have not → haven't.",
-"A|shouldn't|should not|sollte nicht|You shouldn't swim alone.|should not → shouldn't. Keep the silent l.",
-"A|couldn't|could not|konnte nicht|We couldn't see the stars.|could not → couldn't.",
-"A|wouldn't|would not|würde nicht|The door wouldn't open.|would not → wouldn't.",
-"A|I'm|I am|ich bin|I'm ten years old.|I am → I'm. I is always a capital letter.",
-"A|I'll|I will|ich werde|I'll call you after school.|I will → I'll. The apostrophe replaces 'wi'.",
-"A|I'd|I would, or I had|ich würde, ich hätte|I'd like some water, please.|I would → I'd.",
-"A|you're|you are|du bist, ihr seid|You're my best friend.|you are → you're. 'your' (dein) has no apostrophe.",
-"A|they're|they are|sie sind|They're playing on the beach.|they are → they're. Not 'their' (ihr) and not 'there' (dort).",
-"A|we've|we have|wir haben|We've got a new puppy.|we have → we've.",
-"A|let's|let us|lass uns|Let's go swimming!|let us → let's.",
-"A|who's|who is|wer ist|Who's at the door?|who is → who's. 'whose' (wessen) has no apostrophe.",
-"A|it's|it is, or it has|es ist|It's raining again.|it is → it's. Only use the apostrophe if you can say 'it is'.",
-"A|there's|there is|es gibt, da ist|There's a gecko on the wall.|there is → there's.",
-"A|o'clock|of the clock, for full hours|Uhr (volle Stunde)|School starts at eight o'clock.|of the clock → o'clock.",
-"A|its|belonging to it|sein, ihr (von einem Ding oder Tier)|The dog wagged its tail.|No apostrophe! 'its' means belonging to it, like 'his' and 'her'.",
-"A|your|belonging to you|dein, euer|Is this your bag?|No apostrophe. 'you're' means you are.",
-"A|their|belonging to them|ihr (von mehreren)|The children packed their bags.|No apostrophe. The word 'heir' is inside: t-h-e-i-r.",
-"A|whose|belonging to which person|wessen|Whose towel is this?|No apostrophe. 'who's' means who is.",
-"A|the dog's bone|the bone that belongs to the dog|der Knochen des Hundes|The dog's bone is under the sofa.|One owner: dog + 's.",
-"A|Dad's phone|the phone that belongs to Dad|Papas Handy|Dad's phone is ringing.|One owner: Dad + 's. Dad has a capital D when it is his name.",
-"A|the children's toys|the toys that belong to the children|die Spielsachen der Kinder|The children's toys are all over the floor.|children has no s, so add 's: children's.",
-"A|the boys' room|the room that belongs to two or more boys|das Zimmer der Jungen|My two brothers share the boys' room.|More than one boy: boys + apostrophe after the s.",
-"A|the teachers' room|the room for all the teachers|das Lehrerzimmer|All the teachers meet in the teachers' room.|Many teachers: teachers + apostrophe after the s.",
-"A|the women's team|the team of women|die Frauenmannschaft|My aunt plays in the women's team.|women has no s, so add 's: women's."
+"A2|don't|do not|nicht (tun)|Please don't run near the pool.|do not → don't. The apostrophe sits where the o was.",
+"A2|can't|cannot|kann nicht|I can't find my shoes.|cannot → can't. The apostrophe replaces 'no'.",
+"A4|won't|will not|wird nicht, will nicht|The baby won't stop crying.|A strange one: will not → won't.",
+"A2|isn't|is not|ist nicht|The shop isn't open yet.|is not → isn't.",
+"A3|didn't|did not|hat nicht, tat nicht|I didn't hear the bell.|did not → didn't.",
+"A4|doesn't|does not|tut nicht|My brother doesn't like fish.|does not → doesn't. Keep the e: d-o-e-s-n-'-t.",
+"A3|aren't|are not|sind nicht|We aren't ready yet.|are not → aren't.",
+"A3|haven't|have not|habe nicht, haben nicht|I haven't finished my homework.|have not → haven't.",
+"A4|shouldn't|should not|sollte nicht|You shouldn't swim alone.|should not → shouldn't. Keep the silent l.",
+"A4|couldn't|could not|konnte nicht|We couldn't see the stars.|could not → couldn't.",
+"A4|wouldn't|would not|würde nicht|The door wouldn't open.|would not → wouldn't.",
+"A2|I'm|I am|ich bin|I'm ten years old.|I am → I'm. I is always a capital letter.",
+"A3|I'll|I will|ich werde|I'll call you after school.|I will → I'll. The apostrophe replaces 'wi'.",
+"A4|I'd|I would, or I had|ich würde, ich hätte|I'd like some water, please.|I would → I'd.",
+"A4|you're|you are|du bist, ihr seid|You're my best friend.|you are → you're. 'your' (dein) has no apostrophe.",
+"A4|they're|they are|sie sind|They're playing on the beach.|they are → they're. Not 'their' (ihr) and not 'there' (dort).",
+"A3|we've|we have|wir haben|We've got a new puppy.|we have → we've.",
+"A2|let's|let us|lass uns|Let's go swimming!|let us → let's.",
+"A4|who's|who is|wer ist|Who's at the door?|who is → who's. 'whose' (wessen) has no apostrophe.",
+"A3|it's|it is, or it has|es ist|It's raining again.|it is → it's. Only use the apostrophe if you can say 'it is'.",
+"A3|there's|there is|es gibt, da ist|There's a gecko on the wall.|there is → there's.",
+"A3|o'clock|of the clock, for full hours|Uhr (volle Stunde)|School starts at eight o'clock.|of the clock → o'clock.",
+"A4|its|belonging to it|sein, ihr (von einem Ding oder Tier)|The dog wagged its tail.|No apostrophe! 'its' means belonging to it, like 'his' and 'her'.",
+"A4|your|belonging to you|dein, euer|Is this your bag?|No apostrophe. 'you're' means you are.",
+"A4|their|belonging to them|ihr (von mehreren)|The children packed their bags.|No apostrophe. The word 'heir' is inside: t-h-e-i-r.",
+"A4|whose|belonging to which person|wessen|Whose towel is this?|No apostrophe. 'who's' means who is.",
+"A3|the dog's bone|the bone that belongs to the dog|der Knochen des Hundes|The dog's bone is under the sofa.|One owner: dog + 's.",
+"A3|Dad's phone|the phone that belongs to Dad|Papas Handy|Dad's phone is ringing.|One owner: Dad + 's. Dad has a capital D when it is his name.",
+"A4|the children's toys|the toys that belong to the children|die Spielsachen der Kinder|The children's toys are all over the floor.|children has no s, so add 's: children's.",
+"A5|the boys' room|the room that belongs to two or more boys|das Zimmer der Jungen|My two brothers share the boys' room.|More than one boy: boys + apostrophe after the s.",
+"A5|the teachers' room|the room for all the teachers|das Lehrerzimmer|All the teachers meet in the teachers' room.|Many teachers: teachers + apostrophe after the s.",
+"A5|the women's team|the team of women|die Frauenmannschaft|My aunt plays in the women's team.|women has no s, so add 's: women's."
 ];
-const W = RAW.map(s => { const [level, word, meaning, de, sentence, tip] = s.split("|"); return { level: level === "A" ? 0 : +level, word, meaning, de, sentence, tip }; });
+/* Apostrophe rows are "A<n>": level 0 = the apostrophe chapter, and they are also mixed into regular level n. */
+const W = RAW.map(s => { const [level, word, meaning, de, sentence, tip] = s.split("|"); const a = level[0] === "A"; return { level: a ? 0 : +level, mix: a ? +level.slice(1) : 0, word, meaning, de, sentence, tip }; });
 const APOS_TOTAL = W.filter(w => w.level === 0).length;
 const BYWORD = Object.fromEntries(W.map(w => [w.word, w]));
 const LEVEL_NAMES = ["", "First words", "Explorer", "Warm-up", "Steady", "Strong", "Tricky", "Champion"];
@@ -633,14 +693,23 @@ try {
     }
   }
 } catch (e) {}
+/* hist: word -> [[time, result], ...] with result 1 = right, 0 = wrong, 2 = skipped; one entry per round.
+   Progress saved before tracking started is rebuilt from the miss counts, with time 0. */
+function ensureHist(s) {
+  if (s.hist) return s;
+  s.hist = {}; s.rounds = s.rounds || [];
+  Object.entries(s.missed || {}).forEach(([w, n]) => { s.hist[w] = Array.from({ length: n }, () => [0, 0]); });
+  (s.learned || []).forEach(w => { (s.hist[w] = s.hist[w] || []).push([0, 1]); });
+  return s;
+}
 function profile(p) {
-  return Object.assign({ learned: [], missed: {}, accent: "us", level: PLAYERS[p].level, mode: "levels", batch: null, last: null, suggest: null }, root.profiles[p] || {});
+  return ensureHist(Object.assign({ learned: [], missed: {}, accent: "us", level: PLAYERS[p].level, mode: "levels", batch: null, last: null, suggest: null, hist: null, rounds: [] }, root.profiles[p] || {}));
 }
 if (!PLAYERS[root.player]) root.player = "juna";
 let store = root.profiles[root.player] = profile(root.player);
 function save() { root.profiles[root.player] = store; try { localStorage.setItem(KEY, JSON.stringify(root)); } catch (e) {} }
 const size = () => (store.batch && store.batch.size) || PLAYERS[root.player].size;
-function switchPlayer(p) { stopAll(); save(); root.player = p; store = root.profiles[p] = profile(p); save(); updateProgress(); resetUI(); renderStart(); }
+function switchPlayer(p, then) { stopAll(); save(); root.player = p; store = root.profiles[p] = profile(p); save(); updateProgress(); resetUI(); (then || renderStart)(); }
 const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
 /* ---------- voice: recorded clips if published, otherwise the browser voice ---------- */
@@ -700,7 +769,7 @@ function sayWord(w, rate = 0.85) {
 }
 
 /* ---------- views ---------- */
-const VIEWS = ["vStart", "vListen", "vCheck", "vResult", "vDone"];
+const VIEWS = ["vStart", "vListen", "vCheck", "vResult", "vDone", "vParent"];
 function show(id) { VIEWS.forEach(v => $(v).hidden = v !== id); window.scrollTo({ top: 0 }); }
 function levelCount(l) { return W.filter(w => w.level === l && store.learned.includes(w.word)).length; }
 function updateProgress() {
@@ -735,7 +804,7 @@ function renderStart() {
 
 /* ---------- picking words ---------- */
 function pickWord(level, used) {
-  const inLevel = W.filter(w => w.level === level && !used.includes(w.word));
+  const inLevel = W.filter(w => (w.level === level || (level > 0 && w.mix === level)) && !used.includes(w.word));
   let pool = inLevel.filter(w => !store.learned.includes(w.word));
   if (!pool.length) pool = inLevel;
   const bag = [];
@@ -812,6 +881,11 @@ $("doneCheckBtn").onclick = () => {
   const b = store.batch, right = b.ticks.length, total = b.items.length;
   let fresh = 0;
   const toLearn = [];
+  const now = Date.now();
+  b.items.forEach((it, i) => {
+    (store.hist[it.w] = store.hist[it.w] || []).push([now, b.ticks.includes(i) ? 1 : it.skipped ? 2 : 0]);
+  });
+  store.rounds.push({ t: now, mode: b.mode, n: total, right, levels: b.items.map(it => it.level) });
   b.items.forEach((it, i) => {
     if (b.ticks.includes(i)) { if (!store.learned.includes(it.w)) { store.learned.push(it.w); fresh++; } }
     else { store.missed[it.w] = (store.missed[it.w] || 0) + 1; toLearn.push(it.w); }
@@ -862,10 +936,111 @@ setAccent(store.accent);
 function resetUI() { $("resetArea").innerHTML = '<button class="link" id="resetBtn">Start over</button>'; $("resetBtn").onclick = askReset; }
 function askReset() {
   $("resetArea").innerHTML = '<span>Forget all of ' + PLAYERS[root.player].name + '’s learned words?</span><button class="chip" id="yesReset">Yes, start over</button><button class="chip" id="noReset">Cancel</button>';
-  $("yesReset").onclick = () => { stopAll(); store = Object.assign(store, { learned: [], missed: {}, batch: null, last: null, suggest: null, level: PLAYERS[root.player].level, mode: "levels" }); save(); updateProgress(); resetUI(); renderStart(); };
+  $("yesReset").onclick = () => { stopAll(); store = Object.assign(store, { learned: [], missed: {}, batch: null, last: null, suggest: null, level: PLAYERS[root.player].level, mode: "levels", hist: {}, rounds: [] }); save(); updateProgress(); resetUI(); renderStart(); };
   $("noReset").onclick = resetUI;
 }
 $("resetBtn").onclick = askReset;
+
+/* ---------- parent view ---------- */
+const pad2 = n => String(n).padStart(2, "0");
+const ymd = t => { const d = new Date(t); return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()); };   /* local date, not UTC */
+const hm = t => { const d = new Date(t); return pad2(d.getHours()) + ":" + pad2(d.getMinutes()); };
+const fmtDate = t => t ? new Date(t).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "before tracking";
+const levelLabel = e => e.level ? "Level " + e.level : "Apostrophes (level " + e.mix + ")";
+function stats() {
+  const words = Object.entries(store.hist).filter(([w, h]) => h.length && BYWORD[w]).map(([w, h]) => {
+    const i = h.findIndex(x => x[1] === 1), e = BYWORD[w];
+    return { w, e, hist: h, attempts: h.length, first: i < 0 ? null : i + 1, wrong: h.filter(x => x[1] !== 1).length };
+  });
+  const buckets = { 1: [], 2: [], 3: [], 4: [], 0: [] };
+  words.forEach(x => buckets[x.first === null ? 0 : Math.min(x.first, 4)].push(x));
+  return { words, buckets };
+}
+const BUCKET_NAMES = { 1: "1st try", 2: "2nd try", 3: "3rd try", 4: "4th try or later", 0: "Not right yet" };
+function renderParent() {
+  stopAll();
+  const name = PLAYERS[root.player].name, { words, buckets } = stats(), rounds = store.rounds || [];
+  $("pTitle").textContent = "Parent view · " + name;
+  $("pJuna").setAttribute("aria-pressed", root.player === "juna"); $("pArtus").setAttribute("aria-pressed", root.player === "artus");
+  const firstPct = words.length ? Math.round(buckets[1].length / words.length * 100) : 0;
+  $("pTiles").innerHTML = [[rounds.length, "rounds"], [words.length, "words practised"], [store.learned.length, "words spelled right"], [firstPct + "%", "right on the 1st try"]]
+    .map(([v, l]) => '<div class="tile"><b>' + v + "</b><span>" + l + "</span></div>").join("");
+  const max = Math.max(1, ...Object.values(buckets).map(b => b.length));
+  $("pBars").innerHTML = words.length ? [1, 2, 3, 4, 0].map(k => {
+    const list = buckets[k].slice().sort((a, b) => a.e.level - b.e.level || a.w.localeCompare(b.w));
+    return '<details class="b' + k + '"><summary><span>' + BUCKET_NAMES[k] + '</span><span class="track"><span class="fill" style="width:' + (list.length / max * 100) + '%"></span></span><span class="n">' + list.length + "</span></summary>" +
+      '<div class="wordlist">' + (list.length ? list.map(x => esc(x.w) + (k === 0 ? " (" + x.attempts + "×)" : "")).join(", ") : "None yet") + "</div></details>";
+  }).join("") : '<p class="note">No rounds checked yet.</p>';
+  const lv = [1, 2, 3, 4, 5, 6, 7, 0].map(l => {
+    const all = W.filter(w => w.level === l), done = words.filter(x => x.e.level === l);
+    return [l ? l + " · " + LEVEL_NAMES[l] : "Apostrophes", done.length + " / " + all.length,
+      done.length ? Math.round(done.filter(x => x.first === 1).length / done.length * 100) + "%" : "–",
+      all.filter(w => store.learned.includes(w.word)).length];
+  });
+  $("pLevels").innerHTML = '<tr><th>Level</th><th class="num">Practised</th><th class="num">Right 1st try</th><th class="num">Spelled right</th></tr>' +
+    lv.map(r => "<tr><td>" + r[0] + '</td><td class="num">' + r[1] + '</td><td class="num">' + r[2] + '</td><td class="num">' + r[3] + "</td></tr>").join("");
+  const hard = words.filter(x => x.wrong).sort((a, b) => b.wrong - a.wrong || (a.first === null) - (b.first === null) || a.w.localeCompare(b.w)).slice(0, 15);
+  const dotsFor = h => '<span class="res">' + h.map(x => '<i class="r' + (x[1] === 1 ? 1 : 0) + '" title="' + (x[1] === 1 ? "right" : x[1] === 2 ? "skipped" : "wrong") + '"></i>').join("") + "</span>";
+  $("pHard").innerHTML = hard.length ? '<tr><th>Word</th><th>Level</th><th>Tries</th><th class="num">Right on try</th></tr>' +
+    hard.map(x => "<tr><td>" + esc(x.w) + "</td><td>" + levelLabel(x.e) + "</td><td>" + dotsFor(x.hist) + '</td><td class="num">' + (x.first || "not yet") + "</td></tr>").join("")
+    : '<tr><td>No missed words yet.</td></tr>';
+  $("pRounds").innerHTML = rounds.length ? '<tr><th>Date</th><th>Type</th><th>Levels</th><th class="num">Right</th></tr>' +
+    rounds.slice(-12).reverse().map(r => {
+      const ls = r.levels.filter(Boolean), lr = ls.length ? Math.min(...ls) + (Math.max(...ls) > Math.min(...ls) ? "–" + Math.max(...ls) : "") : "–";
+      return "<tr><td>" + fmtDate(r.t) + "</td><td>" + (r.mode === "apos" ? "Apostrophes" : "Levels") + "</td><td>" + lr + '</td><td class="num">' + r.right + " / " + r.n + "</td></tr>";
+    }).join("") : '<tr><td>No rounds since tracking started.</td></tr>';
+  $("exportText").value = summaryText();
+  $("exportToast").hidden = true;
+  show("vParent");
+}
+function exportData() {
+  const { words } = stats();
+  return { app: "spelling practice", child: PLAYERS[root.player].name, exported: new Date().toISOString(),
+    currentLevel: store.level, roundSize: PLAYERS[root.player].size,
+    words: Object.fromEntries(words.map(x => [x.w, { level: x.e.level || "apostrophes", mixedIntoLevel: x.e.mix || undefined, firstRightOnTry: x.first,
+      tries: x.hist.map(h => ({ date: h[0] ? ymd(h[0]) : null, result: h[1] === 1 ? "right" : h[1] === 2 ? "skipped" : "wrong" })) }])),
+    rounds: (store.rounds || []).map(r => ({ date: ymd(r.t) + " " + hm(r.t), type: r.mode, right: r.right, of: r.n, levels: r.levels })) };
+}
+function summaryText() {
+  const name = PLAYERS[root.player].name, { words, buckets } = stats(), rounds = store.rounds || [];
+  const lines = ["Spelling progress: " + name + ", exported " + ymd(Date.now()),
+    "Rounds: " + rounds.length + ". Words practised: " + words.length + ". Spelled right at least once: " + store.learned.length + " of " + W.length + ". Current start level: " + store.level + ".", ""];
+  [1, 2, 3, 4].forEach(k => lines.push("Right on " + BUCKET_NAMES[k] + " (" + buckets[k].length + "): " + buckets[k].map(x => x.w).join(", ")));
+  lines.push("Not right yet (" + buckets[0].length + "): " + buckets[0].map(x => x.w + " (" + x.attempts + " tries)").join(", "), "", "By level:");
+  [1, 2, 3, 4, 5, 6, 7, 0].forEach(l => {
+    const d = words.filter(x => x.e.level === l); if (!d.length) return;
+    lines.push("  " + (l ? "Level " + l : "Apostrophes") + ": " + d.length + " practised, " + d.filter(x => x.first === 1).length + " right on 1st try, " + d.filter(x => x.first === null).length + " not right yet");
+  });
+  if (rounds.length) { lines.push("", "Last rounds:"); rounds.slice(-8).forEach(r => lines.push("  " + ymd(r.t) + " " + (r.mode === "apos" ? "apostrophes" : "levels " + Math.min(...r.levels) + "-" + Math.max(...r.levels)) + ": " + r.right + "/" + r.n)); }
+  return lines.join("\n");
+}
+const exportName = () => "spelling-" + root.player + "-" + ymd(Date.now()) + ".json";
+function toast(msg) { $("exportToast").textContent = msg; $("exportToast").hidden = false; }
+function downloadExport() {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(exportData(), null, 1)], { type: "application/json" }));
+  const a = document.createElement("a"); a.href = url; a.download = exportName(); document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  toast("Saved " + exportName() + ".");
+}
+$("shareBtn").onclick = async () => {
+  const text = summaryText();
+  const file = new File([JSON.stringify(exportData(), null, 1)], exportName(), { type: "application/json" });
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: "Spelling progress", text }); return; }
+    if (navigator.share) { await navigator.share({ title: "Spelling progress", text }); return; }
+  } catch (e) { if (e && e.name === "AbortError") return; }
+  downloadExport();
+};
+$("downloadBtn").onclick = downloadExport;
+$("copyBtn").onclick = () => {
+  const text = summaryText();
+  const fallback = () => { const t = $("exportText"); t.focus(); t.select(); toast("Summary selected below. Copy it from there."); };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(() => toast("Summary copied."), fallback); else fallback();
+};
+$("parentBtn").onclick = renderParent;
+$("parentBackBtn").onclick = renderStart;
+$("pJuna").onclick = () => { if (root.player !== "juna") switchPlayer("juna", renderParent); };
+$("pArtus").onclick = () => { if (root.player !== "artus") switchPlayer("artus", renderParent); };
 
 updateProgress();
 renderStart();
