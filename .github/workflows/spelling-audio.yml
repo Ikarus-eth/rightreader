@@ -13,6 +13,7 @@ on:
     paths: [spelling/audio-request.json]
 permissions:
   contents: write
+  pages: write
 concurrency:
   group: spelling-audio
   cancel-in-progress: false
@@ -46,3 +47,8 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "Spelling audio: ${{ steps.req.outputs.mode }} ${{ steps.req.outputs.voice }}"
           git push origin HEAD:main
+      - name: Publish the site again
+        # Pushes made with the workflow token don't start a Pages build on their own.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages build request failed; the next normal push will publish."
