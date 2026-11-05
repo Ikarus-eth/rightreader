@@ -24,10 +24,10 @@ Promise.all([
   fetch("audio/fix-report.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)
 ]).then(([m,rep,fix])=>{
   const info=rep?Object.fromEntries(rep.words.map(x=>[x.word,x])):{};
-  const list=fix&&fix.changed.length?fix.changed:rep?rep.uncertain:FALLBACK;
-  if(fix&&fix.changed.length){document.querySelector("h1").textContent="Check the "+fix.changed.length+" re-recorded words";}
+  const list=fix&&fix.review?fix.review:fix&&fix.changed.length?fix.changed:rep?rep.uncertain:FALLBACK;
+  if(fix&&fix.review){document.querySelector("h1").textContent="Check "+fix.review.length+" words";}
   document.getElementById("intro").textContent=fix&&fix.changed.length
-    ?"These words were re-recorded. Play each one, then reply in the chat with the numbers that still sound wrong."
+    ?"1 to 6 are the words you reported, now re-recorded. 7 to 11 are words the computer still isn't sure about. Reply in the chat with the numbers that sound wrong."
     :rep
     ?"A speech recogniser listened to all 312 clips. These are the 20 it was least sure about. Play each word and its sentence, then reply in the chat with the numbers that sound wrong or unclear."
     :"Play each word and its sentence. Reply in the chat with the numbers that sound wrong or unclear.";
