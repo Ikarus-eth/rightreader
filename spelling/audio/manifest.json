@@ -800,6 +800,134 @@
   "correspond": {
    "word": "audio/af_heart/correspond.mp3",
    "sentence": "audio/af_heart/correspond-sentence.mp3"
+  },
+  "don't": {
+   "word": "audio/af_heart/don-t.mp3",
+   "sentence": "audio/af_heart/don-t-sentence.mp3"
+  },
+  "can't": {
+   "word": "audio/af_heart/can-t.mp3",
+   "sentence": "audio/af_heart/can-t-sentence.mp3"
+  },
+  "won't": {
+   "word": "audio/af_heart/won-t.mp3",
+   "sentence": "audio/af_heart/won-t-sentence.mp3"
+  },
+  "isn't": {
+   "word": "audio/af_heart/isn-t.mp3",
+   "sentence": "audio/af_heart/isn-t-sentence.mp3"
+  },
+  "didn't": {
+   "word": "audio/af_heart/didn-t.mp3",
+   "sentence": "audio/af_heart/didn-t-sentence.mp3"
+  },
+  "doesn't": {
+   "word": "audio/af_heart/doesn-t.mp3",
+   "sentence": "audio/af_heart/doesn-t-sentence.mp3"
+  },
+  "aren't": {
+   "word": "audio/af_heart/aren-t.mp3",
+   "sentence": "audio/af_heart/aren-t-sentence.mp3"
+  },
+  "haven't": {
+   "word": "audio/af_heart/haven-t.mp3",
+   "sentence": "audio/af_heart/haven-t-sentence.mp3"
+  },
+  "shouldn't": {
+   "word": "audio/af_heart/shouldn-t.mp3",
+   "sentence": "audio/af_heart/shouldn-t-sentence.mp3"
+  },
+  "couldn't": {
+   "word": "audio/af_heart/couldn-t.mp3",
+   "sentence": "audio/af_heart/couldn-t-sentence.mp3"
+  },
+  "wouldn't": {
+   "word": "audio/af_heart/wouldn-t.mp3",
+   "sentence": "audio/af_heart/wouldn-t-sentence.mp3"
+  },
+  "I'm": {
+   "word": "audio/af_heart/i-m.mp3",
+   "sentence": "audio/af_heart/i-m-sentence.mp3"
+  },
+  "I'll": {
+   "word": "audio/af_heart/i-ll.mp3",
+   "sentence": "audio/af_heart/i-ll-sentence.mp3"
+  },
+  "I'd": {
+   "word": "audio/af_heart/i-d.mp3",
+   "sentence": "audio/af_heart/i-d-sentence.mp3"
+  },
+  "you're": {
+   "word": "audio/af_heart/you-re.mp3",
+   "sentence": "audio/af_heart/you-re-sentence.mp3"
+  },
+  "they're": {
+   "word": "audio/af_heart/they-re.mp3",
+   "sentence": "audio/af_heart/they-re-sentence.mp3"
+  },
+  "we've": {
+   "word": "audio/af_heart/we-ve.mp3",
+   "sentence": "audio/af_heart/we-ve-sentence.mp3"
+  },
+  "let's": {
+   "word": "audio/af_heart/let-s.mp3",
+   "sentence": "audio/af_heart/let-s-sentence.mp3"
+  },
+  "who's": {
+   "word": "audio/af_heart/who-s.mp3",
+   "sentence": "audio/af_heart/who-s-sentence.mp3"
+  },
+  "it's": {
+   "word": "audio/af_heart/it-s.mp3",
+   "sentence": "audio/af_heart/it-s-sentence.mp3"
+  },
+  "there's": {
+   "word": "audio/af_heart/there-s.mp3",
+   "sentence": "audio/af_heart/there-s-sentence.mp3"
+  },
+  "o'clock": {
+   "word": "audio/af_heart/o-clock.mp3",
+   "sentence": "audio/af_heart/o-clock-sentence.mp3"
+  },
+  "its": {
+   "word": "audio/af_heart/its.mp3",
+   "sentence": "audio/af_heart/its-sentence.mp3"
+  },
+  "your": {
+   "word": "audio/af_heart/your.mp3",
+   "sentence": "audio/af_heart/your-sentence.mp3"
+  },
+  "their": {
+   "word": "audio/af_heart/their.mp3",
+   "sentence": "audio/af_heart/their-sentence.mp3"
+  },
+  "whose": {
+   "word": "audio/af_heart/whose.mp3",
+   "sentence": "audio/af_heart/whose-sentence.mp3"
+  },
+  "the dog's bone": {
+   "word": "audio/af_heart/the-dog-s-bone.mp3",
+   "sentence": "audio/af_heart/the-dog-s-bone-sentence.mp3"
+  },
+  "Dad's phone": {
+   "word": "audio/af_heart/dad-s-phone.mp3",
+   "sentence": "audio/af_heart/dad-s-phone-sentence.mp3"
+  },
+  "the children's toys": {
+   "word": "audio/af_heart/the-children-s-toys.mp3",
+   "sentence": "audio/af_heart/the-children-s-toys-sentence.mp3"
+  },
+  "the boys' room": {
+   "word": "audio/af_heart/the-boys-room.mp3",
+   "sentence": "audio/af_heart/the-boys-room-sentence.mp3"
+  },
+  "the teachers' room": {
+   "word": "audio/af_heart/the-teachers-room.mp3",
+   "sentence": "audio/af_heart/the-teachers-room-sentence.mp3"
+  },
+  "the women's team": {
+   "word": "audio/af_heart/the-women-s-team.mp3",
+   "sentence": "audio/af_heart/the-women-s-team-sentence.mp3"
   }
  }
 }
