@@ -176,7 +176,7 @@ button:disabled { opacity: .35; cursor: default; }
 
 /* parent view */
 .ptop { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
-.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 @media (max-width: 560px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
 .tile { background: var(--paper); border: 2px solid var(--btn-line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; }
 .tile b { font-size: 1.6rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
@@ -309,6 +309,9 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
         </div>
       </div>
       <div class="tiles" id="pTiles"></div>
+      <p class="ph">Practice time</p>
+      <p class="note">Only active time counts: a pause of more than 90 seconds without a tap, or the app in the background, is left out.</p>
+      <div class="tablewrap"><table class="ptable" id="pTime"></table></div>
       <p class="ph">Right on which try?</p>
       <p class="note">Each word counts once, by the round in which it was first spelled right. Tap a row to see the words.</p>
       <div class="bars" id="pBars"></div>
@@ -703,13 +706,13 @@ function ensureHist(s) {
   return s;
 }
 function profile(p) {
-  return ensureHist(Object.assign({ learned: [], missed: {}, accent: "us", level: PLAYERS[p].level, mode: "levels", batch: null, last: null, suggest: null, hist: null, rounds: [] }, root.profiles[p] || {}));
+  return ensureHist(Object.assign({ learned: [], missed: {}, accent: "us", level: PLAYERS[p].level, mode: "levels", batch: null, last: null, suggest: null, hist: null, rounds: [], time: {} }, root.profiles[p] || {}));
 }
 if (!PLAYERS[root.player]) root.player = "juna";
 let store = root.profiles[root.player] = profile(root.player);
 function save() { root.profiles[root.player] = store; try { localStorage.setItem(KEY, JSON.stringify(root)); } catch (e) {} }
 const size = () => (store.batch && store.batch.size) || PLAYERS[root.player].size;
-function switchPlayer(p, then) { stopAll(); save(); root.player = p; store = root.profiles[p] = profile(p); save(); updateProgress(); resetUI(); (then || renderStart)(); }
+function switchPlayer(p, then) { stopAll(); lastAct = 0; save(); root.player = p; store = root.profiles[p] = profile(p); save(); updateProgress(); resetUI(); (then || renderStart)(); }
 const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
 /* ---------- voice: recorded clips if published, otherwise the browser voice ---------- */
@@ -798,7 +801,9 @@ function renderStart() {
   $("startBtn").textContent = b ? "Start a new " + n : "Start " + n + " words";
   $("suggestLine").hidden = !store.suggest || apos;
   if (store.suggest) $("suggestLine").textContent = "Suggested start for this round: level " + store.suggest + ".";
-  $("lastLine").textContent = store.last ? "Last round: " + store.last.right + " of " + store.last.total + " right." : "";
+  const todaySecs = (store.time || {})[ymd(Date.now())] || 0;
+  $("lastLine").textContent = (store.last ? "Last round: " + store.last.right + " of " + store.last.total + " right. " : "") +
+    (todaySecs >= 60 ? "Practised today: " + fmtDur(todaySecs) + "." : "");
   show(store.learned.length >= W.length ? "vDone" : "vStart");
 }
 
@@ -936,7 +941,7 @@ setAccent(store.accent);
 function resetUI() { $("resetArea").innerHTML = '<button class="link" id="resetBtn">Start over</button>'; $("resetBtn").onclick = askReset; }
 function askReset() {
   $("resetArea").innerHTML = '<span>Forget all of ' + PLAYERS[root.player].name + '’s learned words?</span><button class="chip" id="yesReset">Yes, start over</button><button class="chip" id="noReset">Cancel</button>';
-  $("yesReset").onclick = () => { stopAll(); store = Object.assign(store, { learned: [], missed: {}, batch: null, last: null, suggest: null, level: PLAYERS[root.player].level, mode: "levels", hist: {}, rounds: [] }); save(); updateProgress(); resetUI(); renderStart(); };
+  $("yesReset").onclick = () => { stopAll(); store = Object.assign(store, { learned: [], missed: {}, batch: null, last: null, suggest: null, level: PLAYERS[root.player].level, mode: "levels", hist: {}, rounds: [], time: {} }); save(); updateProgress(); resetUI(); renderStart(); };
   $("noReset").onclick = resetUI;
 }
 $("resetBtn").onclick = askReset;
@@ -963,8 +968,16 @@ function renderParent() {
   $("pTitle").textContent = "Parent view · " + name;
   $("pJuna").setAttribute("aria-pressed", root.player === "juna"); $("pArtus").setAttribute("aria-pressed", root.player === "artus");
   const firstPct = words.length ? Math.round(buckets[1].length / words.length * 100) : 0;
-  $("pTiles").innerHTML = [[rounds.length, "rounds"], [words.length, "words practised"], [store.learned.length, "words spelled right"], [firstPct + "%", "right on the 1st try"]]
+  const tm = store.time || {}, today = tm[ymd(Date.now())] || 0, total = Object.values(tm).reduce((a, b) => a + b, 0);
+  $("pTiles").innerHTML = [[fmtDur(today), "practised today"], [fmtDur(total), "practised in total"], [rounds.length, "rounds"],
+    [words.length, "words practised"], [store.learned.length, "words spelled right"], [firstPct + "%", "right on the 1st try"]]
     .map(([v, l]) => '<div class="tile"><b>' + v + "</b><span>" + l + "</span></div>").join("");
+  const days = Object.keys(tm).filter(d => tm[d] >= 30).sort().reverse().slice(0, 14);
+  $("pTime").innerHTML = days.length ? '<tr><th>Day</th><th class="num">Active time</th><th class="num">Rounds</th><th class="num">Right</th></tr>' +
+    days.map(d => { const rs = rounds.filter(r => ymd(r.t) === d);
+      return "<tr><td>" + fmtDay(d) + '</td><td class="num">' + fmtDur(tm[d]) + '</td><td class="num">' + rs.length + '</td><td class="num">' + (rs.length ? rs.reduce((a, r) => a + r.right, 0) + " / " + rs.reduce((a, r) => a + r.n, 0) : "–") + "</td></tr>"; }).join("") +
+    '<tr><td><b>Total</b></td><td class="num"><b>' + fmtDur(total) + '</b></td><td class="num">' + rounds.length + '</td><td></td></tr>'
+    : '<tr><td>No practice time recorded yet.</td></tr>';
   const max = Math.max(1, ...Object.values(buckets).map(b => b.length));
   $("pBars").innerHTML = words.length ? [1, 2, 3, 4, 0].map(k => {
     const list = buckets[k].slice().sort((a, b) => a.e.level - b.e.level || a.w.localeCompare(b.w));
@@ -997,6 +1010,8 @@ function exportData() {
   const { words } = stats();
   return { app: "spelling practice", child: PLAYERS[root.player].name, exported: new Date().toISOString(),
     currentLevel: store.level, roundSize: PLAYERS[root.player].size,
+    activeMinutesPerDay: Object.fromEntries(Object.entries(store.time || {}).sort().map(([d, s]) => [d, Math.round(s / 6) / 10])),
+    activeMinutesTotal: Math.round(Object.values(store.time || {}).reduce((a, b) => a + b, 0) / 6) / 10,
     words: Object.fromEntries(words.map(x => [x.w, { level: x.e.level || "apostrophes", mixedIntoLevel: x.e.mix || undefined, firstRightOnTry: x.first,
       tries: x.hist.map(h => ({ date: h[0] ? ymd(h[0]) : null, result: h[1] === 1 ? "right" : h[1] === 2 ? "skipped" : "wrong" })) }])),
     rounds: (store.rounds || []).map(r => ({ date: ymd(r.t) + " " + hm(r.t), type: r.mode, right: r.right, of: r.n, levels: r.levels })) };
@@ -1004,6 +1019,9 @@ function exportData() {
 function summaryText() {
   const name = PLAYERS[root.player].name, { words, buckets } = stats(), rounds = store.rounds || [];
   const lines = ["Spelling progress: " + name + ", exported " + ymd(Date.now()),
+    "Active practice time: today " + fmtDur((store.time || {})[ymd(Date.now())] || 0) + ", total " + fmtDur(Object.values(store.time || {}).reduce((a, b) => a + b, 0)) +
+      " (" + ((n) => n + (n === 1 ? " day" : " days"))(Object.keys(store.time || {}).filter(d => store.time[d] >= 30).length) + "). Per day: " +
+      Object.entries(store.time || {}).filter(([, s]) => s >= 30).sort().slice(-14).map(([d, s]) => d + " " + fmtDur(s)).join(", ") + ".",
     "Rounds: " + rounds.length + ". Words practised: " + words.length + ". Spelled right at least once: " + store.learned.length + " of " + W.length + ". Current start level: " + store.level + ".", ""];
   [1, 2, 3, 4].forEach(k => lines.push("Right on " + BUCKET_NAMES[k] + " (" + buckets[k].length + "): " + buckets[k].map(x => x.w).join(", ")));
   lines.push("Not right yet (" + buckets[0].length + "): " + buckets[0].map(x => x.w + " (" + x.attempts + " tries)").join(", "), "", "By level:");
@@ -1041,6 +1059,31 @@ $("parentBtn").onclick = renderParent;
 $("parentBackBtn").onclick = renderStart;
 $("pJuna").onclick = () => { if (root.player !== "juna") switchPlayer("juna", renderParent); };
 $("pArtus").onclick = () => { if (root.player !== "artus") switchPlayer("artus", renderParent); };
+
+/* ---------- active practice time ----------
+   Each tap or key press (and each finished audio clip) adds the time since the previous one,
+   but only if that gap was at most 90 seconds — long enough to write a word down. Longer gaps,
+   time with the app in the background and time in the parent view count as nothing. */
+const IDLE_MS = 90000;
+let lastAct = 0;
+function fmtDur(s) { const m = Math.round(s / 60); return m < 1 ? (s > 0 ? "under 1 min" : "0 min") : m < 60 ? m + " min" : Math.floor(m / 60) + " h " + pad2(m % 60) + " min"; }
+function fmtDay(d) { const [y, mo, da] = d.split("-").map(Number); return new Date(y, mo - 1, da).toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" }); }
+function activity() {
+  const view = VIEWS.find(v => !$(v).hidden);
+  if (document.hidden || view === "vParent") { lastAct = 0; return; }
+  const now = Date.now();
+  if (lastAct && now - lastAct <= IDLE_MS) {
+    const d = ymd(now);
+    store.time = store.time || {};
+    store.time[d] = (store.time[d] || 0) + (now - lastAct) / 1000;
+    save();
+  }
+  lastAct = now;
+}
+["pointerdown", "keydown"].forEach(e => document.addEventListener(e, activity, true));
+player.addEventListener("ended", activity);
+document.addEventListener("visibilitychange", () => { lastAct = 0; });
+window.addEventListener("pagehide", () => { lastAct = 0; });
 
 updateProgress();
 renderStart();
