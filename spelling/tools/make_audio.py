@@ -9,7 +9,7 @@
 Files that already exist are skipped, so a rerun never pays twice.
 Needs FAL_KEY in the environment and ffmpeg on PATH.
 """
-import json, os, re, subprocess, sys, tempfile, time, urllib.request
+import json, os, re, subprocess, sys, tempfile, time, urllib.request, urllib.error
 from concurrent.futures import ThreadPoolExecutor
 import threading
 LOCK = threading.Lock()
@@ -44,6 +44,11 @@ def tts(text, voice, dest, spent, speed=1, single=False):
             with urllib.request.urlopen(req, timeout=120) as r:
                 url = json.load(r)["audio"]["url"]
             break
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode(errors="replace")[:300]
+            if e.code in (401, 403) or attempt == 2:
+                raise SystemExit(f"fal.ai refused the request ({e.code}): {detail}")
+            print("retry", text[:30], e.code, detail); time.sleep(4)
         except Exception as e:
             if attempt == 2:
                 raise
@@ -68,23 +73,32 @@ def main():
             tts(SAMPLE_TEXT, v, ROOT / "audio" / "samples" / f"{v}.mp3", spent)
     elif mode in ("all", "words"):
         voice = sys.argv[2]
-        if mode == "words":  # re-record every single-word clip, keep the sentences
-            for w in words():   # old clips cut off final sounds; new ones get new names so iPads don't replay cached copies
-                (ROOT / "audio" / voice / f"{slug(w['word'])}.mp3").unlink(missing_ok=True)
-        manifest = {"voice": voice, "words": {}}
+        d = ROOT / "audio" / voice
         jobs = []
         for w in words():
             s = slug(w["word"])
-            jobs.append((w["word"], ROOT / "audio" / voice / f"{s}-word.mp3", True))
+            jobs.append((w["word"], d / f"{s}-word.mp3", True))
             if mode == "all":
-                jobs.append((w["sentence"], ROOT / "audio" / voice / f"{s}-sentence.mp3", False))
-            manifest["words"][w["word"]] = {"word": f"audio/{voice}/{s}-word.mp3",
-                                            "sentence": f"audio/{voice}/{s}-sentence.mp3"}
-        with ThreadPoolExecutor(6) as ex:
-            list(ex.map(lambda j: tts(j[0], voice, j[1], spent, 0.9 if j[2] else 1, j[2]), jobs))
-        missing = [str(d) for _, d, _ in jobs if not d.exists()]
-        assert not missing, missing
-        (ROOT / "audio" / "manifest.json").write_text(json.dumps(manifest, indent=1))
+                jobs.append((w["sentence"], d / f"{s}-sentence.mp3", False))
+        try:
+            with ThreadPoolExecutor(6) as ex:
+                list(ex.map(lambda j: tts(j[0], voice, j[1], spent, 0.85 if j[2] else 1, j[2]), jobs))
+        finally:
+            # Point each word at its new clip if it exists, otherwise keep the old one,
+            # so a run that stops partway never leaves the app with missing files.
+            manifest = {"voice": voice, "words": {}}
+            done = 0
+            for w in words():
+                s = slug(w["word"])
+                new, old = d / f"{s}-word.mp3", d / f"{s}.mp3"
+                if new.exists():
+                    done += 1
+                    old.unlink(missing_ok=True)
+                word = new if new.exists() else old
+                manifest["words"][w["word"]] = {"word": f"audio/{voice}/{word.name}",
+                                                "sentence": f"audio/{voice}/{s}-sentence.mp3"}
+            (ROOT / "audio" / "manifest.json").write_text(json.dumps(manifest, indent=1))
+            print(f"new word clips: {done} of {len(manifest['words'])}")
     print(f"characters billed this run: {spent[0]} (about ${spent[0] * 0.00002:.3f})")
 
 if __name__ == "__main__":

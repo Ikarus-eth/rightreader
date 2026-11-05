@@ -40,6 +40,7 @@ jobs:
           test -n "$FAL_KEY" || { echo "Add the FAL_KEY repository secret first."; exit 1; }
           python3 spelling/tools/make_audio.py "${{ steps.req.outputs.mode }}" "${{ steps.req.outputs.voice }}"
       - name: Commit audio
+        if: always()   # keep whatever was recorded even if fal.ai stops partway
         run: |
           git config user.name "Spelling audio"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
