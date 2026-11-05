@@ -10,7 +10,7 @@
    "sentence": "audio/af_heart/was-sentence.mp3"
   },
   "they": {
-   "word": "audio/af_heart/they-word.mp3",
+   "word": "audio/af_heart/they-w2.mp3",
    "sentence": "audio/af_heart/they-sentence.mp3"
   },
   "have": {
@@ -30,7 +30,7 @@
    "sentence": "audio/af_heart/one-sentence.mp3"
   },
   "two": {
-   "word": "audio/af_heart/two-word.mp3",
+   "word": "audio/af_heart/two-w2.mp3",
    "sentence": "audio/af_heart/two-sentence.mp3"
   },
   "what": {
@@ -50,7 +50,7 @@
    "sentence": "audio/af_heart/here-sentence.mp3"
   },
   "she": {
-   "word": "audio/af_heart/she-word.mp3",
+   "word": "audio/af_heart/she-w2.mp3",
    "sentence": "audio/af_heart/she-sentence.mp3"
   },
   "like": {
@@ -62,7 +62,7 @@
    "sentence": "audio/af_heart/little-sentence.mp3"
   },
   "look": {
-   "word": "audio/af_heart/look-word.mp3",
+   "word": "audio/af_heart/look-w2.mp3",
    "sentence": "audio/af_heart/look-sentence.mp3"
   },
   "play": {
@@ -94,7 +94,7 @@
    "sentence": "audio/af_heart/going-sentence.mp3"
   },
   "are": {
-   "word": "audio/af_heart/are-word.mp3",
+   "word": "audio/af_heart/are-w2.mp3",
    "sentence": "audio/af_heart/are-sentence.mp3"
   },
   "were": {
@@ -110,7 +110,7 @@
    "sentence": "audio/af_heart/do-sentence.mp3"
   },
   "who": {
-   "word": "audio/af_heart/who-word.mp3",
+   "word": "audio/af_heart/who-w2.mp3",
    "sentence": "audio/af_heart/who-sentence.mp3"
   },
   "call": {
@@ -126,7 +126,7 @@
    "sentence": "audio/af_heart/jump-sentence.mp3"
   },
   "yellow": {
-   "word": "audio/af_heart/yellow-word.mp3",
+   "word": "audio/af_heart/yellow-w2.mp3",
    "sentence": "audio/af_heart/yellow-sentence.mp3"
   },
   "blue": {
@@ -150,7 +150,7 @@
    "sentence": "audio/af_heart/water-sentence.mp3"
   },
   "eat": {
-   "word": "audio/af_heart/eat-word.mp3",
+   "word": "audio/af_heart/eat-w2.mp3",
    "sentence": "audio/af_heart/eat-sentence.mp3"
   },
   "sleep": {
@@ -178,7 +178,7 @@
    "sentence": "audio/af_heart/any-sentence.mp3"
   },
   "many": {
-   "word": "audio/af_heart/many-word.mp3",
+   "word": "audio/af_heart/many-w2.mp3",
    "sentence": "audio/af_heart/many-sentence.mp3"
   },
   "could": {
@@ -190,7 +190,7 @@
    "sentence": "audio/af_heart/would-sentence.mp3"
   },
   "should": {
-   "word": "audio/af_heart/should-word.mp3",
+   "word": "audio/af_heart/should-w2.mp3",
    "sentence": "audio/af_heart/should-sentence.mp3"
   },
   "every": {
@@ -210,7 +210,7 @@
    "sentence": "audio/af_heart/girl-sentence.mp3"
   },
   "know": {
-   "word": "audio/af_heart/know-word.mp3",
+   "word": "audio/af_heart/know-w2.mp3",
    "sentence": "audio/af_heart/know-sentence.mp3"
   },
   "light": {
@@ -242,7 +242,7 @@
    "sentence": "audio/af_heart/brother-sentence.mp3"
   },
   "sister": {
-   "word": "audio/af_heart/sister-word.mp3",
+   "word": "audio/af_heart/sister-w2.mp3",
    "sentence": "audio/af_heart/sister-sentence.mp3"
   },
   "open": {
@@ -250,7 +250,7 @@
    "sentence": "audio/af_heart/open-sentence.mp3"
   },
   "other": {
-   "word": "audio/af_heart/other-word.mp3",
+   "word": "audio/af_heart/other-w2.mp3",
    "sentence": "audio/af_heart/other-sentence.mp3"
   },
   "pretty": {
@@ -266,7 +266,7 @@
    "sentence": "audio/af_heart/small-sentence.mp3"
   },
   "thank": {
-   "word": "audio/af_heart/thank-word.mp3",
+   "word": "audio/af_heart/thank-w2.mp3",
    "sentence": "audio/af_heart/thank-sentence.mp3"
   },
   "think": {
@@ -314,7 +314,7 @@
    "sentence": "audio/af_heart/once-sentence.mp3"
   },
   "eye": {
-   "word": "audio/af_heart/eye-word.mp3",
+   "word": "audio/af_heart/eye-w2.mp3",
    "sentence": "audio/af_heart/eye-sentence.mp3"
   },
   "door": {
@@ -370,7 +370,7 @@
    "sentence": "audio/af_heart/guess-sentence.mp3"
   },
   "choose": {
-   "word": "audio/af_heart/choose-word.mp3",
+   "word": "audio/af_heart/choose-w2.mp3",
    "sentence": "audio/af_heart/choose-sentence.mp3"
   },
   "climb": {
@@ -430,7 +430,7 @@
    "sentence": "audio/af_heart/brought-sentence.mp3"
   },
   "heard": {
-   "word": "audio/af_heart/heard-word.mp3",
+   "word": "audio/af_heart/heard-w2.mp3",
    "sentence": "audio/af_heart/heard-sentence.mp3"
   },
   "really": {
@@ -466,7 +466,7 @@
    "sentence": "audio/af_heart/busy-sentence.mp3"
   },
   "whole": {
-   "word": "audio/af_heart/whole-word.mp3",
+   "word": "audio/af_heart/whole-w2.mp3",
    "sentence": "audio/af_heart/whole-sentence.mp3"
   },
   "world": {
@@ -510,7 +510,7 @@
    "sentence": "audio/af_heart/quarter-sentence.mp3"
   },
   "believe": {
-   "word": "audio/af_heart/believe-word.mp3",
+   "word": "audio/af_heart/believe-w2.mp3",
    "sentence": "audio/af_heart/believe-sentence.mp3"
   },
   "complete": {
@@ -570,7 +570,7 @@
    "sentence": "audio/af_heart/position-sentence.mp3"
   },
   "possible": {
-   "word": "audio/af_heart/possible-word.mp3",
+   "word": "audio/af_heart/possible-w2.mp3",
    "sentence": "audio/af_heart/possible-sentence.mp3"
   },
   "potatoes": {
@@ -610,7 +610,7 @@
    "sentence": "audio/af_heart/sign-sentence.mp3"
   },
   "half": {
-   "word": "audio/af_heart/half-word.mp3",
+   "word": "audio/af_heart/half-w2.mp3",
    "sentence": "audio/af_heart/half-sentence.mp3"
   },
   "thousand": {
@@ -782,7 +782,7 @@
    "sentence": "audio/af_heart/tongue-sentence.mp3"
   },
   "juice": {
-   "word": "audio/af_heart/juice-word.mp3",
+   "word": "audio/af_heart/juice-w2.mp3",
    "sentence": "audio/af_heart/juice-sentence.mp3"
   },
   "lightning": {
@@ -842,7 +842,7 @@
    "sentence": "audio/af_heart/especially-sentence.mp3"
   },
   "foreign": {
-   "word": "audio/af_heart/foreign-word.mp3",
+   "word": "audio/af_heart/foreign-w2.mp3",
    "sentence": "audio/af_heart/foreign-sentence.mp3"
   },
   "achieve": {
@@ -978,7 +978,7 @@
    "sentence": "audio/af_heart/accommodate-sentence.mp3"
   },
   "rhinoceros": {
-   "word": "audio/af_heart/rhinoceros-word.mp3",
+   "word": "audio/af_heart/rhinoceros-w2.mp3",
    "sentence": "audio/af_heart/rhinoceros-sentence.mp3"
   },
   "apparent": {
@@ -1022,7 +1022,7 @@
    "sentence": "audio/af_heart/desperate-sentence.mp3"
   },
   "disastrous": {
-   "word": "audio/af_heart/disastrous-word.mp3",
+   "word": "audio/af_heart/disastrous-w2.mp3",
    "sentence": "audio/af_heart/disastrous-sentence.mp3"
   },
   "embarrass": {
@@ -1058,7 +1058,7 @@
    "sentence": "audio/af_heart/mischievous-sentence.mp3"
   },
   "nuisance": {
-   "word": "audio/af_heart/nuisance-word.mp3",
+   "word": "audio/af_heart/nuisance-w2.mp3",
    "sentence": "audio/af_heart/nuisance-sentence.mp3"
   },
   "occasionally": {
@@ -1066,7 +1066,7 @@
    "sentence": "audio/af_heart/occasionally-sentence.mp3"
   },
   "occur": {
-   "word": "audio/af_heart/occur-word.mp3",
+   "word": "audio/af_heart/occur-w2.mp3",
    "sentence": "audio/af_heart/occur-sentence.mp3"
   },
   "opportunity": {
@@ -1194,7 +1194,7 @@
    "sentence": "audio/af_heart/let-s-sentence.mp3"
   },
   "who's": {
-   "word": "audio/af_heart/who-s-word.mp3",
+   "word": "audio/af_heart/who-s-w2.mp3",
    "sentence": "audio/af_heart/who-s-sentence.mp3"
   },
   "it's": {
@@ -1222,7 +1222,7 @@
    "sentence": "audio/af_heart/their-sentence.mp3"
   },
   "whose": {
-   "word": "audio/af_heart/whose-word.mp3",
+   "word": "audio/af_heart/whose-w2.mp3",
    "sentence": "audio/af_heart/whose-sentence.mp3"
   },
   "the dog's bone": {

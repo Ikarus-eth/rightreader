@@ -1,0 +1,274 @@
+{
+ "changed": [
+  "they",
+  "two",
+  "she",
+  "look",
+  "are",
+  "who",
+  "yellow",
+  "eat",
+  "many",
+  "should",
+  "know",
+  "sister",
+  "other",
+  "thank",
+  "eye",
+  "choose",
+  "heard",
+  "whole",
+  "believe",
+  "possible",
+  "half",
+  "juice",
+  "foreign",
+  "rhinoceros",
+  "disastrous",
+  "nuisance",
+  "occur",
+  "who's",
+  "whose"
+ ],
+ "broken_not_fixed": [],
+ "details": [
+  {
+   "word": "they",
+   "before": "There you go.",
+   "after": "They.",
+   "after_ok": true,
+   "reported_broken": true
+  },
+  {
+   "word": "two",
+   "before": "It's you.",
+   "after": "Two.",
+   "after_ok": true,
+   "reported_broken": true
+  },
+  {
+   "word": "she",
+   "before": "I see.",
+   "after": "She.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "look",
+   "before": "Good luck.",
+   "after": "Look.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "are",
+   "before": "Hello.",
+   "after": "are.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "who",
+   "before": "Hill.",
+   "after": "Who?",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "yellow",
+   "before": "You tell her.",
+   "after": "Yellow.",
+   "after_ok": true,
+   "reported_broken": true
+  },
+  {
+   "word": "eat",
+   "before": "I eat.",
+   "after": "eat.",
+   "after_ok": true,
+   "reported_broken": true
+  },
+  {
+   "word": "many",
+   "before": "money.",
+   "after": "Many.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "should",
+   "before": "He said.",
+   "after": "Should.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "know",
+   "before": "now.",
+   "after": "No.",
+   "after_ok": true,
+   "reported_broken": true
+  },
+  {
+   "word": "sister",
+   "before": "his sister.",
+   "after": "Sister.",
+   "after_ok": true,
+   "reported_broken": true
+  },
+  {
+   "word": "other",
+   "before": "Another.",
+   "after": "other.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "thank",
+   "before": "Thanks.",
+   "after": "Thank you.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "eye",
+   "before": "And I.",
+   "after": "I.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "choose",
+   "before": "Cheers.",
+   "after": "Choose.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "heard",
+   "before": "It hurt.",
+   "after": "Heard.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "whole",
+   "before": "Hold.",
+   "after": "whole.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "believe",
+   "before": "believes.",
+   "after": "believe.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "possible",
+   "before": "Impossible.",
+   "after": "possible.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "bought",
+   "before": "But...",
+   "after": "But.",
+   "after_ok": false,
+   "reported_broken": false
+  },
+  {
+   "word": "half",
+   "before": "It has.",
+   "after": "Half.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "appear",
+   "before": "up here.",
+   "after": "up here.",
+   "after_ok": false,
+   "reported_broken": false
+  },
+  {
+   "word": "doubt",
+   "before": "out.",
+   "after": "out.",
+   "after_ok": false,
+   "reported_broken": false
+  },
+  {
+   "word": "juice",
+   "before": "Jews.",
+   "after": "juice.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "foreign",
+   "before": "Four in.",
+   "after": "Foreign.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "rhinoceros",
+   "before": "Reynoceros.",
+   "after": "Rhinoceros.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "bruise",
+   "before": "Bruce.",
+   "after": "Bruce.",
+   "after_ok": false,
+   "reported_broken": false
+  },
+  {
+   "word": "disastrous",
+   "before": "Disastress.",
+   "after": "disastrous.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "nuisance",
+   "before": "New sense.",
+   "after": "nuisance.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "occur",
+   "before": "It occurred.",
+   "after": "occur.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "queue",
+   "before": "Thank you.",
+   "after": "Thank you.",
+   "after_ok": false,
+   "reported_broken": false
+  },
+  {
+   "word": "who's",
+   "before": "Who is...",
+   "after": "who's.",
+   "after_ok": true,
+   "reported_broken": false
+  },
+  {
+   "word": "whose",
+   "before": "Who is?",
+   "after": "who's.",
+   "after_ok": true,
+   "reported_broken": false
+  }
+ ]
+}
