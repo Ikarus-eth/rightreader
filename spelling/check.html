@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check Spelling Voice</title>
+<style>
+body{margin:0;padding:20px max(16px,env(safe-area-inset-left));font:18px/1.45 system-ui,-apple-system,sans-serif;background:#eef2fa;color:#1d2742}
+main{max-width:620px;margin:0 auto;display:grid;gap:12px}
+h1{margin:0;font-size:1.5rem} p{margin:0;color:#5a6786}
+.it{background:#fff;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:2em 1fr auto auto;gap:10px;align-items:center}
+.n{font-weight:700;color:#5a6786;text-align:right;font-variant-numeric:tabular-nums}
+.w{font-weight:700;font-size:1.25rem;min-width:0}
+button{font:inherit;font-size:.95rem;font-weight:700;min-height:44px;padding:6px 14px;border-radius:10px;border:2px solid #c5d1e8;background:#eef2fa;color:#1d2742;cursor:pointer}
+.ver{display:block;font-size:.8rem;color:#5a6786;font-weight:400}
+</style></head><body><main>
+<h1>Check 20 words</h1>
+<p>Play each word and its sentence. Reply in the chat with the numbers that sound wrong or unclear.</p>
+<div id="list" style="display:grid;gap:8px"></div>
+</main>
+<script>
+const WORDS=["know","important","definitely","immediately","occasionally","individual","community","other","toward","every","tomorrow","eye","of","who","I'd","its","o'clock","queue","rhythm","the boys' room"];
+const a=new Audio();
+fetch("audio/manifest.json",{cache:"no-store"}).then(r=>r.json()).then(m=>{
+  document.getElementById("list").innerHTML=WORDS.map((w,i)=>{const c=m.words[w];const fresh=c.word.endsWith("-word.mp3");
+    return '<div class="it"><span class="n">'+(i+1)+'.</span><span class="w">'+w+'<span class="ver">'+(fresh?"new":"old")+' recording</span></span><button data-f="'+c.word+'">Word</button><button data-f="'+c.sentence+'">Sentence</button></div>';}).join("");
+  document.querySelectorAll("button[data-f]").forEach(b=>b.onclick=()=>{a.src=b.dataset.f;a.play();});
+});
+</script>
+</body></html>
