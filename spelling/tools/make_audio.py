@@ -30,10 +30,13 @@ def words():
 def slug(w):
     return re.sub(r"[^a-z0-9]+", "-", w.lower()).strip("-")
 
-def tts(text, voice, dest, spent):
+def tts(text, voice, dest, spent, speed=1, single=False):
     if dest.exists():
         return
-    body = json.dumps({"prompt": text, "voice": voice, "speed": 1}).encode()
+    # A lone word without punctuation gets its last sound cut off ("importan"),
+    # so single words are sent with a full stop and read a little slower.
+    prompt = text + "." if single and not text.endswith((".", "!", "?")) else text
+    body = json.dumps({"prompt": prompt, "voice": voice, "speed": speed}).encode()
     req = urllib.request.Request(ENDPOINT, body, {
         "Authorization": "Key " + os.environ["FAL_KEY"], "Content-Type": "application/json"})
     for attempt in range(3):
@@ -46,13 +49,14 @@ def tts(text, voice, dest, spent):
                 raise
             print("retry", text[:30], e); time.sleep(4)
     with LOCK:
-        spent[0] += len(text)
+        spent[0] += len(prompt)
     with tempfile.NamedTemporaryFile(suffix=".wav") as tmp:
         urllib.request.urlretrieve(url, tmp.name)
         dest.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", tmp.name, "-ac", "1",
-                        "-af", "silenceremove=start_periods=1:start_threshold=-50dB,areverse,"
-                               "silenceremove=start_periods=1:start_threshold=-50dB,areverse",
+                        "-af", "silenceremove=start_periods=1:start_threshold=-60dB,areverse,"
+                               "silenceremove=start_periods=1:start_threshold=-60dB,areverse,"
+                               "apad=pad_dur=0.15",
                         "-b:a", "64k", str(dest)], check=True)
     print("ok", dest.relative_to(ROOT))
 
@@ -62,19 +66,23 @@ def main():
     if mode == "samples":
         for v in SAMPLE_VOICES:
             tts(SAMPLE_TEXT, v, ROOT / "audio" / "samples" / f"{v}.mp3", spent)
-    elif mode == "all":
+    elif mode in ("all", "words"):
         voice = sys.argv[2]
+        if mode == "words":  # re-record every single-word clip, keep the sentences
+            for w in words():   # old clips cut off final sounds; new ones get new names so iPads don't replay cached copies
+                (ROOT / "audio" / voice / f"{slug(w['word'])}.mp3").unlink(missing_ok=True)
         manifest = {"voice": voice, "words": {}}
         jobs = []
         for w in words():
             s = slug(w["word"])
-            jobs.append((w["word"], ROOT / "audio" / voice / f"{s}.mp3"))
-            jobs.append((w["sentence"], ROOT / "audio" / voice / f"{s}-sentence.mp3"))
-            manifest["words"][w["word"]] = {"word": f"audio/{voice}/{s}.mp3",
+            jobs.append((w["word"], ROOT / "audio" / voice / f"{s}-word.mp3", True))
+            if mode == "all":
+                jobs.append((w["sentence"], ROOT / "audio" / voice / f"{s}-sentence.mp3", False))
+            manifest["words"][w["word"]] = {"word": f"audio/{voice}/{s}-word.mp3",
                                             "sentence": f"audio/{voice}/{s}-sentence.mp3"}
         with ThreadPoolExecutor(6) as ex:
-            list(ex.map(lambda j: tts(j[0], voice, j[1], spent), jobs))
-        missing = [str(d) for _, d in jobs if not d.exists()]
+            list(ex.map(lambda j: tts(j[0], voice, j[1], spent, 0.9 if j[2] else 1, j[2]), jobs))
+        missing = [str(d) for _, d, _ in jobs if not d.exists()]
         assert not missing, missing
         (ROOT / "audio" / "manifest.json").write_text(json.dumps(manifest, indent=1))
     print(f"characters billed this run: {spent[0]} (about ${spent[0] * 0.00002:.3f})")

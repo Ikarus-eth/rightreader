@@ -43,7 +43,7 @@ jobs:
         run: |
           git config user.name "Spelling audio"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add spelling/audio
+          git add -A spelling/audio
           git diff --cached --quiet && exit 0
           git commit -m "Spelling audio: ${{ steps.req.outputs.mode }} ${{ steps.req.outputs.voice }}"
           git push origin HEAD:main
