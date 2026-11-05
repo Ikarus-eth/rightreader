@@ -24,7 +24,7 @@ def words():
     html = (ROOT / "index.html").read_text()
     raw = re.findall(r'^"([^"\n]*\|[^"\n]*)",?$', html, re.M)
     out = [dict(zip(["level", "word", "meaning", "de", "sentence", "tip"], r.split("|"))) for r in raw]
-    assert len(out) == 200, len(out)
+    assert len(out) >= 200, len(out)
     return out
 
 def slug(w):

@@ -175,6 +175,9 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 .seg { display: inline-flex; border: 2px solid var(--btn-line); border-radius: 99px; overflow: hidden; }
 .seg button { padding: 6px 14px; min-height: 40px; font-weight: 700; font-size: .9rem; }
 .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.modes { justify-self: start; }
+.modes button { min-height: 48px; padding: 8px 20px; font-size: 1rem; }
+.lv0 { --lvc: var(--learn); }
 .link { text-decoration: underline; text-underline-offset: 3px; padding: 8px 4px; font-size: .9rem; color: var(--muted); }
 .confirm { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .warn { background: var(--learn-soft); color: var(--learn); border-radius: 10px; padding: 10px 14px; margin: 0; }
@@ -187,7 +190,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
   <header>
     <div class="top">
       <h1>My Spelling Practice</h1>
-      <div class="count"><b id="nLearned">0</b> of 200 words learned</div>
+      <div class="count"><b id="nLearned">0</b> of <span id="nTotal">232</span> words learned</div>
     </div>
     <div class="bar" aria-hidden="true"><i id="barFill"></i></div>
   </header>
@@ -196,8 +199,13 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
     <!-- START -->
     <section id="vStart">
       <p class="label">Get a pencil and number your paper from 1 to 20.</p>
-      <p class="note">You will hear 20 words. Write each one down, then pick if the next word should be easier, the same or harder. You check them all together at the end.</p>
-      <div>
+      <p class="note" id="introNote">You will hear 20 words. Write each one down, then pick if the next word should be easier, the same or harder. You check them all together at the end.</p>
+      <div class="seg modes" role="group" aria-label="What to practise">
+        <button id="modeLevels" aria-pressed="true">Levels</button>
+        <button id="modeApos" aria-pressed="false">Apostrophes</button>
+      </div>
+      <p class="note" id="aposNote" hidden></p>
+      <div id="levelBlock">
         <p class="next-label" style="margin-bottom:8px">Start with level</p>
         <div class="levels" id="levels"></div>
       </div>
@@ -226,8 +234,9 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
       </div>
       <p class="note" id="skipNote" hidden style="text-align:center">That's fine. Draw a line next to this number and keep going.</p>
       <div id="nextArea">
-        <p class="next-label">Written it down? Next word:</p>
-        <div class="row" style="margin-top:14px">
+        <p class="next-label" id="nextLabel">Written it down? Next word:</p>
+        <button class="btn primary" id="nextOneBtn" hidden style="margin-top:14px;width:100%">Next word</button>
+        <div class="row" id="levelRow" style="margin-top:14px">
           <button class="btn" id="easierBtn">Easier</button>
           <button class="btn primary" id="sameBtn">Same</button>
           <button class="btn" id="harderBtn">Harder</button>
@@ -258,7 +267,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 
     <!-- DONE -->
     <section id="vDone" hidden>
-      <p class="pen" style="color:var(--good);font-size:2.2rem">All 200 words learned!</p>
+      <p class="pen" style="color:var(--good);font-size:2.2rem">All words learned!</p>
       <p class="note">You are ready for the test. Tap “Start over” below to practise all the words again.</p>
     </section>
   </main>
@@ -278,7 +287,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
 </div>
 
 <script>
-/* level|word|meaning|German|sentence|tip — 5 levels x 40 words, about grade 3 up to grade 6+ */
+/* level|word|meaning|German|sentence|tip — 5 levels x 40 words (about grade 3 up to grade 6+), then level A = apostrophe chapter */
 const RAW = [
 "1|answer|what you say or write back to a question|die Antwort|I knew the answer to every question.|Silent w: a-n-s-w-e-r.",
 "1|because|for the reason that|weil|I stayed home because I was sick.|Big Elephants Can Always Understand Small Elephants.",
@@ -479,16 +488,49 @@ const RAW = [
 "5|yacht|a sailing boat|die Jacht|A white yacht sailed past.|Strange letters: y-a-c-h-t.",
 "5|explanation|words that make something clear|die Erklärung|The teacher gave a clear explanation.|explain loses its i: expla-nation.",
 "5|convenience|being easy and useful|die Bequemlichkeit|A shop on the corner is a real convenience.|con-ven-i-ence.",
-"5|correspond|to write letters to each other; to match|sich schreiben; entsprechen|I correspond with a pen pal.|Double r: cor-re-spond."
+"5|correspond|to write letters to each other; to match|sich schreiben; entsprechen|I correspond with a pen pal.|Double r: cor-re-spond.",
+"A|don't|do not|nicht (tun)|Please don't run near the pool.|do not → don't. The apostrophe sits where the o was.",
+"A|can't|cannot|kann nicht|I can't find my shoes.|cannot → can't. The apostrophe replaces 'no'.",
+"A|won't|will not|wird nicht, will nicht|The baby won't stop crying.|A strange one: will not → won't.",
+"A|isn't|is not|ist nicht|The shop isn't open yet.|is not → isn't.",
+"A|didn't|did not|hat nicht, tat nicht|I didn't hear the bell.|did not → didn't.",
+"A|doesn't|does not|tut nicht|My brother doesn't like fish.|does not → doesn't. Keep the e: d-o-e-s-n-'-t.",
+"A|aren't|are not|sind nicht|We aren't ready yet.|are not → aren't.",
+"A|haven't|have not|habe nicht, haben nicht|I haven't finished my homework.|have not → haven't.",
+"A|shouldn't|should not|sollte nicht|You shouldn't swim alone.|should not → shouldn't. Keep the silent l.",
+"A|couldn't|could not|konnte nicht|We couldn't see the stars.|could not → couldn't.",
+"A|wouldn't|would not|würde nicht|The door wouldn't open.|would not → wouldn't.",
+"A|I'm|I am|ich bin|I'm ten years old.|I am → I'm. I is always a capital letter.",
+"A|I'll|I will|ich werde|I'll call you after school.|I will → I'll. The apostrophe replaces 'wi'.",
+"A|I'd|I would, or I had|ich würde, ich hätte|I'd like some water, please.|I would → I'd.",
+"A|you're|you are|du bist, ihr seid|You're my best friend.|you are → you're. 'your' (dein) has no apostrophe.",
+"A|they're|they are|sie sind|They're playing on the beach.|they are → they're. Not 'their' (ihr) and not 'there' (dort).",
+"A|we've|we have|wir haben|We've got a new puppy.|we have → we've.",
+"A|let's|let us|lass uns|Let's go swimming!|let us → let's.",
+"A|who's|who is|wer ist|Who's at the door?|who is → who's. 'whose' (wessen) has no apostrophe.",
+"A|it's|it is, or it has|es ist|It's raining again.|it is → it's. Only use the apostrophe if you can say 'it is'.",
+"A|there's|there is|es gibt, da ist|There's a gecko on the wall.|there is → there's.",
+"A|o'clock|of the clock, for full hours|Uhr (volle Stunde)|School starts at eight o'clock.|of the clock → o'clock.",
+"A|its|belonging to it|sein, ihr (von einem Ding oder Tier)|The dog wagged its tail.|No apostrophe! 'its' means belonging to it, like 'his' and 'her'.",
+"A|your|belonging to you|dein, euer|Is this your bag?|No apostrophe. 'you're' means you are.",
+"A|their|belonging to them|ihr (von mehreren)|The children packed their bags.|No apostrophe. The word 'heir' is inside: t-h-e-i-r.",
+"A|whose|belonging to which person|wessen|Whose towel is this?|No apostrophe. 'who's' means who is.",
+"A|the dog's bone|the bone that belongs to the dog|der Knochen des Hundes|The dog's bone is under the sofa.|One owner: dog + 's.",
+"A|Dad's phone|the phone that belongs to Dad|Papas Handy|Dad's phone is ringing.|One owner: Dad + 's. Dad has a capital D when it is his name.",
+"A|the children's toys|the toys that belong to the children|die Spielsachen der Kinder|The children's toys are all over the floor.|children has no s, so add 's: children's.",
+"A|the boys' room|the room that belongs to two or more boys|das Zimmer der Jungen|My two brothers share the boys' room.|More than one boy: boys + apostrophe after the s.",
+"A|the teachers' room|the room for all the teachers|das Lehrerzimmer|All the teachers meet in the teachers' room.|Many teachers: teachers + apostrophe after the s.",
+"A|the women's team|the team of women|die Frauenmannschaft|My aunt plays in the women's team.|women has no s, so add 's: women's."
 ];
-const W = RAW.map(s => { const [level, word, meaning, de, sentence, tip] = s.split("|"); return { level: +level, word, meaning, de, sentence, tip }; });
+const W = RAW.map(s => { const [level, word, meaning, de, sentence, tip] = s.split("|"); return { level: level === "A" ? 0 : +level, word, meaning, de, sentence, tip }; });
+const APOS_TOTAL = W.filter(w => w.level === 0).length;
 const BYWORD = Object.fromEntries(W.map(w => [w.word, w]));
 const LEVEL_NAMES = ["", "Warm-up", "Steady", "Strong", "Tricky", "Champion"];
 const BATCH = 20;
 
 const $ = id => document.getElementById(id);
 const KEY = "spelling5-v2";
-let store = { learned: [], missed: {}, accent: "us", level: 2, batch: null, last: null, suggest: null };
+let store = { learned: [], missed: {}, accent: "us", level: 2, mode: "levels", batch: null, last: null, suggest: null };
 try { const s = JSON.parse(localStorage.getItem(KEY) || "null"); if (s) store = Object.assign(store, s); } catch (e) {}
 function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
 const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
@@ -555,21 +597,27 @@ function show(id) { VIEWS.forEach(v => $(v).hidden = v !== id); window.scrollTo(
 function levelCount(l) { return W.filter(w => w.level === l && store.learned.includes(w.word)).length; }
 function updateProgress() {
   const n = store.learned.length;
-  $("nLearned").textContent = n;
+  $("nLearned").textContent = n; $("nTotal").textContent = W.length;
   $("barFill").style.width = (n / W.length * 100) + "%";
 }
 function dots(l) { return '<span class="dots">' + [1,2,3,4,5].map(i => '<i class="' + (i <= l ? "on" : "") + '"></i>').join("") + "</span>"; }
-function setBadge(el, l) { el.className = "badge lv" + l; el.innerHTML = dots(l) + " Level " + l + " · " + LEVEL_NAMES[l]; }
+function setBadge(el, l) { el.className = "badge lv" + l; el.innerHTML = l ? dots(l) + " Level " + l + " · " + LEVEL_NAMES[l] : "Apostrophes"; }
 
 function renderStart() {
   $("levels").innerHTML = [1,2,3,4,5].map(l =>
     '<button class="lv lv' + l + '" data-l="' + l + '" aria-pressed="' + (store.level === l) + '"><b>' + l + "</b><span>" + LEVEL_NAMES[l] + "</span><small>" + levelCount(l) + "/40</small></button>").join("");
   $("levels").querySelectorAll(".lv").forEach(b => b.onclick = () => { store.level = +b.dataset.l; save(); renderStart(); });
+  const apos = store.mode === "apos";
+  $("modeLevels").setAttribute("aria-pressed", !apos); $("modeApos").setAttribute("aria-pressed", apos);
+  $("levelBlock").hidden = apos; $("aposNote").hidden = !apos;
+  $("introNote").textContent = apos ? "You will hear 20 words or short phrases. Write each one down, then tap Next word. You check them all together at the end."
+    : "You will hear 20 words. Write each one down, then pick if the next word should be easier, the same or harder. You check them all together at the end.";
+  $("aposNote").textContent = "Words like don't, it's and the dog's bone, plus some that look like they need an apostrophe but don't, like its and your. Listen to the sentence: it tells you which one to write. Learned so far: " + levelCount(0) + " of " + APOS_TOTAL + ".";
   const b = store.batch;
   $("resumeBtn").hidden = !b;
   if (b) $("resumeBtn").textContent = b.phase === "check" ? "Continue checking" : "Continue at word " + (b.items.length);
   $("startBtn").textContent = b ? "Start a new 20" : "Start 20 words";
-  $("suggestLine").hidden = !store.suggest;
+  $("suggestLine").hidden = !store.suggest || apos;
   if (store.suggest) $("suggestLine").textContent = "Suggested start for this round: level " + store.suggest + ".";
   $("lastLine").textContent = store.last ? "Last round: " + store.last.right + " of " + store.last.total + " right." : "";
   show(store.learned.length >= W.length ? "vDone" : "vStart");
@@ -587,13 +635,14 @@ function pickWord(level, used) {
 
 /* ---------- round ---------- */
 function startBatch() {
-  store.batch = { items: [], level: store.level, phase: "listen", ticks: [] };
-  store.suggest = null;
-  addWord(store.level);
+  const apos = store.mode === "apos";
+  store.batch = { items: [], mode: store.mode, level: apos ? 0 : store.level, phase: "listen", ticks: [] };
+  if (!apos) store.suggest = null;
+  addWord(apos ? 0 : store.level);
 }
 function addWord(level) {
   const b = store.batch;
-  b.level = Math.max(1, Math.min(5, level));
+  b.level = b.mode === "apos" ? 0 : Math.max(1, Math.min(5, level));
   const w = pickWord(b.level, b.items.map(i => i.w));
   b.items.push({ w, level: b.level, skipped: false });
   save(); renderListen(); sayTest(w);
@@ -608,6 +657,9 @@ function renderListen() {
   $("skipNote").hidden = !it.skipped;
   const last = n >= BATCH;
   $("nextArea").hidden = last; $("toCheckBtn").hidden = !last;
+  const apos = b.mode === "apos";
+  $("levelRow").hidden = apos; $("nextOneBtn").hidden = !apos;
+  $("nextLabel").textContent = apos ? "Written it down?" : "Written it down? Next word:";
   $("easierBtn").disabled = it.level <= 1; $("harderBtn").disabled = it.level >= 5;
   show("vListen");
 }
@@ -618,6 +670,7 @@ $("skipBtn").onclick = () => { cur().skipped = !cur().skipped; save(); renderLis
 $("easierBtn").onclick = () => addWord(cur().level - 1);
 $("sameBtn").onclick = () => addWord(cur().level);
 $("harderBtn").onclick = () => addWord(cur().level + 1);
+$("nextOneBtn").onclick = () => addWord(0);
 $("toCheckBtn").onclick = () => { stopAll(); store.batch.phase = "check"; save(); renderCheck(); };
 
 const EAR = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3z"/><path d="M15.5 8.5a5 5 0 0 1 0 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
@@ -649,9 +702,11 @@ $("doneCheckBtn").onclick = () => {
     if (b.ticks.includes(i)) { if (!store.learned.includes(it.w)) { store.learned.push(it.w); fresh++; } }
     else { store.missed[it.w] = (store.missed[it.w] || 0) + 1; toLearn.push(it.w); }
   });
-  const avg = b.items.reduce((s, it) => s + it.level, 0) / total, ratio = right / total;
-  let sug = Math.round(avg) + (ratio >= 0.8 ? 1 : ratio <= 0.4 ? -1 : 0);
-  store.suggest = Math.max(1, Math.min(5, sug)); store.level = store.suggest;
+  if (b.mode !== "apos") {
+    const avg = b.items.reduce((s, it) => s + it.level, 0) / total, ratio = right / total;
+    const sug = Math.round(avg) + (ratio >= 0.8 ? 1 : ratio <= 0.4 ? -1 : 0);
+    store.suggest = Math.max(1, Math.min(5, sug)); store.level = store.suggest;
+  }
   store.last = { right, total };
   store.batch = null; save(); updateProgress();
   renderResult(right, total, fresh, toLearn);
@@ -673,6 +728,8 @@ function renderResult(right, total, fresh, toLearn) {
   show("vResult");
 }
 $("againBtn").onclick = renderStart;
+$("modeLevels").onclick = () => { store.mode = "levels"; save(); renderStart(); };
+$("modeApos").onclick = () => { store.mode = "apos"; save(); renderStart(); };
 $("startBtn").onclick = startBatch;
 $("resumeBtn").onclick = () => { const b = store.batch; if (b.phase === "check") renderCheck(); else { renderListen(); sayTest(cur().w); } };
 
