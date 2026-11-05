@@ -2498,26 +2498,26 @@
   }
  ],
  "uncertain": [
-  "twelfth",
-  "forty",
   "juice",
   "bruise",
   "yellow",
-  "occur",
   "sister",
-  "rhinoceros",
   "whole",
-  "whose",
   "doubt",
-  "thorough",
   "they",
   "half",
-  "who's",
-  "other",
-  "stomach",
-  "three",
-  "thank",
-  "eat"
+  "eat",
+  "many",
+  "look",
+  "possible",
+  "bought",
+  "choose",
+  "nuisance",
+  "heard",
+  "knife",
+  "two",
+  "know",
+  "who"
  ],
  "mismatches": [
   "said",
@@ -2588,5 +2588,6 @@
   "category",
   "forty",
   "twelfth"
- ]
+ ],
+ "note": "uncertain = real mismatches picked by hand from the recogniser output; filler words and digits (3 for three) ignored"
 }

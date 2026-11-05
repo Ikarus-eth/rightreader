@@ -25,11 +25,17 @@ def norm(s):
 def flat(s):
     return norm(s).replace("'", "").replace(" ", "")
 
+NUM = {"one": "1", "two": "2", "three": "3", "eight": "8", "forty": "40", "twelfth": "12th", "thousand": "1000"}
+
 def same(heard, word):
     h, w = norm(heard), norm(word)
     if flat(h) == flat(w):
         return True
-    return any(w in g and h in g for g in HOMO)
+    if any(w in g and h in g for g in HOMO):
+        return True
+    toks = re.sub(r"[^a-z0-9' ]", " ", heard.lower().replace(",", "")).split()
+    # Whisper often adds a filler word around a lone word ("I said."), or writes digits.
+    return NUM.get(w) in toks or all(p in toks for p in w.split())
 
 def main():
     rows = [r.split("|") for r in re.findall(r'^"([^"\n]*\|[^"\n]*)",?$', (ROOT / "index.html").read_text(), re.M)]
