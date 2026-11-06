@@ -1397,10 +1397,6 @@
    "word": "audio/af_heart/ghost-w2.mp3",
    "sentence": "audio/af_heart/ghost-sentence.mp3"
   },
-  "calm": {
-   "word": "audio/af_heart/calm-w2.mp3",
-   "sentence": "audio/af_heart/calm-sentence.mp3"
-  },
   "happen": {
    "word": "audio/af_heart/happen-w2.mp3",
    "sentence": "audio/af_heart/happen-sentence.mp3"
@@ -1648,6 +1644,10 @@
   "excitement": {
    "word": "audio/af_heart/excitement-w2.mp3",
    "sentence": "audio/af_heart/excitement-sentence.mp3"
+  },
+  "calm": {
+   "word": "audio/af_heart/calm-w2.mp3",
+   "sentence": "audio/af_heart/calm-sentence.mp3"
   }
  }
 }

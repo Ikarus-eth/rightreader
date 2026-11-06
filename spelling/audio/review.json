@@ -7,11 +7,11 @@
   "niece",
   "curtain",
   "wrist",
-  "calm",
   "wear",
   "hear",
   "than",
-  "except"
+  "except",
+  "calm"
  ],
  "unsure": [
   "weigh",
@@ -19,11 +19,11 @@
   "niece",
   "curtain",
   "wrist",
-  "calm",
   "wear",
   "hear",
   "than",
-  "except"
+  "except",
+  "calm"
  ],
  "details": [
   {
@@ -526,23 +526,6 @@
    "sentence_heard": "The ghost story was spooky.",
    "word_ok": true,
    "sentence_ok": true
-  },
-  {
-   "word": "calm",
-   "tried": [
-    [
-     "lead-in",
-     "Come."
-    ],
-    [
-     "plain",
-     "Come."
-    ]
-   ],
-   "kept_heard": "Come.",
-   "sentence_heard": "The sea has come this morning.",
-   "word_ok": false,
-   "sentence_ok": false
   },
   {
    "word": "happen",
@@ -1368,6 +1351,23 @@
    "kept_heard": "Excitement.",
    "sentence_heard": "The children shouted with excitement.",
    "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "calm",
+   "tried": [
+    [
+     "lead-in",
+     "Come."
+    ],
+    [
+     "plain",
+     "Come."
+    ]
+   ],
+   "kept_heard": "Come.",
+   "sentence_heard": "The sea has calmed this morning.",
+   "word_ok": false,
    "sentence_ok": true
   }
  ]
