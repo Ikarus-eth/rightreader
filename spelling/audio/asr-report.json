@@ -4,7 +4,7 @@
    "word": "said",
    "heard": "I said.",
    "match": true,
-   "confidence": -0.769,
+   "confidence": -0.762,
    "sentence_heard": "Mum said it is time for bed.",
    "sentence_has_word": true
   },
@@ -12,15 +12,15 @@
    "word": "was",
    "heard": "was.",
    "match": true,
-   "confidence": -0.383,
+   "confidence": -0.367,
    "sentence_heard": "The cake was yummy.",
    "sentence_has_word": true
   },
   {
    "word": "they",
-   "heard": "They.",
+   "heard": "They",
    "match": true,
-   "confidence": -0.559,
+   "confidence": -0.434,
    "sentence_heard": "They are my friends.",
    "sentence_has_word": true
   },
@@ -28,7 +28,7 @@
    "word": "have",
    "heard": "have.",
    "match": true,
-   "confidence": -0.977,
+   "confidence": -0.934,
    "sentence_heard": "I have a red bike.",
    "sentence_has_word": true
   },
@@ -36,23 +36,23 @@
    "word": "come",
    "heard": "Come.",
    "match": true,
-   "confidence": -0.455,
+   "confidence": -0.472,
    "sentence_heard": "Come and play with me.",
    "sentence_has_word": true
   },
   {
    "word": "some",
-   "heard": "Some.",
-   "match": true,
-   "confidence": -1.133,
+   "heard": "We'll see you in a minute.",
+   "match": false,
+   "confidence": -1.09,
    "sentence_heard": "Can I have some milk?",
    "sentence_has_word": true
   },
   {
    "word": "one",
-   "heard": "One.",
+   "heard": "one.",
    "match": true,
-   "confidence": -0.75,
+   "confidence": -0.763,
    "sentence_heard": "I have one brother.",
    "sentence_has_word": true
   },
@@ -60,7 +60,7 @@
    "word": "two",
    "heard": "Two.",
    "match": true,
-   "confidence": -0.881,
+   "confidence": -0.901,
    "sentence_heard": "I have two hands.",
    "sentence_has_word": true
   },
@@ -68,7 +68,7 @@
    "word": "what",
    "heard": "What?",
    "match": true,
-   "confidence": -0.237,
+   "confidence": -0.24,
    "sentence_heard": "What is your name?",
    "sentence_has_word": true
   },
@@ -76,7 +76,7 @@
    "word": "where",
    "heard": "Where?",
    "match": true,
-   "confidence": -0.534,
+   "confidence": -0.573,
    "sentence_heard": "Where's my shoe?",
    "sentence_has_word": true
   },
@@ -84,7 +84,7 @@
    "word": "there",
    "heard": "There.",
    "match": true,
-   "confidence": -0.35,
+   "confidence": -0.333,
    "sentence_heard": "Look over there.",
    "sentence_has_word": true
   },
@@ -92,7 +92,7 @@
    "word": "here",
    "heard": "here.",
    "match": true,
-   "confidence": -0.363,
+   "confidence": -0.385,
    "sentence_heard": "Come over here.",
    "sentence_has_word": true
   },
@@ -100,7 +100,7 @@
    "word": "she",
    "heard": "She.",
    "match": true,
-   "confidence": -0.307,
+   "confidence": -0.333,
    "sentence_heard": "She is my sister.",
    "sentence_has_word": true
   },
@@ -108,7 +108,7 @@
    "word": "like",
    "heard": "like.",
    "match": true,
-   "confidence": -0.728,
+   "confidence": -0.777,
    "sentence_heard": "I like ice cream.",
    "sentence_has_word": true
   },
@@ -116,7 +116,7 @@
    "word": "little",
    "heard": "little.",
    "match": true,
-   "confidence": -0.438,
+   "confidence": -0.403,
    "sentence_heard": "A little frog jumped.",
    "sentence_has_word": true
   },
@@ -124,7 +124,7 @@
    "word": "look",
    "heard": "Look.",
    "match": true,
-   "confidence": -0.169,
+   "confidence": -0.172,
    "sentence_heard": "Look at the moon.",
    "sentence_has_word": true
   },
@@ -132,7 +132,7 @@
    "word": "play",
    "heard": "Play.",
    "match": true,
-   "confidence": -0.205,
+   "confidence": -0.207,
    "sentence_heard": "Let us play outside.",
    "sentence_has_word": true
   },
@@ -140,7 +140,7 @@
    "word": "want",
    "heard": "want.",
    "match": true,
-   "confidence": -0.477,
+   "confidence": -0.466,
    "sentence_heard": "I want a banana.",
    "sentence_has_word": true
   },
@@ -148,7 +148,7 @@
    "word": "went",
    "heard": "Went.",
    "match": true,
-   "confidence": -0.436,
+   "confidence": -0.477,
    "sentence_heard": "We went to the beach.",
    "sentence_has_word": true
   },
@@ -156,7 +156,7 @@
    "word": "with",
    "heard": "with.",
    "match": true,
-   "confidence": -0.676,
+   "confidence": -0.718,
    "sentence_heard": "Come with me.",
    "sentence_has_word": true
   },
@@ -164,7 +164,7 @@
    "word": "from",
    "heard": "from.",
    "match": true,
-   "confidence": -0.591,
+   "confidence": -0.604,
    "sentence_heard": "I am from Germany.",
    "sentence_has_word": true
   },
@@ -172,7 +172,7 @@
    "word": "does",
    "heard": "does.",
    "match": true,
-   "confidence": -0.494,
+   "confidence": -0.513,
    "sentence_heard": "Does the dog bite?",
    "sentence_has_word": true
   },
@@ -180,7 +180,7 @@
    "word": "going",
    "heard": "going.",
    "match": true,
-   "confidence": -0.548,
+   "confidence": -0.537,
    "sentence_heard": "We are going home.",
    "sentence_has_word": true
   },
@@ -188,7 +188,7 @@
    "word": "are",
    "heard": "are.",
    "match": true,
-   "confidence": -0.417,
+   "confidence": -0.404,
    "sentence_heard": "You are funny.",
    "sentence_has_word": true
   },
@@ -196,7 +196,7 @@
    "word": "were",
    "heard": "were.",
    "match": true,
-   "confidence": -0.85,
+   "confidence": -0.882,
    "sentence_heard": "We were at school.",
    "sentence_has_word": true
   },
@@ -204,7 +204,7 @@
    "word": "of",
    "heard": "of.",
    "match": true,
-   "confidence": -0.785,
+   "confidence": -0.755,
    "sentence_heard": "A cup of tea",
    "sentence_has_word": true
   },
@@ -212,7 +212,7 @@
    "word": "do",
    "heard": "do.",
    "match": true,
-   "confidence": -0.405,
+   "confidence": -0.385,
    "sentence_heard": "What do you want?",
    "sentence_has_word": true
   },
@@ -220,7 +220,7 @@
    "word": "who",
    "heard": "Who?",
    "match": true,
-   "confidence": -0.327,
+   "confidence": -0.312,
    "sentence_heard": "Who is at the door?",
    "sentence_has_word": true
   },
@@ -228,7 +228,7 @@
    "word": "call",
    "heard": "Call.",
    "match": true,
-   "confidence": -0.508,
+   "confidence": -0.501,
    "sentence_heard": "Call me later.",
    "sentence_has_word": true
   },
@@ -236,7 +236,7 @@
    "word": "day",
    "heard": "Day.",
    "match": true,
-   "confidence": -0.297,
+   "confidence": -0.306,
    "sentence_heard": "Today is a sunny day.",
    "sentence_has_word": true
   },
@@ -244,7 +244,7 @@
    "word": "jump",
    "heard": "Jump.",
    "match": true,
-   "confidence": -0.298,
+   "confidence": -0.288,
    "sentence_heard": "Frogs can jump high.",
    "sentence_has_word": true
   },
@@ -252,7 +252,7 @@
    "word": "yellow",
    "heard": "Yellow.",
    "match": true,
-   "confidence": -0.299,
+   "confidence": -0.323,
    "sentence_heard": "The sun is yellow.",
    "sentence_has_word": true
   },
@@ -260,7 +260,7 @@
    "word": "blue",
    "heard": "blue.",
    "match": true,
-   "confidence": -0.705,
+   "confidence": -0.667,
    "sentence_heard": "The sea is blue.",
    "sentence_has_word": true
   },
@@ -268,7 +268,7 @@
    "word": "green",
    "heard": "A green.",
    "match": true,
-   "confidence": -0.56,
+   "confidence": -0.556,
    "sentence_heard": "Frogs are green.",
    "sentence_has_word": true
   },
@@ -276,7 +276,7 @@
    "word": "house",
    "heard": "house.",
    "match": true,
-   "confidence": -0.462,
+   "confidence": -0.471,
    "sentence_heard": "Our house has a pool.",
    "sentence_has_word": true
   },
@@ -284,7 +284,7 @@
    "word": "school",
    "heard": "school.",
    "match": true,
-   "confidence": -0.614,
+   "confidence": -0.622,
    "sentence_heard": "I walked to school.",
    "sentence_has_word": true
   },
@@ -292,7 +292,7 @@
    "word": "water",
    "heard": "water.",
    "match": true,
-   "confidence": -0.425,
+   "confidence": -0.428,
    "sentence_heard": "I drink a lot of water",
    "sentence_has_word": true
   },
@@ -300,7 +300,7 @@
    "word": "eat",
    "heard": "eat.",
    "match": true,
-   "confidence": -0.552,
+   "confidence": -0.52,
    "sentence_heard": "We eat rice for dinner.",
    "sentence_has_word": true
   },
@@ -308,7 +308,7 @@
    "word": "sleep",
    "heard": "sleep.",
    "match": true,
-   "confidence": -0.756,
+   "confidence": -0.68,
    "sentence_heard": "Cats sleep a lot.",
    "sentence_has_word": true
   },
@@ -316,7 +316,7 @@
    "word": "fish",
    "heard": "Fish.",
    "match": true,
-   "confidence": -0.762,
+   "confidence": -0.739,
    "sentence_heard": "I saw a big fish.",
    "sentence_has_word": true
   },
@@ -324,7 +324,7 @@
    "word": "again",
    "heard": "again.",
    "match": true,
-   "confidence": -0.416,
+   "confidence": -0.392,
    "sentence_heard": "Can you say it again?",
    "sentence_has_word": true
   },
@@ -332,7 +332,7 @@
    "word": "about",
    "heard": "about.",
    "match": true,
-   "confidence": -0.327,
+   "confidence": -0.342,
    "sentence_heard": "This book is about sharks.",
    "sentence_has_word": true
   },
@@ -340,15 +340,15 @@
    "word": "after",
    "heard": "after.",
    "match": true,
-   "confidence": -0.355,
-   "sentence_heard": "swim after school.",
+   "confidence": -0.341,
+   "sentence_heard": "We swim after school",
    "sentence_has_word": true
   },
   {
    "word": "any",
    "heard": "Any.",
    "match": true,
-   "confidence": -1.004,
+   "confidence": -1.013,
    "sentence_heard": "Do you have any snacks?",
    "sentence_has_word": true
   },
@@ -356,7 +356,7 @@
    "word": "many",
    "heard": "Many.",
    "match": true,
-   "confidence": -0.374,
+   "confidence": -0.378,
    "sentence_heard": "There are many shells on the beach.",
    "sentence_has_word": true
   },
@@ -364,7 +364,7 @@
    "word": "could",
    "heard": "could.",
    "match": true,
-   "confidence": -0.618,
+   "confidence": -0.582,
    "sentence_heard": "I could see the boat",
    "sentence_has_word": true
   },
@@ -372,7 +372,7 @@
    "word": "would",
    "heard": "would.",
    "match": true,
-   "confidence": -0.483,
+   "confidence": -0.473,
    "sentence_heard": "I would like a drink.",
    "sentence_has_word": true
   },
@@ -380,7 +380,7 @@
    "word": "should",
    "heard": "Should.",
    "match": true,
-   "confidence": -0.495,
+   "confidence": -0.503,
    "sentence_heard": "You should brush your teeth.",
    "sentence_has_word": true
   },
@@ -388,7 +388,7 @@
    "word": "every",
    "heard": "every",
    "match": true,
-   "confidence": -0.931,
+   "confidence": -0.887,
    "sentence_heard": "I swim everyday.",
    "sentence_has_word": true
   },
@@ -396,7 +396,7 @@
    "word": "first",
    "heard": "First.",
    "match": true,
-   "confidence": -0.957,
+   "confidence": -0.936,
    "sentence_heard": "came first in the race",
    "sentence_has_word": true
   },
@@ -404,7 +404,7 @@
    "word": "found",
    "heard": "found.",
    "match": true,
-   "confidence": -0.5,
+   "confidence": -0.521,
    "sentence_heard": "I found a shell.",
    "sentence_has_word": true
   },
@@ -412,7 +412,7 @@
    "word": "girl",
    "heard": "Good girl.",
    "match": true,
-   "confidence": -0.352,
+   "confidence": -0.335,
    "sentence_heard": "The girl has long hair.",
    "sentence_has_word": true
   },
@@ -420,7 +420,7 @@
    "word": "know",
    "heard": "No.",
    "match": true,
-   "confidence": -0.131,
+   "confidence": -0.134,
    "sentence_heard": "I know the answer.",
    "sentence_has_word": true
   },
@@ -428,7 +428,7 @@
    "word": "light",
    "heard": "the light.",
    "match": true,
-   "confidence": -0.637,
+   "confidence": -0.604,
    "sentence_heard": "Turn on the light.",
    "sentence_has_word": true
   },
@@ -436,7 +436,7 @@
    "word": "night",
    "heard": "night.",
    "match": true,
-   "confidence": -0.361,
+   "confidence": -0.378,
    "sentence_heard": "The stars come out at night.",
    "sentence_has_word": true
   },
@@ -444,7 +444,7 @@
    "word": "right",
    "heard": "Right.",
    "match": true,
-   "confidence": -0.272,
+   "confidence": -0.286,
    "sentence_heard": "And that is right.",
    "sentence_has_word": true
   },
@@ -452,7 +452,7 @@
    "word": "write",
    "heard": "Right.",
    "match": true,
-   "confidence": -0.255,
+   "confidence": -0.256,
    "sentence_heard": "Write your name here.",
    "sentence_has_word": true
   },
@@ -460,7 +460,7 @@
    "word": "live",
    "heard": "live.",
    "match": true,
-   "confidence": -0.522,
+   "confidence": -0.553,
    "sentence_heard": "We live in Bali.",
    "sentence_has_word": true
   },
@@ -468,7 +468,7 @@
    "word": "mother",
    "heard": "mother.",
    "match": true,
-   "confidence": -0.647,
+   "confidence": -0.637,
    "sentence_heard": "My mother reads to me.",
    "sentence_has_word": true
   },
@@ -476,15 +476,15 @@
    "word": "brother",
    "heard": "brother.",
    "match": true,
-   "confidence": -0.779,
-   "sentence_heard": "My brother is older than me.",
+   "confidence": -0.768,
+   "sentence_heard": "My brother is older than me",
    "sentence_has_word": true
   },
   {
    "word": "sister",
    "heard": "Sister.",
    "match": true,
-   "confidence": -0.357,
+   "confidence": -0.378,
    "sentence_heard": "My sister likes horses.",
    "sentence_has_word": true
   },
@@ -492,7 +492,7 @@
    "word": "open",
    "heard": "Open.",
    "match": true,
-   "confidence": -0.313,
+   "confidence": -0.295,
    "sentence_heard": "Open the door please.",
    "sentence_has_word": true
   },
@@ -500,7 +500,7 @@
    "word": "other",
    "heard": "other.",
    "match": true,
-   "confidence": -0.863,
+   "confidence": -0.882,
    "sentence_heard": "Where is my other sock?",
    "sentence_has_word": true
   },
@@ -508,7 +508,7 @@
    "word": "pretty",
    "heard": "You're pretty.",
    "match": true,
-   "confidence": -0.54,
+   "confidence": -0.551,
    "sentence_heard": "What a pretty flower.",
    "sentence_has_word": true
   },
@@ -516,15 +516,15 @@
    "word": "put",
    "heard": "put.",
    "match": true,
-   "confidence": -0.719,
-   "sentence_heard": "Put your shoes by the door.",
+   "confidence": -0.748,
+   "sentence_heard": "Put your shoes by the door",
    "sentence_has_word": true
   },
   {
    "word": "small",
    "heard": "small.",
    "match": true,
-   "confidence": -0.42,
+   "confidence": -0.384,
    "sentence_heard": "A mouse is small.",
    "sentence_has_word": true
   },
@@ -532,7 +532,7 @@
    "word": "thank",
    "heard": "Thank you.",
    "match": true,
-   "confidence": -0.17,
+   "confidence": -0.15,
    "sentence_heard": "Thank you for the gift.",
    "sentence_has_word": true
   },
@@ -540,7 +540,7 @@
    "word": "think",
    "heard": "think.",
    "match": true,
-   "confidence": -0.623,
+   "confidence": -0.553,
    "sentence_heard": "I think it will rain",
    "sentence_has_word": true
   },
@@ -548,7 +548,7 @@
    "word": "three",
    "heard": "3.",
    "match": true,
-   "confidence": -0.748,
+   "confidence": -0.766,
    "sentence_heard": "I am three years older than my brother.",
    "sentence_has_word": true
   },
@@ -556,7 +556,7 @@
    "word": "very",
    "heard": "Very.",
    "match": true,
-   "confidence": -0.472,
+   "confidence": -0.506,
    "sentence_heard": "It is very hot today.",
    "sentence_has_word": true
   },
@@ -564,7 +564,7 @@
    "word": "walk",
    "heard": "walk.",
    "match": true,
-   "confidence": -0.752,
+   "confidence": -0.746,
    "sentence_heard": "We walk to the beach.",
    "sentence_has_word": true
   },
@@ -572,7 +572,7 @@
    "word": "talk",
    "heard": "Talk.",
    "match": true,
-   "confidence": -0.318,
+   "confidence": -0.302,
    "sentence_heard": "Let us talk about it.",
    "sentence_has_word": true
   },
@@ -580,7 +580,7 @@
    "word": "warm",
    "heard": "warm.",
    "match": true,
-   "confidence": -0.358,
+   "confidence": -0.351,
    "sentence_heard": "The sea is warm.",
    "sentence_has_word": true
   },
@@ -588,7 +588,7 @@
    "word": "wash",
    "heard": "Wash.",
    "match": true,
-   "confidence": -0.308,
+   "confidence": -0.29,
    "sentence_heard": "Wash your hands.",
    "sentence_has_word": true
   },
@@ -596,7 +596,7 @@
    "word": "which",
    "heard": "which",
    "match": true,
-   "confidence": -0.766,
+   "confidence": -0.712,
    "sentence_heard": "Which one do you want?",
    "sentence_has_word": true
   },
@@ -604,7 +604,7 @@
    "word": "why",
    "heard": "Why?",
    "match": true,
-   "confidence": -0.201,
+   "confidence": -0.199,
    "sentence_heard": "Why is the sky blue?",
    "sentence_has_word": true
   },
@@ -612,7 +612,7 @@
    "word": "year",
    "heard": "year.",
    "match": true,
-   "confidence": -0.477,
+   "confidence": -0.42,
    "sentence_heard": "I am 7 this year.",
    "sentence_has_word": true
   },
@@ -620,7 +620,7 @@
    "word": "once",
    "heard": "Once.",
    "match": true,
-   "confidence": -0.509,
+   "confidence": -0.48,
    "sentence_heard": "I have been to Paris once.",
    "sentence_has_word": true
   },
@@ -628,7 +628,7 @@
    "word": "eye",
    "heard": "I.",
    "match": true,
-   "confidence": -0.744,
+   "confidence": -0.69,
    "sentence_heard": "Close one eye.",
    "sentence_has_word": true
   },
@@ -636,7 +636,7 @@
    "word": "door",
    "heard": "door.",
    "match": true,
-   "confidence": -0.411,
+   "confidence": -0.396,
    "sentence_heard": "Please close the door.",
    "sentence_has_word": true
   },
@@ -644,7 +644,7 @@
    "word": "answer",
    "heard": "answer.",
    "match": true,
-   "confidence": -0.357,
+   "confidence": -0.384,
    "sentence_heard": "I knew the answer to every question.",
    "sentence_has_word": true
   },
@@ -652,7 +652,7 @@
    "word": "because",
    "heard": "because.",
    "match": true,
-   "confidence": -0.753,
+   "confidence": -0.785,
    "sentence_heard": "I stayed home because I was sick.",
    "sentence_has_word": true
   },
@@ -660,7 +660,7 @@
    "word": "caught",
    "heard": "caught.",
    "match": true,
-   "confidence": -0.324,
+   "confidence": -0.317,
    "sentence_heard": "She caught the ball with one hand.",
    "sentence_has_word": true
   },
@@ -668,7 +668,7 @@
    "word": "early",
    "heard": "Early.",
    "match": true,
-   "confidence": -0.317,
+   "confidence": -0.311,
    "sentence_heard": "We got up early to watch the sunrise.",
    "sentence_has_word": true
   },
@@ -676,7 +676,7 @@
    "word": "earth",
    "heard": "Earth.",
    "match": true,
-   "confidence": -0.522,
+   "confidence": -0.511,
    "sentence_heard": "The Earth goes around the sun.",
    "sentence_has_word": true
   },
@@ -684,7 +684,7 @@
    "word": "eight",
    "heard": "8.",
    "match": true,
-   "confidence": -0.54,
+   "confidence": -0.514,
    "sentence_heard": "Spiders have eight legs.",
    "sentence_has_word": true
   },
@@ -692,7 +692,7 @@
    "word": "friend",
    "heard": "friend.",
    "match": true,
-   "confidence": -0.65,
+   "confidence": -0.637,
    "sentence_heard": "My friend lives next door.",
    "sentence_has_word": true
   },
@@ -700,7 +700,7 @@
    "word": "people",
    "heard": "people.",
    "match": true,
-   "confidence": -0.454,
+   "confidence": -0.47,
    "sentence_heard": "Many people live in Jakarta.",
    "sentence_has_word": true
   },
@@ -708,7 +708,7 @@
    "word": "often",
    "heard": "often.",
    "match": true,
-   "confidence": -0.534,
+   "confidence": -0.539,
    "sentence_heard": "We often go to the beach.",
    "sentence_has_word": true
   },
@@ -716,7 +716,7 @@
    "word": "minute",
    "heard": "minute.",
    "match": true,
-   "confidence": -0.379,
+   "confidence": -0.373,
    "sentence_heard": "Wait a minute, please.",
    "sentence_has_word": true
   },
@@ -724,7 +724,7 @@
    "word": "piece",
    "heard": "Peace.",
    "match": true,
-   "confidence": -0.314,
+   "confidence": -0.299,
    "sentence_heard": "Can I have a piece of cake?",
    "sentence_has_word": true
   },
@@ -732,7 +732,7 @@
    "word": "guess",
    "heard": "Guess.",
    "match": true,
-   "confidence": -0.476,
+   "confidence": -0.51,
    "sentence_heard": "Guess what is in the box?",
    "sentence_has_word": true
   },
@@ -740,7 +740,7 @@
    "word": "choose",
    "heard": "Choose.",
    "match": true,
-   "confidence": -1.035,
+   "confidence": -1.157,
    "sentence_heard": "Choose one card from the pile.",
    "sentence_has_word": true
   },
@@ -748,7 +748,7 @@
    "word": "climb",
    "heard": "Climb.",
    "match": true,
-   "confidence": -0.438,
+   "confidence": -0.431,
    "sentence_heard": "We climbed to the top of the hill.",
    "sentence_has_word": true
   },
@@ -756,7 +756,7 @@
    "word": "famous",
    "heard": "Famous.",
    "match": true,
-   "confidence": -0.67,
+   "confidence": -0.629,
    "sentence_heard": "The Eiffel Tower is very famous.",
    "sentence_has_word": true
   },
@@ -764,7 +764,7 @@
    "word": "history",
    "heard": "history.",
    "match": true,
-   "confidence": -0.396,
+   "confidence": -0.417,
    "sentence_heard": "In history, we are learning about ancient Egypt.",
    "sentence_has_word": true
   },
@@ -772,7 +772,7 @@
    "word": "ocean",
    "heard": "ocean.",
    "match": true,
-   "confidence": -0.739,
+   "confidence": -0.758,
    "sentence_heard": "The Indian Ocean is south of Bali.",
    "sentence_has_word": true
   },
@@ -780,15 +780,15 @@
    "word": "perhaps",
    "heard": "Perhaps.",
    "match": true,
-   "confidence": -0.469,
+   "confidence": -0.467,
    "sentence_heard": "Perhaps we can go swimming later.",
    "sentence_has_word": true
   },
   {
    "word": "promise",
-   "heard": "promise.",
+   "heard": "I promise.",
    "match": true,
-   "confidence": -0.621,
+   "confidence": -0.525,
    "sentence_heard": "I promise I will tidy my room.",
    "sentence_has_word": true
   },
@@ -796,7 +796,7 @@
    "word": "question",
    "heard": "Question.",
    "match": true,
-   "confidence": -0.31,
+   "confidence": -0.328,
    "sentence_heard": "raise your hand if you have a question.",
    "sentence_has_word": true
   },
@@ -804,7 +804,7 @@
    "word": "remember",
    "heard": "Remember.",
    "match": true,
-   "confidence": -0.834,
+   "confidence": -0.869,
    "sentence_heard": "Remember to bring your hat.",
    "sentence_has_word": true
   },
@@ -812,7 +812,7 @@
    "word": "forward",
    "heard": "Forward.",
    "match": true,
-   "confidence": -0.372,
+   "confidence": -0.386,
    "sentence_heard": "Take one step forward.",
    "sentence_has_word": true
   },
@@ -820,7 +820,7 @@
    "word": "during",
    "heard": "during.",
    "match": true,
-   "confidence": -0.487,
+   "confidence": -0.477,
    "sentence_heard": "Don't talk during the test.",
    "sentence_has_word": true
   },
@@ -828,7 +828,7 @@
    "word": "build",
    "heard": "Build.",
    "match": true,
-   "confidence": -0.447,
+   "confidence": -0.44,
    "sentence_heard": "We will build a sand castle.",
    "sentence_has_word": true
   },
@@ -836,15 +836,15 @@
    "word": "decide",
    "heard": "Decide.",
    "match": true,
-   "confidence": -0.258,
-   "sentence_heard": "I can't decide which ice cream to get.",
+   "confidence": -0.29,
+   "sentence_heard": "can't decide which ice cream to get.",
    "sentence_has_word": true
   },
   {
    "word": "laugh",
-   "heard": "The laugh.",
+   "heard": "You laugh.",
    "match": true,
-   "confidence": -0.642,
+   "confidence": -0.676,
    "sentence_heard": "We laugh at dad's silly jokes.",
    "sentence_has_word": true
   },
@@ -852,7 +852,7 @@
    "word": "brought",
    "heard": "brought.",
    "match": true,
-   "confidence": -0.529,
+   "confidence": -0.511,
    "sentence_heard": "She brought snacks to the beach.",
    "sentence_has_word": true
   },
@@ -860,7 +860,7 @@
    "word": "heard",
    "heard": "Heard.",
    "match": true,
-   "confidence": -0.432,
+   "confidence": -0.426,
    "sentence_heard": "I heard a gecko in the night.",
    "sentence_has_word": true
   },
@@ -868,7 +868,7 @@
    "word": "really",
    "heard": "Really?",
    "match": true,
-   "confidence": -0.483,
+   "confidence": -0.452,
    "sentence_heard": "The water is really warm today.",
    "sentence_has_word": true
   },
@@ -876,7 +876,7 @@
    "word": "finally",
    "heard": "Finally.",
    "match": true,
-   "confidence": -0.466,
+   "confidence": -0.533,
    "sentence_heard": "We finally reach the top.",
    "sentence_has_word": true
   },
@@ -884,7 +884,7 @@
    "word": "tomorrow",
    "heard": "tomorrow.",
    "match": true,
-   "confidence": -0.153,
+   "confidence": -0.149,
    "sentence_heard": "We have a spelling test tomorrow.",
    "sentence_has_word": true
   },
@@ -892,7 +892,7 @@
    "word": "breakfast",
    "heard": "breakfast",
    "match": true,
-   "confidence": -0.384,
+   "confidence": -0.359,
    "sentence_heard": "eat mango for breakfast.",
    "sentence_has_word": true
   },
@@ -900,7 +900,7 @@
    "word": "children",
    "heard": "children.",
    "match": true,
-   "confidence": -0.393,
+   "confidence": -0.383,
    "sentence_heard": "The children played in the pool.",
    "sentence_has_word": true
   },
@@ -908,7 +908,7 @@
    "word": "listen",
    "heard": "Listen.",
    "match": true,
-   "confidence": -0.371,
+   "confidence": -0.386,
    "sentence_heard": "Listen to the rain on the roof.",
    "sentence_has_word": true
   },
@@ -916,7 +916,7 @@
    "word": "knife",
    "heard": "Knife.",
    "match": true,
-   "confidence": -0.483,
+   "confidence": -0.462,
    "sentence_heard": "Cut the papaya with a knife.",
    "sentence_has_word": true
   },
@@ -924,7 +924,7 @@
    "word": "busy",
    "heard": "Busy.",
    "match": true,
-   "confidence": -0.236,
+   "confidence": -0.228,
    "sentence_heard": "Mom is busy on the phone.",
    "sentence_has_word": true
   },
@@ -932,15 +932,15 @@
    "word": "whole",
    "heard": "whole.",
    "match": true,
-   "confidence": -0.629,
-   "sentence_heard": "I ate the whole pizza",
+   "confidence": -0.626,
+   "sentence_heard": "I ate the whole pizza.",
    "sentence_has_word": true
   },
   {
    "word": "world",
    "heard": "world.",
    "match": true,
-   "confidence": -0.589,
+   "confidence": -0.573,
    "sentence_heard": "I wanna travel around the world.",
    "sentence_has_word": true
   },
@@ -948,7 +948,7 @@
    "word": "quiet",
    "heard": "Quiet.",
    "match": true,
-   "confidence": -0.646,
+   "confidence": -0.627,
    "sentence_heard": "Please be quiet in the library.",
    "sentence_has_word": true
   },
@@ -956,7 +956,7 @@
    "word": "village",
    "heard": "Village.",
    "match": true,
-   "confidence": -0.328,
+   "confidence": -0.306,
    "sentence_heard": "We cycle to the next village.",
    "sentence_has_word": true
   },
@@ -964,7 +964,7 @@
    "word": "though",
    "heard": "though",
    "match": true,
-   "confidence": -0.639,
+   "confidence": -0.593,
    "sentence_heard": "It was sunny, though a bit windy.",
    "sentence_has_word": true
   },
@@ -972,7 +972,7 @@
    "word": "thought",
    "heard": "thought.",
    "match": true,
-   "confidence": -0.467,
+   "confidence": -0.504,
    "sentence_heard": "I thought about it all night.",
    "sentence_has_word": true
   },
@@ -980,7 +980,7 @@
    "word": "through",
    "heard": "It's through.",
    "match": true,
-   "confidence": -0.468,
+   "confidence": -0.476,
    "sentence_heard": "We walked through the rice fields.",
    "sentence_has_word": true
   },
@@ -988,7 +988,7 @@
    "word": "enough",
    "heard": "Enough.",
    "match": true,
-   "confidence": -0.37,
+   "confidence": -0.367,
    "sentence_heard": "Have you had enough to eat?",
    "sentence_has_word": true
   },
@@ -1004,7 +1004,7 @@
    "word": "weight",
    "heard": "Wait.",
    "match": true,
-   "confidence": -0.335,
+   "confidence": -0.333,
    "sentence_heard": "The weight of the bag is two kilos.",
    "sentence_has_word": true
   },
@@ -1012,7 +1012,7 @@
    "word": "quarter",
    "heard": "quarter.",
    "match": true,
-   "confidence": -0.614,
+   "confidence": -0.552,
    "sentence_heard": "Cut the pizza into quarters.",
    "sentence_has_word": true
   },
@@ -1020,15 +1020,15 @@
    "word": "believe",
    "heard": "believe.",
    "match": true,
-   "confidence": -0.557,
-   "sentence_heard": "I believe you",
+   "confidence": -0.563,
+   "sentence_heard": "I believe you.",
    "sentence_has_word": true
   },
   {
    "word": "complete",
    "heard": "Complete.",
    "match": true,
-   "confidence": -0.442,
+   "confidence": -0.402,
    "sentence_heard": "My puzzle is finally complete.",
    "sentence_has_word": true
   },
@@ -1036,7 +1036,7 @@
    "word": "continue",
    "heard": "Continue.",
    "match": true,
-   "confidence": -0.387,
+   "confidence": -0.379,
    "sentence_heard": "Please continue reading.",
    "sentence_has_word": true
   },
@@ -1044,7 +1044,7 @@
    "word": "describe",
    "heard": "and describe.",
    "match": true,
-   "confidence": -0.429,
+   "confidence": -0.456,
    "sentence_heard": "Describe your best holiday.",
    "sentence_has_word": true
   },
@@ -1052,7 +1052,7 @@
    "word": "different",
    "heard": "Different.",
    "match": true,
-   "confidence": -0.416,
+   "confidence": -0.412,
    "sentence_heard": "My brother and I have different hobbies.",
    "sentence_has_word": true
   },
@@ -1060,7 +1060,7 @@
    "word": "discover",
    "heard": "Discover.",
    "match": true,
-   "confidence": -0.442,
+   "confidence": -0.444,
    "sentence_heard": "They discovered a cave by the beach.",
    "sentence_has_word": true
   },
@@ -1068,7 +1068,7 @@
    "word": "guide",
    "heard": "Guide.",
    "match": true,
-   "confidence": -0.463,
+   "confidence": -0.469,
    "sentence_heard": "Our guide showed us the temple.",
    "sentence_has_word": true
   },
@@ -1076,7 +1076,7 @@
    "word": "imagine",
    "heard": "Imagine.",
    "match": true,
-   "confidence": -0.405,
+   "confidence": -0.373,
    "sentence_heard": "Imagine you could fly.",
    "sentence_has_word": true
   },
@@ -1084,7 +1084,7 @@
    "word": "important",
    "heard": "important.",
    "match": true,
-   "confidence": -0.272,
+   "confidence": -0.27,
    "sentence_heard": "Sleep is important for growing.",
    "sentence_has_word": true
   },
@@ -1092,7 +1092,7 @@
    "word": "increase",
    "heard": "increase.",
    "match": true,
-   "confidence": -0.33,
+   "confidence": -0.34,
    "sentence_heard": "The price of mangoes will increase.",
    "sentence_has_word": true
   },
@@ -1100,7 +1100,7 @@
    "word": "interest",
    "heard": "interest.",
    "match": true,
-   "confidence": -0.337,
+   "confidence": -0.332,
    "sentence_heard": "She has a big interest in sharks.",
    "sentence_has_word": true
   },
@@ -1108,7 +1108,7 @@
    "word": "island",
    "heard": "Island.",
    "match": true,
-   "confidence": -0.24,
+   "confidence": -0.25,
    "sentence_heard": "Bali is an island.",
    "sentence_has_word": true
   },
@@ -1116,7 +1116,7 @@
    "word": "natural",
    "heard": "natural.",
    "match": true,
-   "confidence": -0.528,
+   "confidence": -0.53,
    "sentence_heard": "The beach has natural rock pools.",
    "sentence_has_word": true
   },
@@ -1124,7 +1124,7 @@
    "word": "nervous",
    "heard": "Nervous.",
    "match": true,
-   "confidence": -0.472,
+   "confidence": -0.48,
    "sentence_heard": "I feel nervous before a test.",
    "sentence_has_word": true
   },
@@ -1132,7 +1132,7 @@
    "word": "position",
    "heard": "position.",
    "match": true,
-   "confidence": -0.345,
+   "confidence": -0.336,
    "sentence_heard": "Put the chairs back in position.",
    "sentence_has_word": true
   },
@@ -1140,7 +1140,7 @@
    "word": "possible",
    "heard": "possible.",
    "match": true,
-   "confidence": -0.545,
+   "confidence": -0.494,
    "sentence_heard": "Is it possible to swim to that island?",
    "sentence_has_word": true
   },
@@ -1148,7 +1148,7 @@
    "word": "potatoes",
    "heard": "Potatoes",
    "match": true,
-   "confidence": -0.256,
+   "confidence": -0.288,
    "sentence_heard": "We had roast potatoes for dinner.",
    "sentence_has_word": true
   },
@@ -1156,7 +1156,7 @@
    "word": "probably",
    "heard": "Probably.",
    "match": true,
-   "confidence": -0.258,
+   "confidence": -0.261,
    "sentence_heard": "It will probably rain later.",
    "sentence_has_word": true
   },
@@ -1164,7 +1164,7 @@
    "word": "recent",
    "heard": "recent.",
    "match": true,
-   "confidence": -0.679,
+   "confidence": -0.722,
    "sentence_heard": "This is a recent photo of my family.",
    "sentence_has_word": true
   },
@@ -1172,7 +1172,7 @@
    "word": "special",
    "heard": "special.",
    "match": true,
-   "confidence": -0.628,
+   "confidence": -0.64,
    "sentence_heard": "Today is a special day.",
    "sentence_has_word": true
   },
@@ -1180,7 +1180,7 @@
    "word": "surprise",
    "heard": "Surprise.",
    "match": true,
-   "confidence": -0.468,
+   "confidence": -0.463,
    "sentence_heard": "We planned a surprise party.",
    "sentence_has_word": true
   },
@@ -1188,15 +1188,15 @@
    "word": "bought",
    "heard": "But...",
    "match": false,
-   "confidence": -0.623,
-   "sentence_heard": "We bought fresh fish at the market",
+   "confidence": -0.606,
+   "sentence_heard": "We bought fresh fish at the market.",
    "sentence_has_word": true
   },
   {
    "word": "daughter",
    "heard": "daughter.",
    "match": true,
-   "confidence": -0.463,
+   "confidence": -0.448,
    "sentence_heard": "They have one son and two daughters.",
    "sentence_has_word": true
   },
@@ -1204,7 +1204,7 @@
    "word": "castle",
    "heard": "Castle.",
    "match": true,
-   "confidence": -0.654,
+   "confidence": -0.668,
    "sentence_heard": "The king lived in a castle on a hill.",
    "sentence_has_word": true
   },
@@ -1212,7 +1212,7 @@
    "word": "sign",
    "heard": "sign.",
    "match": true,
-   "confidence": -0.589,
+   "confidence": -0.536,
    "sentence_heard": "The sign says no swimming.",
    "sentence_has_word": true
   },
@@ -1220,7 +1220,7 @@
    "word": "half",
    "heard": "Half.",
    "match": true,
-   "confidence": -0.36,
+   "confidence": -0.336,
    "sentence_heard": "Cut the apple in half.",
    "sentence_has_word": true
   },
@@ -1228,7 +1228,7 @@
    "word": "thousand",
    "heard": "1,000",
    "match": true,
-   "confidence": -0.604,
+   "confidence": -0.619,
    "sentence_heard": "There are a thousand stars tonight.",
    "sentence_has_word": true
   },
@@ -1236,7 +1236,7 @@
    "word": "clothes",
    "heard": "clothes.",
    "match": true,
-   "confidence": -0.533,
+   "confidence": -0.588,
    "sentence_heard": "Put your wet clothes on the line.",
    "sentence_has_word": true
   },
@@ -1244,7 +1244,7 @@
    "word": "toward",
    "heard": "toward.",
    "match": true,
-   "confidence": -0.652,
+   "confidence": -0.717,
    "sentence_heard": "The dog ran toward me.",
    "sentence_has_word": true
   },
@@ -1252,7 +1252,7 @@
    "word": "dangerous",
    "heard": "dangerous.",
    "match": true,
-   "confidence": -0.358,
+   "confidence": -0.327,
    "sentence_heard": "Big waves can be dangerous.",
    "sentence_has_word": true
   },
@@ -1260,7 +1260,7 @@
    "word": "honest",
    "heard": "Honest.",
    "match": true,
-   "confidence": -0.178,
+   "confidence": -0.171,
    "sentence_heard": "Thank you for being honest.",
    "sentence_has_word": true
   },
@@ -1268,7 +1268,7 @@
    "word": "wrong",
    "heard": "Wrong.",
    "match": true,
-   "confidence": -0.158,
+   "confidence": -0.151,
    "sentence_heard": "That answer is wrong, so try again.",
    "sentence_has_word": true
   },
@@ -1276,7 +1276,7 @@
    "word": "bicycle",
    "heard": "Bicycle.",
    "match": true,
-   "confidence": -0.764,
+   "confidence": -0.776,
    "sentence_heard": "I ride my bicycle to school.",
    "sentence_has_word": true
   },
@@ -1284,7 +1284,7 @@
    "word": "beautiful",
    "heard": "beautiful.",
    "match": true,
-   "confidence": -0.527,
+   "confidence": -0.468,
    "sentence_heard": "The sunset over the sea was beautiful.",
    "sentence_has_word": true
   },
@@ -1292,7 +1292,7 @@
    "word": "certain",
    "heard": "certain.",
    "match": true,
-   "confidence": -0.716,
+   "confidence": -0.727,
    "sentence_heard": "Are you certain the door is locked?",
    "sentence_has_word": true
   },
@@ -1300,7 +1300,7 @@
    "word": "accept",
    "heard": "Accept.",
    "match": true,
-   "confidence": -0.581,
+   "confidence": -0.536,
    "sentence_heard": "Please accept the small gift.",
    "sentence_has_word": true
   },
@@ -1308,7 +1308,7 @@
    "word": "among",
    "heard": "among.",
    "match": true,
-   "confidence": -0.976,
+   "confidence": -1.0,
    "sentence_heard": "She sat among her friends.",
    "sentence_has_word": true
   },
@@ -1316,7 +1316,7 @@
    "word": "appear",
    "heard": "up here.",
    "match": false,
-   "confidence": -0.253,
+   "confidence": -0.242,
    "sentence_heard": "A rainbow appeared after the storm.",
    "sentence_has_word": true
   },
@@ -1324,7 +1324,7 @@
    "word": "guard",
    "heard": "guard.",
    "match": true,
-   "confidence": -0.455,
+   "confidence": -0.444,
    "sentence_heard": "A guard stood at the gate.",
    "sentence_has_word": true
   },
@@ -1332,7 +1332,7 @@
    "word": "machine",
    "heard": "machine.",
    "match": true,
-   "confidence": -0.44,
+   "confidence": -0.466,
    "sentence_heard": "The washing machine is noisy.",
    "sentence_has_word": true
   },
@@ -1340,7 +1340,7 @@
    "word": "measure",
    "heard": "measure.",
    "match": true,
-   "confidence": -0.455,
+   "confidence": -0.431,
    "sentence_heard": "Measure the table with a ruler.",
    "sentence_has_word": true
   },
@@ -1348,7 +1348,7 @@
    "word": "science",
    "heard": "science.",
    "match": true,
-   "confidence": -0.562,
+   "confidence": -0.556,
    "sentence_heard": "We have science on Mondays.",
    "sentence_has_word": true
   },
@@ -1356,7 +1356,7 @@
    "word": "straight",
    "heard": "is straight.",
    "match": true,
-   "confidence": -0.398,
+   "confidence": -0.419,
    "sentence_heard": "Draw a straight line with a ruler.",
    "sentence_has_word": true
   },
@@ -1364,7 +1364,7 @@
    "word": "opposite",
    "heard": "opposite.",
    "match": true,
-   "confidence": -0.406,
+   "confidence": -0.444,
    "sentence_heard": "Heart is the opposite of cold.",
    "sentence_has_word": true
   },
@@ -1372,7 +1372,7 @@
    "word": "address",
    "heard": "address.",
    "match": true,
-   "confidence": -0.308,
+   "confidence": -0.295,
    "sentence_heard": "Write your address on the envelope.",
    "sentence_has_word": true
   },
@@ -1380,7 +1380,7 @@
    "word": "although",
    "heard": "Although.",
    "match": true,
-   "confidence": -0.807,
+   "confidence": -0.795,
    "sentence_heard": "I went outside, although it was raining.",
    "sentence_has_word": true
   },
@@ -1388,7 +1388,7 @@
    "word": "attention",
    "heard": "Attention.",
    "match": true,
-   "confidence": -0.411,
+   "confidence": -0.409,
    "sentence_heard": "Please pay attention to the teacher",
    "sentence_has_word": true
   },
@@ -1396,7 +1396,7 @@
    "word": "breathe",
    "heard": "Breathe.",
    "match": true,
-   "confidence": -0.38,
+   "confidence": -0.401,
    "sentence_heard": "Breathe in slowly through your nose.",
    "sentence_has_word": true
   },
@@ -1404,7 +1404,7 @@
    "word": "calendar",
    "heard": "calendar.",
    "match": true,
-   "confidence": -0.357,
+   "confidence": -0.375,
    "sentence_heard": "Mark the test on the calendar.",
    "sentence_has_word": true
   },
@@ -1412,7 +1412,7 @@
    "word": "ceiling",
    "heard": "ceiling.",
    "match": true,
-   "confidence": -0.259,
+   "confidence": -0.27,
    "sentence_heard": "A gecko is walking on the ceiling.",
    "sentence_has_word": true
   },
@@ -1420,7 +1420,7 @@
    "word": "character",
    "heard": "character.",
    "match": true,
-   "confidence": -0.754,
+   "confidence": -0.694,
    "sentence_heard": "Harry is the main character in the book.",
    "sentence_has_word": true
   },
@@ -1428,7 +1428,7 @@
    "word": "February",
    "heard": "February",
    "match": true,
-   "confidence": -0.299,
+   "confidence": -0.328,
    "sentence_heard": "Carnival is in February.",
    "sentence_has_word": true
   },
@@ -1436,7 +1436,7 @@
    "word": "Wednesday",
    "heard": "Wednesday.",
    "match": true,
-   "confidence": -0.125,
+   "confidence": -0.147,
    "sentence_heard": "We have swimming on Wednesday.",
    "sentence_has_word": true
   },
@@ -1444,23 +1444,23 @@
    "word": "whether",
    "heard": "weather.",
    "match": true,
-   "confidence": -0.285,
-   "sentence_heard": "I don't know whether to laugh or cry",
+   "confidence": -0.309,
+   "sentence_heard": "I don't know whether to laugh or cry.",
    "sentence_has_word": true
   },
   {
    "word": "library",
    "heard": "library.",
    "match": true,
-   "confidence": -0.534,
-   "sentence_heard": "I borrowed three books from the library",
+   "confidence": -0.539,
+   "sentence_heard": "I borrowed three books from the library.",
    "sentence_has_word": true
   },
   {
    "word": "ordinary",
    "heard": "Ordinary.",
    "match": true,
-   "confidence": -0.354,
+   "confidence": -0.371,
    "sentence_heard": "It was an ordinary school day.",
    "sentence_has_word": true
   },
@@ -1468,7 +1468,7 @@
    "word": "strength",
    "heard": "strength.",
    "match": true,
-   "confidence": -0.413,
+   "confidence": -0.36,
    "sentence_heard": "It takes strength to lift that box.",
    "sentence_has_word": true
   },
@@ -1476,7 +1476,7 @@
    "word": "language",
    "heard": "language.",
    "match": true,
-   "confidence": -0.403,
+   "confidence": -0.404,
    "sentence_heard": "English is my second language.",
    "sentence_has_word": true
   },
@@ -1484,23 +1484,23 @@
    "word": "accident",
    "heard": "accident.",
    "match": true,
-   "confidence": -0.352,
-   "sentence_heard": "He broke his arm in a bike accident.",
+   "confidence": -0.317,
+   "sentence_heard": "broke his arm in a bike accident.",
    "sentence_has_word": true
   },
   {
    "word": "beginning",
    "heard": "beginning.",
    "match": true,
-   "confidence": -0.453,
+   "confidence": -0.449,
    "sentence_heard": "Lets go back to the beginning of the story.",
    "sentence_has_word": true
   },
   {
    "word": "consider",
-   "heard": "Consider.",
+   "heard": "consider.",
    "match": true,
-   "confidence": -0.51,
+   "confidence": -0.549,
    "sentence_heard": "Consider both choices before you decide.",
    "sentence_has_word": true
   },
@@ -1508,7 +1508,7 @@
    "word": "doubt",
    "heard": "out.",
    "match": false,
-   "confidence": -0.834,
+   "confidence": -0.82,
    "sentence_heard": "I doubt it will rain today.",
    "sentence_has_word": true
   },
@@ -1516,7 +1516,7 @@
    "word": "experiment",
    "heard": "experiment.",
    "match": true,
-   "confidence": -0.587,
+   "confidence": -0.633,
    "sentence_heard": "In science, we did an experiment with ICE.",
    "sentence_has_word": true
   },
@@ -1524,15 +1524,15 @@
    "word": "grammar",
    "heard": "A grammar.",
    "match": true,
-   "confidence": -0.522,
+   "confidence": -0.539,
    "sentence_heard": "German grammar has three genders.",
    "sentence_has_word": true
   },
   {
    "word": "difficult",
-   "heard": "and difficult.",
+   "heard": "Difficult.",
    "match": true,
-   "confidence": -0.494,
+   "confidence": -0.518,
    "sentence_heard": "This puzzle is difficult.",
    "sentence_has_word": true
   },
@@ -1540,7 +1540,7 @@
    "word": "disappear",
    "heard": "and disappear.",
    "match": true,
-   "confidence": -0.365,
+   "confidence": -0.308,
    "sentence_heard": "The magician made the coin disappear.",
    "sentence_has_word": true
   },
@@ -1548,7 +1548,7 @@
    "word": "shoulder",
    "heard": "shoulder.",
    "match": true,
-   "confidence": -0.204,
+   "confidence": -0.213,
    "sentence_heard": "The parrot sat on his shoulder.",
    "sentence_has_word": true
   },
@@ -1556,7 +1556,7 @@
    "word": "tongue",
    "heard": "tongue.",
    "match": true,
-   "confidence": -0.404,
+   "confidence": -0.436,
    "sentence_heard": "Don't stick your tongue out.",
    "sentence_has_word": true
   },
@@ -1564,7 +1564,7 @@
    "word": "juice",
    "heard": "juice.",
    "match": true,
-   "confidence": -0.25,
+   "confidence": -0.227,
    "sentence_heard": "I'd like a glass of orange juice.",
    "sentence_has_word": true
   },
@@ -1572,15 +1572,15 @@
    "word": "lightning",
    "heard": "lightning.",
    "match": true,
-   "confidence": -0.402,
+   "confidence": -0.425,
    "sentence_heard": "Lightening lit up the whole sky.",
    "sentence_has_word": false
   },
   {
    "word": "vegetable",
-   "heard": "vegetable.",
+   "heard": "Vegetable.",
    "match": true,
-   "confidence": -0.544,
+   "confidence": -0.637,
    "sentence_heard": "Broccoli is a green vegetable.",
    "sentence_has_word": true
   },
@@ -1588,7 +1588,7 @@
    "word": "dictionary",
    "heard": "Dictionary.",
    "match": true,
-   "confidence": -0.507,
+   "confidence": -0.492,
    "sentence_heard": "Look the word up in the dictionary.",
    "sentence_has_word": true
   },
@@ -1596,15 +1596,15 @@
    "word": "decision",
    "heard": "decision.",
    "match": true,
-   "confidence": -0.324,
-   "sentence_heard": "It was a hard decision.",
+   "confidence": -0.309,
+   "sentence_heard": "It was a hard decision",
    "sentence_has_word": true
   },
   {
    "word": "argument",
    "heard": "argument.",
    "match": true,
-   "confidence": -0.392,
+   "confidence": -0.374,
    "sentence_heard": "The twins had an argument about the toy.",
    "sentence_has_word": true
   },
@@ -1612,7 +1612,7 @@
    "word": "business",
    "heard": "Business.",
    "match": true,
-   "confidence": -0.47,
+   "confidence": -0.499,
    "sentence_heard": "My uncle runs a small business.",
    "sentence_has_word": true
   },
@@ -1620,7 +1620,7 @@
    "word": "exercise",
    "heard": "exercise.",
    "match": true,
-   "confidence": -0.274,
+   "confidence": -0.304,
    "sentence_heard": "Swimming is good exercise.",
    "sentence_has_word": true
   },
@@ -1628,7 +1628,7 @@
    "word": "experience",
    "heard": "experience.",
    "match": true,
-   "confidence": -0.343,
+   "confidence": -0.332,
    "sentence_heard": "Snorkeling was an amazing experience.",
    "sentence_has_word": true
   },
@@ -1636,7 +1636,7 @@
    "word": "knowledge",
    "heard": "Knowledge.",
    "match": true,
-   "confidence": -0.411,
+   "confidence": -0.409,
    "sentence_heard": "Reading books gives you knowledge.",
    "sentence_has_word": true
   },
@@ -1644,7 +1644,7 @@
    "word": "particular",
    "heard": "Particular.",
    "match": true,
-   "confidence": -0.556,
+   "confidence": -0.568,
    "sentence_heard": "Is there a particular book you want?",
    "sentence_has_word": true
   },
@@ -1652,15 +1652,15 @@
    "word": "receive",
    "heard": "receive.",
    "match": true,
-   "confidence": -0.547,
+   "confidence": -0.58,
    "sentence_heard": "Did you receive my message?",
    "sentence_has_word": true
   },
   {
    "word": "government",
-   "heard": "Government.",
+   "heard": "government.",
    "match": true,
-   "confidence": -0.8,
+   "confidence": -0.813,
    "sentence_heard": "The government built a new school.",
    "sentence_has_word": true
   },
@@ -1668,7 +1668,7 @@
    "word": "environment",
    "heard": "environment.",
    "match": true,
-   "confidence": -0.201,
+   "confidence": -0.198,
    "sentence_heard": "We must protect the environment.",
    "sentence_has_word": true
   },
@@ -1676,7 +1676,7 @@
    "word": "especially",
    "heard": "especially.",
    "match": true,
-   "confidence": -0.503,
+   "confidence": -0.44,
    "sentence_heard": "I love fruit, especially mangoes.",
    "sentence_has_word": true
   },
@@ -1684,7 +1684,7 @@
    "word": "foreign",
    "heard": "Foreign.",
    "match": true,
-   "confidence": -0.715,
+   "confidence": -0.697,
    "sentence_heard": "She speaks two foreign languages.",
    "sentence_has_word": true
   },
@@ -1692,7 +1692,7 @@
    "word": "achieve",
    "heard": "achieve.",
    "match": true,
-   "confidence": -0.478,
+   "confidence": -0.48,
    "sentence_heard": "You can achieve a lot if you keep trying.",
    "sentence_has_word": true
   },
@@ -1700,7 +1700,7 @@
    "word": "awkward",
    "heard": "Awkward.",
    "match": true,
-   "confidence": -0.154,
+   "confidence": -0.155,
    "sentence_heard": "There was an awkward silence.",
    "sentence_has_word": true
   },
@@ -1708,7 +1708,7 @@
    "word": "muscle",
    "heard": "muscle.",
    "match": true,
-   "confidence": -0.382,
+   "confidence": -0.399,
    "sentence_heard": "Swimming makes your muscles strong.",
    "sentence_has_word": true
   },
@@ -1716,7 +1716,7 @@
    "word": "stomach",
    "heard": "is stomach.",
    "match": true,
-   "confidence": -0.871,
+   "confidence": -0.884,
    "sentence_heard": "My stomach is rumbling.",
    "sentence_has_word": true
   },
@@ -1724,7 +1724,7 @@
    "word": "temperature",
    "heard": "temperature.",
    "match": true,
-   "confidence": -0.326,
+   "confidence": -0.349,
    "sentence_heard": "The temperature today is 31 degrees.",
    "sentence_has_word": true
   },
@@ -1732,7 +1732,7 @@
    "word": "signature",
    "heard": "signature.",
    "match": true,
-   "confidence": -0.55,
+   "confidence": -0.56,
    "sentence_heard": "Put your signature at the bottom.",
    "sentence_has_word": true
   },
@@ -1740,7 +1740,7 @@
    "word": "vehicle",
    "heard": "vehicle.",
    "match": true,
-   "confidence": -0.365,
+   "confidence": -0.36,
    "sentence_heard": "A scooter is a small vehicle.",
    "sentence_has_word": true
   },
@@ -1748,7 +1748,7 @@
    "word": "average",
    "heard": "average.",
    "match": true,
-   "confidence": -0.53,
+   "confidence": -0.467,
    "sentence_heard": "The average class has 20 pupils.",
    "sentence_has_word": true
   },
@@ -1756,7 +1756,7 @@
    "word": "available",
    "heard": "Available.",
    "match": true,
-   "confidence": -0.284,
+   "confidence": -0.292,
    "sentence_heard": "Is this seat available?",
    "sentence_has_word": true
   },
@@ -1764,7 +1764,7 @@
    "word": "ancient",
    "heard": "ancient.",
    "match": true,
-   "confidence": -0.45,
+   "confidence": -0.472,
    "sentence_heard": "We visited an ancient temple.",
    "sentence_has_word": true
   },
@@ -1772,7 +1772,7 @@
    "word": "bargain",
    "heard": "I'm bargain",
    "match": true,
-   "confidence": -0.881,
+   "confidence": -0.946,
    "sentence_heard": "This shirt was a real bargain.",
    "sentence_has_word": true
   },
@@ -1780,7 +1780,7 @@
    "word": "category",
    "heard": "category.",
    "match": true,
-   "confidence": -0.649,
+   "confidence": -0.659,
    "sentence_heard": "Sort the animals into categories.",
    "sentence_has_word": false
   },
@@ -1788,7 +1788,7 @@
    "word": "community",
    "heard": "community.",
    "match": true,
-   "confidence": -0.354,
+   "confidence": -0.375,
    "sentence_heard": "Our school is a friendly community.",
    "sentence_has_word": true
   },
@@ -1796,7 +1796,7 @@
    "word": "competition",
    "heard": "competition.",
    "match": true,
-   "confidence": -0.522,
+   "confidence": -0.492,
    "sentence_heard": "She won the drawing competition.",
    "sentence_has_word": true
   },
@@ -1804,7 +1804,7 @@
    "word": "determined",
    "heard": "Determined.",
    "match": true,
-   "confidence": -0.546,
+   "confidence": -0.525,
    "sentence_heard": "was determined to finish the race",
    "sentence_has_word": true
   },
@@ -1812,7 +1812,7 @@
    "word": "develop",
    "heard": "Develop.",
    "match": true,
-   "confidence": -0.724,
+   "confidence": -0.677,
    "sentence_heard": "tadpoles develop into frogs.",
    "sentence_has_word": true
   },
@@ -1820,15 +1820,15 @@
    "word": "equipment",
    "heard": "equipment.",
    "match": true,
-   "confidence": -0.537,
+   "confidence": -0.548,
    "sentence_heard": "Pack your snorkel equipment.",
    "sentence_has_word": true
   },
   {
    "word": "familiar",
-   "heard": "familiar.",
+   "heard": "Familiar.",
    "match": true,
-   "confidence": -0.587,
+   "confidence": -0.601,
    "sentence_heard": "That song sounds familiar.",
    "sentence_has_word": true
   },
@@ -1836,7 +1836,7 @@
    "word": "frequently",
    "heard": "Frequently.",
    "match": true,
-   "confidence": -0.383,
+   "confidence": -0.389,
    "sentence_heard": "It frequently rains in December.",
    "sentence_has_word": true
   },
@@ -1844,7 +1844,7 @@
    "word": "individual",
    "heard": "individual.",
    "match": true,
-   "confidence": -0.223,
+   "confidence": -0.221,
    "sentence_heard": "Each individual gets a ticket.",
    "sentence_has_word": true
   },
@@ -1852,7 +1852,7 @@
    "word": "interrupt",
    "heard": "Interrupt.",
    "match": true,
-   "confidence": -0.392,
+   "confidence": -0.383,
    "sentence_heard": "Please don't interrupt me.",
    "sentence_has_word": true
   },
@@ -1860,7 +1860,7 @@
    "word": "persuade",
    "heard": "Persuade.",
    "match": true,
-   "confidence": -0.154,
+   "confidence": -0.155,
    "sentence_heard": "I persuaded mom to buy ice cream.",
    "sentence_has_word": true
   },
@@ -1868,7 +1868,7 @@
    "word": "physical",
    "heard": "Physical.",
    "match": true,
-   "confidence": -0.497,
+   "confidence": -0.495,
    "sentence_heard": "Running is good physical exercise.",
    "sentence_has_word": true
   },
@@ -1876,7 +1876,7 @@
    "word": "exhausted",
    "heard": "Exhausted.",
    "match": true,
-   "confidence": -0.222,
+   "confidence": -0.229,
    "sentence_heard": "I was exhausted after the long hike.",
    "sentence_has_word": true
   },
@@ -1884,7 +1884,7 @@
    "word": "soldier",
    "heard": "soldier.",
    "match": true,
-   "confidence": -0.744,
+   "confidence": -0.736,
    "sentence_heard": "The soldier stood very still.",
    "sentence_has_word": true
   },
@@ -1892,7 +1892,7 @@
    "word": "suggest",
    "heard": "I suggest.",
    "match": true,
-   "confidence": -0.646,
+   "confidence": -0.656,
    "sentence_heard": "I suggest we go swimming",
    "sentence_has_word": true
   },
@@ -1900,7 +1900,7 @@
    "word": "mysterious",
    "heard": "Mysterious.",
    "match": true,
-   "confidence": -0.53,
+   "confidence": -0.506,
    "sentence_heard": "We heard a mysterious noise.",
    "sentence_has_word": true
   },
@@ -1908,7 +1908,7 @@
    "word": "rhyme",
    "heard": "rhyme.",
    "match": true,
-   "confidence": -0.418,
+   "confidence": -0.424,
    "sentence_heard": "Cat rhymes with hat.",
    "sentence_has_word": true
   },
@@ -1916,7 +1916,7 @@
    "word": "forty",
    "heard": "40.",
    "match": true,
-   "confidence": -0.33,
+   "confidence": -0.326,
    "sentence_heard": "There are 40 pupils in the hall.",
    "sentence_has_word": false
   },
@@ -1924,7 +1924,7 @@
    "word": "necessary",
    "heard": "necessary.",
    "match": true,
-   "confidence": -0.325,
+   "confidence": -0.356,
    "sentence_heard": "Sun cream is necessary at the beach.",
    "sentence_has_word": true
   },
@@ -1932,7 +1932,7 @@
    "word": "rhythm",
    "heard": "rhythm.",
    "match": true,
-   "confidence": -0.604,
+   "confidence": -0.608,
    "sentence_heard": "Clap along to the rhythm.",
    "sentence_has_word": true
   },
@@ -1940,7 +1940,7 @@
    "word": "separate",
    "heard": "is separate.",
    "match": true,
-   "confidence": -0.423,
+   "confidence": -0.435,
    "sentence_heard": "Keep the eggs separate from the flour.",
    "sentence_has_word": true
   },
@@ -1948,7 +1948,7 @@
    "word": "accommodate",
    "heard": "Accommodate.",
    "match": true,
-   "confidence": -0.391,
+   "confidence": -0.403,
    "sentence_heard": "The villa can accommodate 10 guests.",
    "sentence_has_word": true
   },
@@ -1956,23 +1956,23 @@
    "word": "rhinoceros",
    "heard": "Rhinoceros.",
    "match": true,
-   "confidence": -0.517,
-   "sentence_heard": "Arinoceros has very thick skin.",
-   "sentence_has_word": false
+   "confidence": -0.556,
+   "sentence_heard": "A rhinoceros has very thick skin.",
+   "sentence_has_word": true
   },
   {
    "word": "apparent",
    "heard": "Apparent",
    "match": true,
-   "confidence": -0.948,
+   "confidence": -0.955,
    "sentence_heard": "It was apparent that she was tired.",
    "sentence_has_word": true
   },
   {
    "word": "appreciate",
-   "heard": "appreciate.",
+   "heard": "Appreciate",
    "match": true,
-   "confidence": -0.486,
+   "confidence": -0.551,
    "sentence_heard": "appreciate your help.",
    "sentence_has_word": true
   },
@@ -1980,15 +1980,15 @@
    "word": "bruise",
    "heard": "Bruce.",
    "match": false,
-   "confidence": -1.296,
+   "confidence": -1.275,
    "sentence_heard": "I got a bruise on my knee.",
    "sentence_has_word": true
   },
   {
    "word": "cemetery",
-   "heard": "The cemetery.",
+   "heard": "cemetery.",
    "match": true,
-   "confidence": -0.702,
+   "confidence": -0.578,
    "sentence_heard": "There is an old cemetery near the church.",
    "sentence_has_word": true
   },
@@ -1996,7 +1996,7 @@
    "word": "committee",
    "heard": "Committee.",
    "match": true,
-   "confidence": -0.322,
+   "confidence": -0.325,
    "sentence_heard": "The school committee planned the fair.",
    "sentence_has_word": true
   },
@@ -2004,7 +2004,7 @@
    "word": "conscience",
    "heard": "conscience.",
    "match": true,
-   "confidence": -0.589,
+   "confidence": -0.551,
    "sentence_heard": "My conscience told me to say sorry.",
    "sentence_has_word": true
   },
@@ -2012,7 +2012,7 @@
    "word": "conscious",
    "heard": "conscious.",
    "match": true,
-   "confidence": -0.551,
+   "confidence": -0.497,
    "sentence_heard": "was conscious after the fall.",
    "sentence_has_word": true
   },
@@ -2020,7 +2020,7 @@
    "word": "curiosity",
    "heard": "Curiosity.",
    "match": true,
-   "confidence": -0.511,
+   "confidence": -0.455,
    "sentence_heard": "Curiosity makes you a good scientist.",
    "sentence_has_word": true
   },
@@ -2028,7 +2028,7 @@
    "word": "definitely",
    "heard": "Definitely.",
    "match": true,
-   "confidence": -0.287,
+   "confidence": -0.301,
    "sentence_heard": "I will definitely come.",
    "sentence_has_word": true
   },
@@ -2036,7 +2036,7 @@
    "word": "desperate",
    "heard": "Desperate.",
    "match": true,
-   "confidence": -0.289,
+   "confidence": -0.247,
    "sentence_heard": "The dog was desperate for water.",
    "sentence_has_word": true
   },
@@ -2044,7 +2044,7 @@
    "word": "disastrous",
    "heard": "disastrous.",
    "match": true,
-   "confidence": -0.659,
+   "confidence": -0.672,
    "sentence_heard": "The storm was disastrous for the farmers.",
    "sentence_has_word": true
   },
@@ -2052,7 +2052,7 @@
    "word": "embarrass",
    "heard": "Embarrass.",
    "match": true,
-   "confidence": -0.523,
+   "confidence": -0.53,
    "sentence_heard": "Please don't embarrass me.",
    "sentence_has_word": true
   },
@@ -2060,7 +2060,7 @@
    "word": "exaggerate",
    "heard": "exaggerate.",
    "match": true,
-   "confidence": -0.256,
+   "confidence": -0.241,
    "sentence_heard": "don't exaggerate, it was only a small spider.",
    "sentence_has_word": true
   },
@@ -2068,7 +2068,7 @@
    "word": "existence",
    "heard": "Existence.",
    "match": true,
-   "confidence": -0.388,
+   "confidence": -0.374,
    "sentence_heard": "Do you believe in the existence of dragons?",
    "sentence_has_word": true
   },
@@ -2076,7 +2076,7 @@
    "word": "guarantee",
    "heard": "Guarantee.",
    "match": true,
-   "confidence": -0.277,
+   "confidence": -0.296,
    "sentence_heard": "The watch has a two year guarantee.",
    "sentence_has_word": true
   },
@@ -2084,7 +2084,7 @@
    "word": "immediately",
    "heard": "immediately.",
    "match": true,
-   "confidence": -0.321,
+   "confidence": -0.288,
    "sentence_heard": "come here immediately.",
    "sentence_has_word": true
   },
@@ -2092,7 +2092,7 @@
    "word": "interfere",
    "heard": "interfere.",
    "match": true,
-   "confidence": -0.495,
+   "confidence": -0.55,
    "sentence_heard": "Don't interfere in their game.",
    "sentence_has_word": true
   },
@@ -2100,7 +2100,7 @@
    "word": "leisure",
    "heard": "A leisure.",
    "match": true,
-   "confidence": -0.348,
+   "confidence": -0.334,
    "sentence_heard": "We read books in our leisure time.",
    "sentence_has_word": true
   },
@@ -2108,15 +2108,15 @@
    "word": "mischievous",
    "heard": "Mischievous.",
    "match": true,
-   "confidence": -0.527,
+   "confidence": -0.536,
    "sentence_heard": "The mischievous monkey stole my hat.",
    "sentence_has_word": true
   },
   {
    "word": "nuisance",
-   "heard": "nuisance.",
-   "match": true,
-   "confidence": -0.55,
+   "heard": "New sense.",
+   "match": false,
+   "confidence": -0.607,
    "sentence_heard": "Mosquitoes are a nuisance.",
    "sentence_has_word": true
   },
@@ -2124,7 +2124,7 @@
    "word": "occasionally",
    "heard": "occasionally.",
    "match": true,
-   "confidence": -0.436,
+   "confidence": -0.437,
    "sentence_heard": "We occasionally eat out.",
    "sentence_has_word": true
   },
@@ -2132,7 +2132,7 @@
    "word": "occur",
    "heard": "occur.",
    "match": true,
-   "confidence": -0.291,
+   "confidence": -0.286,
    "sentence_heard": "Earthquakes occur in Indonesia.",
    "sentence_has_word": true
   },
@@ -2140,7 +2140,7 @@
    "word": "opportunity",
    "heard": "opportunity.",
    "match": true,
-   "confidence": -0.325,
+   "confidence": -0.33,
    "sentence_heard": "This is a great opportunity.",
    "sentence_has_word": true
   },
@@ -2148,7 +2148,7 @@
    "word": "privilege",
    "heard": "privilege.",
    "match": true,
-   "confidence": -0.31,
+   "confidence": -0.306,
    "sentence_heard": "It is a privilege to meet you.",
    "sentence_has_word": true
   },
@@ -2156,7 +2156,7 @@
    "word": "pronunciation",
    "heard": "Pronunciation.",
    "match": true,
-   "confidence": -0.196,
+   "confidence": -0.217,
    "sentence_heard": "Her English pronunciation is excellent.",
    "sentence_has_word": true
   },
@@ -2164,7 +2164,7 @@
    "word": "queue",
    "heard": "Thank you.",
    "match": false,
-   "confidence": -0.129,
+   "confidence": -0.133,
    "sentence_heard": "We waited in a long queue.",
    "sentence_has_word": true
   },
@@ -2172,7 +2172,7 @@
    "word": "recommend",
    "heard": "recommend.",
    "match": true,
-   "confidence": -0.611,
+   "confidence": -0.59,
    "sentence_heard": "I recommend this book",
    "sentence_has_word": true
   },
@@ -2180,7 +2180,7 @@
    "word": "sincerely",
    "heard": "sincerely.",
    "match": true,
-   "confidence": -0.465,
+   "confidence": -0.488,
    "sentence_heard": "Your sincerely is a way to end a letter.",
    "sentence_has_word": true
   },
@@ -2188,7 +2188,7 @@
    "word": "sufficient",
    "heard": "sufficient.",
    "match": true,
-   "confidence": -0.654,
+   "confidence": -0.687,
    "sentence_heard": "is one bottle of water sufficient.",
    "sentence_has_word": true
   },
@@ -2196,7 +2196,7 @@
    "word": "thorough",
    "heard": "It's thorough.",
    "match": true,
-   "confidence": -0.954,
+   "confidence": -0.921,
    "sentence_heard": "Do a thorough check of your work.",
    "sentence_has_word": true
   },
@@ -2204,7 +2204,7 @@
    "word": "twelfth",
    "heard": "12th.",
    "match": true,
-   "confidence": -0.707,
+   "confidence": -0.7,
    "sentence_heard": "Today is 12th of November.",
    "sentence_has_word": false
   },
@@ -2212,7 +2212,7 @@
    "word": "yacht",
    "heard": "Yacht.",
    "match": true,
-   "confidence": -0.462,
+   "confidence": -0.464,
    "sentence_heard": "A white yacht sailed past.",
    "sentence_has_word": true
   },
@@ -2220,15 +2220,15 @@
    "word": "explanation",
    "heard": "Explanation.",
    "match": true,
-   "confidence": -0.645,
+   "confidence": -0.634,
    "sentence_heard": "The teacher gave a clear explanation.",
    "sentence_has_word": true
   },
   {
    "word": "convenience",
-   "heard": "Convenience.",
+   "heard": "Convenience",
    "match": true,
-   "confidence": -0.201,
+   "confidence": -0.581,
    "sentence_heard": "A shop on the corner is a real convenience.",
    "sentence_has_word": true
   },
@@ -2236,15 +2236,815 @@
    "word": "correspond",
    "heard": "correspond.",
    "match": true,
-   "confidence": -1.034,
+   "confidence": -1.067,
    "sentence_heard": "I correspond with a pen pal.",
    "sentence_has_word": true
   },
   {
-   "word": "don't",
-   "heard": "You don't.",
+   "word": "tough",
+   "heard": "Tough.",
+   "match": true,
+   "confidence": -0.533,
+   "sentence_heard": "The climb was tough but we made it.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "rough",
+   "heard": "rough",
+   "match": true,
+   "confidence": -0.431,
+   "sentence_heard": "The sea was rough after the storm.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "cough",
+   "heard": "cough.",
+   "match": true,
+   "confidence": -0.511,
+   "sentence_heard": "The smoke made me cough.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "taught",
+   "heard": "Taught.",
+   "match": true,
+   "confidence": -0.664,
+   "sentence_heard": "Mum taught me how to swim.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "naughty",
+   "heard": "Naughty.",
+   "match": true,
+   "confidence": -0.408,
+   "sentence_heard": "The naughty monkey took my banana.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "weigh",
+   "heard": "Way.",
+   "match": false,
+   "confidence": -0.617,
+   "sentence_heard": "Let's weigh the suitcase.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "eighteen",
+   "heard": "18.",
+   "match": false,
+   "confidence": -0.311,
+   "sentence_heard": "My cousin is 18 years old.",
+   "sentence_has_word": false
+  },
+  {
+   "word": "fought",
+   "heard": "fought.",
+   "match": true,
+   "confidence": -0.8,
+   "sentence_heard": "the two cats fought over the fish.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "field",
+   "heard": "field.",
+   "match": true,
+   "confidence": -0.324,
+   "sentence_heard": "The cows are in the field",
+   "sentence_has_word": true
+  },
+  {
+   "word": "chief",
+   "heard": "Chief.",
+   "match": true,
+   "confidence": -0.449,
+   "sentence_heard": "The fire chief arrived first.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "thief",
+   "heard": "Thief.",
+   "match": true,
+   "confidence": -0.323,
+   "sentence_heard": "The thief ran away with the bag.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "niece",
+   "heard": "Nice.",
+   "match": false,
+   "confidence": -0.318,
+   "sentence_heard": "My aunt brought her niece to the party.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "either",
+   "heard": "either.",
+   "match": true,
+   "confidence": -0.326,
+   "sentence_heard": "can have either juice or water.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "chocolate",
+   "heard": "chocolate.",
+   "match": true,
+   "confidence": -0.271,
+   "sentence_heard": "I love hot chocolate.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "family",
+   "heard": "family.",
+   "match": true,
+   "confidence": -0.43,
+   "sentence_heard": "My family lives in Bali.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "animal",
+   "heard": "animal.",
+   "match": true,
+   "confidence": -0.317,
+   "sentence_heard": "The elephant is a big animal.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "holiday",
+   "heard": "Holiday.",
+   "match": true,
+   "confidence": -0.344,
+   "sentence_heard": "We go to Germany for the holidays.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "memory",
+   "heard": "memory.",
+   "match": true,
+   "confidence": -0.539,
+   "sentence_heard": "have a good memory for faces.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "camera",
+   "heard": "camera.",
+   "match": true,
+   "confidence": -0.443,
+   "sentence_heard": "Smile at the camera.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "several",
+   "heard": "Several.",
+   "match": true,
+   "confidence": -0.317,
+   "sentence_heard": "I read several books this week",
+   "sentence_has_word": true
+  },
+  {
+   "word": "hospital",
+   "heard": "Hospital.",
+   "match": true,
+   "confidence": -0.363,
+   "sentence_heard": "The doctor works at the hospital.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "pencil",
+   "heard": "Pencil.",
+   "match": true,
+   "confidence": -0.471,
+   "sentence_heard": "Can I borrow your pencil?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "cousin",
+   "heard": "cousin.",
+   "match": true,
+   "confidence": -0.531,
+   "sentence_heard": "My cousin lives in Berlin.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "button",
+   "heard": "button.",
+   "match": true,
+   "confidence": -0.279,
+   "sentence_heard": "Press the red button.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "garden",
+   "heard": "Garden.",
+   "match": true,
+   "confidence": -0.384,
+   "sentence_heard": "We grow chilies in our garden.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "mountain",
+   "heard": "Mountain.",
+   "match": true,
+   "confidence": -0.261,
+   "sentence_heard": "We climbed the mountain at sunrise.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "captain",
+   "heard": "Captain.",
+   "match": true,
+   "confidence": -0.349,
+   "sentence_heard": "The captain steered the boat.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "curtain",
+   "heard": "Curtin.",
+   "match": false,
+   "confidence": -0.757,
+   "sentence_heard": "Close the curtain, please.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "knee",
+   "heard": "knee.",
+   "match": true,
+   "confidence": -0.529,
+   "sentence_heard": "I fell and hurt my knee",
+   "sentence_has_word": true
+  },
+  {
+   "word": "knock",
+   "heard": "Knock.",
+   "match": true,
+   "confidence": -0.214,
+   "sentence_heard": "Please knock before you come in.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "wrap",
+   "heard": "Wrap.",
+   "match": true,
+   "confidence": -0.525,
+   "sentence_heard": "Let's wrap the present.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "wrist",
+   "heard": "Rest.",
+   "match": false,
+   "confidence": -0.555,
+   "sentence_heard": "I wear my watch on my wrist.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "thumb",
+   "heard": "Thumb.",
+   "match": true,
+   "confidence": -0.35,
+   "sentence_heard": "Thumbs up.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "lamb",
+   "heard": "Lamb.",
+   "match": true,
+   "confidence": -0.427,
+   "sentence_heard": "The lamb follows its mother.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "whistle",
+   "heard": "Whistle.",
+   "match": true,
+   "confidence": -0.308,
+   "sentence_heard": "The coach blew the whistle.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "hour",
+   "heard": "hour.",
+   "match": true,
+   "confidence": -0.551,
+   "sentence_heard": "The flight takes one hour.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "ghost",
+   "heard": "Ghost.",
+   "match": true,
+   "confidence": -0.531,
+   "sentence_heard": "The ghost story was spooky.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "calm",
+   "heard": "Come.",
+   "match": false,
+   "confidence": -0.605,
+   "sentence_heard": "The sea has come this morning.",
+   "sentence_has_word": false
+  },
+  {
+   "word": "happen",
+   "heard": "Happen.",
+   "match": true,
+   "confidence": -0.518,
+   "sentence_heard": "What will happen next?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "rabbit",
+   "heard": "Rabbit.",
+   "match": true,
+   "confidence": -0.803,
+   "sentence_heard": "The rabbit ate a carrot.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "carrot",
+   "heard": "Carrot.",
+   "match": true,
+   "confidence": -0.675,
+   "sentence_heard": "Rabbits love carrots.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "pillow",
+   "heard": "pillow.",
+   "match": true,
+   "confidence": -0.656,
+   "sentence_heard": "need a new pillow.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "summer",
+   "heard": "Summer.",
+   "match": true,
+   "confidence": -0.358,
+   "sentence_heard": "We swim a lot in summer.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "dinner",
+   "heard": "Dinner.",
+   "match": true,
+   "confidence": -0.336,
+   "sentence_heard": "Dinner is ready.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "sudden",
+   "heard": "Sudden.",
+   "match": true,
+   "confidence": -0.407,
+   "sentence_heard": "There was a sudden storm.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "arrive",
+   "heard": "arrive.",
+   "match": true,
+   "confidence": -0.442,
+   "sentence_heard": "We arrive in Munich at six.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "borrow",
+   "heard": "Borrow.",
+   "match": true,
+   "confidence": -0.498,
+   "sentence_heard": "Can I borrow your bike?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "follow",
+   "heard": "Follow.",
+   "match": true,
+   "confidence": -0.312,
+   "sentence_heard": "Follow me to the beach.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "collect",
+   "heard": "Collect.",
+   "match": true,
+   "confidence": -0.57,
+   "sentence_heard": "I collect shells.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "station",
+   "heard": "station.",
+   "match": true,
+   "confidence": -0.377,
+   "sentence_heard": "The train left the station.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "action",
+   "heard": "action.",
+   "match": true,
+   "confidence": -0.511,
+   "sentence_heard": "It is time for action.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "mention",
+   "heard": "Mention",
+   "match": true,
+   "confidence": -0.649,
+   "sentence_heard": "Did she mention the party?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "picture",
+   "heard": "picture.",
+   "match": true,
+   "confidence": -0.376,
+   "sentence_heard": "Draw a picture of your house.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "adventure",
+   "heard": "adventure.",
+   "match": true,
+   "confidence": -0.447,
+   "sentence_heard": "Our trip was a big adventure.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "future",
+   "heard": "future.",
+   "match": true,
+   "confidence": -0.329,
+   "sentence_heard": "What do you want to be in the future?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "creature",
+   "heard": "creature.",
+   "match": true,
+   "confidence": -0.341,
+   "sentence_heard": "A strange creature lives in the pond",
+   "sentence_has_word": true
+  },
+  {
+   "word": "treasure",
+   "heard": "treasure.",
+   "match": true,
+   "confidence": -0.49,
+   "sentence_heard": "The pirates buried their treasure.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "pleasure",
+   "heard": "Pleasure.",
+   "match": true,
+   "confidence": -0.306,
+   "sentence_heard": "It was a pleasure to meet you",
+   "sentence_has_word": true
+  },
+  {
+   "word": "middle",
+   "heard": "Middle.",
    "match": true,
    "confidence": -0.315,
+   "sentence_heard": "Sit in the middle.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "puzzle",
+   "heard": "puzzle.",
+   "match": true,
+   "confidence": -0.48,
+   "sentence_heard": "We finished the puzzle together.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "bottle",
+   "heard": "bottle.",
+   "match": true,
+   "confidence": -0.368,
+   "sentence_heard": "Fill your water bottle.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "travel",
+   "heard": "travel.",
+   "match": true,
+   "confidence": -0.454,
+   "sentence_heard": "We travel to Europe in summer.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "tunnel",
+   "heard": "tunnel.",
+   "match": true,
+   "confidence": -0.311,
+   "sentence_heard": "The train went through a tunnel.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "final",
+   "heard": "Final.",
+   "match": true,
+   "confidence": -0.42,
+   "sentence_heard": "This is the final question.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "too",
+   "heard": "too.",
+   "match": true,
+   "confidence": -0.95,
+   "sentence_heard": "This soup is too hot.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "wear",
+   "heard": "Where?",
+   "match": false,
+   "confidence": -0.514,
+   "sentence_heard": "I wear a hat at the beach.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "hear",
+   "heard": "here.",
+   "match": false,
+   "confidence": -0.306,
+   "sentence_heard": "Can you hear the waves?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "weather",
+   "heard": "weather.",
+   "match": true,
+   "confidence": -0.438,
+   "sentence_heard": "The weather is sunny today.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "quite",
+   "heard": "quite.",
+   "match": true,
+   "confidence": -0.616,
+   "sentence_heard": "The water is quite cold",
+   "sentence_has_word": true
+  },
+  {
+   "word": "than",
+   "heard": "Then.",
+   "match": false,
+   "confidence": -0.575,
+   "sentence_heard": "A whale is bigger than a shark.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "break",
+   "heard": "Break.",
+   "match": true,
+   "confidence": -0.434,
+   "sentence_heard": "Don't break the glass.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "babies",
+   "heard": "babies.",
+   "match": true,
+   "confidence": -0.492,
+   "sentence_heard": "The babies are sleeping.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "stopped",
+   "heard": "stopped.",
+   "match": true,
+   "confidence": -0.308,
+   "sentence_heard": "The bus stopped at the corner.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "careful",
+   "heard": "Careful.",
+   "match": true,
+   "confidence": -0.11,
+   "sentence_heard": "Be careful with the knife.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "happiness",
+   "heard": "Happiness.",
+   "match": true,
+   "confidence": -0.382,
+   "sentence_heard": "Her face was full of happiness.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "thoughtful",
+   "heard": "Thoughtful.",
+   "match": true,
+   "confidence": -0.081,
+   "sentence_heard": "It was thoughtful of you to help.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "neither",
+   "heard": "Neither.",
+   "match": true,
+   "confidence": -0.216,
+   "sentence_heard": "Neither of us was hungry.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "weird",
+   "heard": "Weird.",
+   "match": true,
+   "confidence": -0.206,
+   "sentence_heard": "That was a weird dream.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "shield",
+   "heard": "Shield.",
+   "match": true,
+   "confidence": -0.573,
+   "sentence_heard": "The night held up his shield.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "medicine",
+   "heard": "Medicine.",
+   "match": true,
+   "confidence": -0.233,
+   "sentence_heard": "Take your medicine after dinner.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "general",
+   "heard": "General.",
+   "match": true,
+   "confidence": -0.525,
+   "sentence_heard": "In general I like rainy days.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "autumn",
+   "heard": "Autumn.",
+   "match": true,
+   "confidence": -0.425,
+   "sentence_heard": "Leaves fall in autumn.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "column",
+   "heard": "column.",
+   "match": true,
+   "confidence": -0.222,
+   "sentence_heard": "Write the answers in the first column.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "scissors",
+   "heard": "Scissors.",
+   "match": true,
+   "confidence": -0.785,
+   "sentence_heard": "Pass me the scissors please.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "success",
+   "heard": "Success.",
+   "match": true,
+   "confidence": -0.203,
+   "sentence_heard": "The party was a big success.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "terrible",
+   "heard": "Terrible.",
+   "match": true,
+   "confidence": -0.181,
+   "sentence_heard": "The traffic was terrible.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "occasion",
+   "heard": "occasion.",
+   "match": true,
+   "confidence": -0.363,
+   "sentence_heard": "A birthday is a special occasion.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "furniture",
+   "heard": "Furniture.",
+   "match": true,
+   "confidence": -0.283,
+   "sentence_heard": "We bought new furniture.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "information",
+   "heard": "information.",
+   "match": true,
+   "confidence": -0.272,
+   "sentence_heard": "The website has information about whales",
+   "sentence_has_word": true
+  },
+  {
+   "word": "invitation",
+   "heard": "Invitation.",
+   "match": true,
+   "confidence": -0.256,
+   "sentence_heard": "got an invitation to the party.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "television",
+   "heard": "television.",
+   "match": true,
+   "confidence": -0.482,
+   "sentence_heard": "We watched a film on television.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "usual",
+   "heard": "Usual.",
+   "match": true,
+   "confidence": -0.543,
+   "sentence_heard": "met at the usual place.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "signal",
+   "heard": "signal.",
+   "match": true,
+   "confidence": -0.517,
+   "sentence_heard": "phone has no signal here.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "except",
+   "heard": "Accept.",
+   "match": false,
+   "confidence": -0.417,
+   "sentence_heard": "Everyone came except my brother.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "lose",
+   "heard": "lose.",
+   "match": true,
+   "confidence": -0.617,
+   "sentence_heard": "Don't lose your key.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "passed",
+   "heard": "passed.",
+   "match": true,
+   "confidence": -0.657,
+   "sentence_heard": "She passed the ball to me",
+   "sentence_has_word": true
+  },
+  {
+   "word": "families",
+   "heard": "Families.",
+   "match": true,
+   "confidence": -0.449,
+   "sentence_heard": "Many families came to the fair.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "carried",
+   "heard": "Carried.",
+   "match": true,
+   "confidence": -0.569,
+   "sentence_heard": "Dad carried the heavy bag.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "knives",
+   "heard": "Knives.",
+   "match": true,
+   "confidence": -0.637,
+   "sentence_heard": "Put the knives in the drawer.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "excitement",
+   "heard": "Excitement.",
+   "match": true,
+   "confidence": -0.228,
+   "sentence_heard": "The children shouted with excitement.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "don't",
+   "heard": "Don't.",
+   "match": true,
+   "confidence": -0.417,
    "sentence_heard": "Please don't run near the pool.",
    "sentence_has_word": true
   },
@@ -2252,7 +3052,7 @@
    "word": "can't",
    "heard": "You can't.",
    "match": true,
-   "confidence": -0.398,
+   "confidence": -0.402,
    "sentence_heard": "can't find my shoes.",
    "sentence_has_word": true
   },
@@ -2260,7 +3060,7 @@
    "word": "won't",
    "heard": "won't.",
    "match": true,
-   "confidence": -0.498,
+   "confidence": -0.499,
    "sentence_heard": "The baby won't stop crying.",
    "sentence_has_word": true
   },
@@ -2268,7 +3068,7 @@
    "word": "isn't",
    "heard": "isn't.",
    "match": true,
-   "confidence": -0.434,
+   "confidence": -0.452,
    "sentence_heard": "The shop isn't open yet.",
    "sentence_has_word": true
   },
@@ -2276,7 +3076,7 @@
    "word": "didn't",
    "heard": "You didn't.",
    "match": true,
-   "confidence": -0.296,
+   "confidence": -0.307,
    "sentence_heard": "I didn't hear the bell.",
    "sentence_has_word": true
   },
@@ -2284,7 +3084,7 @@
    "word": "doesn't",
    "heard": "doesn't.",
    "match": true,
-   "confidence": -0.404,
+   "confidence": -0.376,
    "sentence_heard": "My brother doesn't like fish.",
    "sentence_has_word": true
   },
@@ -2292,7 +3092,7 @@
    "word": "aren't",
    "heard": "aren't.",
    "match": true,
-   "confidence": -0.966,
+   "confidence": -1.002,
    "sentence_heard": "We aren't ready yet.",
    "sentence_has_word": true
   },
@@ -2300,7 +3100,7 @@
    "word": "haven't",
    "heard": "haven't.",
    "match": true,
-   "confidence": -0.453,
+   "confidence": -0.474,
    "sentence_heard": "I haven't finished my homework.",
    "sentence_has_word": true
   },
@@ -2308,7 +3108,7 @@
    "word": "shouldn't",
    "heard": "You shouldn't.",
    "match": true,
-   "confidence": -0.21,
+   "confidence": -0.191,
    "sentence_heard": "You shouldn't swim alone.",
    "sentence_has_word": true
   },
@@ -2316,7 +3116,7 @@
    "word": "couldn't",
    "heard": "Couldn't.",
    "match": true,
-   "confidence": -0.241,
+   "confidence": -0.249,
    "sentence_heard": "We couldn't see the stars",
    "sentence_has_word": true
   },
@@ -2324,7 +3124,7 @@
    "word": "wouldn't",
    "heard": "Wouldn't.",
    "match": true,
-   "confidence": -0.29,
+   "confidence": -0.286,
    "sentence_heard": "The door wouldn't open.",
    "sentence_has_word": true
   },
@@ -2332,15 +3132,15 @@
    "word": "I'm",
    "heard": "I'm.",
    "match": true,
-   "confidence": -0.405,
+   "confidence": -0.399,
    "sentence_heard": "I'm 10 years old.",
    "sentence_has_word": true
   },
   {
    "word": "I'll",
-   "heard": "I'll",
+   "heard": "I'll.",
    "match": true,
-   "confidence": -0.778,
+   "confidence": -0.556,
    "sentence_heard": "I'll call you after school.",
    "sentence_has_word": true
   },
@@ -2348,7 +3148,7 @@
    "word": "I'd",
    "heard": "I'd.",
    "match": true,
-   "confidence": -0.629,
+   "confidence": -0.621,
    "sentence_heard": "I'd like some water please.",
    "sentence_has_word": true
   },
@@ -2356,7 +3156,7 @@
    "word": "you're",
    "heard": "You're.",
    "match": true,
-   "confidence": -0.707,
+   "confidence": -0.72,
    "sentence_heard": "You're my best friend.",
    "sentence_has_word": true
   },
@@ -2364,7 +3164,7 @@
    "word": "they're",
    "heard": "There.",
    "match": true,
-   "confidence": -0.3,
+   "confidence": -0.292,
    "sentence_heard": "They're playing on the beach.",
    "sentence_has_word": true
   },
@@ -2372,7 +3172,7 @@
    "word": "we've",
    "heard": "We've.",
    "match": true,
-   "confidence": -0.554,
+   "confidence": -0.559,
    "sentence_heard": "We've got a new puppy.",
    "sentence_has_word": true
   },
@@ -2380,7 +3180,7 @@
    "word": "let's",
    "heard": "Let's.",
    "match": true,
-   "confidence": -0.467,
+   "confidence": -0.456,
    "sentence_heard": "Let's go swimming.",
    "sentence_has_word": true
   },
@@ -2388,7 +3188,7 @@
    "word": "who's",
    "heard": "who's.",
    "match": true,
-   "confidence": -0.771,
+   "confidence": -0.749,
    "sentence_heard": "Who's at the door?",
    "sentence_has_word": true
   },
@@ -2396,7 +3196,7 @@
    "word": "it's",
    "heard": "It's...",
    "match": true,
-   "confidence": -0.523,
+   "confidence": -0.542,
    "sentence_heard": "It's raining again.",
    "sentence_has_word": true
   },
@@ -2404,7 +3204,7 @@
    "word": "there's",
    "heard": "Theirs.",
    "match": true,
-   "confidence": -0.643,
+   "confidence": -0.613,
    "sentence_heard": "There's a gecko on the wall.",
    "sentence_has_word": true
   },
@@ -2420,15 +3220,15 @@
    "word": "its",
    "heard": "It's...",
    "match": true,
-   "confidence": -0.522,
+   "confidence": -0.525,
    "sentence_heard": "The dog wagged its tail.",
    "sentence_has_word": true
   },
   {
    "word": "your",
-   "heard": "You're",
+   "heard": "You're.",
    "match": true,
-   "confidence": -0.794,
+   "confidence": -0.716,
    "sentence_heard": "Is this your bag?",
    "sentence_has_word": true
   },
@@ -2436,7 +3236,7 @@
    "word": "their",
    "heard": "There.",
    "match": true,
-   "confidence": -0.282,
+   "confidence": -0.276,
    "sentence_heard": "The children pack their bags.",
    "sentence_has_word": true
   },
@@ -2444,7 +3244,7 @@
    "word": "whose",
    "heard": "who's.",
    "match": true,
-   "confidence": -0.732,
+   "confidence": -0.709,
    "sentence_heard": "Whose towel is this?",
    "sentence_has_word": true
   },
@@ -2452,7 +3252,7 @@
    "word": "the dog's bone",
    "heard": "the dog's bone.",
    "match": true,
-   "confidence": -0.247,
+   "confidence": -0.251,
    "sentence_heard": "The dog's bone is under the sofa.",
    "sentence_has_word": true
   },
@@ -2460,7 +3260,7 @@
    "word": "Dad's phone",
    "heard": "Dad's phone.",
    "match": true,
-   "confidence": -0.182,
+   "confidence": -0.186,
    "sentence_heard": "Dad's phone is ringing.",
    "sentence_has_word": true
   },
@@ -2468,7 +3268,7 @@
    "word": "the children's toys",
    "heard": "the children's toys.",
    "match": true,
-   "confidence": -0.138,
+   "confidence": -0.135,
    "sentence_heard": "The children's toys are all over the floor.",
    "sentence_has_word": true
   },
@@ -2476,7 +3276,7 @@
    "word": "the boys' room",
    "heard": "the boys' room.",
    "match": true,
-   "confidence": -0.41,
+   "confidence": -0.398,
    "sentence_heard": "My two brothers share the boys room.",
    "sentence_has_word": true
   },
@@ -2484,7 +3284,7 @@
    "word": "the teachers' room",
    "heard": "the teacher's room.",
    "match": true,
-   "confidence": -0.226,
+   "confidence": -0.222,
    "sentence_heard": "All the teachers meet in the teacher's room.",
    "sentence_has_word": true
   },
@@ -2492,45 +3292,58 @@
    "word": "the women's team",
    "heard": "the women's team.",
    "match": true,
-   "confidence": -0.138,
+   "confidence": -0.145,
    "sentence_heard": "My aunt plays in the women's team.",
    "sentence_has_word": true
   }
  ],
  "uncertain": [
+  "calm",
+  "eighteen",
   "bruise",
+  "some",
   "doubt",
+  "curtain",
+  "weigh",
+  "nuisance",
   "bought",
+  "than",
+  "wrist",
+  "wear",
+  "except",
+  "niece",
+  "hear",
   "appear",
   "queue",
   "twelfth",
   "category",
-  "rhinoceros",
-  "lightning",
-  "forty",
-  "some",
-  "choose",
-  "correspond",
-  "any",
-  "have",
-  "among",
-  "aren't",
-  "first",
-  "thorough",
-  "apparent"
+  "lightning"
  ],
  "mismatches": [
+  "some",
   "bought",
   "appear",
   "doubt",
   "bruise",
-  "queue"
+  "nuisance",
+  "queue",
+  "weigh",
+  "eighteen",
+  "niece",
+  "curtain",
+  "wrist",
+  "calm",
+  "wear",
+  "hear",
+  "than",
+  "except"
  ],
  "sentence_problems": [
   "lightning",
   "category",
   "forty",
-  "rhinoceros",
-  "twelfth"
+  "twelfth",
+  "eighteen",
+  "calm"
  ]
 }
