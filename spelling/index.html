@@ -234,7 +234,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
       </div>
       <p class="label" id="paperLabel">Get a pencil and number your paper from 1 to 20.</p>
       <p class="note" id="introNote">You will hear 20 words. Write each one down, then pick if the next word should be easier, the same or harder. You check them all together at the end.</p>
-      <div class="seg modes" role="group" aria-label="What to practise">
+      <div class="seg modes" role="group" aria-label="What to practise" hidden>
         <button id="modeLevels" aria-pressed="true">Levels</button>
         <button id="modeApos" aria-pressed="false">Apostrophes</button>
       </div>
@@ -709,6 +709,7 @@ function profile(p) {
   return ensureHist(Object.assign({ learned: [], missed: {}, accent: "us", level: PLAYERS[p].level, mode: "levels", batch: null, last: null, suggest: null, hist: null, rounds: [], time: {} }, root.profiles[p] || {}));
 }
 if (!PLAYERS[root.player]) root.player = "juna";
+Object.values(root.profiles).forEach(s => { if (s) s.mode = "levels"; });   /* the separate apostrophe round is gone */
 let store = root.profiles[root.player] = profile(root.player);
 function save() { root.profiles[root.player] = store; try { localStorage.setItem(KEY, JSON.stringify(root)); } catch (e) {} }
 const size = () => (store.batch && store.batch.size) || PLAYERS[root.player].size;
@@ -808,8 +809,16 @@ function renderStart() {
 }
 
 /* ---------- picking words ---------- */
+/* Apostrophe words are mixed in sparingly: about 1 in 10 words and at most 1 per 10 words of the round,
+   so they don't take over a level once its regular words are learned. */
+const isApos = w => w.level === 0;
 function pickWord(level, used) {
-  const inLevel = W.filter(w => (w.level === level || (level > 0 && w.mix === level)) && !used.includes(w.word));
+  const avail = W.filter(w => (w.level === level || (level > 0 && w.mix === level)) && !used.includes(w.word));
+  const aposUsed = used.filter(u => BYWORD[u] && isApos(BYWORD[u])).length;
+  const cap = Math.max(1, Math.floor(size() / 10));
+  const regular = avail.filter(w => !isApos(w)), apos = avail.filter(isApos);
+  const wantApos = level > 0 && apos.length && aposUsed < cap && (Math.random() < 0.1 || !regular.length);
+  const inLevel = wantApos ? apos : (regular.length ? regular : avail);
   let pool = inLevel.filter(w => !store.learned.includes(w.word));
   if (!pool.length) pool = inLevel;
   const bag = [];
