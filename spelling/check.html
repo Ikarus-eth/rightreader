@@ -21,17 +21,20 @@ const a=new Audio();
 Promise.all([
   fetch("audio/manifest.json",{cache:"no-store"}).then(r=>r.json()),
   fetch("audio/asr-report.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null),
-  fetch("audio/fix-report.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)
-]).then(([m,rep,fix])=>{
+  fetch("audio/fix-report.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null),
+  fetch("audio/review.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).catch(()=>null)
+]).then(([m,rep,fix,rev])=>{
+  if(rev&&rev.review&&rev.review.length) fix={review:rev.review,changed:rev.review};
   const info=rep?Object.fromEntries(rep.words.map(x=>[x.word,x])):{};
   const list=fix&&fix.review?fix.review:fix&&fix.changed.length?fix.changed:rep?rep.uncertain:FALLBACK;
   if(fix&&fix.review){document.querySelector("h1").textContent="Check "+fix.review.length+" words";}
-  document.getElementById("intro").textContent=fix&&fix.changed.length
+  if(rev&&rev.review&&rev.review.length){document.querySelector("h1").textContent=rev.title;}
+  document.getElementById("intro").textContent=rev&&rev.intro?rev.intro:fix&&fix.changed.length
     ?"1 to 6 are the words you reported, now re-recorded. 7 to 11 are words the computer still isn't sure about. Reply in the chat with the numbers that sound wrong."
     :rep
     ?"A speech recogniser listened to all 312 clips. These are the 20 it was least sure about. Play each word and its sentence, then reply in the chat with the numbers that sound wrong or unclear."
     :"Play each word and its sentence. Reply in the chat with the numbers that sound wrong or unclear.";
-  document.getElementById("list").innerHTML=list.map((w,i)=>{const c=m.words[w];const fresh=c.word.endsWith("-word.mp3");const x=info[w];
+  document.getElementById("list").innerHTML=list.map((w,i)=>{const c=m.words[w];const fresh=/-(word|w2)\.mp3$/.test(c.word);const x=info[w];
     const heard=x?' · computer heard “'+x.heard+'”':'';
     return '<div class="it"><span class="n">'+(i+1)+'.</span><span class="w">'+w+'<span class="ver">'+(fresh?"new":"old")+' recording'+heard+'</span></span><button data-f="'+c.word+'">Word</button><button data-f="'+c.sentence+'">Sentence</button></div>';}).join("");
   document.querySelectorAll("button[data-f]").forEach(b=>b.onclick=()=>{a.src=b.dataset.f;a.play();});
