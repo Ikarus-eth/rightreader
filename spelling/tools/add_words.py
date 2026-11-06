@@ -17,6 +17,14 @@ from fix_words import cut_after_pause, LEAD
 from faster_whisper import WhisperModel
 
 ROOT = lv.ROOT
+# Words the voice model mispronounces, with the pronunciation spelled out (Kokoro's [word](/phonemes/) markup).
+PRON = {"calm": "[calm](/kˈɑm/)"}
+
+def say(text):
+    import re
+    for w, markup in PRON.items():
+        text = re.sub(rf"\b{re.escape(w)}\b", markup, text)
+    return text
 
 def synth(text, speed):
     old = lv.SPEED
@@ -29,6 +37,9 @@ def synth(text, speed):
 def main():
     man_path = ROOT / "audio" / "manifest.json"
     manifest = json.loads(man_path.read_text())
+    req = json.loads((ROOT / "voice-request.json").read_text())
+    for w in req.get("redo", []):          # re-record these even though they already have audio
+        manifest["words"].pop(w, None)
     todo = [w for w in lv.words() if w["word"] not in manifest["words"]]
     print(f"{len(todo)} words without audio")
     model = WhisperModel("base.en", device="cpu", compute_type="int8")
@@ -41,16 +52,16 @@ def main():
     for w in todo:
         word, s = w["word"], lv.slug(w["word"])
         sent = d / f"{s}-sentence.mp3"
-        lv.to_mp3(synth(w["sentence"], 1.0), sent)
+        lv.to_mp3(synth(say(w["sentence"]), 1.0), sent)
         dest = d / f"{s}-w2.mp3"
         text = word + "."
-        clip = cut_after_pause(synth(f"{LEAD} {text}", lv.SPEED))
+        clip = cut_after_pause(synth(f"{LEAD} {say(text)}", lv.SPEED))
         tried = []
         if clip is not None:
             lv.to_mp3(clip, dest); h = heard(dest); tried.append(("lead-in", h))
         if clip is None or not asr.same(h, word):
             plain = d / f"{s}-plain.mp3"
-            lv.to_mp3(synth(text, lv.SPEED), plain); hp = heard(plain); tried.append(("plain", hp))
+            lv.to_mp3(synth(say(text), lv.SPEED), plain); hp = heard(plain); tried.append(("plain", hp))
             if clip is None or (asr.same(hp, word) and not asr.same(h, word)):
                 plain.replace(dest); h = hp
             else:
@@ -62,6 +73,11 @@ def main():
         details.append({"word": word, "tried": tried, "kept_heard": h, "sentence_heard": sh, "word_ok": ok_word, "sentence_ok": ok_sent})
         manifest["words"][word] = {"word": f"audio/{lv.VOICE}/{dest.name}", "sentence": f"audio/{lv.VOICE}/{sent.name}"}
         man_path.write_text(json.dumps(manifest, indent=1))
+    prev = json.loads((ROOT / "audio" / "review.json").read_text()) if req.get("redo") and (ROOT / "audio" / "review.json").exists() else None
+    if prev:
+        redone = {x["word"] for x in details}
+        details = [x for x in prev["details"] if x["word"] not in redone] + details
+        unsure = [w for w in prev["unsure"] if w not in redone] + unsure
     review = unsure[:20]
     if len(review) < 10:   # always give a short sample to listen to
         review += [w["word"] for w in todo if w["word"] not in review][: 10 - len(review)]
