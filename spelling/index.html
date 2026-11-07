@@ -255,6 +255,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
     <!-- LISTEN -->
     <section id="vListen" hidden>
       <div class="head">
+        <button class="chip" id="backBtn" aria-label="Back to the previous word">← Back</button>
         <p class="label" id="listenLabel">Word 1 of 20</p>
         <span class="badge" id="levelBadge"></span>
       </div>
@@ -284,7 +285,10 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
       <p class="label">Now check your paper.</p>
       <p class="note">Look at each word letter by letter. Tap the box for every word you spelled right. Tap again if you change your mind.</p>
       <ol class="list" id="checkList"></ol>
-      <button class="btn primary" id="doneCheckBtn">Done checking</button>
+      <div class="row two">
+        <button class="btn" id="checkBackBtn">← Back to the last word</button>
+        <button class="btn primary" id="doneCheckBtn">Done checking</button>
+      </div>
     </section>
 
     <!-- RESULT -->
@@ -330,6 +334,11 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
       </div>
       <p class="toast" id="exportToast" hidden></p>
       <textarea id="exportText" readonly aria-label="Progress summary"></textarea>
+      <p class="ph">Restore progress</p>
+      <p class="note">Pick a file saved with Share or Download. Its words, rounds and practice time are added to what is on this iPad; nothing here is deleted, and loading the same file twice changes nothing.</p>
+      <label class="btn" for="restoreFile">Restore from a saved file</label>
+      <input type="file" id="restoreFile" accept=".json,application/json" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
+      <p class="toast" id="restoreToast" hidden></p>
       <button class="btn" id="parentBackBtn">Back to practice</button>
     </section>
 
@@ -349,9 +358,6 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
       </div>
     </div>
     <button class="link" id="parentBtn">Parent view</button>
-    <div class="confirm" id="resetArea">
-      <button class="link" id="resetBtn">Start over</button>
-    </div>
   </footer>
 </div>
 
@@ -738,6 +744,206 @@ const RAW = [
 "4|carried|the past of 'carry'|trug, getragen|Dad carried the heavy bag.|carry: y turns into i, + ed.",
 "4|knives|more than one knife|die Messer|Put the knives in the drawer.|knife: f turns into v, + es. Silent k.",
 "4|excitement|a happy, excited feeling|die Aufregung, die Begeisterung|The children shouted with excitement.|excite + ment. Keep the e.",
+"3|afraid|scared|ängstlich, erschrocken|My little brother is afraid of the dark.|a + fraid. The 'ay' sound is spelled ai.",
+"3|explain|to make something clear|erklären|Can you explain the game to me?|ex + plain. The 'ay' sound is spelled ai.",
+"3|remain|to stay|bleiben|Please remain in your seats.|re + main.",
+"3|daily|every day|täglich|I read a daily story.|day: y turns into i, + ly.",
+"3|birthday|the day you were born|der Geburtstag|My birthday is in May.|birth + day.",
+"3|yesterday|the day before today|gestern|Yesterday we went to the beach.|yes + ter + day.",
+"3|always|every time|immer|I always brush my teeth.|al + ways. Only one l.",
+"3|crayon|a wax stick for drawing|der Wachsmalstift|Pass me the red crayon.|cray + on.",
+"3|between|in the middle of two things|zwischen|Sit between me and Dad.|be + tween, double e.",
+"3|fifteen|the number 15|fünfzehn|There are fifteen children in my class.|fif + teen. five turns into fif.",
+"3|agree|to think the same|zustimmen|I agree with you.|a + gree. One g, double e.",
+"3|speech|a talk to many people|die Rede|The teacher gave a speech.|sp + eech.",
+"3|freeze|to turn into ice|frieren, einfrieren|Water will freeze in the freezer.|fr + ee + ze. It ends in -ze.",
+"3|beach|sand next to the sea|der Strand|We play on the beach every weekend.|b + each.",
+"3|reason|why something happens|der Grund|What is the reason you are late?|rea + son.",
+"3|season|spring, summer, autumn or winter|die Jahreszeit|Bali has a rainy season.|sea + son.",
+"3|teacher|a person who teaches|der Lehrer, die Lehrerin|My teacher is very kind.|teach + er.",
+"3|leaf|the flat green part of a plant|das Blatt|A leaf fell from the tree.|l + eaf. More than one: leaves.",
+"3|feather|a soft part that covers a bird|die Feder|The parrot dropped a red feather.|f + eath + er. The 'e' sound is spelled ea.",
+"3|heavy|weighing a lot|schwer|This bag is very heavy.|h + ea + vy. The 'e' sound is spelled ea.",
+"3|ready|prepared|bereit, fertig|Are you ready to go?|r + ea + dy.",
+"3|health|being well and not ill|die Gesundheit|Fruit is good for your health.|heal + th.",
+"3|instead|in place of something else|stattdessen|Let's walk instead of driving.|in + stead.",
+"3|breath|the air you breathe in and out|der Atem|Take a deep breath.|br + eath. No e at the end (that is 'breathe').",
+"3|sweater|a warm top made of wool|der Pullover|Wear a sweater in the mountains.|sweat + er.",
+"3|coast|land next to the sea|die Küste|We drove along the coast.|c + oast.",
+"3|throat|the inside front of your neck|der Hals, die Kehle|My throat hurts.|thr + oat.",
+"3|shadow|a dark shape made by blocking light|der Schatten|My shadow is very long.|sha + dow.",
+"3|elbow|the middle of your arm|der Ellbogen|I bumped my elbow.|el + bow.",
+"3|known|the past of 'know'|gewusst, bekannt|I have known her for years.|Silent k: k-n-o-w-n.",
+"3|swallow|to make food go down your throat|schlucken|Chew before you swallow.|Double l: s-w-a-l-l-o-w.",
+"3|tomato|a red fruit used in salads|die Tomate|I put tomato on my pizza.|to + ma + to. More than one: tomatoes.",
+"3|flight|a trip by plane|der Flug|Our flight leaves at nine.|fl + ight.",
+"3|frighten|to make someone scared|erschrecken|Don't frighten the cat.|fright + en.",
+"3|midnight|twelve o'clock at night|Mitternacht|The party ended at midnight.|mid + night.",
+"3|delight|great happiness|die Freude|The children shouted with delight.|de + light.",
+"3|cried|the past of 'cry'|weinte, rief|The baby cried all night.|cry: y turns into i, + ed.",
+"3|tried|the past of 'try'|versuchte|I tried my best.|try: y turns into i, + ed.",
+"3|replied|the past of 'reply'|antwortete|She replied to my message.|reply: y turns into i, + ed.",
+"3|balloon|a rubber bag filled with air|der Luftballon|The red balloon floated away.|Double l, double o: b-a-l-l-o-o-n.",
+"3|cartoon|a funny drawing or film|der Zeichentrickfilm, der Cartoon|We watched a cartoon.|car + toon.",
+"3|noodle|a long thin piece of pasta|die Nudel|I love noodle soup.|n + oo + dle.",
+"3|smooth|flat and even, not rough|glatt|The stone was smooth.|sm + ooth.",
+"3|threw|the past of 'throw'|warf|He threw the ball very far.|thr + ew. 'through' (durch) sounds the same.",
+"3|jewel|a precious stone|das Juwel|The crown has a big jewel.|j + ew + el.",
+"3|true|correct, not false|wahr|Is that story true?|tr + ue. Don't forget the e.",
+"3|clue|a hint that helps you find the answer|der Hinweis|The detective found a clue.|cl + ue.",
+"3|value|how much something is worth|der Wert|This old coin has a high value.|val + ue.",
+"3|rescue|to save someone from danger|retten|The lifeguard will rescue you.|res + cue.",
+"3|huge|very big|riesig|An elephant is huge.|h-u-g-e. The e makes the u say its name.",
+"3|proud|very pleased about something you did|stolz|I am proud of you.|pr + oud.",
+"3|south|the direction opposite north|der Süden|Australia is south of Bali.|s + outh.",
+"3|amount|how much there is|die Menge|A small amount of salt.|a + mount.",
+"3|flower|the pretty part of a plant that blooms|die Blume|She picked a yellow flower.|fl + ower. 'flour' (Mehl) sounds the same.",
+"3|towel|a cloth for drying yourself|das Handtuch|Bring a towel to the pool.|t + ow + el.",
+"3|allow|to let someone do something|erlauben|My parents allow us to stay up late on Fridays.|Double l: a-l-l-o-w.",
+"3|market|a place where people buy and sell|der Markt|We bought fruit at the market.|mar + ket.",
+"3|carpet|a thick soft floor cover|der Teppich|The cat sleeps on the carpet.|car + pet.",
+"3|corner|where two lines or walls meet|die Ecke|The shop is on the corner.|cor + ner.",
+"3|morning|the early part of the day|der Morgen|I swim every morning.|mor + ning.",
+"3|report|a written or spoken account|der Bericht|I wrote a report about turtles.|re + port.",
+"3|before|earlier than|vor, bevor|Wash your hands before dinner.|be + fore.",
+"3|explore|to look around a new place|erkunden|Let's explore the cave.|ex + plore.",
+"3|four|the number 4|vier|A cat has four legs.|f + our. 'for' (für) sounds the same.",
+"3|pour|to make a liquid flow out|gießen, einschenken|Pour the milk into the cup.|p + our.",
+"3|course|a set of lessons; a direction|der Kurs|I am taking a swimming course.|c + our + se. 'Of course!' means natürlich.",
+"3|fourth|number 4 in a row|der, die, das vierte|This is my fourth try.|four + th.",
+"3|person|one human|die Person|Each person gets one cake.|per + son.",
+"3|perfect|with nothing wrong|perfekt|Your drawing is perfect.|per + fect.",
+"3|thirsty|wanting a drink|durstig|I am thirsty after running.|thirst + y.",
+"3|circle|a perfectly round shape|der Kreis|Draw a circle.|cir + cle. Both c's sound different.",
+"3|turtle|a sea animal with a shell|die Schildkröte|We saw a turtle in the sea.|tur + tle.",
+"3|purple|a mix of red and blue|lila|I have a purple bag.|pur + ple.",
+"3|hurry|to move fast|sich beeilen|Hurry, the bus is coming!|Double r: h-u-r-r-y.",
+"3|church|a building for Christian worship|die Kirche|The church has a tall tower.|ch + ur + ch.",
+"3|Thursday|the day after Wednesday|der Donnerstag|We have art on Thursday.|Thurs + day. Days start with a capital letter.",
+"3|Saturday|the day after Friday|der Samstag|On Saturday we go to the market.|Sat + ur + day. Capital S.",
+"3|return|to come or go back|zurückkehren, zurückgeben|Please return the book on Monday.|re + turn.",
+"3|surface|the top or outside of something|die Oberfläche|The turtle swam to the surface.|sur + face.",
+"3|stairs|steps that go up and down|die Treppe|Walk up the stairs.|st + airs.",
+"3|repair|to fix something broken|reparieren|Dad will repair my bike.|re + pair.",
+"3|square|a shape with four equal sides|das Quadrat|Draw a square.|squ + are.",
+"3|compare|to look at how things are alike or different|vergleichen|Compare the two pictures.|com + pare.",
+"3|prepare|to get ready|vorbereiten|We prepare lunch together.|pre + pare.",
+"3|kitchen|the room where food is cooked|die Küche|Dad is cooking in the kitchen.|kit + chen. The t is easy to forget.",
+"3|stretch|to make longer by pulling|dehnen, strecken|Stretch your arms up high.|str + e + tch.",
+"3|switch|a button to turn something on or off|der Schalter|Turn off the light switch.|sw + i + tch.",
+"3|judge|a person who decides in court or a contest|der Richter|The judge chose the winner.|j + u + dge.",
+"3|bridge|a road over a river|die Brücke|We walked over the bridge.|br + i + dge.",
+"3|fridge|a cold box for food|der Kühlschrank|Put the milk in the fridge.|fr + i + dge.",
+"3|change|to make or become different|ändern, wechseln|The weather can change quickly.|ch + ange.",
+"3|strange|unusual, odd|seltsam, fremd|I heard a strange noise.|str + ange.",
+"3|orange|a round citrus fruit|die Orange; orange|I had an orange for a snack.|or + ange.",
+"3|giant|a very big person in stories|der Riese|The giant lived in a castle.|The g sounds like j here: g-i-a-n-t.",
+"3|gentle|soft and kind|sanft|Be gentle with the kitten.|The g sounds like j: gen + tle.",
+"3|giraffe|a tall animal with a long neck|die Giraffe|The giraffe ate leaves from the tree.|One r, double f: g-i-r-a-f-f-e.",
+"3|magic|tricks that seem impossible|die Zauberei; magisch|The magic show was amazing.|ma + gic. The g sounds like j.",
+"3|stranger|someone you don't know|der Fremde|Don't talk to strangers.|strange + r.",
+"3|engine|the part that makes a car move|der Motor|The engine is very loud.|en + gine.",
+"3|energy|power to do things|die Energie|Bananas give you energy.|en + er + gy.",
+"3|city|a big town|die Stadt|Jakarta is a big city.|The c sounds like s: c-i-t-y.",
+"3|circus|a show with clowns and acrobats|der Zirkus|We went to the circus.|cir + cus.",
+"3|voice|the sound you make when you speak|die Stimme|She has a lovely voice.|v + oice.",
+"3|choice|something you choose|die Wahl|You have a choice of two cakes.|ch + oice.",
+"3|police|people who keep law and order|die Polizei|The police helped us.|po + lice.",
+"3|office|a room where people work|das Büro|Dad works in an office.|Double f: of + fice.",
+"3|notice|to see or become aware of|bemerken|Did you notice the rainbow?|no + tice.",
+"3|alphabet|the letters A to Z|das Alphabet|There are 26 letters in the alphabet.|al + pha + bet. ph sounds like f.",
+"3|elephant|a huge animal with a trunk|der Elefant|The elephant sprayed water.|el + e + phant. ph, not f.",
+"3|dolphin|a clever sea animal|der Delfin|We saw dolphins in Lovina.|dol + phin. ph, not f.",
+"3|whisper|to speak very quietly|flüstern|She whispered a secret.|wh + is + per.",
+"3|echo|a sound that comes back|das Echo|We heard an echo in the cave.|ch sounds like k: e-c-h-o.",
+"3|ache|a dull pain|der Schmerz|I have a tummy ache.|ch sounds like k: a-c-h-e.",
+"3|running|moving fast on foot|rennend|The dog is running on the beach.|run + n + ing: double the n.",
+"3|swimming|moving through water|schwimmend|I go swimming every morning.|swim + m + ing: double the m.",
+"3|shopping|buying things in shops|das Einkaufen|We went shopping for shoes.|shop + p + ing: double the p.",
+"3|planned|the past of 'plan'|plante, geplant|We planned a picnic.|plan + n + ed: double the n.",
+"3|clapped|the past of 'clap'|klatschte|Everyone clapped at the end.|clap + p + ed: double the p.",
+"3|hoping|wishing for something|hoffend|I am hoping for sunshine.|hope loses its e: hop + ing.",
+"3|writing|putting words on paper|schreibend|I am writing a story.|write loses its e: writ + ing. One t.",
+"3|dancing|moving to music|tanzend|The girls are dancing.|dance loses its e: danc + ing.",
+"3|stories|more than one story|die Geschichten|Grandma tells great stories.|story: y turns into ies.",
+"3|cherries|more than one cherry|die Kirschen|The cake had cherries on top.|cherry: y turns into ies.",
+"3|puppies|more than one puppy|die Welpen|The puppies are sleeping.|puppy: y turns into ies.",
+"3|leaves|more than one leaf|die Blätter|The leaves are green.|leaf: f turns into v, + es.",
+"3|wolves|more than one wolf|die Wölfe|Wolves live in packs.|wolf: f turns into v, + es.",
+"3|halves|more than one half|die Hälften|Cut the orange into halves.|half: f turns into v, + es.",
+"3|shelves|more than one shelf|die Regale|The books are on the shelves.|shelf: f turns into v, + es.",
+"3|helpful|ready to help|hilfsbereit|Thank you for being so helpful.|help + ful. Only one l.",
+"3|thankful|feeling thanks|dankbar|I am thankful for my family.|thank + ful.",
+"3|painful|hurting|schmerzhaft|The bee sting was painful.|pain + ful.",
+"3|careless|not careful|unvorsichtig|It was careless to leave the door open.|care + less.",
+"3|kindness|being kind|die Freundlichkeit|Thank you for your kindness.|kind + ness.",
+"3|darkness|when there is no light|die Dunkelheit|The cat can see in the darkness.|dark + ness.",
+"3|sadness|being sad|die Traurigkeit|She felt sadness when her fish died.|sad + ness.",
+"3|suddenly|all at once|plötzlich|Suddenly it started to rain.|sudden + ly. Double d.",
+"3|friendly|kind and nice to others|freundlich|Our new teacher is very friendly.|friend + ly.",
+"3|lonely|sad because you are alone|einsam|The puppy felt lonely.|lone + ly. Keep the e.",
+"3|safely|without danger|sicher|We got home safely.|safe + ly. Keep the e.",
+"3|movement|moving|die Bewegung|I saw a movement in the bushes.|move + ment. Keep the e.",
+"3|unhappy|not happy|unglücklich|The boy looked unhappy.|un + happy. Double p.",
+"3|untidy|messy|unordentlich|My room is untidy.|un + tidy.",
+"3|rewrite|to write again|neu schreiben|Please rewrite this sentence.|re + write. Silent w.",
+"3|disagree|to not agree|nicht einverstanden sein|I disagree with you.|dis + agree.",
+"3|mistake|something wrong|der Fehler|Everyone makes mistakes.|mis + take.",
+"3|something|a thing|etwas|There is something in my shoe.|some + thing.",
+"3|sometimes|not always|manchmal|Sometimes we eat out.|some + times.",
+"3|everything|all things|alles|I packed everything.|every + thing.",
+"3|everyone|all people|jeder, alle|Everyone is here.|every + one.",
+"3|somebody|a person|jemand|Somebody knocked on the door.|some + body.",
+"3|playground|a place with swings and slides|der Spielplatz|We met at the playground.|play + ground.",
+"3|rainbow|the curved band of light in the sky after rain|der Regenbogen|Look, a rainbow!|rain + bow.",
+"3|homework|school work you do at home|die Hausaufgaben|I finished my homework.|home + work.",
+"3|afternoon|the time between lunch and evening|der Nachmittag|We swim in the afternoon.|after + noon.",
+"3|weekend|Saturday and Sunday|das Wochenende|What are you doing this weekend?|week + end.",
+"3|without|not with|ohne|I can't sleep without my teddy.|with + out.",
+"3|yourself|you and nobody else|dich selbst, selbst|Did you make it yourself?|your + self.",
+"3|cupboard|a cabinet with doors|der Schrank|The plates are in the cupboard.|cup + board. Silent p!",
+"3|sure|certain|sicher|Are you sure?|s-u-r-e. It sounds like 'shore'.",
+"3|sugar|sweet white crystals|der Zucker|No sugar in my tea, please.|s-u-g-a-r. The s sounds like sh.",
+"3|heart|the organ that pumps blood|das Herz|My heart is beating fast.|h + ear + t.",
+"3|learn|to find out how to do something|lernen|I want to learn to surf.|l + earn.",
+"3|woman|an adult female|die Frau|The woman is a doctor.|wo + man. More than one: women.",
+"3|women|more than one woman|die Frauen|Two women ran the race.|wo + men. It sounds like 'wimmin'.",
+"3|country|a land with its own government|das Land|Indonesia is a big country.|c + ountry. ou sounds like u.",
+"3|young|not old|jung|My brother is too young for school.|y + oung. ou sounds like u.",
+"3|touch|to feel with your hand|berühren|Don't touch the hot pan.|t + ouch. ou sounds like u.",
+"3|double|two times as much|doppelt|I want a double scoop of ice cream.|d + ouble. ou sounds like u.",
+"3|trouble|a problem|der Ärger, die Schwierigkeit|We had trouble finding the house.|tr + ouble.",
+"3|couple|two people or things|das Paar|A couple of birds sat on the roof.|c + ouple.",
+"3|soup|a hot liquid food|die Suppe|The soup is too hot.|s + oup. ou sounds like oo.",
+"3|direction|the way you go|die Richtung|Which direction is the beach?|di + rec + tion.",
+"3|vision|being able to see|das Sehvermögen, die Vision|Eagles have amazing vision.|vi + sion. -sion sounds like 'zhun'.",
+"3|addition|adding numbers|die Addition, das Plus|We did addition at school today.|add + ition. Double d.",
+"3|candle|a stick of wax that burns|die Kerze|Blow out the candles!|can + dle.",
+"3|eagle|a big bird that hunts|der Adler|An eagle flew over the hills.|ea + gle.",
+"3|giggle|a little laugh|kichern|The girls giggled at the joke.|gig + gle. Double g.",
+"3|jungle|a thick tropical forest|der Dschungel|Monkeys live in the jungle.|jun + gle.",
+"3|bubble|a small ball of air|die Blase|Blow a big bubble!|bub + ble. Double b.",
+"3|pebble|a small smooth stone|der Kieselstein|I found a white pebble.|peb + ble. Double b.",
+"3|doctor|a person who treats sick people|der Arzt, die Ärztin|The doctor checked my ears.|doc + tor. It ends in -or.",
+"3|visitor|someone who comes to see you|der Besucher|We have a visitor today.|visit + or.",
+"3|dollar|money used in America|der Dollar|It costs one dollar.|Double l, ends in -ar.",
+"3|collar|the part of a shirt around the neck|der Kragen|My collar is wet.|Double l, ends in -ar.",
+"3|wonder|to want to know|sich fragen; das Wunder|I wonder what is for dinner.|won + der.",
+"3|meat|food from animals|das Fleisch|I don't eat much meat.|m + eat. 'meet' (treffen) sounds the same.",
+"3|tail|the part at the back of an animal|der Schwanz|The dog wagged its tail.|t + ail. 'tale' (die Geschichte) sounds the same.",
+"3|flour|powder used to make bread|das Mehl|Mix the flour and the eggs.|fl + our. 'flower' (Blume) sounds the same.",
+"3|bear|a big furry wild animal|der Bär|The bear caught a fish.|b + ear. 'bare' (nackt) sounds the same.",
+"3|knight|a soldier in armour long ago|der Ritter|The knight rode a horse.|Silent k: k + night.",
+"3|blew|the past of 'blow'|blies|The wind blew my hat away.|bl + ew. 'blue' (blau) sounds the same.",
+"3|knew|the past of 'know'|wusste|I knew the answer.|Silent k: k + new.",
+"3|pear|a sweet green or yellow fruit|die Birne|I had a pear for lunch.|p + ear. 'pair' (Paar) sounds the same.",
+"3|week|seven days|die Woche|We have a holiday next week.|w + eek. 'weak' (schwach) sounds the same.",
+"3|sail|to travel on water in a boat|segeln; das Segel|We will sail to the island.|s + ail. 'sale' (Verkauf) sounds the same.",
+"3|plane|a flying machine with wings|das Flugzeug|The plane landed in Denpasar.|pl + ane. 'plain' (schlicht) sounds the same.",
+"3|steal|to take something that isn't yours|stehlen|Monkeys steal sunglasses at the temple.|st + eal. 'steel' (Stahl) sounds the same.",
+"3|witch|a woman with magic powers in stories|die Hexe|The witch flew on a broom.|w + itch. 'which' (welche) sounds the same.",
+"3|aloud|so that others can hear|laut, vor (lesen)|Read the story aloud.|a + loud. 'allowed' (erlaubt) sounds the same.",
+"3|rode|the past of 'ride'|ritt, fuhr|I rode my bike to school.|r + ode. 'road' (Straße) sounds the same.",
 "A2|don't|do not|nicht (tun)|Please don't run near the pool.|do not → don't. The apostrophe sits where the o was.",
 "A2|can't|cannot|kann nicht|I can't find my shoes.|cannot → can't. The apostrophe replaces 'no'.",
 "A4|won't|will not|wird nicht, will nicht|The baby won't stop crying.|A strange one: will not → won't.",
@@ -813,7 +1019,7 @@ Object.values(root.profiles).forEach(s => { if (s) s.mode = "levels"; });   /* t
 let store = root.profiles[root.player] = profile(root.player);
 function save() { root.profiles[root.player] = store; try { localStorage.setItem(KEY, JSON.stringify(root)); } catch (e) {} }
 const size = () => (store.batch && store.batch.size) || PLAYERS[root.player].size;
-function switchPlayer(p, then) { stopAll(); lastAct = 0; save(); root.player = p; store = root.profiles[p] = profile(p); save(); updateProgress(); resetUI(); (then || renderStart)(); }
+function switchPlayer(p, then) { stopAll(); lastAct = 0; save(); root.player = p; store = root.profiles[p] = profile(p); save(); updateProgress(); (then || renderStart)(); }
 const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
 /* ---------- voice: recorded clips if published, otherwise the browser voice ---------- */
@@ -905,7 +1111,7 @@ function renderStart() {
   const todaySecs = (store.time || {})[ymd(Date.now())] || 0;
   $("lastLine").textContent = (store.last ? "Last round: " + store.last.right + " of " + store.last.total + " right. " : "") +
     (todaySecs >= 60 ? "Practised today: " + fmtDur(todaySecs) + "." : "");
-  show(store.learned.length >= W.length ? "vDone" : "vStart");
+  show("vStart");
 }
 
 /* ---------- picking words ---------- */
@@ -944,6 +1150,7 @@ function cur() { const b = store.batch; return b.items[b.items.length - 1]; }
 function renderListen() {
   const b = store.batch, it = cur(), n = b.items.length;
   $("listenLabel").textContent = "Word " + n + " of " + size();
+  $("backBtn").hidden = n < 2;
   setBadge($("levelBadge"), it.level);
   $("skipBtn").setAttribute("aria-pressed", it.skipped);
   $("skipBtn").textContent = it.skipped ? "Skipped" : "I don't know this one";
@@ -1046,14 +1253,9 @@ $("accUS").onclick = () => setAccent("us");
 $("accUK").onclick = () => setAccent("uk");
 setAccent(store.accent);
 
-/* ---------- reset with in-page confirm ---------- */
-function resetUI() { $("resetArea").innerHTML = '<button class="link" id="resetBtn">Start over</button>'; $("resetBtn").onclick = askReset; }
-function askReset() {
-  $("resetArea").innerHTML = '<span>Forget all of ' + PLAYERS[root.player].name + '’s learned words?</span><button class="chip" id="yesReset">Yes, start over</button><button class="chip" id="noReset">Cancel</button>';
-  $("yesReset").onclick = () => { stopAll(); store = Object.assign(store, { learned: [], missed: {}, batch: null, last: null, suggest: null, level: PLAYERS[root.player].level, mode: "levels", hist: {}, rounds: [], time: {} }); save(); updateProgress(); resetUI(); renderStart(); };
-  $("noReset").onclick = resetUI;
-}
-$("resetBtn").onclick = askReset;
+/* There is no way to wipe progress from inside the app: it is never forgotten.
+   Ask the browser to keep this site's storage even when the iPad is short on space. */
+try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
 
 /* ---------- parent view ---------- */
 const pad2 = n => String(n).padStart(2, "0");
@@ -1193,6 +1395,64 @@ function activity() {
 player.addEventListener("ended", activity);
 document.addEventListener("visibilitychange", () => { lastAct = 0; });
 window.addEventListener("pagehide", () => { lastAct = 0; });
+
+/* ---------- back: undo moving on to the next word ---------- */
+$("backBtn").onclick = () => {
+  const b = store.batch;
+  if (!b || b.items.length < 2) return;
+  stopAll();
+  b.items.pop();                       // the word just picked goes back into the pool
+  b.level = cur().level;
+  save(); renderListen(); sayTest(cur().w);
+};
+$("checkBackBtn").onclick = () => { const b = store.batch; b.phase = "listen"; save(); renderListen(); sayTest(cur().w); };
+
+/* ---------- restore from an exported file (merges, never deletes) ---------- */
+function importData(d) {
+  if (!d || typeof d.words !== "object") throw new Error("This isn't a spelling progress file.");
+  const key = Object.keys(PLAYERS).find(k => PLAYERS[k].name === d.child);
+  if (!key) throw new Error("The file doesn't say whose progress it is.");
+  if (key !== root.player) switchPlayer(key, () => {});
+  const code = r => r === "right" ? 1 : r === "skipped" ? 2 : 0;
+  const dayT = s => { const [y, m, dd] = s.split("-").map(Number); return new Date(y, m - 1, dd, 12).getTime(); };
+  let words = 0;
+  Object.entries(d.words).forEach(([w, x]) => {
+    if (!BYWORD[w] || !Array.isArray(x.tries)) return;
+    const file = x.tries.map(t => [t.date ? dayT(t.date) : 0, code(t.result)]);
+    // An entry on this iPad that the file already has (same day and result) is the same try: count it once.
+    const left = {};
+    file.forEach(([t, r]) => { const k = (t ? ymd(t) : "-") + r; left[k] = (left[k] || 0) + 1; });
+    const extra = (store.hist[w] || []).filter(([t, r]) => { const k = (t ? ymd(t) : "-") + r; if (left[k]) { left[k]--; return false; } return true; });
+    store.hist[w] = file.concat(extra).sort((a, b) => a[0] - b[0]);
+    if (store.hist[w].some(h => h[1] === 1) && !store.learned.includes(w)) store.learned.push(w);
+    store.missed[w] = store.hist[w].filter(h => h[1] !== 1).length;
+    words++;
+  });
+  const have = new Set((store.rounds || []).map(r => ymd(r.t) + " " + hm(r.t)));
+  let rounds = 0;
+  (d.rounds || []).forEach(r => {
+    const [day, time] = String(r.date).split(" "), [y, m, dd] = day.split("-").map(Number), [hh, mi] = (time || "12:00").split(":").map(Number);
+    const t = new Date(y, m - 1, dd, hh, mi).getTime();
+    if (have.has(ymd(t) + " " + hm(t))) return;
+    store.rounds.push({ t, mode: r.type || "levels", n: r.of, right: r.right, levels: r.levels || [] }); rounds++;
+  });
+  store.rounds.sort((a, b) => a.t - b.t);
+  Object.entries(d.activeMinutesPerDay || {}).forEach(([day, min]) => { store.time[day] = Math.max(store.time[day] || 0, min * 60); });
+  save(); updateProgress();
+  return { name: PLAYERS[key].name, words, rounds };
+}
+$("restoreFile").onchange = e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    let msg;
+    try { const res = importData(JSON.parse(r.result)); renderParent(); msg = "Restored " + res.name + "’s progress: " + res.words + " words and " + res.rounds + " new rounds from " + f.name + "."; }
+    catch (err) { msg = "Couldn't restore: " + err.message; }
+    $("restoreToast").textContent = msg; $("restoreToast").hidden = false;
+    e.target.value = "";
+  };
+  r.readAsText(f);
+};
 
 updateProgress();
 renderStart();
