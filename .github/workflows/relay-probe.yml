@@ -1,0 +1,31 @@
+name: Relay probe (temporary)
+on:
+  push:
+    branches: [main]
+    paths: [spelling/relay-probe.txt]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Probe relays
+        run: |
+          O="Origin: https://ikarus-eth.github.io"
+          head -c 30000 /dev/urandom | base64 -w0 > body.txt   # ~40 KB, like an encrypted progress file
+          printf '{"probe":"%s"}' "$(cat body.txt)" > body.json
+          echo "== jsonblob"
+          curl -s -i -X OPTIONS -H "$O" -H "Access-Control-Request-Method: PUT" -H "Access-Control-Request-Headers: content-type" https://jsonblob.com/api/jsonBlob | grep -iE "^HTTP|access-control" || true
+          loc=$(curl -s -i -X POST -H "$O" -H "Content-Type: application/json" -H "Accept: application/json" --data-binary @body.json https://jsonblob.com/api/jsonBlob | tee jb.txt | grep -i '^location:' | tr -d '\r' | awk '{print $2}')
+          grep -iE "^HTTP|access-control" jb.txt || true; echo "location=$loc"
+          if [ -n "$loc" ]; then curl -s -o /dev/null -w "PUT %{http_code}\n" -X PUT -H "$O" -H "Content-Type: application/json" --data-binary @body.json "$loc"; curl -s -H "$O" "$loc" | head -c 40; echo; fi
+          echo "== ntfy"
+          T="rr-probe-$RANDOM$RANDOM$RANDOM"
+          curl -s -i -X OPTIONS -H "$O" -H "Access-Control-Request-Method: PUT" -H "Access-Control-Request-Headers: filename,title" "https://ntfy.sh/$T" | grep -iE "^HTTP|access-control" || true
+          curl -s -H "$O" -X PUT -H "Filename: d1.json" -H "Title: device-1" --data-binary @body.json "https://ntfy.sh/$T" | head -c 400; echo
+          sleep 2
+          curl -s "https://ntfy.sh/$T/json?poll=1&since=all" | head -c 600; echo
+          url=$(curl -s "https://ntfy.sh/$T/json?poll=1&since=all" | jq -r 'select(.attachment) | .attachment.url' | tail -1)
+          [ -n "$url" ] && curl -s -o got.json -w "attachment GET %{http_code} size %{size_download}\n" "$url" && cmp -s got.json body.json && echo "attachment matches"
+          echo "== kvdb"
+          b=$(curl -s -X POST -H "$O" https://kvdb.io/ ; echo); echo "bucket=$b"
+          if [ -n "$b" ] && [ ${#b} -lt 40 ]; then curl -s -o /dev/null -w "PUT %{http_code}\n" -X PUT -H "$O" --data-binary @body.json "https://kvdb.io/$b/dev1"; curl -s -i -X OPTIONS -H "$O" -H "Access-Control-Request-Method: PUT" "https://kvdb.io/$b/dev1" | grep -iE "^HTTP|access-control" || true; curl -s "https://kvdb.io/$b/?values=true&format=json" | head -c 120; echo; fi
