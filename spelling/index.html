@@ -334,6 +334,7 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
       </div>
       <p class="toast" id="exportToast" hidden></p>
       <textarea id="exportText" readonly aria-label="Progress summary"></textarea>
+      <p class="note" id="syncLine"></p>
       <p class="ph">Restore progress</p>
       <p class="note">Pick a file saved with Share or Download. Its words, rounds and practice time are added to what is on this iPad; nothing here is deleted, and loading the same file twice changes nothing.</p>
       <label class="btn" for="restoreFile">Restore from a saved file</label>
@@ -1218,6 +1219,7 @@ $("doneCheckBtn").onclick = () => {
   }
   store.last = { right, total };
   store.batch = null; save(); updateProgress();
+  syncNow("round");
   renderResult(right, total, fresh, toLearn);
 };
 function renderResult(right, total, fresh, toLearn) {
@@ -1314,6 +1316,8 @@ function renderParent() {
       return "<tr><td>" + fmtDate(r.t) + "</td><td>" + (r.mode === "apos" ? "Apostrophes" : "Levels") + "</td><td>" + lr + '</td><td class="num">' + r.right + " / " + r.n + "</td></tr>";
     }).join("") : '<tr><td>No rounds since tracking started.</td></tr>';
   $("exportText").value = summaryText();
+  const si = syncInfo();
+  $("syncLine").textContent = "Automatic backup: " + (si ? "last sent " + fmtDay(ymd(si.at)) + " at " + hm(si.at) : "not sent yet (needs internet)") + ". It is encrypted and goes out by itself when the app opens and after each round.";
   $("exportToast").hidden = true;
   show("vParent");
 }
@@ -1453,6 +1457,56 @@ $("restoreFile").onchange = e => {
   };
   r.readAsText(f);
 };
+
+/* ---------- automatic sync: an encrypted copy of all progress leaves the iPad ----------
+   Like BlitzWord's progress mirror: the app encrypts everything (both children) with a public key and
+   posts it to a private ntfy.sh channel when the app opens or resumes, after each checked round, and
+   every 2 minutes while progress changes. A GitHub workflow copies the newest file per iPad to the
+   progress-data branch. Only the private reading key, kept outside GitHub, can decrypt it.
+   The copy on the iPad stays the one the app uses; sync never changes it. */
+const SYNC = { url: "https://ntfy.sh/rr-spelling-148f96224024e100360d4648", aad: "spelling-progress-v1", pub: {"kty":"EC","crv":"P-256","x":"tsaszD-cceMoB1AND156oArDuIMhIvyM7H5BH5Jxr18","y":"m2AJKL1qkFlVKksMmoSxSfxAmad1bbBIn5YQHfx3XyM"} };
+const deviceId = (() => {
+  try {
+    let d = localStorage.getItem("spelling-device");
+    if (!d) { d = "ipad-" + Array.from(crypto.getRandomValues(new Uint8Array(5)), b => b.toString(16).padStart(2, "0")).join(""); localStorage.setItem("spelling-device", d); }
+    return d;
+  } catch (e) { return "ipad-unsaved"; }
+})();
+const b64 = u8 => { let s = ""; u8.forEach(b => s += String.fromCharCode(b)); return btoa(s); };
+async function sealProgress(text) {
+  const subtle = crypto.subtle, enc = new TextEncoder();
+  const pub = await subtle.importKey("jwk", SYNC.pub, { name: "ECDH", namedCurve: "P-256" }, false, []);
+  const eph = await subtle.generateKey({ name: "ECDH", namedCurve: "P-256" }, true, ["deriveKey"]);
+  const key = await subtle.deriveKey({ name: "ECDH", public: pub }, eph.privateKey, { name: "AES-GCM", length: 256 }, false, ["encrypt"]);
+  let data = enc.encode(text), gzip = false;
+  if (window.CompressionStream) {
+    data = new Uint8Array(await new Response(new Blob([data]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer()); gzip = true;
+  }
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await subtle.encrypt({ name: "AES-GCM", iv, additionalData: enc.encode(SYNC.aad) }, key, data));
+  const e = await subtle.exportKey("jwk", eph.publicKey);
+  return JSON.stringify({ format: SYNC.aad, alg: "ECDH-P256 AES-256-GCM", gzip, device: deviceId, savedAt: new Date().toISOString(),
+    epk: { kty: e.kty, crv: e.crv, x: e.x, y: e.y }, iv: b64(iv), ct: b64(ct) });
+}
+let syncSentFor = null, syncBusy = false;
+function syncInfo() { try { return JSON.parse(localStorage.getItem("spelling-sync") || "null"); } catch (e) { return null; } }
+async function syncNow(reason) {
+  if (syncBusy || !(window.crypto && crypto.subtle) || navigator.onLine === false) return;
+  const state = JSON.stringify(root);
+  if (state === syncSentFor && (reason === "change" || reason === "leave")) return;   // nothing new
+  syncBusy = true;
+  try {
+    const body = await sealProgress(JSON.stringify({ format: SYNC.aad, app: "spelling practice", device: deviceId, reason, savedAt: new Date().toISOString(), root }));
+    const r = await fetch(SYNC.url + "?filename=" + deviceId + ".json&title=" + deviceId, {
+      method: "POST", headers: { "Content-Type": "text/plain" }, body, keepalive: body.length < 60000 });
+    if (r.ok) { syncSentFor = state; try { localStorage.setItem("spelling-sync", JSON.stringify({ at: Date.now(), device: deviceId })); } catch (e) {} }
+  } catch (e) { /* offline or blocked: try again later */ }
+  syncBusy = false;
+}
+setTimeout(() => syncNow("start"), 1500);
+setInterval(() => { if (!document.hidden) syncNow("change"); }, 120000);
+document.addEventListener("visibilitychange", () => syncNow(document.hidden ? "leave" : "resume"));
+window.addEventListener("online", () => syncNow("online"));
 
 updateProgress();
 renderStart();

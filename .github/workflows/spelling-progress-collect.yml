@@ -1,0 +1,41 @@
+name: Spelling progress collect
+# Copies the encrypted progress files the iPads send to the progress-data branch.
+# Files stay encrypted here; the reading key is not in GitHub.
+on:
+  schedule:
+    - cron: "*/20 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [spelling/sync/selftest.txt]
+permissions:
+  contents: write
+concurrency:
+  group: spelling-progress-collect
+  cancel-in-progress: false
+env:
+  TOPIC: rr-spelling-148f96224024e100360d4648
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: progress-data
+          path: data
+      - name: Self-test (only when spelling/sync/selftest.txt changes)
+        if: github.event_name == 'push'
+        run: node spelling/tools/sync_selftest.mjs "$TOPIC" spelling/sync/public.jwk.json && sleep 3
+      - name: Collect
+        run: python3 spelling/tools/collect_progress.py "$TOPIC" data
+      - name: Commit to progress-data
+        working-directory: data
+        run: |
+          git config user.name "Spelling progress"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && { echo "no new progress"; exit 0; }
+          git commit -q -m "Progress update $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -q origin HEAD:progress-data
