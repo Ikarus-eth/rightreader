@@ -1648,6 +1648,806 @@
   "calm": {
    "word": "audio/af_heart/calm-w2.mp3",
    "sentence": "audio/af_heart/calm-sentence.mp3"
+  },
+  "afraid": {
+   "word": "audio/af_heart/afraid-w2.mp3",
+   "sentence": "audio/af_heart/afraid-sentence.mp3"
+  },
+  "explain": {
+   "word": "audio/af_heart/explain-w2.mp3",
+   "sentence": "audio/af_heart/explain-sentence.mp3"
+  },
+  "remain": {
+   "word": "audio/af_heart/remain-w2.mp3",
+   "sentence": "audio/af_heart/remain-sentence.mp3"
+  },
+  "daily": {
+   "word": "audio/af_heart/daily-w2.mp3",
+   "sentence": "audio/af_heart/daily-sentence.mp3"
+  },
+  "birthday": {
+   "word": "audio/af_heart/birthday-w2.mp3",
+   "sentence": "audio/af_heart/birthday-sentence.mp3"
+  },
+  "yesterday": {
+   "word": "audio/af_heart/yesterday-w2.mp3",
+   "sentence": "audio/af_heart/yesterday-sentence.mp3"
+  },
+  "always": {
+   "word": "audio/af_heart/always-w2.mp3",
+   "sentence": "audio/af_heart/always-sentence.mp3"
+  },
+  "crayon": {
+   "word": "audio/af_heart/crayon-w2.mp3",
+   "sentence": "audio/af_heart/crayon-sentence.mp3"
+  },
+  "between": {
+   "word": "audio/af_heart/between-w2.mp3",
+   "sentence": "audio/af_heart/between-sentence.mp3"
+  },
+  "fifteen": {
+   "word": "audio/af_heart/fifteen-w2.mp3",
+   "sentence": "audio/af_heart/fifteen-sentence.mp3"
+  },
+  "agree": {
+   "word": "audio/af_heart/agree-w2.mp3",
+   "sentence": "audio/af_heart/agree-sentence.mp3"
+  },
+  "speech": {
+   "word": "audio/af_heart/speech-w2.mp3",
+   "sentence": "audio/af_heart/speech-sentence.mp3"
+  },
+  "freeze": {
+   "word": "audio/af_heart/freeze-w2.mp3",
+   "sentence": "audio/af_heart/freeze-sentence.mp3"
+  },
+  "beach": {
+   "word": "audio/af_heart/beach-w2.mp3",
+   "sentence": "audio/af_heart/beach-sentence.mp3"
+  },
+  "reason": {
+   "word": "audio/af_heart/reason-w2.mp3",
+   "sentence": "audio/af_heart/reason-sentence.mp3"
+  },
+  "season": {
+   "word": "audio/af_heart/season-w2.mp3",
+   "sentence": "audio/af_heart/season-sentence.mp3"
+  },
+  "teacher": {
+   "word": "audio/af_heart/teacher-w2.mp3",
+   "sentence": "audio/af_heart/teacher-sentence.mp3"
+  },
+  "leaf": {
+   "word": "audio/af_heart/leaf-w2.mp3",
+   "sentence": "audio/af_heart/leaf-sentence.mp3"
+  },
+  "feather": {
+   "word": "audio/af_heart/feather-w2.mp3",
+   "sentence": "audio/af_heart/feather-sentence.mp3"
+  },
+  "heavy": {
+   "word": "audio/af_heart/heavy-w2.mp3",
+   "sentence": "audio/af_heart/heavy-sentence.mp3"
+  },
+  "ready": {
+   "word": "audio/af_heart/ready-w2.mp3",
+   "sentence": "audio/af_heart/ready-sentence.mp3"
+  },
+  "health": {
+   "word": "audio/af_heart/health-w2.mp3",
+   "sentence": "audio/af_heart/health-sentence.mp3"
+  },
+  "instead": {
+   "word": "audio/af_heart/instead-w2.mp3",
+   "sentence": "audio/af_heart/instead-sentence.mp3"
+  },
+  "breath": {
+   "word": "audio/af_heart/breath-w2.mp3",
+   "sentence": "audio/af_heart/breath-sentence.mp3"
+  },
+  "sweater": {
+   "word": "audio/af_heart/sweater-w2.mp3",
+   "sentence": "audio/af_heart/sweater-sentence.mp3"
+  },
+  "coast": {
+   "word": "audio/af_heart/coast-w2.mp3",
+   "sentence": "audio/af_heart/coast-sentence.mp3"
+  },
+  "throat": {
+   "word": "audio/af_heart/throat-w2.mp3",
+   "sentence": "audio/af_heart/throat-sentence.mp3"
+  },
+  "shadow": {
+   "word": "audio/af_heart/shadow-w2.mp3",
+   "sentence": "audio/af_heart/shadow-sentence.mp3"
+  },
+  "elbow": {
+   "word": "audio/af_heart/elbow-w2.mp3",
+   "sentence": "audio/af_heart/elbow-sentence.mp3"
+  },
+  "known": {
+   "word": "audio/af_heart/known-w2.mp3",
+   "sentence": "audio/af_heart/known-sentence.mp3"
+  },
+  "swallow": {
+   "word": "audio/af_heart/swallow-w2.mp3",
+   "sentence": "audio/af_heart/swallow-sentence.mp3"
+  },
+  "tomato": {
+   "word": "audio/af_heart/tomato-w2.mp3",
+   "sentence": "audio/af_heart/tomato-sentence.mp3"
+  },
+  "flight": {
+   "word": "audio/af_heart/flight-w2.mp3",
+   "sentence": "audio/af_heart/flight-sentence.mp3"
+  },
+  "frighten": {
+   "word": "audio/af_heart/frighten-w2.mp3",
+   "sentence": "audio/af_heart/frighten-sentence.mp3"
+  },
+  "midnight": {
+   "word": "audio/af_heart/midnight-w2.mp3",
+   "sentence": "audio/af_heart/midnight-sentence.mp3"
+  },
+  "delight": {
+   "word": "audio/af_heart/delight-w2.mp3",
+   "sentence": "audio/af_heart/delight-sentence.mp3"
+  },
+  "cried": {
+   "word": "audio/af_heart/cried-w2.mp3",
+   "sentence": "audio/af_heart/cried-sentence.mp3"
+  },
+  "tried": {
+   "word": "audio/af_heart/tried-w2.mp3",
+   "sentence": "audio/af_heart/tried-sentence.mp3"
+  },
+  "replied": {
+   "word": "audio/af_heart/replied-w2.mp3",
+   "sentence": "audio/af_heart/replied-sentence.mp3"
+  },
+  "balloon": {
+   "word": "audio/af_heart/balloon-w2.mp3",
+   "sentence": "audio/af_heart/balloon-sentence.mp3"
+  },
+  "cartoon": {
+   "word": "audio/af_heart/cartoon-w2.mp3",
+   "sentence": "audio/af_heart/cartoon-sentence.mp3"
+  },
+  "noodle": {
+   "word": "audio/af_heart/noodle-w2.mp3",
+   "sentence": "audio/af_heart/noodle-sentence.mp3"
+  },
+  "smooth": {
+   "word": "audio/af_heart/smooth-w2.mp3",
+   "sentence": "audio/af_heart/smooth-sentence.mp3"
+  },
+  "threw": {
+   "word": "audio/af_heart/threw-w2.mp3",
+   "sentence": "audio/af_heart/threw-sentence.mp3"
+  },
+  "jewel": {
+   "word": "audio/af_heart/jewel-w2.mp3",
+   "sentence": "audio/af_heart/jewel-sentence.mp3"
+  },
+  "true": {
+   "word": "audio/af_heart/true-w2.mp3",
+   "sentence": "audio/af_heart/true-sentence.mp3"
+  },
+  "clue": {
+   "word": "audio/af_heart/clue-w2.mp3",
+   "sentence": "audio/af_heart/clue-sentence.mp3"
+  },
+  "value": {
+   "word": "audio/af_heart/value-w2.mp3",
+   "sentence": "audio/af_heart/value-sentence.mp3"
+  },
+  "rescue": {
+   "word": "audio/af_heart/rescue-w2.mp3",
+   "sentence": "audio/af_heart/rescue-sentence.mp3"
+  },
+  "huge": {
+   "word": "audio/af_heart/huge-w2.mp3",
+   "sentence": "audio/af_heart/huge-sentence.mp3"
+  },
+  "proud": {
+   "word": "audio/af_heart/proud-w2.mp3",
+   "sentence": "audio/af_heart/proud-sentence.mp3"
+  },
+  "south": {
+   "word": "audio/af_heart/south-w2.mp3",
+   "sentence": "audio/af_heart/south-sentence.mp3"
+  },
+  "amount": {
+   "word": "audio/af_heart/amount-w2.mp3",
+   "sentence": "audio/af_heart/amount-sentence.mp3"
+  },
+  "flower": {
+   "word": "audio/af_heart/flower-w2.mp3",
+   "sentence": "audio/af_heart/flower-sentence.mp3"
+  },
+  "towel": {
+   "word": "audio/af_heart/towel-w2.mp3",
+   "sentence": "audio/af_heart/towel-sentence.mp3"
+  },
+  "allow": {
+   "word": "audio/af_heart/allow-w2.mp3",
+   "sentence": "audio/af_heart/allow-sentence.mp3"
+  },
+  "market": {
+   "word": "audio/af_heart/market-w2.mp3",
+   "sentence": "audio/af_heart/market-sentence.mp3"
+  },
+  "carpet": {
+   "word": "audio/af_heart/carpet-w2.mp3",
+   "sentence": "audio/af_heart/carpet-sentence.mp3"
+  },
+  "corner": {
+   "word": "audio/af_heart/corner-w2.mp3",
+   "sentence": "audio/af_heart/corner-sentence.mp3"
+  },
+  "morning": {
+   "word": "audio/af_heart/morning-w2.mp3",
+   "sentence": "audio/af_heart/morning-sentence.mp3"
+  },
+  "report": {
+   "word": "audio/af_heart/report-w2.mp3",
+   "sentence": "audio/af_heart/report-sentence.mp3"
+  },
+  "before": {
+   "word": "audio/af_heart/before-w2.mp3",
+   "sentence": "audio/af_heart/before-sentence.mp3"
+  },
+  "explore": {
+   "word": "audio/af_heart/explore-w2.mp3",
+   "sentence": "audio/af_heart/explore-sentence.mp3"
+  },
+  "four": {
+   "word": "audio/af_heart/four-w2.mp3",
+   "sentence": "audio/af_heart/four-sentence.mp3"
+  },
+  "pour": {
+   "word": "audio/af_heart/pour-w2.mp3",
+   "sentence": "audio/af_heart/pour-sentence.mp3"
+  },
+  "course": {
+   "word": "audio/af_heart/course-w2.mp3",
+   "sentence": "audio/af_heart/course-sentence.mp3"
+  },
+  "fourth": {
+   "word": "audio/af_heart/fourth-w2.mp3",
+   "sentence": "audio/af_heart/fourth-sentence.mp3"
+  },
+  "person": {
+   "word": "audio/af_heart/person-w2.mp3",
+   "sentence": "audio/af_heart/person-sentence.mp3"
+  },
+  "perfect": {
+   "word": "audio/af_heart/perfect-w2.mp3",
+   "sentence": "audio/af_heart/perfect-sentence.mp3"
+  },
+  "thirsty": {
+   "word": "audio/af_heart/thirsty-w2.mp3",
+   "sentence": "audio/af_heart/thirsty-sentence.mp3"
+  },
+  "circle": {
+   "word": "audio/af_heart/circle-w2.mp3",
+   "sentence": "audio/af_heart/circle-sentence.mp3"
+  },
+  "turtle": {
+   "word": "audio/af_heart/turtle-w2.mp3",
+   "sentence": "audio/af_heart/turtle-sentence.mp3"
+  },
+  "purple": {
+   "word": "audio/af_heart/purple-w2.mp3",
+   "sentence": "audio/af_heart/purple-sentence.mp3"
+  },
+  "hurry": {
+   "word": "audio/af_heart/hurry-w2.mp3",
+   "sentence": "audio/af_heart/hurry-sentence.mp3"
+  },
+  "church": {
+   "word": "audio/af_heart/church-w2.mp3",
+   "sentence": "audio/af_heart/church-sentence.mp3"
+  },
+  "Thursday": {
+   "word": "audio/af_heart/thursday-w2.mp3",
+   "sentence": "audio/af_heart/thursday-sentence.mp3"
+  },
+  "Saturday": {
+   "word": "audio/af_heart/saturday-w2.mp3",
+   "sentence": "audio/af_heart/saturday-sentence.mp3"
+  },
+  "return": {
+   "word": "audio/af_heart/return-w2.mp3",
+   "sentence": "audio/af_heart/return-sentence.mp3"
+  },
+  "surface": {
+   "word": "audio/af_heart/surface-w2.mp3",
+   "sentence": "audio/af_heart/surface-sentence.mp3"
+  },
+  "stairs": {
+   "word": "audio/af_heart/stairs-w2.mp3",
+   "sentence": "audio/af_heart/stairs-sentence.mp3"
+  },
+  "repair": {
+   "word": "audio/af_heart/repair-w2.mp3",
+   "sentence": "audio/af_heart/repair-sentence.mp3"
+  },
+  "square": {
+   "word": "audio/af_heart/square-w2.mp3",
+   "sentence": "audio/af_heart/square-sentence.mp3"
+  },
+  "compare": {
+   "word": "audio/af_heart/compare-w2.mp3",
+   "sentence": "audio/af_heart/compare-sentence.mp3"
+  },
+  "prepare": {
+   "word": "audio/af_heart/prepare-w2.mp3",
+   "sentence": "audio/af_heart/prepare-sentence.mp3"
+  },
+  "kitchen": {
+   "word": "audio/af_heart/kitchen-w2.mp3",
+   "sentence": "audio/af_heart/kitchen-sentence.mp3"
+  },
+  "stretch": {
+   "word": "audio/af_heart/stretch-w2.mp3",
+   "sentence": "audio/af_heart/stretch-sentence.mp3"
+  },
+  "switch": {
+   "word": "audio/af_heart/switch-w2.mp3",
+   "sentence": "audio/af_heart/switch-sentence.mp3"
+  },
+  "judge": {
+   "word": "audio/af_heart/judge-w2.mp3",
+   "sentence": "audio/af_heart/judge-sentence.mp3"
+  },
+  "bridge": {
+   "word": "audio/af_heart/bridge-w2.mp3",
+   "sentence": "audio/af_heart/bridge-sentence.mp3"
+  },
+  "fridge": {
+   "word": "audio/af_heart/fridge-w2.mp3",
+   "sentence": "audio/af_heart/fridge-sentence.mp3"
+  },
+  "change": {
+   "word": "audio/af_heart/change-w2.mp3",
+   "sentence": "audio/af_heart/change-sentence.mp3"
+  },
+  "strange": {
+   "word": "audio/af_heart/strange-w2.mp3",
+   "sentence": "audio/af_heart/strange-sentence.mp3"
+  },
+  "orange": {
+   "word": "audio/af_heart/orange-w2.mp3",
+   "sentence": "audio/af_heart/orange-sentence.mp3"
+  },
+  "giant": {
+   "word": "audio/af_heart/giant-w2.mp3",
+   "sentence": "audio/af_heart/giant-sentence.mp3"
+  },
+  "gentle": {
+   "word": "audio/af_heart/gentle-w2.mp3",
+   "sentence": "audio/af_heart/gentle-sentence.mp3"
+  },
+  "giraffe": {
+   "word": "audio/af_heart/giraffe-w2.mp3",
+   "sentence": "audio/af_heart/giraffe-sentence.mp3"
+  },
+  "magic": {
+   "word": "audio/af_heart/magic-w2.mp3",
+   "sentence": "audio/af_heart/magic-sentence.mp3"
+  },
+  "stranger": {
+   "word": "audio/af_heart/stranger-w2.mp3",
+   "sentence": "audio/af_heart/stranger-sentence.mp3"
+  },
+  "engine": {
+   "word": "audio/af_heart/engine-w2.mp3",
+   "sentence": "audio/af_heart/engine-sentence.mp3"
+  },
+  "energy": {
+   "word": "audio/af_heart/energy-w2.mp3",
+   "sentence": "audio/af_heart/energy-sentence.mp3"
+  },
+  "city": {
+   "word": "audio/af_heart/city-w2.mp3",
+   "sentence": "audio/af_heart/city-sentence.mp3"
+  },
+  "circus": {
+   "word": "audio/af_heart/circus-w2.mp3",
+   "sentence": "audio/af_heart/circus-sentence.mp3"
+  },
+  "voice": {
+   "word": "audio/af_heart/voice-w2.mp3",
+   "sentence": "audio/af_heart/voice-sentence.mp3"
+  },
+  "choice": {
+   "word": "audio/af_heart/choice-w2.mp3",
+   "sentence": "audio/af_heart/choice-sentence.mp3"
+  },
+  "police": {
+   "word": "audio/af_heart/police-w2.mp3",
+   "sentence": "audio/af_heart/police-sentence.mp3"
+  },
+  "office": {
+   "word": "audio/af_heart/office-w2.mp3",
+   "sentence": "audio/af_heart/office-sentence.mp3"
+  },
+  "notice": {
+   "word": "audio/af_heart/notice-w2.mp3",
+   "sentence": "audio/af_heart/notice-sentence.mp3"
+  },
+  "alphabet": {
+   "word": "audio/af_heart/alphabet-w2.mp3",
+   "sentence": "audio/af_heart/alphabet-sentence.mp3"
+  },
+  "elephant": {
+   "word": "audio/af_heart/elephant-w2.mp3",
+   "sentence": "audio/af_heart/elephant-sentence.mp3"
+  },
+  "dolphin": {
+   "word": "audio/af_heart/dolphin-w2.mp3",
+   "sentence": "audio/af_heart/dolphin-sentence.mp3"
+  },
+  "whisper": {
+   "word": "audio/af_heart/whisper-w2.mp3",
+   "sentence": "audio/af_heart/whisper-sentence.mp3"
+  },
+  "echo": {
+   "word": "audio/af_heart/echo-w2.mp3",
+   "sentence": "audio/af_heart/echo-sentence.mp3"
+  },
+  "ache": {
+   "word": "audio/af_heart/ache-w2.mp3",
+   "sentence": "audio/af_heart/ache-sentence.mp3"
+  },
+  "running": {
+   "word": "audio/af_heart/running-w2.mp3",
+   "sentence": "audio/af_heart/running-sentence.mp3"
+  },
+  "swimming": {
+   "word": "audio/af_heart/swimming-w2.mp3",
+   "sentence": "audio/af_heart/swimming-sentence.mp3"
+  },
+  "shopping": {
+   "word": "audio/af_heart/shopping-w2.mp3",
+   "sentence": "audio/af_heart/shopping-sentence.mp3"
+  },
+  "planned": {
+   "word": "audio/af_heart/planned-w2.mp3",
+   "sentence": "audio/af_heart/planned-sentence.mp3"
+  },
+  "clapped": {
+   "word": "audio/af_heart/clapped-w2.mp3",
+   "sentence": "audio/af_heart/clapped-sentence.mp3"
+  },
+  "hoping": {
+   "word": "audio/af_heart/hoping-w2.mp3",
+   "sentence": "audio/af_heart/hoping-sentence.mp3"
+  },
+  "writing": {
+   "word": "audio/af_heart/writing-w2.mp3",
+   "sentence": "audio/af_heart/writing-sentence.mp3"
+  },
+  "dancing": {
+   "word": "audio/af_heart/dancing-w2.mp3",
+   "sentence": "audio/af_heart/dancing-sentence.mp3"
+  },
+  "stories": {
+   "word": "audio/af_heart/stories-w2.mp3",
+   "sentence": "audio/af_heart/stories-sentence.mp3"
+  },
+  "cherries": {
+   "word": "audio/af_heart/cherries-w2.mp3",
+   "sentence": "audio/af_heart/cherries-sentence.mp3"
+  },
+  "puppies": {
+   "word": "audio/af_heart/puppies-w2.mp3",
+   "sentence": "audio/af_heart/puppies-sentence.mp3"
+  },
+  "leaves": {
+   "word": "audio/af_heart/leaves-w2.mp3",
+   "sentence": "audio/af_heart/leaves-sentence.mp3"
+  },
+  "wolves": {
+   "word": "audio/af_heart/wolves-w2.mp3",
+   "sentence": "audio/af_heart/wolves-sentence.mp3"
+  },
+  "halves": {
+   "word": "audio/af_heart/halves-w2.mp3",
+   "sentence": "audio/af_heart/halves-sentence.mp3"
+  },
+  "shelves": {
+   "word": "audio/af_heart/shelves-w2.mp3",
+   "sentence": "audio/af_heart/shelves-sentence.mp3"
+  },
+  "helpful": {
+   "word": "audio/af_heart/helpful-w2.mp3",
+   "sentence": "audio/af_heart/helpful-sentence.mp3"
+  },
+  "thankful": {
+   "word": "audio/af_heart/thankful-w2.mp3",
+   "sentence": "audio/af_heart/thankful-sentence.mp3"
+  },
+  "painful": {
+   "word": "audio/af_heart/painful-w2.mp3",
+   "sentence": "audio/af_heart/painful-sentence.mp3"
+  },
+  "careless": {
+   "word": "audio/af_heart/careless-w2.mp3",
+   "sentence": "audio/af_heart/careless-sentence.mp3"
+  },
+  "kindness": {
+   "word": "audio/af_heart/kindness-w2.mp3",
+   "sentence": "audio/af_heart/kindness-sentence.mp3"
+  },
+  "darkness": {
+   "word": "audio/af_heart/darkness-w2.mp3",
+   "sentence": "audio/af_heart/darkness-sentence.mp3"
+  },
+  "sadness": {
+   "word": "audio/af_heart/sadness-w2.mp3",
+   "sentence": "audio/af_heart/sadness-sentence.mp3"
+  },
+  "suddenly": {
+   "word": "audio/af_heart/suddenly-w2.mp3",
+   "sentence": "audio/af_heart/suddenly-sentence.mp3"
+  },
+  "friendly": {
+   "word": "audio/af_heart/friendly-w2.mp3",
+   "sentence": "audio/af_heart/friendly-sentence.mp3"
+  },
+  "lonely": {
+   "word": "audio/af_heart/lonely-w2.mp3",
+   "sentence": "audio/af_heart/lonely-sentence.mp3"
+  },
+  "safely": {
+   "word": "audio/af_heart/safely-w2.mp3",
+   "sentence": "audio/af_heart/safely-sentence.mp3"
+  },
+  "movement": {
+   "word": "audio/af_heart/movement-w2.mp3",
+   "sentence": "audio/af_heart/movement-sentence.mp3"
+  },
+  "unhappy": {
+   "word": "audio/af_heart/unhappy-w2.mp3",
+   "sentence": "audio/af_heart/unhappy-sentence.mp3"
+  },
+  "untidy": {
+   "word": "audio/af_heart/untidy-w2.mp3",
+   "sentence": "audio/af_heart/untidy-sentence.mp3"
+  },
+  "rewrite": {
+   "word": "audio/af_heart/rewrite-w2.mp3",
+   "sentence": "audio/af_heart/rewrite-sentence.mp3"
+  },
+  "disagree": {
+   "word": "audio/af_heart/disagree-w2.mp3",
+   "sentence": "audio/af_heart/disagree-sentence.mp3"
+  },
+  "mistake": {
+   "word": "audio/af_heart/mistake-w2.mp3",
+   "sentence": "audio/af_heart/mistake-sentence.mp3"
+  },
+  "something": {
+   "word": "audio/af_heart/something-w2.mp3",
+   "sentence": "audio/af_heart/something-sentence.mp3"
+  },
+  "sometimes": {
+   "word": "audio/af_heart/sometimes-w2.mp3",
+   "sentence": "audio/af_heart/sometimes-sentence.mp3"
+  },
+  "everything": {
+   "word": "audio/af_heart/everything-w2.mp3",
+   "sentence": "audio/af_heart/everything-sentence.mp3"
+  },
+  "everyone": {
+   "word": "audio/af_heart/everyone-w2.mp3",
+   "sentence": "audio/af_heart/everyone-sentence.mp3"
+  },
+  "somebody": {
+   "word": "audio/af_heart/somebody-w2.mp3",
+   "sentence": "audio/af_heart/somebody-sentence.mp3"
+  },
+  "playground": {
+   "word": "audio/af_heart/playground-w2.mp3",
+   "sentence": "audio/af_heart/playground-sentence.mp3"
+  },
+  "rainbow": {
+   "word": "audio/af_heart/rainbow-w2.mp3",
+   "sentence": "audio/af_heart/rainbow-sentence.mp3"
+  },
+  "homework": {
+   "word": "audio/af_heart/homework-w2.mp3",
+   "sentence": "audio/af_heart/homework-sentence.mp3"
+  },
+  "afternoon": {
+   "word": "audio/af_heart/afternoon-w2.mp3",
+   "sentence": "audio/af_heart/afternoon-sentence.mp3"
+  },
+  "weekend": {
+   "word": "audio/af_heart/weekend-w2.mp3",
+   "sentence": "audio/af_heart/weekend-sentence.mp3"
+  },
+  "without": {
+   "word": "audio/af_heart/without-w2.mp3",
+   "sentence": "audio/af_heart/without-sentence.mp3"
+  },
+  "yourself": {
+   "word": "audio/af_heart/yourself-w2.mp3",
+   "sentence": "audio/af_heart/yourself-sentence.mp3"
+  },
+  "cupboard": {
+   "word": "audio/af_heart/cupboard-w2.mp3",
+   "sentence": "audio/af_heart/cupboard-sentence.mp3"
+  },
+  "sure": {
+   "word": "audio/af_heart/sure-w2.mp3",
+   "sentence": "audio/af_heart/sure-sentence.mp3"
+  },
+  "sugar": {
+   "word": "audio/af_heart/sugar-w2.mp3",
+   "sentence": "audio/af_heart/sugar-sentence.mp3"
+  },
+  "heart": {
+   "word": "audio/af_heart/heart-w2.mp3",
+   "sentence": "audio/af_heart/heart-sentence.mp3"
+  },
+  "learn": {
+   "word": "audio/af_heart/learn-w2.mp3",
+   "sentence": "audio/af_heart/learn-sentence.mp3"
+  },
+  "woman": {
+   "word": "audio/af_heart/woman-w2.mp3",
+   "sentence": "audio/af_heart/woman-sentence.mp3"
+  },
+  "women": {
+   "word": "audio/af_heart/women-w2.mp3",
+   "sentence": "audio/af_heart/women-sentence.mp3"
+  },
+  "country": {
+   "word": "audio/af_heart/country-w2.mp3",
+   "sentence": "audio/af_heart/country-sentence.mp3"
+  },
+  "young": {
+   "word": "audio/af_heart/young-w2.mp3",
+   "sentence": "audio/af_heart/young-sentence.mp3"
+  },
+  "touch": {
+   "word": "audio/af_heart/touch-w2.mp3",
+   "sentence": "audio/af_heart/touch-sentence.mp3"
+  },
+  "double": {
+   "word": "audio/af_heart/double-w2.mp3",
+   "sentence": "audio/af_heart/double-sentence.mp3"
+  },
+  "trouble": {
+   "word": "audio/af_heart/trouble-w2.mp3",
+   "sentence": "audio/af_heart/trouble-sentence.mp3"
+  },
+  "couple": {
+   "word": "audio/af_heart/couple-w2.mp3",
+   "sentence": "audio/af_heart/couple-sentence.mp3"
+  },
+  "soup": {
+   "word": "audio/af_heart/soup-w2.mp3",
+   "sentence": "audio/af_heart/soup-sentence.mp3"
+  },
+  "direction": {
+   "word": "audio/af_heart/direction-w2.mp3",
+   "sentence": "audio/af_heart/direction-sentence.mp3"
+  },
+  "vision": {
+   "word": "audio/af_heart/vision-w2.mp3",
+   "sentence": "audio/af_heart/vision-sentence.mp3"
+  },
+  "addition": {
+   "word": "audio/af_heart/addition-w2.mp3",
+   "sentence": "audio/af_heart/addition-sentence.mp3"
+  },
+  "candle": {
+   "word": "audio/af_heart/candle-w2.mp3",
+   "sentence": "audio/af_heart/candle-sentence.mp3"
+  },
+  "eagle": {
+   "word": "audio/af_heart/eagle-w2.mp3",
+   "sentence": "audio/af_heart/eagle-sentence.mp3"
+  },
+  "giggle": {
+   "word": "audio/af_heart/giggle-w2.mp3",
+   "sentence": "audio/af_heart/giggle-sentence.mp3"
+  },
+  "jungle": {
+   "word": "audio/af_heart/jungle-w2.mp3",
+   "sentence": "audio/af_heart/jungle-sentence.mp3"
+  },
+  "bubble": {
+   "word": "audio/af_heart/bubble-w2.mp3",
+   "sentence": "audio/af_heart/bubble-sentence.mp3"
+  },
+  "pebble": {
+   "word": "audio/af_heart/pebble-w2.mp3",
+   "sentence": "audio/af_heart/pebble-sentence.mp3"
+  },
+  "doctor": {
+   "word": "audio/af_heart/doctor-w2.mp3",
+   "sentence": "audio/af_heart/doctor-sentence.mp3"
+  },
+  "visitor": {
+   "word": "audio/af_heart/visitor-w2.mp3",
+   "sentence": "audio/af_heart/visitor-sentence.mp3"
+  },
+  "dollar": {
+   "word": "audio/af_heart/dollar-w2.mp3",
+   "sentence": "audio/af_heart/dollar-sentence.mp3"
+  },
+  "collar": {
+   "word": "audio/af_heart/collar-w2.mp3",
+   "sentence": "audio/af_heart/collar-sentence.mp3"
+  },
+  "wonder": {
+   "word": "audio/af_heart/wonder-w2.mp3",
+   "sentence": "audio/af_heart/wonder-sentence.mp3"
+  },
+  "meat": {
+   "word": "audio/af_heart/meat-w2.mp3",
+   "sentence": "audio/af_heart/meat-sentence.mp3"
+  },
+  "tail": {
+   "word": "audio/af_heart/tail-w2.mp3",
+   "sentence": "audio/af_heart/tail-sentence.mp3"
+  },
+  "flour": {
+   "word": "audio/af_heart/flour-w2.mp3",
+   "sentence": "audio/af_heart/flour-sentence.mp3"
+  },
+  "bear": {
+   "word": "audio/af_heart/bear-w2.mp3",
+   "sentence": "audio/af_heart/bear-sentence.mp3"
+  },
+  "knight": {
+   "word": "audio/af_heart/knight-w2.mp3",
+   "sentence": "audio/af_heart/knight-sentence.mp3"
+  },
+  "blew": {
+   "word": "audio/af_heart/blew-w2.mp3",
+   "sentence": "audio/af_heart/blew-sentence.mp3"
+  },
+  "knew": {
+   "word": "audio/af_heart/knew-w2.mp3",
+   "sentence": "audio/af_heart/knew-sentence.mp3"
+  },
+  "pear": {
+   "word": "audio/af_heart/pear-w2.mp3",
+   "sentence": "audio/af_heart/pear-sentence.mp3"
+  },
+  "week": {
+   "word": "audio/af_heart/week-w2.mp3",
+   "sentence": "audio/af_heart/week-sentence.mp3"
+  },
+  "sail": {
+   "word": "audio/af_heart/sail-w2.mp3",
+   "sentence": "audio/af_heart/sail-sentence.mp3"
+  },
+  "plane": {
+   "word": "audio/af_heart/plane-w2.mp3",
+   "sentence": "audio/af_heart/plane-sentence.mp3"
+  },
+  "steal": {
+   "word": "audio/af_heart/steal-w2.mp3",
+   "sentence": "audio/af_heart/steal-sentence.mp3"
+  },
+  "witch": {
+   "word": "audio/af_heart/witch-w2.mp3",
+   "sentence": "audio/af_heart/witch-sentence.mp3"
+  },
+  "aloud": {
+   "word": "audio/af_heart/aloud-w2.mp3",
+   "sentence": "audio/af_heart/aloud-sentence.mp3"
+  },
+  "rode": {
+   "word": "audio/af_heart/rode-w2.mp3",
+   "sentence": "audio/af_heart/rode-sentence.mp3"
   }
  }
 }

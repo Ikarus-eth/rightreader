@@ -42,9 +42,9 @@
   },
   {
    "word": "some",
-   "heard": "Some.",
-   "match": true,
-   "confidence": -1.133,
+   "heard": "We'll see you soon.",
+   "match": false,
+   "confidence": -1.07,
    "sentence_heard": "Can I have some milk?",
    "sentence_has_word": true
   },
@@ -3041,6 +3041,1606 @@
    "sentence_has_word": true
   },
   {
+   "word": "afraid",
+   "heard": "afraid.",
+   "match": true,
+   "confidence": -0.457,
+   "sentence_heard": "My little brother is afraid of the dark.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "explain",
+   "heard": "Explain.",
+   "match": true,
+   "confidence": -0.347,
+   "sentence_heard": "Can you explain the game to me?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "remain",
+   "heard": "remain.",
+   "match": true,
+   "confidence": -0.347,
+   "sentence_heard": "Please remain in your seats.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "daily",
+   "heard": "Daily.",
+   "match": true,
+   "confidence": -0.351,
+   "sentence_heard": "I read a daily story.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "birthday",
+   "heard": "Birthday.",
+   "match": true,
+   "confidence": -0.57,
+   "sentence_heard": "My birthday is in May.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "yesterday",
+   "heard": "yesterday.",
+   "match": true,
+   "confidence": -0.368,
+   "sentence_heard": "Yesterday we went to the beach.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "always",
+   "heard": "always.",
+   "match": true,
+   "confidence": -0.585,
+   "sentence_heard": "always brush my teeth.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "crayon",
+   "heard": "crayon.",
+   "match": true,
+   "confidence": -0.241,
+   "sentence_heard": "Pass me the red crayon.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "between",
+   "heard": "between.",
+   "match": true,
+   "confidence": -0.391,
+   "sentence_heard": "Sit between me and Dad.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "fifteen",
+   "heard": "15.",
+   "match": false,
+   "confidence": -0.314,
+   "sentence_heard": "There are 15 children in my class.",
+   "sentence_has_word": false
+  },
+  {
+   "word": "agree",
+   "heard": "Agree.",
+   "match": true,
+   "confidence": -0.514,
+   "sentence_heard": "agree with you.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "speech",
+   "heard": "Speech.",
+   "match": true,
+   "confidence": -0.469,
+   "sentence_heard": "The teacher gave a speech.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "freeze",
+   "heard": "freeze.",
+   "match": true,
+   "confidence": -0.53,
+   "sentence_heard": "Water will freeze in the freezer.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "beach",
+   "heard": "Beach.",
+   "match": true,
+   "confidence": -0.384,
+   "sentence_heard": "We play on the beach every weekend.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "reason",
+   "heard": "Reason.",
+   "match": true,
+   "confidence": -0.434,
+   "sentence_heard": "What is the reason you are late?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "season",
+   "heard": "season.",
+   "match": true,
+   "confidence": -0.304,
+   "sentence_heard": "Bali has a rainy season.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "teacher",
+   "heard": "teacher.",
+   "match": true,
+   "confidence": -0.268,
+   "sentence_heard": "My teacher is very kind",
+   "sentence_has_word": true
+  },
+  {
+   "word": "leaf",
+   "heard": "Leaf.",
+   "match": true,
+   "confidence": -0.188,
+   "sentence_heard": "A leaf fell from the tree",
+   "sentence_has_word": true
+  },
+  {
+   "word": "feather",
+   "heard": "Father.",
+   "match": false,
+   "confidence": -0.782,
+   "sentence_heard": "The parrot dropped a red feather.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "heavy",
+   "heard": "Heavy.",
+   "match": true,
+   "confidence": -0.346,
+   "sentence_heard": "This bag is very heavy.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "ready",
+   "heard": "Ready.",
+   "match": true,
+   "confidence": -0.304,
+   "sentence_heard": "Are you ready to go?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "health",
+   "heard": "Health.",
+   "match": true,
+   "confidence": -0.33,
+   "sentence_heard": "Fruit is good for your health.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "instead",
+   "heard": "instead.",
+   "match": true,
+   "confidence": -0.447,
+   "sentence_heard": "Let's walk instead of driving.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "breath",
+   "heard": "Breath.",
+   "match": true,
+   "confidence": -0.613,
+   "sentence_heard": "Take a deep breath.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "sweater",
+   "heard": "Sweater.",
+   "match": true,
+   "confidence": -0.247,
+   "sentence_heard": "Wear a sweater in the mountains.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "coast",
+   "heard": "coast.",
+   "match": true,
+   "confidence": -0.621,
+   "sentence_heard": "We drove along the coast.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "throat",
+   "heard": "throat.",
+   "match": true,
+   "confidence": -0.354,
+   "sentence_heard": "My throat hurts.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "shadow",
+   "heard": "Shadow.",
+   "match": true,
+   "confidence": -0.394,
+   "sentence_heard": "My shadow is very long.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "elbow",
+   "heard": "Elbow.",
+   "match": true,
+   "confidence": -0.488,
+   "sentence_heard": "I bumped my elbow.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "known",
+   "heard": "Known.",
+   "match": true,
+   "confidence": -0.499,
+   "sentence_heard": "I have known her for years.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "swallow",
+   "heard": "Swallow.",
+   "match": true,
+   "confidence": -0.186,
+   "sentence_heard": "you before you swallow.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "tomato",
+   "heard": "Tomato.",
+   "match": true,
+   "confidence": -0.779,
+   "sentence_heard": "I put tomato on my pizza",
+   "sentence_has_word": true
+  },
+  {
+   "word": "flight",
+   "heard": "Flight.",
+   "match": true,
+   "confidence": -0.474,
+   "sentence_heard": "Our flight leaves at 9.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "frighten",
+   "heard": "Frighten.",
+   "match": true,
+   "confidence": -0.329,
+   "sentence_heard": "Don't frighten the cat.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "midnight",
+   "heard": "Midnight.",
+   "match": true,
+   "confidence": -0.497,
+   "sentence_heard": "The party ended at midnight.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "delight",
+   "heard": "Delight.",
+   "match": true,
+   "confidence": -0.446,
+   "sentence_heard": "The children shouted with delight.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "cried",
+   "heard": "Cried.",
+   "match": true,
+   "confidence": -0.617,
+   "sentence_heard": "The baby cried all night.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "tried",
+   "heard": "tried.",
+   "match": true,
+   "confidence": -0.511,
+   "sentence_heard": "I tried my best.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "replied",
+   "heard": "Replied.",
+   "match": true,
+   "confidence": -0.526,
+   "sentence_heard": "She replied to my message",
+   "sentence_has_word": true
+  },
+  {
+   "word": "balloon",
+   "heard": "Balloon.",
+   "match": true,
+   "confidence": -0.373,
+   "sentence_heard": "The red balloon floated away.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "cartoon",
+   "heard": "cartoon.",
+   "match": true,
+   "confidence": -0.364,
+   "sentence_heard": "We watched a cartoon.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "noodle",
+   "heard": "Noodle.",
+   "match": true,
+   "confidence": -0.32,
+   "sentence_heard": "I love noodle soup.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "smooth",
+   "heard": "Smooth.",
+   "match": true,
+   "confidence": -0.209,
+   "sentence_heard": "The stone was smooth.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "threw",
+   "heard": "through.",
+   "match": false,
+   "confidence": -0.223,
+   "sentence_heard": "He threw the ball very far.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "jewel",
+   "heard": "Jewel.",
+   "match": true,
+   "confidence": -0.737,
+   "sentence_heard": "The crown has a big jewel.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "true",
+   "heard": "True.",
+   "match": true,
+   "confidence": -0.555,
+   "sentence_heard": "Is that story true?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "clue",
+   "heard": "Clue.",
+   "match": true,
+   "confidence": -0.745,
+   "sentence_heard": "The detective found a clue.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "value",
+   "heard": "value.",
+   "match": true,
+   "confidence": -0.241,
+   "sentence_heard": "This old coin has a high value.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "rescue",
+   "heard": "Rescue.",
+   "match": true,
+   "confidence": -0.378,
+   "sentence_heard": "The lifeguard will rescue you.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "huge",
+   "heard": "Huge.",
+   "match": true,
+   "confidence": -0.119,
+   "sentence_heard": "and elephant is huge.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "proud",
+   "heard": "Proud.",
+   "match": true,
+   "confidence": -0.458,
+   "sentence_heard": "I am proud of you.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "south",
+   "heard": "South.",
+   "match": true,
+   "confidence": -0.518,
+   "sentence_heard": "Australia is south of Bali.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "amount",
+   "heard": "amount.",
+   "match": true,
+   "confidence": -0.433,
+   "sentence_heard": "small amount of salt.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "flower",
+   "heard": "Flower.",
+   "match": true,
+   "confidence": -0.463,
+   "sentence_heard": "She picked a yellow flower",
+   "sentence_has_word": true
+  },
+  {
+   "word": "towel",
+   "heard": "towel.",
+   "match": true,
+   "confidence": -0.69,
+   "sentence_heard": "Bring a towel to the pool",
+   "sentence_has_word": true
+  },
+  {
+   "word": "allow",
+   "heard": "Allow.",
+   "match": true,
+   "confidence": -0.287,
+   "sentence_heard": "My parents allow us to stay up late on Fridays.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "market",
+   "heard": "market.",
+   "match": true,
+   "confidence": -0.593,
+   "sentence_heard": "We bought fruit at the market.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "carpet",
+   "heard": "carpet.",
+   "match": true,
+   "confidence": -0.418,
+   "sentence_heard": "The cat sleeps on the carpet.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "corner",
+   "heard": "corner.",
+   "match": true,
+   "confidence": -0.455,
+   "sentence_heard": "The shop is on the corner.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "morning",
+   "heard": "morning.",
+   "match": true,
+   "confidence": -0.46,
+   "sentence_heard": "swim every morning.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "report",
+   "heard": "report.",
+   "match": true,
+   "confidence": -0.309,
+   "sentence_heard": "I wrote a report about",
+   "sentence_has_word": true
+  },
+  {
+   "word": "before",
+   "heard": "before.",
+   "match": true,
+   "confidence": -0.125,
+   "sentence_heard": "Wash your hands before dinner.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "explore",
+   "heard": "Explore.",
+   "match": true,
+   "confidence": -0.246,
+   "sentence_heard": "Let's explore the cave.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "four",
+   "heard": "Four.",
+   "match": true,
+   "confidence": -0.667,
+   "sentence_heard": "A cat has four legs.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "pour",
+   "heard": "Poor.",
+   "match": false,
+   "confidence": -0.953,
+   "sentence_heard": "Pour the milk into the cup.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "course",
+   "heard": "course.",
+   "match": true,
+   "confidence": -0.432,
+   "sentence_heard": "I am taking a swimming course.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "fourth",
+   "heard": "Fourth.",
+   "match": true,
+   "confidence": -0.456,
+   "sentence_heard": "This is my fourth try.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "person",
+   "heard": "person.",
+   "match": true,
+   "confidence": -0.489,
+   "sentence_heard": "Each person gets one cake.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "perfect",
+   "heard": "Perfect.",
+   "match": true,
+   "confidence": -0.177,
+   "sentence_heard": "Your drawing is perfect.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "thirsty",
+   "heard": "Thirsty",
+   "match": true,
+   "confidence": -0.931,
+   "sentence_heard": "I am thirsty after running.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "circle",
+   "heard": "Circle.",
+   "match": true,
+   "confidence": -0.231,
+   "sentence_heard": "Draw a circle.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "turtle",
+   "heard": "Turtle.",
+   "match": true,
+   "confidence": -0.904,
+   "sentence_heard": "We saw a turtle in the sea.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "purple",
+   "heard": "Purple.",
+   "match": true,
+   "confidence": -0.189,
+   "sentence_heard": "I have a purple bag.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "hurry",
+   "heard": "Hurry.",
+   "match": true,
+   "confidence": -0.294,
+   "sentence_heard": "Hurry, the bus is coming.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "church",
+   "heard": "Church.",
+   "match": true,
+   "confidence": -0.236,
+   "sentence_heard": "The church has a tall tower.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "Thursday",
+   "heard": "Thursday.",
+   "match": true,
+   "confidence": -0.224,
+   "sentence_heard": "We have art on Thursday.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "Saturday",
+   "heard": "Saturday.",
+   "match": true,
+   "confidence": -0.193,
+   "sentence_heard": "On Saturday, we go to the market.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "return",
+   "heard": "Return.",
+   "match": true,
+   "confidence": -0.3,
+   "sentence_heard": "Please return the book on Monday.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "surface",
+   "heard": "Surface.",
+   "match": true,
+   "confidence": -0.39,
+   "sentence_heard": "The turtles swam to the surface.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "stairs",
+   "heard": "Stairs.",
+   "match": true,
+   "confidence": -0.446,
+   "sentence_heard": "Walk up the stairs.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "repair",
+   "heard": "Repair.",
+   "match": true,
+   "confidence": -0.219,
+   "sentence_heard": "Dad will repair my bike.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "square",
+   "heard": "Square.",
+   "match": true,
+   "confidence": -0.33,
+   "sentence_heard": "Draw a square.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "compare",
+   "heard": "compare.",
+   "match": true,
+   "confidence": -0.544,
+   "sentence_heard": "Compare the two pictures.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "prepare",
+   "heard": "prepare.",
+   "match": true,
+   "confidence": -0.469,
+   "sentence_heard": "We prepare lunch together.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "kitchen",
+   "heard": "kitchen.",
+   "match": true,
+   "confidence": -0.528,
+   "sentence_heard": "Dad is cooking in the kitchen.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "stretch",
+   "heard": "Stretch.",
+   "match": true,
+   "confidence": -0.111,
+   "sentence_heard": "Stretch your arms up high.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "switch",
+   "heard": "Switch.",
+   "match": true,
+   "confidence": -0.107,
+   "sentence_heard": "Turn off the light switch.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "judge",
+   "heard": "Judge.",
+   "match": true,
+   "confidence": -0.315,
+   "sentence_heard": "The judge chose the winner.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "bridge",
+   "heard": "Bridge.",
+   "match": true,
+   "confidence": -0.407,
+   "sentence_heard": "We walked over the bridge.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "fridge",
+   "heard": "French.",
+   "match": false,
+   "confidence": -0.983,
+   "sentence_heard": "Put the milk in the fridge.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "change",
+   "heard": "Change.",
+   "match": true,
+   "confidence": -0.403,
+   "sentence_heard": "The weather can change quickly",
+   "sentence_has_word": true
+  },
+  {
+   "word": "strange",
+   "heard": "Strange.",
+   "match": true,
+   "confidence": -0.127,
+   "sentence_heard": "I heard a strange noise.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "orange",
+   "heard": "Orange.",
+   "match": true,
+   "confidence": -0.434,
+   "sentence_heard": "I had an orange for snack.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "giant",
+   "heard": "giant.",
+   "match": true,
+   "confidence": -0.437,
+   "sentence_heard": "The giant lived in a castle.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "gentle",
+   "heard": "Gentle.",
+   "match": true,
+   "confidence": -0.499,
+   "sentence_heard": "Be gentle with the kitten.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "giraffe",
+   "heard": "giraffe.",
+   "match": true,
+   "confidence": -0.42,
+   "sentence_heard": "The giraffe ate leaves from the tree.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "magic",
+   "heard": "Magic.",
+   "match": true,
+   "confidence": -0.251,
+   "sentence_heard": "The magic show was amazing.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "stranger",
+   "heard": "Stranger.",
+   "match": true,
+   "confidence": -0.207,
+   "sentence_heard": "Don't talk to strangers.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "engine",
+   "heard": "Engine.",
+   "match": true,
+   "confidence": -0.329,
+   "sentence_heard": "The engine is very loud.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "energy",
+   "heard": "energy.",
+   "match": true,
+   "confidence": -0.363,
+   "sentence_heard": "Bananas give you energy.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "city",
+   "heard": "City.",
+   "match": true,
+   "confidence": -0.276,
+   "sentence_heard": "Jakarta is a big city.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "circus",
+   "heard": "Circus.",
+   "match": true,
+   "confidence": -0.442,
+   "sentence_heard": "We went to the circus.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "voice",
+   "heard": "voice.",
+   "match": true,
+   "confidence": -0.347,
+   "sentence_heard": "She has a lovely voice",
+   "sentence_has_word": true
+  },
+  {
+   "word": "choice",
+   "heard": "choice.",
+   "match": true,
+   "confidence": -0.359,
+   "sentence_heard": "You have a choice of two cakes.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "police",
+   "heard": "Police.",
+   "match": true,
+   "confidence": -0.415,
+   "sentence_heard": "The police helped us.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "office",
+   "heard": "office.",
+   "match": true,
+   "confidence": -0.442,
+   "sentence_heard": "Dad works in an office.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "notice",
+   "heard": "Notice.",
+   "match": true,
+   "confidence": -0.173,
+   "sentence_heard": "Did you notice the rainbow?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "alphabet",
+   "heard": "alphabet.",
+   "match": true,
+   "confidence": -0.455,
+   "sentence_heard": "There are 26 letters in the alphabet",
+   "sentence_has_word": true
+  },
+  {
+   "word": "elephant",
+   "heard": "Elephant.",
+   "match": true,
+   "confidence": -0.473,
+   "sentence_heard": "the elephant sprayed water.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "dolphin",
+   "heard": "Dolphin.",
+   "match": true,
+   "confidence": -0.364,
+   "sentence_heard": "We saw dolphins in Levina.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "whisper",
+   "heard": "Whisper.",
+   "match": true,
+   "confidence": -0.198,
+   "sentence_heard": "She whispered a secret",
+   "sentence_has_word": true
+  },
+  {
+   "word": "echo",
+   "heard": "Echo.",
+   "match": true,
+   "confidence": -0.633,
+   "sentence_heard": "We heard an echo in the cave.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "ache",
+   "heard": "Thank you.",
+   "match": false,
+   "confidence": -1.254,
+   "sentence_heard": "I have a tummy ache.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "running",
+   "heard": "running.",
+   "match": true,
+   "confidence": -0.368,
+   "sentence_heard": "dog is running on the beach.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "swimming",
+   "heard": "Swimming.",
+   "match": true,
+   "confidence": -0.194,
+   "sentence_heard": "I go swimming every morning.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "shopping",
+   "heard": "Shopping.",
+   "match": true,
+   "confidence": -0.385,
+   "sentence_heard": "We went shopping for shoes.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "planned",
+   "heard": "planned.",
+   "match": true,
+   "confidence": -0.28,
+   "sentence_heard": "We planned a picnic.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "clapped",
+   "heard": "clapped.",
+   "match": true,
+   "confidence": -0.443,
+   "sentence_heard": "Everyone clapped at the end.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "hoping",
+   "heard": "Hoping.",
+   "match": true,
+   "confidence": -0.145,
+   "sentence_heard": "I am hoping for sunshine.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "writing",
+   "heard": "writing.",
+   "match": true,
+   "confidence": -0.381,
+   "sentence_heard": "I am writing a story.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "dancing",
+   "heard": "Dancing.",
+   "match": true,
+   "confidence": -0.355,
+   "sentence_heard": "The girls are dancing.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "stories",
+   "heard": "Stories.",
+   "match": true,
+   "confidence": -0.33,
+   "sentence_heard": "Grandma tells great stories.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "cherries",
+   "heard": "cherries.",
+   "match": true,
+   "confidence": -0.707,
+   "sentence_heard": "The cake had cherries on top.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "puppies",
+   "heard": "Puppies.",
+   "match": true,
+   "confidence": -0.29,
+   "sentence_heard": "The puppies are sleeping.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "leaves",
+   "heard": "leaves.",
+   "match": true,
+   "confidence": -0.438,
+   "sentence_heard": "The leaves are green.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "wolves",
+   "heard": "Wolves.",
+   "match": true,
+   "confidence": -0.359,
+   "sentence_heard": "Wolves live in packs.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "halves",
+   "heard": "Habs.",
+   "match": false,
+   "confidence": -0.572,
+   "sentence_heard": "Cut the orange into halves.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "shelves",
+   "heard": "Shelves.",
+   "match": true,
+   "confidence": -0.298,
+   "sentence_heard": "The books are on the shelves.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "helpful",
+   "heard": "Helpful.",
+   "match": true,
+   "confidence": -0.281,
+   "sentence_heard": "Thank you for being so helpful.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "thankful",
+   "heard": "Thankful.",
+   "match": true,
+   "confidence": -0.257,
+   "sentence_heard": "I am thankful for my family.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "painful",
+   "heard": "painful.",
+   "match": true,
+   "confidence": -0.21,
+   "sentence_heard": "The bee sting was painful.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "careless",
+   "heard": "Careless.",
+   "match": true,
+   "confidence": -0.149,
+   "sentence_heard": "It was careless to leave the door open.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "kindness",
+   "heard": "Kindness.",
+   "match": true,
+   "confidence": -0.331,
+   "sentence_heard": "Thank you for your kindness.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "darkness",
+   "heard": "Darkness.",
+   "match": true,
+   "confidence": -0.407,
+   "sentence_heard": "The cat can see in the darkness.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "sadness",
+   "heard": "Sadness.",
+   "match": true,
+   "confidence": -0.46,
+   "sentence_heard": "She felt sadness when her fish died.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "suddenly",
+   "heard": "Suddenly.",
+   "match": true,
+   "confidence": -0.268,
+   "sentence_heard": "Suddenly, it started to rain.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "friendly",
+   "heard": "Friendly.",
+   "match": true,
+   "confidence": -0.245,
+   "sentence_heard": "Our new teacher is very friendly.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "lonely",
+   "heard": "Lonely.",
+   "match": true,
+   "confidence": -0.197,
+   "sentence_heard": "The puppy felt lonely.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "safely",
+   "heard": "Safely.",
+   "match": true,
+   "confidence": -0.159,
+   "sentence_heard": "We got home safely.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "movement",
+   "heard": "Movement.",
+   "match": true,
+   "confidence": -0.511,
+   "sentence_heard": "saw a movement in the bushes.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "unhappy",
+   "heard": "unhappy.",
+   "match": true,
+   "confidence": -0.353,
+   "sentence_heard": "The boy looked unhappy.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "untidy",
+   "heard": "Untidy.",
+   "match": true,
+   "confidence": -0.416,
+   "sentence_heard": "My room is untidy.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "rewrite",
+   "heard": "rewrite.",
+   "match": true,
+   "confidence": -0.272,
+   "sentence_heard": "Please rewrite the sentence.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "disagree",
+   "heard": "Disagree.",
+   "match": true,
+   "confidence": -0.309,
+   "sentence_heard": "I disagree with you.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "mistake",
+   "heard": "mistake.",
+   "match": true,
+   "confidence": -0.181,
+   "sentence_heard": "Everyone makes mistakes.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "something",
+   "heard": "Something.",
+   "match": true,
+   "confidence": -0.428,
+   "sentence_heard": "There is something in my shoe.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "sometimes",
+   "heard": "sometimes.",
+   "match": true,
+   "confidence": -0.585,
+   "sentence_heard": "Sometimes we eat out.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "everything",
+   "heard": "everything.",
+   "match": true,
+   "confidence": -0.366,
+   "sentence_heard": "I packed everything.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "everyone",
+   "heard": "Everyone.",
+   "match": true,
+   "confidence": -0.482,
+   "sentence_heard": "Everyone is here.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "somebody",
+   "heard": "Somebody.",
+   "match": true,
+   "confidence": -0.397,
+   "sentence_heard": "Somebody knocked on the door.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "playground",
+   "heard": "playground.",
+   "match": true,
+   "confidence": -0.223,
+   "sentence_heard": "We met at the playground.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "rainbow",
+   "heard": "Rainbow.",
+   "match": true,
+   "confidence": -0.31,
+   "sentence_heard": "Look a rainbow.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "homework",
+   "heard": "homework.",
+   "match": true,
+   "confidence": -0.407,
+   "sentence_heard": "I finished my homework.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "afternoon",
+   "heard": "afternoon.",
+   "match": true,
+   "confidence": -0.349,
+   "sentence_heard": "swim in the afternoon.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "weekend",
+   "heard": "weekend.",
+   "match": true,
+   "confidence": -0.273,
+   "sentence_heard": "What are you doing this weekend?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "without",
+   "heard": "without.",
+   "match": true,
+   "confidence": -0.344,
+   "sentence_heard": "I can't sleep without my Teddy.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "yourself",
+   "heard": "yourself.",
+   "match": true,
+   "confidence": -0.17,
+   "sentence_heard": "Did you make it yourself?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "cupboard",
+   "heard": "Covered.",
+   "match": false,
+   "confidence": -0.669,
+   "sentence_heard": "The plates are in the cupboard",
+   "sentence_has_word": true
+  },
+  {
+   "word": "sure",
+   "heard": "Sure.",
+   "match": true,
+   "confidence": -0.185,
+   "sentence_heard": "Are you sure?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "sugar",
+   "heard": "Sugar.",
+   "match": true,
+   "confidence": -0.257,
+   "sentence_heard": "No sugar in my tea, please.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "heart",
+   "heard": "Heart.",
+   "match": true,
+   "confidence": -0.368,
+   "sentence_heard": "My heart is beating fast.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "learn",
+   "heard": "Learn.",
+   "match": true,
+   "confidence": -0.27,
+   "sentence_heard": "I wanna learn to surf.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "woman",
+   "heard": "Woman.",
+   "match": true,
+   "confidence": -0.644,
+   "sentence_heard": "The woman is a doctor",
+   "sentence_has_word": true
+  },
+  {
+   "word": "women",
+   "heard": "Women.",
+   "match": true,
+   "confidence": -0.365,
+   "sentence_heard": "Two women ran the race.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "country",
+   "heard": "country.",
+   "match": true,
+   "confidence": -0.423,
+   "sentence_heard": "Indonesia is a big country.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "young",
+   "heard": "Young.",
+   "match": true,
+   "confidence": -0.373,
+   "sentence_heard": "My brother is too young for school.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "touch",
+   "heard": "Touch.",
+   "match": true,
+   "confidence": -0.5,
+   "sentence_heard": "Don't touch the hot pan.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "double",
+   "heard": "double.",
+   "match": true,
+   "confidence": -0.412,
+   "sentence_heard": "I want a double scoop of ice cream.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "trouble",
+   "heard": "trouble.",
+   "match": true,
+   "confidence": -0.366,
+   "sentence_heard": "We had trouble finding the house.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "couple",
+   "heard": "couple.",
+   "match": true,
+   "confidence": -0.449,
+   "sentence_heard": "A couple of birds sat on the roof.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "soup",
+   "heard": "Soup.",
+   "match": true,
+   "confidence": -0.562,
+   "sentence_heard": "The soup is too hot",
+   "sentence_has_word": true
+  },
+  {
+   "word": "direction",
+   "heard": "direction.",
+   "match": true,
+   "confidence": -0.163,
+   "sentence_heard": "Which direction is the beach?",
+   "sentence_has_word": true
+  },
+  {
+   "word": "vision",
+   "heard": "vision.",
+   "match": true,
+   "confidence": -0.453,
+   "sentence_heard": "Eagles have amazing vision.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "addition",
+   "heard": "addition.",
+   "match": true,
+   "confidence": -0.747,
+   "sentence_heard": "We did addition at school today.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "candle",
+   "heard": "Candle.",
+   "match": true,
+   "confidence": -0.808,
+   "sentence_heard": "Blow out the candles.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "eagle",
+   "heard": "Eagle.",
+   "match": true,
+   "confidence": -0.456,
+   "sentence_heard": "and Eagle flew over the hills.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "giggle",
+   "heard": "Giggle.",
+   "match": true,
+   "confidence": -0.314,
+   "sentence_heard": "The girls giggled at the joke.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "jungle",
+   "heard": "jungle.",
+   "match": true,
+   "confidence": -0.484,
+   "sentence_heard": "Monkeys live in the jungle.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "bubble",
+   "heard": "bubble.",
+   "match": true,
+   "confidence": -0.433,
+   "sentence_heard": "Blow a big bubble.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "pebble",
+   "heard": "pebble.",
+   "match": true,
+   "confidence": -0.634,
+   "sentence_heard": "I found a white pebble",
+   "sentence_has_word": true
+  },
+  {
+   "word": "doctor",
+   "heard": "Doctor.",
+   "match": true,
+   "confidence": -0.614,
+   "sentence_heard": "The doctor checked my ears.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "visitor",
+   "heard": "Visitor.",
+   "match": true,
+   "confidence": -0.432,
+   "sentence_heard": "We have a visitor today.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "dollar",
+   "heard": "dollar.",
+   "match": true,
+   "confidence": -0.666,
+   "sentence_heard": "It costs $1.",
+   "sentence_has_word": false
+  },
+  {
+   "word": "collar",
+   "heard": "color.",
+   "match": false,
+   "confidence": -0.47,
+   "sentence_heard": "My collar is wet.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "wonder",
+   "heard": "Wonder.",
+   "match": true,
+   "confidence": -0.442,
+   "sentence_heard": "I wonder what is for dinner.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "meat",
+   "heard": "Meet.",
+   "match": false,
+   "confidence": -0.616,
+   "sentence_heard": "I don't eat much meat.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "tail",
+   "heard": "tail.",
+   "match": true,
+   "confidence": -0.877,
+   "sentence_heard": "The dog wagged its tail.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "flour",
+   "heard": "flour.",
+   "match": true,
+   "confidence": -0.785,
+   "sentence_heard": "Mix the flour and the eggs.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "bear",
+   "heard": "There.",
+   "match": false,
+   "confidence": -0.436,
+   "sentence_heard": "The bear caught a fish.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "knight",
+   "heard": "night.",
+   "match": false,
+   "confidence": -0.415,
+   "sentence_heard": "The night wrote a horse.",
+   "sentence_has_word": false
+  },
+  {
+   "word": "blew",
+   "heard": "Blue.",
+   "match": false,
+   "confidence": -0.464,
+   "sentence_heard": "The wind blew my hat away.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "knew",
+   "heard": "New.",
+   "match": false,
+   "confidence": -0.432,
+   "sentence_heard": "I knew the answer.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "pear",
+   "heard": "hair.",
+   "match": false,
+   "confidence": -0.672,
+   "sentence_heard": "I had a pair for lunch.",
+   "sentence_has_word": false
+  },
+  {
+   "word": "week",
+   "heard": "week.",
+   "match": true,
+   "confidence": -0.329,
+   "sentence_heard": "We have a holiday next week.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "sail",
+   "heard": "Sale.",
+   "match": false,
+   "confidence": -0.743,
+   "sentence_heard": "We will sail to the island.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "plane",
+   "heard": "plane.",
+   "match": true,
+   "confidence": -0.661,
+   "sentence_heard": "The plane landed in Den Passar.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "steal",
+   "heard": "steal.",
+   "match": true,
+   "confidence": -1.074,
+   "sentence_heard": "Monkeys steal sunglasses at the temple.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "witch",
+   "heard": "Witch.",
+   "match": true,
+   "confidence": -0.649,
+   "sentence_heard": "The witch flew on a broom.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "aloud",
+   "heard": "allowed.",
+   "match": false,
+   "confidence": -0.295,
+   "sentence_heard": "Read the story aloud.",
+   "sentence_has_word": true
+  },
+  {
+   "word": "rode",
+   "heard": "Road.",
+   "match": false,
+   "confidence": -0.339,
+   "sentence_heard": "I rode my bike to school.",
+   "sentence_has_word": true
+  },
+  {
    "word": "don't",
    "heard": "You don't.",
    "match": true,
@@ -3298,28 +4898,29 @@
   }
  ],
  "uncertain": [
+  "pear",
+  "knight",
+  "fifteen",
   "eighteen",
   "bruise",
+  "ache",
+  "some",
+  "fridge",
+  "pour",
   "doubt",
+  "feather",
   "curtain",
+  "sail",
+  "cupboard",
   "bought",
   "calm",
+  "meat",
   "weigh",
   "than",
-  "wrist",
-  "wear",
-  "except",
-  "hear",
-  "niece",
-  "appear",
-  "queue",
-  "twelfth",
-  "category",
-  "rhinoceros",
-  "lightning",
-  "forty"
+  "halves"
  ],
  "mismatches": [
+  "some",
   "bought",
   "appear",
   "doubt",
@@ -3334,7 +4935,25 @@
   "wear",
   "hear",
   "than",
-  "except"
+  "except",
+  "fifteen",
+  "feather",
+  "threw",
+  "pour",
+  "fridge",
+  "ache",
+  "halves",
+  "cupboard",
+  "collar",
+  "meat",
+  "bear",
+  "knight",
+  "blew",
+  "knew",
+  "pear",
+  "sail",
+  "aloud",
+  "rode"
  ],
  "sentence_problems": [
   "lightning",
@@ -3342,6 +4961,10 @@
   "forty",
   "rhinoceros",
   "twelfth",
-  "eighteen"
+  "eighteen",
+  "fifteen",
+  "dollar",
+  "knight",
+  "pear"
  ]
 }

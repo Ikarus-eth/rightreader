@@ -2,1371 +2,2731 @@
  "title": "Check the new words",
  "intro": "New recordings. The first ones listed are those the computer was least sure about. Reply in the chat with the numbers that sound wrong.",
  "review": [
-  "weigh",
-  "eighteen",
-  "niece",
-  "curtain",
-  "wrist",
-  "wear",
-  "hear",
-  "than",
-  "except",
-  "calm"
+  "fifteen",
+  "feather",
+  "threw",
+  "pour",
+  "fridge",
+  "halves",
+  "cupboard",
+  "dollar",
+  "collar",
+  "meat",
+  "bear",
+  "knight",
+  "blew",
+  "knew",
+  "pear",
+  "sail",
+  "aloud",
+  "rode"
  ],
  "unsure": [
-  "weigh",
-  "eighteen",
-  "niece",
-  "curtain",
-  "wrist",
-  "wear",
-  "hear",
-  "than",
-  "except",
-  "calm"
+  "fifteen",
+  "feather",
+  "threw",
+  "pour",
+  "fridge",
+  "halves",
+  "cupboard",
+  "dollar",
+  "collar",
+  "meat",
+  "bear",
+  "knight",
+  "blew",
+  "knew",
+  "pear",
+  "sail",
+  "aloud",
+  "rode"
  ],
  "details": [
   {
-   "word": "tough",
+   "word": "afraid",
    "tried": [
     [
      "lead-in",
-     "Tough."
+     "afraid."
     ]
    ],
-   "kept_heard": "Tough.",
-   "sentence_heard": "The climb was tough but we made it.",
+   "kept_heard": "afraid.",
+   "sentence_heard": "My little brother is afraid of the dark.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "rough",
+   "word": "explain",
    "tried": [
     [
      "lead-in",
-     "rough"
+     "Explain."
     ]
    ],
-   "kept_heard": "rough",
-   "sentence_heard": "The sea was rough after the storm.",
+   "kept_heard": "Explain.",
+   "sentence_heard": "Can you explain the game to me?",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "cough",
+   "word": "remain",
    "tried": [
     [
      "lead-in",
-     "cough."
+     "remain."
     ]
    ],
-   "kept_heard": "cough.",
-   "sentence_heard": "The smoke made me cough.",
+   "kept_heard": "remain.",
+   "sentence_heard": "Please remain in your seats.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "taught",
+   "word": "daily",
    "tried": [
     [
      "lead-in",
-     "Taught."
+     "Daily."
     ]
    ],
-   "kept_heard": "Taught.",
-   "sentence_heard": "Mum taught me how to swim.",
+   "kept_heard": "Daily.",
+   "sentence_heard": "I read a daily story.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "naughty",
+   "word": "birthday",
    "tried": [
     [
      "lead-in",
-     "Naughty."
+     "Birthday."
     ]
    ],
-   "kept_heard": "Naughty.",
-   "sentence_heard": "The naughty monkey took my banana.",
+   "kept_heard": "Birthday.",
+   "sentence_heard": "My birthday is in May.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "weigh",
+   "word": "yesterday",
    "tried": [
     [
      "lead-in",
-     "Way."
+     "yesterday."
+    ]
+   ],
+   "kept_heard": "yesterday.",
+   "sentence_heard": "Yesterday we went to the beach.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "always",
+   "tried": [
+    [
+     "lead-in",
+     "always."
+    ]
+   ],
+   "kept_heard": "always.",
+   "sentence_heard": "always brush my teeth.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "crayon",
+   "tried": [
+    [
+     "lead-in",
+     "crayon."
+    ]
+   ],
+   "kept_heard": "crayon.",
+   "sentence_heard": "Pass me the red crayon.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "between",
+   "tried": [
+    [
+     "lead-in",
+     "between."
+    ]
+   ],
+   "kept_heard": "between.",
+   "sentence_heard": "Sit between me and Dad.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "fifteen",
+   "tried": [
+    [
+     "lead-in",
+     "15."
     ],
     [
      "plain",
-     "Way."
+     "15."
     ]
    ],
-   "kept_heard": "Way.",
-   "sentence_heard": "Let's weigh the suitcase.",
-   "word_ok": false,
-   "sentence_ok": true
-  },
-  {
-   "word": "eighteen",
-   "tried": [
-    [
-     "lead-in",
-     "18."
-    ],
-    [
-     "plain",
-     "18."
-    ]
-   ],
-   "kept_heard": "18.",
-   "sentence_heard": "My cousin is 18 years old.",
+   "kept_heard": "15.",
+   "sentence_heard": "There are 15 children in my class.",
    "word_ok": false,
    "sentence_ok": false
   },
   {
-   "word": "fought",
+   "word": "agree",
    "tried": [
     [
      "lead-in",
-     "fought."
+     "Agree."
     ]
    ],
-   "kept_heard": "fought.",
-   "sentence_heard": "the two cats fought over the fish.",
+   "kept_heard": "Agree.",
+   "sentence_heard": "agree with you.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "field",
+   "word": "speech",
    "tried": [
     [
      "lead-in",
-     "field."
+     "Speech."
     ]
    ],
-   "kept_heard": "field.",
-   "sentence_heard": "The cows are in the field",
+   "kept_heard": "Speech.",
+   "sentence_heard": "The teacher gave a speech.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "chief",
+   "word": "freeze",
    "tried": [
     [
      "lead-in",
-     "Chief."
+     "freeze."
     ]
    ],
-   "kept_heard": "Chief.",
-   "sentence_heard": "The fire chief arrived first.",
+   "kept_heard": "freeze.",
+   "sentence_heard": "Water will freeze in the freezer.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "thief",
+   "word": "beach",
    "tried": [
     [
      "lead-in",
-     "Thief."
+     "Beach."
     ]
    ],
-   "kept_heard": "Thief.",
-   "sentence_heard": "The thief ran away with the bag.",
+   "kept_heard": "Beach.",
+   "sentence_heard": "We play on the beach every weekend.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "niece",
+   "word": "reason",
    "tried": [
     [
      "lead-in",
-     "Nice."
+     "Reason."
+    ]
+   ],
+   "kept_heard": "Reason.",
+   "sentence_heard": "What is the reason you are late?",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "season",
+   "tried": [
+    [
+     "lead-in",
+     "season."
+    ]
+   ],
+   "kept_heard": "season.",
+   "sentence_heard": "Bali has a rainy season.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "teacher",
+   "tried": [
+    [
+     "lead-in",
+     "teacher."
+    ]
+   ],
+   "kept_heard": "teacher.",
+   "sentence_heard": "My teacher is very kind",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "leaf",
+   "tried": [
+    [
+     "lead-in",
+     "Leaf."
+    ]
+   ],
+   "kept_heard": "Leaf.",
+   "sentence_heard": "A leaf fell from the tree",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "feather",
+   "tried": [
+    [
+     "lead-in",
+     "Father."
     ],
     [
      "plain",
-     "Nice."
+     "My father."
     ]
    ],
-   "kept_heard": "Nice.",
-   "sentence_heard": "My aunt brought her niece to the party.",
+   "kept_heard": "Father.",
+   "sentence_heard": "The parrot dropped a red feather.",
    "word_ok": false,
    "sentence_ok": true
   },
   {
-   "word": "either",
+   "word": "heavy",
    "tried": [
     [
      "lead-in",
-     "either."
+     "Heavy."
     ]
    ],
-   "kept_heard": "either.",
-   "sentence_heard": "can have either juice or water.",
+   "kept_heard": "Heavy.",
+   "sentence_heard": "This bag is very heavy.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "chocolate",
+   "word": "ready",
    "tried": [
     [
      "lead-in",
-     "chocolate."
+     "Ready."
     ]
    ],
-   "kept_heard": "chocolate.",
-   "sentence_heard": "I love hot chocolate.",
+   "kept_heard": "Ready.",
+   "sentence_heard": "Are you ready to go?",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "family",
+   "word": "health",
    "tried": [
     [
      "lead-in",
-     "family."
+     "Health."
     ]
    ],
-   "kept_heard": "family.",
-   "sentence_heard": "My family lives in Bali.",
+   "kept_heard": "Health.",
+   "sentence_heard": "Fruit is good for your health.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "animal",
+   "word": "instead",
    "tried": [
     [
      "lead-in",
-     "animal."
+     "instead."
     ]
    ],
-   "kept_heard": "animal.",
-   "sentence_heard": "The elephant is a big animal.",
+   "kept_heard": "instead.",
+   "sentence_heard": "Let's walk instead of driving.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "holiday",
+   "word": "breath",
    "tried": [
     [
      "lead-in",
-     "Holiday."
+     "Breath."
     ]
    ],
-   "kept_heard": "Holiday.",
-   "sentence_heard": "We go to Germany for the holidays.",
+   "kept_heard": "Breath.",
+   "sentence_heard": "Take a deep breath.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "memory",
+   "word": "sweater",
    "tried": [
     [
      "lead-in",
-     "memory."
+     "Sweater."
     ]
    ],
-   "kept_heard": "memory.",
-   "sentence_heard": "have a good memory for faces.",
+   "kept_heard": "Sweater.",
+   "sentence_heard": "Wear a sweater in the mountains.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "camera",
+   "word": "coast",
    "tried": [
     [
      "lead-in",
-     "camera."
+     "coast."
     ]
    ],
-   "kept_heard": "camera.",
-   "sentence_heard": "Smile at the camera.",
+   "kept_heard": "coast.",
+   "sentence_heard": "We drove along the coast.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "several",
+   "word": "throat",
    "tried": [
     [
      "lead-in",
-     "Several."
+     "throat."
     ]
    ],
-   "kept_heard": "Several.",
-   "sentence_heard": "I read several books this week",
+   "kept_heard": "throat.",
+   "sentence_heard": "My throat hurts.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "hospital",
+   "word": "shadow",
    "tried": [
     [
      "lead-in",
-     "Hospital."
+     "Shadow."
     ]
    ],
-   "kept_heard": "Hospital.",
-   "sentence_heard": "The doctor works at the hospital.",
+   "kept_heard": "Shadow.",
+   "sentence_heard": "My shadow is very long.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "pencil",
+   "word": "elbow",
    "tried": [
     [
      "lead-in",
-     "Pencil."
+     "Elbow."
     ]
    ],
-   "kept_heard": "Pencil.",
-   "sentence_heard": "Can I borrow your pencil?",
+   "kept_heard": "Elbow.",
+   "sentence_heard": "I bumped my elbow.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "cousin",
+   "word": "known",
    "tried": [
     [
      "lead-in",
-     "cousin."
+     "Known."
     ]
    ],
-   "kept_heard": "cousin.",
-   "sentence_heard": "My cousin lives in Berlin.",
+   "kept_heard": "Known.",
+   "sentence_heard": "I have known her for years.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "button",
+   "word": "swallow",
    "tried": [
     [
      "lead-in",
-     "button."
+     "Swallow."
     ]
    ],
-   "kept_heard": "button.",
-   "sentence_heard": "Press the red button.",
+   "kept_heard": "Swallow.",
+   "sentence_heard": "you before you swallow.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "garden",
+   "word": "tomato",
    "tried": [
     [
      "lead-in",
-     "Garden."
+     "Tomato."
     ]
    ],
-   "kept_heard": "Garden.",
-   "sentence_heard": "We grow chilies in our garden.",
+   "kept_heard": "Tomato.",
+   "sentence_heard": "I put tomato on my pizza",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "mountain",
+   "word": "flight",
    "tried": [
     [
      "lead-in",
-     "Mountain."
+     "Flight."
     ]
    ],
-   "kept_heard": "Mountain.",
-   "sentence_heard": "We climbed the mountain at sunrise.",
+   "kept_heard": "Flight.",
+   "sentence_heard": "Our flight leaves at 9.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "captain",
+   "word": "frighten",
    "tried": [
     [
      "lead-in",
-     "Captain."
+     "Frighten."
     ]
    ],
-   "kept_heard": "Captain.",
-   "sentence_heard": "The captain steered the boat.",
+   "kept_heard": "Frighten.",
+   "sentence_heard": "Don't frighten the cat.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "curtain",
+   "word": "midnight",
    "tried": [
     [
      "lead-in",
-     "Curtin."
+     "Midnight."
+    ]
+   ],
+   "kept_heard": "Midnight.",
+   "sentence_heard": "The party ended at midnight.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "delight",
+   "tried": [
+    [
+     "lead-in",
+     "Delight."
+    ]
+   ],
+   "kept_heard": "Delight.",
+   "sentence_heard": "The children shouted with delight.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "cried",
+   "tried": [
+    [
+     "lead-in",
+     "Cried."
+    ]
+   ],
+   "kept_heard": "Cried.",
+   "sentence_heard": "The baby cried all night.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "tried",
+   "tried": [
+    [
+     "lead-in",
+     "tried."
+    ]
+   ],
+   "kept_heard": "tried.",
+   "sentence_heard": "I tried my best.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "replied",
+   "tried": [
+    [
+     "lead-in",
+     "Replied."
+    ]
+   ],
+   "kept_heard": "Replied.",
+   "sentence_heard": "She replied to my message",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "balloon",
+   "tried": [
+    [
+     "lead-in",
+     "Balloon."
+    ]
+   ],
+   "kept_heard": "Balloon.",
+   "sentence_heard": "The red balloon floated away.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "cartoon",
+   "tried": [
+    [
+     "lead-in",
+     "cartoon."
+    ]
+   ],
+   "kept_heard": "cartoon.",
+   "sentence_heard": "We watched a cartoon.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "noodle",
+   "tried": [
+    [
+     "lead-in",
+     "Noodle."
+    ]
+   ],
+   "kept_heard": "Noodle.",
+   "sentence_heard": "I love noodle soup.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "smooth",
+   "tried": [
+    [
+     "lead-in",
+     "Smooth."
+    ]
+   ],
+   "kept_heard": "Smooth.",
+   "sentence_heard": "The stone was smooth.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "threw",
+   "tried": [
+    [
+     "lead-in",
+     "through."
     ],
     [
      "plain",
-     "Curtin."
+     "It's through."
     ]
    ],
-   "kept_heard": "Curtin.",
-   "sentence_heard": "Close the curtain, please.",
+   "kept_heard": "through.",
+   "sentence_heard": "He threw the ball very far.",
    "word_ok": false,
    "sentence_ok": true
   },
   {
-   "word": "knee",
+   "word": "jewel",
    "tried": [
     [
      "lead-in",
-     "knee."
+     "Jewel."
     ]
    ],
-   "kept_heard": "knee.",
-   "sentence_heard": "I fell and hurt my knee",
+   "kept_heard": "Jewel.",
+   "sentence_heard": "The crown has a big jewel.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "knock",
+   "word": "true",
    "tried": [
     [
      "lead-in",
-     "Knock."
+     "True."
     ]
    ],
-   "kept_heard": "Knock.",
-   "sentence_heard": "Please knock before you come in.",
+   "kept_heard": "True.",
+   "sentence_heard": "Is that story true?",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "wrap",
+   "word": "clue",
    "tried": [
     [
      "lead-in",
-     "Wrap."
+     "Clue."
     ]
    ],
-   "kept_heard": "Wrap.",
-   "sentence_heard": "Let's wrap the present.",
+   "kept_heard": "Clue.",
+   "sentence_heard": "The detective found a clue.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "wrist",
+   "word": "value",
    "tried": [
     [
      "lead-in",
-     "Rest."
+     "value."
+    ]
+   ],
+   "kept_heard": "value.",
+   "sentence_heard": "This old coin has a high value.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "rescue",
+   "tried": [
+    [
+     "lead-in",
+     "Rescue."
+    ]
+   ],
+   "kept_heard": "Rescue.",
+   "sentence_heard": "The lifeguard will rescue you.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "huge",
+   "tried": [
+    [
+     "lead-in",
+     "Huge."
+    ]
+   ],
+   "kept_heard": "Huge.",
+   "sentence_heard": "and elephant is huge.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "proud",
+   "tried": [
+    [
+     "lead-in",
+     "Proud."
+    ]
+   ],
+   "kept_heard": "Proud.",
+   "sentence_heard": "I am proud of you.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "south",
+   "tried": [
+    [
+     "lead-in",
+     "South."
+    ]
+   ],
+   "kept_heard": "South.",
+   "sentence_heard": "Australia is south of Bali.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "amount",
+   "tried": [
+    [
+     "lead-in",
+     "amount."
+    ]
+   ],
+   "kept_heard": "amount.",
+   "sentence_heard": "small amount of salt.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "flower",
+   "tried": [
+    [
+     "lead-in",
+     "Flower."
+    ]
+   ],
+   "kept_heard": "Flower.",
+   "sentence_heard": "She picked a yellow flower",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "towel",
+   "tried": [
+    [
+     "lead-in",
+     "towel."
+    ]
+   ],
+   "kept_heard": "towel.",
+   "sentence_heard": "Bring a towel to the pool",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "allow",
+   "tried": [
+    [
+     "lead-in",
+     "Allow."
+    ]
+   ],
+   "kept_heard": "Allow.",
+   "sentence_heard": "My parents allow us to stay up late on Fridays.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "market",
+   "tried": [
+    [
+     "lead-in",
+     "market."
+    ]
+   ],
+   "kept_heard": "market.",
+   "sentence_heard": "We bought fruit at the market.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "carpet",
+   "tried": [
+    [
+     "lead-in",
+     "carpet."
+    ]
+   ],
+   "kept_heard": "carpet.",
+   "sentence_heard": "The cat sleeps on the carpet.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "corner",
+   "tried": [
+    [
+     "lead-in",
+     "corner."
+    ]
+   ],
+   "kept_heard": "corner.",
+   "sentence_heard": "The shop is on the corner.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "morning",
+   "tried": [
+    [
+     "lead-in",
+     "morning."
+    ]
+   ],
+   "kept_heard": "morning.",
+   "sentence_heard": "swim every morning.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "report",
+   "tried": [
+    [
+     "lead-in",
+     "report."
+    ]
+   ],
+   "kept_heard": "report.",
+   "sentence_heard": "I wrote a report about",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "before",
+   "tried": [
+    [
+     "lead-in",
+     "before."
+    ]
+   ],
+   "kept_heard": "before.",
+   "sentence_heard": "Wash your hands before dinner.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "explore",
+   "tried": [
+    [
+     "lead-in",
+     "Explore."
+    ]
+   ],
+   "kept_heard": "Explore.",
+   "sentence_heard": "Let's explore the cave.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "four",
+   "tried": [
+    [
+     "lead-in",
+     "Four."
+    ]
+   ],
+   "kept_heard": "Four.",
+   "sentence_heard": "A cat has four legs.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "pour",
+   "tried": [
+    [
+     "lead-in",
+     "Poor."
     ],
     [
      "plain",
-     "Rest."
+     "Poor."
     ]
    ],
-   "kept_heard": "Rest.",
-   "sentence_heard": "I wear my watch on my wrist.",
+   "kept_heard": "Poor.",
+   "sentence_heard": "Pour the milk into the cup.",
    "word_ok": false,
    "sentence_ok": true
   },
   {
-   "word": "thumb",
+   "word": "course",
    "tried": [
     [
      "lead-in",
-     "Thumb."
+     "course."
     ]
    ],
-   "kept_heard": "Thumb.",
-   "sentence_heard": "Thumbs up.",
+   "kept_heard": "course.",
+   "sentence_heard": "I am taking a swimming course.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "lamb",
+   "word": "fourth",
    "tried": [
     [
      "lead-in",
-     "Lamb."
+     "Fourth."
     ]
    ],
-   "kept_heard": "Lamb.",
-   "sentence_heard": "The lamb follows its mother.",
+   "kept_heard": "Fourth.",
+   "sentence_heard": "This is my fourth try.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "whistle",
+   "word": "person",
    "tried": [
     [
      "lead-in",
-     "Whistle."
+     "person."
     ]
    ],
-   "kept_heard": "Whistle.",
-   "sentence_heard": "The coach blew the whistle.",
+   "kept_heard": "person.",
+   "sentence_heard": "Each person gets one cake.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "hour",
+   "word": "perfect",
    "tried": [
     [
      "lead-in",
-     "hour."
+     "Perfect."
     ]
    ],
-   "kept_heard": "hour.",
-   "sentence_heard": "The flight takes one hour.",
+   "kept_heard": "Perfect.",
+   "sentence_heard": "Your drawing is perfect.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "ghost",
+   "word": "thirsty",
    "tried": [
     [
      "lead-in",
-     "Ghost."
-    ]
-   ],
-   "kept_heard": "Ghost.",
-   "sentence_heard": "The ghost story was spooky.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "happen",
-   "tried": [
-    [
-     "lead-in",
-     "Happen."
-    ]
-   ],
-   "kept_heard": "Happen.",
-   "sentence_heard": "What will happen next?",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "rabbit",
-   "tried": [
-    [
-     "lead-in",
-     "Rabbit."
-    ]
-   ],
-   "kept_heard": "Rabbit.",
-   "sentence_heard": "The rabbit ate a carrot.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "carrot",
-   "tried": [
-    [
-     "lead-in",
-     "Carrot."
-    ]
-   ],
-   "kept_heard": "Carrot.",
-   "sentence_heard": "Rabbits love carrots.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "pillow",
-   "tried": [
-    [
-     "lead-in",
-     "Hello."
+     "Thursday."
     ],
     [
      "plain",
-     "pillow."
+     "Thirsty"
     ]
    ],
-   "kept_heard": "pillow.",
-   "sentence_heard": "need a new pillow.",
+   "kept_heard": "Thirsty",
+   "sentence_heard": "I am thirsty after running.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "summer",
+   "word": "circle",
    "tried": [
     [
      "lead-in",
-     "Summer."
+     "Circle."
     ]
    ],
-   "kept_heard": "Summer.",
-   "sentence_heard": "We swim a lot in summer.",
+   "kept_heard": "Circle.",
+   "sentence_heard": "Draw a circle.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "dinner",
+   "word": "turtle",
    "tried": [
     [
      "lead-in",
-     "Dinner."
+     "Turtle."
     ]
    ],
-   "kept_heard": "Dinner.",
-   "sentence_heard": "Dinner is ready.",
+   "kept_heard": "Turtle.",
+   "sentence_heard": "We saw a turtle in the sea.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "sudden",
+   "word": "purple",
    "tried": [
     [
      "lead-in",
-     "Sudden."
+     "Purple."
     ]
    ],
-   "kept_heard": "Sudden.",
-   "sentence_heard": "There was a sudden storm.",
+   "kept_heard": "Purple.",
+   "sentence_heard": "I have a purple bag.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "arrive",
+   "word": "hurry",
    "tried": [
     [
      "lead-in",
-     "arrive."
+     "Hurry."
     ]
    ],
-   "kept_heard": "arrive.",
-   "sentence_heard": "We arrive in Munich at six.",
+   "kept_heard": "Hurry.",
+   "sentence_heard": "Hurry, the bus is coming.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "borrow",
+   "word": "church",
    "tried": [
     [
      "lead-in",
-     "Borrow."
+     "Church."
     ]
    ],
-   "kept_heard": "Borrow.",
-   "sentence_heard": "Can I borrow your bike?",
+   "kept_heard": "Church.",
+   "sentence_heard": "The church has a tall tower.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "follow",
+   "word": "Thursday",
    "tried": [
     [
      "lead-in",
-     "Follow."
+     "Thursday."
     ]
    ],
-   "kept_heard": "Follow.",
-   "sentence_heard": "Follow me to the beach.",
+   "kept_heard": "Thursday.",
+   "sentence_heard": "We have art on Thursday.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "collect",
+   "word": "Saturday",
    "tried": [
     [
      "lead-in",
-     "Collect."
+     "Saturday."
     ]
    ],
-   "kept_heard": "Collect.",
-   "sentence_heard": "I collect shells.",
+   "kept_heard": "Saturday.",
+   "sentence_heard": "On Saturday, we go to the market.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "station",
+   "word": "return",
    "tried": [
     [
      "lead-in",
-     "station."
+     "Return."
     ]
    ],
-   "kept_heard": "station.",
-   "sentence_heard": "The train left the station.",
+   "kept_heard": "Return.",
+   "sentence_heard": "Please return the book on Monday.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "action",
+   "word": "surface",
    "tried": [
     [
      "lead-in",
-     "action."
+     "Surface."
     ]
    ],
-   "kept_heard": "action.",
-   "sentence_heard": "It is time for action.",
+   "kept_heard": "Surface.",
+   "sentence_heard": "The turtles swam to the surface.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "mention",
+   "word": "stairs",
    "tried": [
     [
      "lead-in",
-     "Mention"
+     "Stairs."
     ]
    ],
-   "kept_heard": "Mention",
-   "sentence_heard": "Did she mention the party?",
+   "kept_heard": "Stairs.",
+   "sentence_heard": "Walk up the stairs.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "picture",
+   "word": "repair",
    "tried": [
     [
      "lead-in",
-     "picture."
+     "Repair."
     ]
    ],
-   "kept_heard": "picture.",
-   "sentence_heard": "Draw a picture of your house.",
+   "kept_heard": "Repair.",
+   "sentence_heard": "Dad will repair my bike.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "adventure",
+   "word": "square",
    "tried": [
     [
      "lead-in",
-     "adventure."
+     "Square."
     ]
    ],
-   "kept_heard": "adventure.",
-   "sentence_heard": "Our trip was a big adventure.",
+   "kept_heard": "Square.",
+   "sentence_heard": "Draw a square.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "future",
+   "word": "compare",
    "tried": [
     [
      "lead-in",
-     "future."
+     "compare."
     ]
    ],
-   "kept_heard": "future.",
-   "sentence_heard": "What do you want to be in the future?",
+   "kept_heard": "compare.",
+   "sentence_heard": "Compare the two pictures.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "creature",
+   "word": "prepare",
    "tried": [
     [
      "lead-in",
-     "creature."
+     "prepare."
     ]
    ],
-   "kept_heard": "creature.",
-   "sentence_heard": "A strange creature lives in the pond",
+   "kept_heard": "prepare.",
+   "sentence_heard": "We prepare lunch together.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "treasure",
+   "word": "kitchen",
    "tried": [
     [
      "lead-in",
-     "treasure."
+     "kitchen."
     ]
    ],
-   "kept_heard": "treasure.",
-   "sentence_heard": "The pirates buried their treasure.",
+   "kept_heard": "kitchen.",
+   "sentence_heard": "Dad is cooking in the kitchen.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "pleasure",
+   "word": "stretch",
    "tried": [
     [
      "lead-in",
-     "Pleasure."
+     "Stretch."
     ]
    ],
-   "kept_heard": "Pleasure.",
-   "sentence_heard": "It was a pleasure to meet you",
+   "kept_heard": "Stretch.",
+   "sentence_heard": "Stretch your arms up high.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "middle",
+   "word": "switch",
    "tried": [
     [
      "lead-in",
-     "Middle."
+     "Switch."
     ]
    ],
-   "kept_heard": "Middle.",
-   "sentence_heard": "Sit in the middle.",
+   "kept_heard": "Switch.",
+   "sentence_heard": "Turn off the light switch.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "puzzle",
+   "word": "judge",
    "tried": [
     [
      "lead-in",
-     "puzzle."
+     "Judge."
     ]
    ],
-   "kept_heard": "puzzle.",
-   "sentence_heard": "We finished the puzzle together.",
+   "kept_heard": "Judge.",
+   "sentence_heard": "The judge chose the winner.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "bottle",
+   "word": "bridge",
    "tried": [
     [
      "lead-in",
-     "bottle."
+     "Bridge."
     ]
    ],
-   "kept_heard": "bottle.",
-   "sentence_heard": "Fill your water bottle.",
+   "kept_heard": "Bridge.",
+   "sentence_heard": "We walked over the bridge.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "travel",
+   "word": "fridge",
    "tried": [
     [
      "lead-in",
-     "travel."
-    ]
-   ],
-   "kept_heard": "travel.",
-   "sentence_heard": "We travel to Europe in summer.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "tunnel",
-   "tried": [
-    [
-     "lead-in",
-     "tunnel."
-    ]
-   ],
-   "kept_heard": "tunnel.",
-   "sentence_heard": "The train went through a tunnel.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "final",
-   "tried": [
-    [
-     "lead-in",
-     "Final."
-    ]
-   ],
-   "kept_heard": "Final.",
-   "sentence_heard": "This is the final question.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "too",
-   "tried": [
-    [
-     "lead-in",
-     "too."
-    ]
-   ],
-   "kept_heard": "too.",
-   "sentence_heard": "This soup is too hot.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "wear",
-   "tried": [
-    [
-     "lead-in",
-     "Where?"
+     "French."
     ],
     [
      "plain",
-     "Where?"
+     "Bridge."
     ]
    ],
-   "kept_heard": "Where?",
-   "sentence_heard": "I wear a hat at the beach.",
+   "kept_heard": "French.",
+   "sentence_heard": "Put the milk in the fridge.",
    "word_ok": false,
    "sentence_ok": true
   },
   {
-   "word": "hear",
+   "word": "change",
    "tried": [
     [
      "lead-in",
-     "here."
+     "Change."
+    ]
+   ],
+   "kept_heard": "Change.",
+   "sentence_heard": "The weather can change quickly",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "strange",
+   "tried": [
+    [
+     "lead-in",
+     "Strange."
+    ]
+   ],
+   "kept_heard": "Strange.",
+   "sentence_heard": "I heard a strange noise.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "orange",
+   "tried": [
+    [
+     "lead-in",
+     "Orange."
+    ]
+   ],
+   "kept_heard": "Orange.",
+   "sentence_heard": "I had an orange for snack.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "giant",
+   "tried": [
+    [
+     "lead-in",
+     "giant."
+    ]
+   ],
+   "kept_heard": "giant.",
+   "sentence_heard": "The giant lived in a castle.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "gentle",
+   "tried": [
+    [
+     "lead-in",
+     "Gentle."
+    ]
+   ],
+   "kept_heard": "Gentle.",
+   "sentence_heard": "Be gentle with the kitten.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "giraffe",
+   "tried": [
+    [
+     "lead-in",
+     "giraffe."
+    ]
+   ],
+   "kept_heard": "giraffe.",
+   "sentence_heard": "The giraffe ate leaves from the tree.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "magic",
+   "tried": [
+    [
+     "lead-in",
+     "Magic."
+    ]
+   ],
+   "kept_heard": "Magic.",
+   "sentence_heard": "The magic show was amazing.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "stranger",
+   "tried": [
+    [
+     "lead-in",
+     "Stranger."
+    ]
+   ],
+   "kept_heard": "Stranger.",
+   "sentence_heard": "Don't talk to strangers.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "engine",
+   "tried": [
+    [
+     "lead-in",
+     "Engine."
+    ]
+   ],
+   "kept_heard": "Engine.",
+   "sentence_heard": "The engine is very loud.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "energy",
+   "tried": [
+    [
+     "lead-in",
+     "energy."
+    ]
+   ],
+   "kept_heard": "energy.",
+   "sentence_heard": "Bananas give you energy.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "city",
+   "tried": [
+    [
+     "lead-in",
+     "City."
+    ]
+   ],
+   "kept_heard": "City.",
+   "sentence_heard": "Jakarta is a big city.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "circus",
+   "tried": [
+    [
+     "lead-in",
+     "Circus."
+    ]
+   ],
+   "kept_heard": "Circus.",
+   "sentence_heard": "We went to the circus.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "voice",
+   "tried": [
+    [
+     "lead-in",
+     "voice."
+    ]
+   ],
+   "kept_heard": "voice.",
+   "sentence_heard": "She has a lovely voice",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "choice",
+   "tried": [
+    [
+     "lead-in",
+     "choice."
+    ]
+   ],
+   "kept_heard": "choice.",
+   "sentence_heard": "You have a choice of two cakes.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "police",
+   "tried": [
+    [
+     "lead-in",
+     "Police."
+    ]
+   ],
+   "kept_heard": "Police.",
+   "sentence_heard": "The police helped us.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "office",
+   "tried": [
+    [
+     "lead-in",
+     "office."
+    ]
+   ],
+   "kept_heard": "office.",
+   "sentence_heard": "Dad works in an office.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "notice",
+   "tried": [
+    [
+     "lead-in",
+     "Notice."
+    ]
+   ],
+   "kept_heard": "Notice.",
+   "sentence_heard": "Did you notice the rainbow?",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "alphabet",
+   "tried": [
+    [
+     "lead-in",
+     "alphabet."
+    ]
+   ],
+   "kept_heard": "alphabet.",
+   "sentence_heard": "There are 26 letters in the alphabet",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "elephant",
+   "tried": [
+    [
+     "lead-in",
+     "Elephant."
+    ]
+   ],
+   "kept_heard": "Elephant.",
+   "sentence_heard": "the elephant sprayed water.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "dolphin",
+   "tried": [
+    [
+     "lead-in",
+     "Dolphin."
+    ]
+   ],
+   "kept_heard": "Dolphin.",
+   "sentence_heard": "We saw dolphins in Levina.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "whisper",
+   "tried": [
+    [
+     "lead-in",
+     "Whisper."
+    ]
+   ],
+   "kept_heard": "Whisper.",
+   "sentence_heard": "She whispered a secret",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "echo",
+   "tried": [
+    [
+     "lead-in",
+     "Echo."
+    ]
+   ],
+   "kept_heard": "Echo.",
+   "sentence_heard": "We heard an echo in the cave.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "ache",
+   "tried": [
+    [
+     "lead-in",
+     "ache."
+    ]
+   ],
+   "kept_heard": "ache.",
+   "sentence_heard": "I have a tummy ache.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "running",
+   "tried": [
+    [
+     "lead-in",
+     "running."
+    ]
+   ],
+   "kept_heard": "running.",
+   "sentence_heard": "dog is running on the beach.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "swimming",
+   "tried": [
+    [
+     "lead-in",
+     "Swimming."
+    ]
+   ],
+   "kept_heard": "Swimming.",
+   "sentence_heard": "I go swimming every morning.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "shopping",
+   "tried": [
+    [
+     "lead-in",
+     "Shopping."
+    ]
+   ],
+   "kept_heard": "Shopping.",
+   "sentence_heard": "We went shopping for shoes.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "planned",
+   "tried": [
+    [
+     "lead-in",
+     "planned."
+    ]
+   ],
+   "kept_heard": "planned.",
+   "sentence_heard": "We planned a picnic.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "clapped",
+   "tried": [
+    [
+     "lead-in",
+     "clapped."
+    ]
+   ],
+   "kept_heard": "clapped.",
+   "sentence_heard": "Everyone clapped at the end.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "hoping",
+   "tried": [
+    [
+     "lead-in",
+     "Hoping."
+    ]
+   ],
+   "kept_heard": "Hoping.",
+   "sentence_heard": "I am hoping for sunshine.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "writing",
+   "tried": [
+    [
+     "lead-in",
+     "writing."
+    ]
+   ],
+   "kept_heard": "writing.",
+   "sentence_heard": "I am writing a story.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "dancing",
+   "tried": [
+    [
+     "lead-in",
+     "Dancing."
+    ]
+   ],
+   "kept_heard": "Dancing.",
+   "sentence_heard": "The girls are dancing.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "stories",
+   "tried": [
+    [
+     "lead-in",
+     "Stories."
+    ]
+   ],
+   "kept_heard": "Stories.",
+   "sentence_heard": "Grandma tells great stories.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "cherries",
+   "tried": [
+    [
+     "lead-in",
+     "cherries."
+    ]
+   ],
+   "kept_heard": "cherries.",
+   "sentence_heard": "The cake had cherries on top.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "puppies",
+   "tried": [
+    [
+     "lead-in",
+     "Puppies."
+    ]
+   ],
+   "kept_heard": "Puppies.",
+   "sentence_heard": "The puppies are sleeping.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "leaves",
+   "tried": [
+    [
+     "lead-in",
+     "leaves."
+    ]
+   ],
+   "kept_heard": "leaves.",
+   "sentence_heard": "The leaves are green.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "wolves",
+   "tried": [
+    [
+     "lead-in",
+     "Wolves."
+    ]
+   ],
+   "kept_heard": "Wolves.",
+   "sentence_heard": "Wolves live in packs.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "halves",
+   "tried": [
+    [
+     "lead-in",
+     "Habs."
     ],
     [
      "plain",
-     "here."
+     "Habs."
     ]
    ],
-   "kept_heard": "here.",
-   "sentence_heard": "Can you hear the waves?",
+   "kept_heard": "Habs.",
+   "sentence_heard": "Cut the orange into halves.",
    "word_ok": false,
    "sentence_ok": true
   },
   {
-   "word": "weather",
+   "word": "shelves",
    "tried": [
     [
      "lead-in",
-     "weather."
+     "Shelves."
     ]
    ],
-   "kept_heard": "weather.",
-   "sentence_heard": "The weather is sunny today.",
+   "kept_heard": "Shelves.",
+   "sentence_heard": "The books are on the shelves.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "quite",
+   "word": "helpful",
    "tried": [
     [
      "lead-in",
-     "quite."
+     "Helpful."
     ]
    ],
-   "kept_heard": "quite.",
-   "sentence_heard": "The water is quite cold",
+   "kept_heard": "Helpful.",
+   "sentence_heard": "Thank you for being so helpful.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "than",
+   "word": "thankful",
    "tried": [
     [
      "lead-in",
-     "Then."
+     "Thankful."
+    ]
+   ],
+   "kept_heard": "Thankful.",
+   "sentence_heard": "I am thankful for my family.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "painful",
+   "tried": [
+    [
+     "lead-in",
+     "painful."
+    ]
+   ],
+   "kept_heard": "painful.",
+   "sentence_heard": "The bee sting was painful.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "careless",
+   "tried": [
+    [
+     "lead-in",
+     "Careless."
+    ]
+   ],
+   "kept_heard": "Careless.",
+   "sentence_heard": "It was careless to leave the door open.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "kindness",
+   "tried": [
+    [
+     "lead-in",
+     "Kindness."
+    ]
+   ],
+   "kept_heard": "Kindness.",
+   "sentence_heard": "Thank you for your kindness.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "darkness",
+   "tried": [
+    [
+     "lead-in",
+     "Darkness."
+    ]
+   ],
+   "kept_heard": "Darkness.",
+   "sentence_heard": "The cat can see in the darkness.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "sadness",
+   "tried": [
+    [
+     "lead-in",
+     "Sadness."
+    ]
+   ],
+   "kept_heard": "Sadness.",
+   "sentence_heard": "She felt sadness when her fish died.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "suddenly",
+   "tried": [
+    [
+     "lead-in",
+     "Suddenly."
+    ]
+   ],
+   "kept_heard": "Suddenly.",
+   "sentence_heard": "Suddenly, it started to rain.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "friendly",
+   "tried": [
+    [
+     "lead-in",
+     "Friendly."
+    ]
+   ],
+   "kept_heard": "Friendly.",
+   "sentence_heard": "Our new teacher is very friendly.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "lonely",
+   "tried": [
+    [
+     "lead-in",
+     "Lonely."
+    ]
+   ],
+   "kept_heard": "Lonely.",
+   "sentence_heard": "The puppy felt lonely.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "safely",
+   "tried": [
+    [
+     "lead-in",
+     "Safely."
+    ]
+   ],
+   "kept_heard": "Safely.",
+   "sentence_heard": "We got home safely.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "movement",
+   "tried": [
+    [
+     "lead-in",
+     "Movement."
+    ]
+   ],
+   "kept_heard": "Movement.",
+   "sentence_heard": "saw a movement in the bushes.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "unhappy",
+   "tried": [
+    [
+     "lead-in",
+     "unhappy."
+    ]
+   ],
+   "kept_heard": "unhappy.",
+   "sentence_heard": "The boy looked unhappy.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "untidy",
+   "tried": [
+    [
+     "lead-in",
+     "on tidy."
     ],
     [
      "plain",
-     "then."
+     "Untidy."
     ]
    ],
-   "kept_heard": "Then.",
-   "sentence_heard": "A whale is bigger than a shark.",
+   "kept_heard": "Untidy.",
+   "sentence_heard": "My room is untidy.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "rewrite",
+   "tried": [
+    [
+     "lead-in",
+     "rewrite."
+    ]
+   ],
+   "kept_heard": "rewrite.",
+   "sentence_heard": "Please rewrite the sentence.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "disagree",
+   "tried": [
+    [
+     "lead-in",
+     "Disagree."
+    ]
+   ],
+   "kept_heard": "Disagree.",
+   "sentence_heard": "I disagree with you.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "mistake",
+   "tried": [
+    [
+     "lead-in",
+     "mistake."
+    ]
+   ],
+   "kept_heard": "mistake.",
+   "sentence_heard": "Everyone makes mistakes.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "something",
+   "tried": [
+    [
+     "lead-in",
+     "Something."
+    ]
+   ],
+   "kept_heard": "Something.",
+   "sentence_heard": "There is something in my shoe.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "sometimes",
+   "tried": [
+    [
+     "lead-in",
+     "sometimes."
+    ]
+   ],
+   "kept_heard": "sometimes.",
+   "sentence_heard": "Sometimes we eat out.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "everything",
+   "tried": [
+    [
+     "lead-in",
+     "everything."
+    ]
+   ],
+   "kept_heard": "everything.",
+   "sentence_heard": "I packed everything.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "everyone",
+   "tried": [
+    [
+     "lead-in",
+     "Everyone."
+    ]
+   ],
+   "kept_heard": "Everyone.",
+   "sentence_heard": "Everyone is here.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "somebody",
+   "tried": [
+    [
+     "lead-in",
+     "Somebody."
+    ]
+   ],
+   "kept_heard": "Somebody.",
+   "sentence_heard": "Somebody knocked on the door.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "playground",
+   "tried": [
+    [
+     "lead-in",
+     "playground."
+    ]
+   ],
+   "kept_heard": "playground.",
+   "sentence_heard": "We met at the playground.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "rainbow",
+   "tried": [
+    [
+     "lead-in",
+     "Rainbow."
+    ]
+   ],
+   "kept_heard": "Rainbow.",
+   "sentence_heard": "Look a rainbow.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "homework",
+   "tried": [
+    [
+     "lead-in",
+     "homework."
+    ]
+   ],
+   "kept_heard": "homework.",
+   "sentence_heard": "I finished my homework.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "afternoon",
+   "tried": [
+    [
+     "lead-in",
+     "afternoon."
+    ]
+   ],
+   "kept_heard": "afternoon.",
+   "sentence_heard": "swim in the afternoon.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "weekend",
+   "tried": [
+    [
+     "lead-in",
+     "weekend."
+    ]
+   ],
+   "kept_heard": "weekend.",
+   "sentence_heard": "What are you doing this weekend?",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "without",
+   "tried": [
+    [
+     "lead-in",
+     "without."
+    ]
+   ],
+   "kept_heard": "without.",
+   "sentence_heard": "I can't sleep without my Teddy.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "yourself",
+   "tried": [
+    [
+     "lead-in",
+     "yourself."
+    ]
+   ],
+   "kept_heard": "yourself.",
+   "sentence_heard": "Did you make it yourself?",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "cupboard",
+   "tried": [
+    [
+     "lead-in",
+     "Covered."
+    ],
+    [
+     "plain",
+     "Covered."
+    ]
+   ],
+   "kept_heard": "Covered.",
+   "sentence_heard": "The plates are in the cupboard",
    "word_ok": false,
    "sentence_ok": true
   },
   {
-   "word": "break",
+   "word": "sure",
    "tried": [
     [
      "lead-in",
-     "Break."
+     "Sure."
     ]
    ],
-   "kept_heard": "Break.",
-   "sentence_heard": "Don't break the glass.",
+   "kept_heard": "Sure.",
+   "sentence_heard": "Are you sure?",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "babies",
+   "word": "sugar",
    "tried": [
     [
      "lead-in",
-     "babies."
+     "Sugar."
     ]
    ],
-   "kept_heard": "babies.",
-   "sentence_heard": "The babies are sleeping.",
+   "kept_heard": "Sugar.",
+   "sentence_heard": "No sugar in my tea, please.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "stopped",
+   "word": "heart",
    "tried": [
     [
      "lead-in",
-     "stopped."
+     "Heart."
     ]
    ],
-   "kept_heard": "stopped.",
-   "sentence_heard": "The bus stopped at the corner.",
+   "kept_heard": "Heart.",
+   "sentence_heard": "My heart is beating fast.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "careful",
+   "word": "learn",
    "tried": [
     [
      "lead-in",
-     "Careful."
+     "Learn."
     ]
    ],
-   "kept_heard": "Careful.",
-   "sentence_heard": "Be careful with the knife.",
+   "kept_heard": "Learn.",
+   "sentence_heard": "I wanna learn to surf.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "happiness",
+   "word": "woman",
    "tried": [
     [
      "lead-in",
-     "Happiness."
+     "Woman."
     ]
    ],
-   "kept_heard": "Happiness.",
-   "sentence_heard": "Her face was full of happiness.",
+   "kept_heard": "Woman.",
+   "sentence_heard": "The woman is a doctor",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "thoughtful",
+   "word": "women",
    "tried": [
     [
      "lead-in",
-     "Thoughtful."
+     "Women."
     ]
    ],
-   "kept_heard": "Thoughtful.",
-   "sentence_heard": "It was thoughtful of you to help.",
+   "kept_heard": "Women.",
+   "sentence_heard": "Two women ran the race.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "neither",
+   "word": "country",
    "tried": [
     [
      "lead-in",
-     "Neither."
+     "country."
     ]
    ],
-   "kept_heard": "Neither.",
-   "sentence_heard": "Neither of us was hungry.",
+   "kept_heard": "country.",
+   "sentence_heard": "Indonesia is a big country.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "weird",
+   "word": "young",
    "tried": [
     [
      "lead-in",
-     "Weird."
+     "Young."
     ]
    ],
-   "kept_heard": "Weird.",
-   "sentence_heard": "That was a weird dream.",
+   "kept_heard": "Young.",
+   "sentence_heard": "My brother is too young for school.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "shield",
+   "word": "touch",
    "tried": [
     [
      "lead-in",
-     "Shield."
+     "Touch."
     ]
    ],
-   "kept_heard": "Shield.",
-   "sentence_heard": "The night held up his shield.",
+   "kept_heard": "Touch.",
+   "sentence_heard": "Don't touch the hot pan.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "medicine",
+   "word": "double",
    "tried": [
     [
      "lead-in",
-     "Medicine."
+     "double."
     ]
    ],
-   "kept_heard": "Medicine.",
-   "sentence_heard": "Take your medicine after dinner.",
+   "kept_heard": "double.",
+   "sentence_heard": "I want a double scoop of ice cream.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "general",
+   "word": "trouble",
    "tried": [
     [
      "lead-in",
-     "General."
+     "trouble."
     ]
    ],
-   "kept_heard": "General.",
-   "sentence_heard": "In general I like rainy days.",
+   "kept_heard": "trouble.",
+   "sentence_heard": "We had trouble finding the house.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "autumn",
+   "word": "couple",
    "tried": [
     [
      "lead-in",
-     "Autumn."
+     "couple."
     ]
    ],
-   "kept_heard": "Autumn.",
-   "sentence_heard": "Leaves fall in autumn.",
+   "kept_heard": "couple.",
+   "sentence_heard": "A couple of birds sat on the roof.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "column",
+   "word": "soup",
    "tried": [
     [
      "lead-in",
-     "column."
+     "Soup."
     ]
    ],
-   "kept_heard": "column.",
-   "sentence_heard": "Write the answers in the first column.",
+   "kept_heard": "Soup.",
+   "sentence_heard": "The soup is too hot",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "scissors",
+   "word": "direction",
    "tried": [
     [
      "lead-in",
-     "Scissors."
+     "direction."
     ]
    ],
-   "kept_heard": "Scissors.",
-   "sentence_heard": "Pass me the scissors please.",
+   "kept_heard": "direction.",
+   "sentence_heard": "Which direction is the beach?",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "success",
+   "word": "vision",
    "tried": [
     [
      "lead-in",
-     "Success."
+     "vision."
     ]
    ],
-   "kept_heard": "Success.",
-   "sentence_heard": "The party was a big success.",
+   "kept_heard": "vision.",
+   "sentence_heard": "Eagles have amazing vision.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "terrible",
+   "word": "addition",
    "tried": [
     [
      "lead-in",
-     "Terrible."
+     "addition."
     ]
    ],
-   "kept_heard": "Terrible.",
-   "sentence_heard": "The traffic was terrible.",
+   "kept_heard": "addition.",
+   "sentence_heard": "We did addition at school today.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "occasion",
+   "word": "candle",
    "tried": [
     [
      "lead-in",
-     "occasion."
+     "Candle."
     ]
    ],
-   "kept_heard": "occasion.",
-   "sentence_heard": "A birthday is a special occasion.",
+   "kept_heard": "Candle.",
+   "sentence_heard": "Blow out the candles.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "furniture",
+   "word": "eagle",
    "tried": [
     [
      "lead-in",
-     "Furniture."
+     "Eagle."
     ]
    ],
-   "kept_heard": "Furniture.",
-   "sentence_heard": "We bought new furniture.",
+   "kept_heard": "Eagle.",
+   "sentence_heard": "and Eagle flew over the hills.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "information",
+   "word": "giggle",
    "tried": [
     [
      "lead-in",
-     "information."
+     "Giggle."
     ]
    ],
-   "kept_heard": "information.",
-   "sentence_heard": "The website has information about whales",
+   "kept_heard": "Giggle.",
+   "sentence_heard": "The girls giggled at the joke.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "invitation",
+   "word": "jungle",
    "tried": [
     [
      "lead-in",
-     "Invitation."
+     "jungle."
     ]
    ],
-   "kept_heard": "Invitation.",
-   "sentence_heard": "got an invitation to the party.",
+   "kept_heard": "jungle.",
+   "sentence_heard": "Monkeys live in the jungle.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "television",
+   "word": "bubble",
    "tried": [
     [
      "lead-in",
-     "television."
+     "bubble."
     ]
    ],
-   "kept_heard": "television.",
-   "sentence_heard": "We watched a film on television.",
+   "kept_heard": "bubble.",
+   "sentence_heard": "Blow a big bubble.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "usual",
+   "word": "pebble",
    "tried": [
     [
      "lead-in",
-     "Usual."
+     "pebble."
     ]
    ],
-   "kept_heard": "Usual.",
-   "sentence_heard": "met at the usual place.",
+   "kept_heard": "pebble.",
+   "sentence_heard": "I found a white pebble",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "signal",
+   "word": "doctor",
    "tried": [
     [
      "lead-in",
-     "signal."
+     "Doctor."
     ]
    ],
-   "kept_heard": "signal.",
-   "sentence_heard": "phone has no signal here.",
+   "kept_heard": "Doctor.",
+   "sentence_heard": "The doctor checked my ears.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "except",
+   "word": "visitor",
    "tried": [
     [
      "lead-in",
-     "Accept."
+     "Visitor."
+    ]
+   ],
+   "kept_heard": "Visitor.",
+   "sentence_heard": "We have a visitor today.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "dollar",
+   "tried": [
+    [
+     "lead-in",
+     "dollar."
+    ]
+   ],
+   "kept_heard": "dollar.",
+   "sentence_heard": "It costs $1.",
+   "word_ok": true,
+   "sentence_ok": false
+  },
+  {
+   "word": "collar",
+   "tried": [
+    [
+     "lead-in",
+     "color."
     ],
     [
      "plain",
-     "Accept."
+     "color."
     ]
    ],
-   "kept_heard": "Accept.",
-   "sentence_heard": "Everyone came except my brother.",
+   "kept_heard": "color.",
+   "sentence_heard": "My collar is wet.",
    "word_ok": false,
    "sentence_ok": true
   },
   {
-   "word": "lose",
+   "word": "wonder",
    "tried": [
     [
      "lead-in",
-     "lose."
+     "Wonder."
     ]
    ],
-   "kept_heard": "lose.",
-   "sentence_heard": "Don't lose your key.",
+   "kept_heard": "Wonder.",
+   "sentence_heard": "I wonder what is for dinner.",
    "word_ok": true,
    "sentence_ok": true
   },
   {
-   "word": "passed",
+   "word": "meat",
    "tried": [
     [
      "lead-in",
-     "passed."
-    ]
-   ],
-   "kept_heard": "passed.",
-   "sentence_heard": "She passed the ball to me",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "families",
-   "tried": [
-    [
-     "lead-in",
-     "Families."
-    ]
-   ],
-   "kept_heard": "Families.",
-   "sentence_heard": "Many families came to the fair.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "carried",
-   "tried": [
-    [
-     "lead-in",
-     "Carried."
-    ]
-   ],
-   "kept_heard": "Carried.",
-   "sentence_heard": "Dad carried the heavy bag.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "knives",
-   "tried": [
-    [
-     "lead-in",
-     "Knives."
-    ]
-   ],
-   "kept_heard": "Knives.",
-   "sentence_heard": "Put the knives in the drawer.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "excitement",
-   "tried": [
-    [
-     "lead-in",
-     "Excitement."
-    ]
-   ],
-   "kept_heard": "Excitement.",
-   "sentence_heard": "The children shouted with excitement.",
-   "word_ok": true,
-   "sentence_ok": true
-  },
-  {
-   "word": "calm",
-   "tried": [
-    [
-     "lead-in",
-     "Come."
+     "Meet."
     ],
     [
      "plain",
-     "Come."
+     "Meet."
     ]
    ],
-   "kept_heard": "Come.",
-   "sentence_heard": "The sea has calmed this morning.",
+   "kept_heard": "Meet.",
+   "sentence_heard": "I don't eat much meat.",
+   "word_ok": false,
+   "sentence_ok": true
+  },
+  {
+   "word": "tail",
+   "tried": [
+    [
+     "lead-in",
+     "detail."
+    ],
+    [
+     "plain",
+     "tail."
+    ]
+   ],
+   "kept_heard": "tail.",
+   "sentence_heard": "The dog wagged its tail.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "flour",
+   "tried": [
+    [
+     "lead-in",
+     "Flower."
+    ],
+    [
+     "plain",
+     "flour."
+    ]
+   ],
+   "kept_heard": "flour.",
+   "sentence_heard": "Mix the flour and the eggs.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "bear",
+   "tried": [
+    [
+     "lead-in",
+     "There."
+    ],
+    [
+     "plain",
+     "There."
+    ]
+   ],
+   "kept_heard": "There.",
+   "sentence_heard": "The bear caught a fish.",
+   "word_ok": false,
+   "sentence_ok": true
+  },
+  {
+   "word": "knight",
+   "tried": [
+    [
+     "lead-in",
+     "night."
+    ],
+    [
+     "plain",
+     "night."
+    ]
+   ],
+   "kept_heard": "night.",
+   "sentence_heard": "The night wrote a horse.",
+   "word_ok": false,
+   "sentence_ok": false
+  },
+  {
+   "word": "blew",
+   "tried": [
+    [
+     "lead-in",
+     "Blue."
+    ],
+    [
+     "plain",
+     "blue."
+    ]
+   ],
+   "kept_heard": "Blue.",
+   "sentence_heard": "The wind blew my hat away.",
+   "word_ok": false,
+   "sentence_ok": true
+  },
+  {
+   "word": "knew",
+   "tried": [
+    [
+     "lead-in",
+     "New."
+    ],
+    [
+     "plain",
+     "new."
+    ]
+   ],
+   "kept_heard": "New.",
+   "sentence_heard": "I knew the answer.",
+   "word_ok": false,
+   "sentence_ok": true
+  },
+  {
+   "word": "pear",
+   "tried": [
+    [
+     "lead-in",
+     "hair."
+    ],
+    [
+     "plain",
+     "The pair."
+    ]
+   ],
+   "kept_heard": "hair.",
+   "sentence_heard": "I had a pair for lunch.",
+   "word_ok": false,
+   "sentence_ok": false
+  },
+  {
+   "word": "week",
+   "tried": [
+    [
+     "lead-in",
+     "week."
+    ]
+   ],
+   "kept_heard": "week.",
+   "sentence_heard": "We have a holiday next week.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "sail",
+   "tried": [
+    [
+     "lead-in",
+     "Sale."
+    ],
+    [
+     "plain",
+     "sale."
+    ]
+   ],
+   "kept_heard": "Sale.",
+   "sentence_heard": "We will sail to the island.",
+   "word_ok": false,
+   "sentence_ok": true
+  },
+  {
+   "word": "plane",
+   "tried": [
+    [
+     "lead-in",
+     "plane."
+    ]
+   ],
+   "kept_heard": "plane.",
+   "sentence_heard": "The plane landed in Den Passar.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "steal",
+   "tried": [
+    [
+     "lead-in",
+     "Steel."
+    ],
+    [
+     "plain",
+     "steal."
+    ]
+   ],
+   "kept_heard": "steal.",
+   "sentence_heard": "Monkeys steal sunglasses at the temple.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "witch",
+   "tried": [
+    [
+     "lead-in",
+     "Witch."
+    ]
+   ],
+   "kept_heard": "Witch.",
+   "sentence_heard": "The witch flew on a broom.",
+   "word_ok": true,
+   "sentence_ok": true
+  },
+  {
+   "word": "aloud",
+   "tried": [
+    [
+     "lead-in",
+     "allowed."
+    ],
+    [
+     "plain",
+     "allowed."
+    ]
+   ],
+   "kept_heard": "allowed.",
+   "sentence_heard": "Read the story aloud.",
+   "word_ok": false,
+   "sentence_ok": true
+  },
+  {
+   "word": "rode",
+   "tried": [
+    [
+     "lead-in",
+     "Road."
+    ],
+    [
+     "plain",
+     "Road."
+    ]
+   ],
+   "kept_heard": "Road.",
+   "sentence_heard": "I rode my bike to school.",
    "word_ok": false,
    "sentence_ok": true
   }
