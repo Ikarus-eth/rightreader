@@ -316,6 +316,9 @@ footer { display: flex; justify-content: space-between; align-items: center; gap
       <p class="ph">Practice time</p>
       <p class="note">Only active time counts: a pause of more than 90 seconds without a tap, or the app in the background, is left out.</p>
       <div class="tablewrap"><table class="ptable" id="pTime"></table></div>
+      <p class="ph">Review schedule</p>
+      <p class="note">A missed word comes back the next day. Each right answer when it is due moves it on: 3 days, then 7, then 30. Right at the 30-day check means mastered.</p>
+      <div class="tablewrap"><table class="ptable" id="pSched"></table></div>
       <p class="ph">Right on which try?</p>
       <p class="note">Each word counts once, by the round in which it was first spelled right. Tap a row to see the words.</p>
       <div class="bars" id="pBars"></div>
@@ -945,6 +948,206 @@ const RAW = [
 "3|witch|a woman with magic powers in stories|die Hexe|The witch flew on a broom.|w + itch. 'which' (welche) sounds the same.",
 "3|aloud|so that others can hear|laut, vor (lesen)|Read the story aloud.|a + loud. 'allowed' (erlaubt) sounds the same.",
 "3|rode|the past of 'ride'|ritt, fuhr|I rode my bike to school.|r + ode. 'road' (Straße) sounds the same.",
+"3|January|the first month of the year|der Januar|School starts again in January.|Jan + u + ary. Months start with a capital letter.",
+"3|April|the fourth month of the year|der April|It often rains in April.|A-p-r-i-l, with a capital A.",
+"3|August|the eighth month of the year|der August|We fly to Europe in August.|Au + gust, with a capital A.",
+"3|September|the ninth month of the year|der September|My cousin's birthday is in September.|Sep + tem + ber.",
+"3|October|the tenth month of the year|der Oktober|October starts with a capital O.|Oc + to + ber. English uses c, German uses k.",
+"3|November|the eleventh month of the year|der November|It is November now.|No + vem + ber.",
+"3|December|the last month of the year|der Dezember|We go skiing in December.|De + cem + ber. English uses c, German uses z.",
+"3|Monday|the day after Sunday|der Montag|On Monday we have music.|Mon + day, with a capital M.",
+"3|Tuesday|the day after Monday|der Dienstag|We swim on Tuesday.|Tues + day. Don't forget the e.",
+"3|Friday|the day before Saturday|der Freitag|Friday is pizza night.|Fri + day.",
+"3|Sunday|the day before Monday|der Sonntag|On Sunday we sleep in.|Sun + day.",
+"3|eleven|the number 11|elf|There are eleven players in a team.|e + lev + en.",
+"3|twelve|the number 12|zwölf|A clock has twelve numbers.|t-w-e-l-v-e. It ends in -ve.",
+"3|thirteen|the number 13|dreizehn|My sister is thirteen.|thir + teen.",
+"3|fourteen|the number 14|vierzehn|We stayed for fourteen days.|four + teen. Keep the u.",
+"3|sixteen|the number 16|sechzehn|There are sixteen pencils in the box.|six + teen.",
+"3|nineteen|the number 19|neunzehn|My uncle is nineteen.|nine + teen. Keep the e.",
+"3|twenty|the number 20|zwanzig|I can count to twenty in French.|twen + ty.",
+"3|thirty|the number 30|dreißig|The bus comes in thirty minutes.|thir + ty.",
+"3|fifty|the number 50|fünfzig|The book has fifty pages.|fif + ty.",
+"3|hundred|the number 100|hundert|There are a hundred stairs to the temple.|hun + dred. It ends in -dred, not -dret.",
+"3|million|the number 1,000,000|die Million|A million stars filled the sky.|Double l: mil-li-on.",
+"3|second|number 2 in a row; a very short time|zweite; die Sekunde|Wait a second!|sec + ond.",
+"3|fifth|number 5 in a row|der, die, das fünfte|This is my fifth swim today.|five turns into fif + th.",
+"3|ninth|number 9 in a row|der, die, das neunte|She finished ninth in the race.|nine loses its e: n-i-n-t-h.",
+"3|finger|one of the five parts at the end of your hand|der Finger|I cut my finger.|fin + ger, like German.",
+"3|ankle|the joint between your foot and leg|der Knöchel|I twisted my ankle.|an + kle. It ends in -le.",
+"3|tooth|one of the white things in your mouth|der Zahn|My tooth is wobbly.|t + ooth. More than one: teeth.",
+"3|teeth|more than one tooth|die Zähne|Brush your teeth.|t + eeth.",
+"3|already|before now|schon, bereits|I have already eaten.|al + ready. Only one l.",
+"3|almost|nearly|fast|We are almost there.|al + most. Only one l.",
+"3|another|one more|noch ein, ein anderer|Can I have another cookie?|an + other.",
+"3|around|on every side; about|um ... herum; ungefähr|We walked around the lake.|a + round.",
+"3|awake|not sleeping|wach|Are you still awake?|a + wake.",
+"3|become|to start to be|werden|Tadpoles become frogs.|be + come.",
+"3|behind|at the back of|hinter|The cat is behind the sofa.|be + hind.",
+"3|beside|next to|neben|Sit beside me.|be + side.",
+"3|bottom|the lowest part|der Boden, das untere Ende|The coin sank to the bottom.|Double t: bot-tom.",
+"3|brain|the part inside your head that thinks|das Gehirn|Your brain needs sleep.|br + ain.",
+"3|branch|a part of a tree that grows out of the trunk|der Ast, der Zweig|A monkey sat on the branch.|br + anch.",
+"3|brush|a tool with hairs for cleaning or painting|die Bürste; bürsten|Brush your hair.|br + ush.",
+"3|carry|to hold and take somewhere|tragen|Can you carry this bag?|Double r: c-a-r-r-y.",
+"3|chicken|a farm bird|das Huhn, das Hähnchen|We had chicken for dinner.|chick + en.",
+"3|clever|smart|klug|What a clever idea!|clev + er.",
+"3|cloth|material made of cotton or wool|der Stoff, das Tuch|Wipe the table with a cloth.|cl + oth. With an e, 'clothe' means to dress.",
+"3|coin|a round piece of metal money|die Münze|I found a coin on the beach.|c + oin.",
+"3|cookie|a small sweet biscuit|der Keks|The cookie is still warm.|cook + ie.",
+"3|copy|to make the same again|kopieren, abschreiben|Copy the words from the board.|cop + y.",
+"3|cotton|soft cloth made from a plant|die Baumwolle|My shirt is made of cotton.|Double t: cot-ton.",
+"3|crack|a thin break|der Riss, der Sprung|There is a crack in the glass.|cr + ack.",
+"3|cream|the thick part of milk|die Sahne, die Creme|I like strawberries with cream.|cr + eam.",
+"3|curly|having curls|lockig|She has curly hair.|curl + y.",
+"3|damage|harm|der Schaden; beschädigen|The storm did a lot of damage.|dam + age.",
+"3|desert|a dry sandy land|die Wüste|Camels live in the desert.|des + ert. One s. 'dessert' with ss is the sweet course.",
+"3|dessert|a sweet dish after a meal|die Nachspeise, das Dessert|Ice cream is my best dessert.|des + sert, double s. You want more dessert, so two s.",
+"3|diary|a book where you write about each day|das Tagebuch|I write in my diary every night.|di + a + ry. Don't mix it up with 'dairy' (milk).",
+"3|dinosaur|a giant reptile from long ago|der Dinosaurier|The dinosaur skeleton was huge.|di + no + saur.",
+"3|divide|to split into parts|teilen|Divide the cake into four.|di + vide.",
+"3|dozen|twelve|das Dutzend|We bought a dozen eggs.|doz + en. It sounds like 'duzzen'.",
+"3|drawer|a box that slides in and out of a cupboard|die Schublade|The spoons are in the drawer.|draw + er.",
+"3|empty|with nothing inside|leer|The bottle is empty.|emp + ty. Don't forget the p.",
+"3|enjoy|to like doing something|genießen|I enjoy reading.|en + joy.",
+"3|enter|to go into|eintreten, betreten|Please enter the room quietly.|en + ter.",
+"3|evening|the end of the day|der Abend|We walk on the beach in the evening.|eve + ning.",
+"3|example|something that shows what you mean|das Beispiel|Can you give me an example?|ex + am + ple.",
+"3|farmer|a person who works on a farm|der Bauer, die Bäuerin|The farmer grows rice.|farm + er.",
+"3|fence|a wall made of wood or wire|der Zaun|The dog jumped over the fence.|f + ence. The c sounds like s.",
+"3|fever|a high body temperature|das Fieber|I stayed home with a fever.|fe + ver.",
+"3|finish|to come to the end|beenden, fertig werden|Finish your homework first.|fin + ish.",
+"3|forest|a large area full of trees|der Wald|We got lost in the forest.|for + est.",
+"3|forget|to not remember|vergessen|Don't forget your hat.|for + get.",
+"3|forgot|the past of 'forget'|vergaß|I forgot my lunch.|for + got.",
+"3|fruit|food like apples and mangoes|das Obst, die Frucht|Fruit is good for you.|fr + ui + t. The u and i go together.",
+"3|frozen|turned into ice|gefroren|The pond was frozen.|froz + en. One z.",
+"3|funny|making you laugh|lustig|That was a funny joke.|Double n: fun-ny.",
+"3|gather|to bring together|sammeln, versammeln|Gather all the shells.|ga + ther.",
+"3|glass|a hard clear material; a cup made of it|das Glas|Can I have a glass of water?|gl + ass. Double s.",
+"3|glove|a cover for your hand|der Handschuh|I lost one glove in the snow.|gl + ove. It sounds like 'gluv'.",
+"3|goal|what you aim for; a point in football|das Ziel; das Tor|She scored a goal.|g + oal.",
+"3|golden|made of gold or looking like gold|golden|The rice fields look golden.|gold + en.",
+"3|grass|green plants that cover the ground|das Gras|Don't walk on the grass.|gr + ass. Double s.",
+"3|greedy|wanting too much|gierig|The greedy seagull took my chips.|greed + y.",
+"3|group|people or things together|die Gruppe|Work in a group of three.|gr + oup. ou sounds like oo.",
+"3|guitar|a musical instrument with strings|die Gitarre|My dad plays the guitar.|gu + i + tar. Silent u.",
+"3|hammer|a tool for hitting nails|der Hammer|Hit the nail with the hammer.|Double m: ham-mer.",
+"3|handle|the part you hold|der Griff, der Henkel|The cup has a broken handle.|han + dle.",
+"3|helmet|a hard hat that protects your head|der Helm|Wear your helmet on the bike.|hel + met.",
+"3|hidden|hard to see or find|versteckt|The treasure was hidden in a cave.|Double d: hid-den.",
+"3|hobby|something you do for fun|das Hobby|Drawing is my hobby.|Double b: hob-by.",
+"3|honey|sweet food made by bees|der Honig|I put honey on my toast.|hon + ey. It ends in -ey.",
+"3|horse|a large animal you can ride|das Pferd|I rode a horse on the beach.|h + orse.",
+"3|hungry|wanting food|hungrig|I'm hungry after swimming.|hun + gry.",
+"3|idea|a thought or plan|die Idee|I have a great idea!|i + de + a.",
+"3|insect|a small animal with six legs|das Insekt|An ant is an insect.|in + sect. English uses c, German uses k.",
+"3|invite|to ask someone to come|einladen|I want to invite my friends.|in + vite.",
+"3|jacket|a short coat|die Jacke|Take a jacket, it's windy.|jack + et.",
+"3|journey|a long trip|die Reise|The journey to Germany is very long.|jour + ney. ou sounds like ur.",
+"3|kettle|a pot for boiling water|der Wasserkocher|Switch on the kettle.|Double t: ket-tle.",
+"3|kitten|a young cat|das Kätzchen|The kitten is playing with string.|Double t: kit-ten.",
+"3|ladder|steps you climb to reach high places|die Leiter|Dad climbed the ladder.|Double d: lad-der.",
+"3|lazy|not wanting to work|faul|The lazy dog slept all day.|la + zy.",
+"3|leader|the person in charge|der Anführer|She is the leader of the team.|lead + er.",
+"3|lemon|a sour yellow fruit|die Zitrone|Lemon juice is sour.|lem + on.",
+"3|lesson|a time for learning|die Unterrichtsstunde|We have a swimming lesson today.|Double s: les-son.",
+"3|lizard|a small reptile with a long tail|die Eidechse|A lizard ran up the wall.|liz + ard.",
+"3|magnet|a metal that pulls iron|der Magnet|The magnet picked up the pins.|mag + net.",
+"3|marble|a small glass ball; a kind of stone|die Murmel; der Marmor|I won the marble game.|mar + ble.",
+"3|mirror|glass that shows your face|der Spiegel|Look in the mirror.|Double r: mir-ror.",
+"3|monkey|an animal that climbs trees|der Affe|The monkey stole my sunglasses.|mon + key. It ends in -ey.",
+"3|monster|a scary creature|das Monster|There's no monster under the bed.|mon + ster.",
+"3|nearly|almost|fast|I nearly fell.|near + ly.",
+"3|needle|a thin pointed tool for sewing|die Nadel|Thread the needle.|nee + dle.",
+"3|nephew|the son of your brother or sister|der Neffe|My aunt's nephew is my cousin.|neph + ew. ph sounds like f.",
+"3|nothing|not anything|nichts|There is nothing in the box.|no + thing.",
+"3|number|a word or sign like 3 or seven|die Zahl, die Nummer|Pick a number.|num + ber.",
+"3|octopus|a sea animal with eight arms|der Oktopus, der Krake|We saw an octopus while diving.|oc + to + pus.",
+"3|onion|a round vegetable that makes you cry|die Zwiebel|Cutting an onion makes me cry.|on + ion. It sounds like 'unyun'.",
+"3|oven|a box for baking|der Ofen|The bread is in the oven.|ov + en. It sounds like 'uvven'.",
+"3|owner|the person something belongs to|der Besitzer|Who is the owner of this dog?|own + er.",
+"3|palace|a big house for a king or queen|der Palast|The king lives in a palace.|pal + ace.",
+"3|parent|a mother or father|der Elternteil|Ask a parent to sign this.|par + ent.",
+"3|parrot|a bright tropical bird that can copy words|der Papagei|The parrot said hello.|Double r: par-rot.",
+"3|pattern|shapes or lines that repeat|das Muster|The shirt has a stripy pattern.|Double t: pat-tern.",
+"3|peanut|a nut that grows in the ground|die Erdnuss|I like peanut butter.|pea + nut.",
+"3|penguin|a black and white bird that swims|der Pinguin|Penguins can't fly.|pen + guin.",
+"3|pepper|a spice; a vegetable|der Pfeffer; die Paprika|Pass the salt and pepper.|Double p: pep-per.",
+"3|pirate|a person who robs ships|der Pirat|The pirate had a parrot.|pi + rate.",
+"3|planet|a big round world in space|der Planet|Earth is a planet.|plan + et.",
+"3|plastic|a light material made in factories|das Plastik|Don't use plastic bags.|plas + tic.",
+"3|pocket|a small bag sewn into clothes|die Tasche (an der Kleidung)|I have a shell in my pocket.|pock + et.",
+"3|poem|a piece of writing with lines and rhythm|das Gedicht|We read a poem in class.|po + em.",
+"3|poison|something that makes you ill if you eat it|das Gift|Some berries are poison.|poi + son.",
+"3|polite|having good manners|höflich|It's polite to say thank you.|po + lite.",
+"3|popcorn|corn that pops when heated|das Popcorn|We ate popcorn at the cinema.|pop + corn.",
+"3|present|a gift; here now|das Geschenk; anwesend|I got a present for my birthday.|pres + ent.",
+"3|pretend|to act as if|so tun, als ob|Let's pretend we are pirates.|pre + tend.",
+"3|prince|the son of a king|der Prinz|The prince rode a white horse.|pr + ince. English uses c, German uses z.",
+"3|princess|the daughter of a king|die Prinzessin|The princess lived in a tower.|prin + cess. Double s.",
+"3|prize|something you win|der Preis|She won first prize.|pr + ize.",
+"3|problem|something difficult to solve|das Problem|We can solve this problem.|prob + lem.",
+"3|pumpkin|a large orange vegetable|der Kürbis|We carved a pumpkin.|pump + kin.",
+"3|puppet|a toy you move with your hand|die Puppe, die Handpuppe|We made a sock puppet.|Double p: pup-pet.",
+"3|queen|a female ruler|die Königin|The queen wore a crown.|qu + een.",
+"3|quickly|fast|schnell|Come quickly!|quick + ly.",
+"3|radio|a machine that plays news and music|das Radio|We listen to the radio in the car.|ra + di + o.",
+"3|rather|more willingly|lieber, eher|I would rather swim.|ra + ther.",
+"3|record|to save sound or pictures|aufnehmen; der Rekord|Let's record a song.|re + cord.",
+"3|ribbon|a long thin strip of cloth|das Band, die Schleife|She has a red ribbon in her hair.|Double b: rib-bon.",
+"3|river|a lot of water flowing across land|der Fluss|We crossed the river by boat.|riv + er.",
+"3|rocket|a machine that flies into space|die Rakete|The rocket flew to the moon.|rock + et.",
+"3|ruler|a straight strip for measuring|das Lineal|Use a ruler to draw a line.|rul + er.",
+"3|salad|a cold dish of vegetables|der Salat|I'd like a green salad.|sal + ad.",
+"3|sandwich|food between two slices of bread|das Sandwich|I have a cheese sandwich.|sand + wich.",
+"3|scarf|cloth you wear around your neck|der Schal|Wear a scarf in winter.|sc + arf.",
+"3|scooter|a small vehicle you push or ride|der Roller|I ride my scooter to the shop.|scoot + er.",
+"3|scream|to shout loudly in fear|schreien|Don't scream, it's only a gecko.|scr + eam.",
+"3|secret|something you keep to yourself|das Geheimnis|Can you keep a secret?|se + cret.",
+"3|shampoo|soap for your hair|das Shampoo|The shampoo smells of coconut.|sham + poo.",
+"3|shelf|a flat board for keeping things on|das Regal|Put the book on the shelf.|sh + elf. More than one: shelves.",
+"3|shiny|bright and smooth|glänzend|What a shiny shell!|shine loses its e: shin + y.",
+"3|silver|a shiny white metal|das Silber|She has a silver ring.|sil + ver.",
+"3|skeleton|all the bones of a body|das Skelett|We saw a dinosaur skeleton.|skel + e + ton.",
+"3|slipper|a soft shoe for indoors|der Hausschuh|Where is my other slipper?|Double p: slip-per.",
+"3|spider|an animal with eight legs|die Spinne|A spider made a web.|spi + der.",
+"3|squirrel|a small furry animal with a bushy tail|das Eichhörnchen|The squirrel ate a nut.|squir + rel. Double r.",
+"3|stamp|a small sticker you put on a letter|die Briefmarke|Put a stamp on the card.|st + amp.",
+"3|statue|a figure made of stone or metal|die Statue|There is a big statue at the temple.|stat + ue.",
+"3|sticky|covered in something that sticks|klebrig|My hands are sticky from the mango.|stick + y.",
+"3|strawberry|a small red fruit|die Erdbeere|I love strawberry ice cream.|straw + berry. Double r.",
+"3|street|a road in a town|die Straße|We live on a quiet street.|str + eet.",
+"3|student|a person who studies|der Schüler, der Student|Every student needs a pencil.|stu + dent.",
+"3|supper|an evening meal|das Abendessen|We had soup for supper.|Double p: sup-per.",
+"3|swing|a seat that moves back and forth|die Schaukel; schaukeln|The swing goes very high.|sw + ing.",
+"3|sword|a long sharp metal weapon|das Schwert|The knight held a sword.|Silent w: s-w-o-r-d.",
+"3|tadpole|a baby frog|die Kaulquappe|The tadpole has a tail.|tad + pole.",
+"3|tennis|a game with rackets and a ball|das Tennis|We play tennis on Saturday.|Double n: ten-nis.",
+"3|thunder|the loud noise in a storm|der Donner|The thunder woke me up.|thun + der.",
+"3|ticket|a paper that lets you travel or enter|die Fahrkarte, das Ticket|Show your ticket, please.|tick + et.",
+"3|tired|needing rest|müde|I'm tired after the long walk.|tire + d.",
+"3|toilet|a seat in the bathroom|die Toilette|Where is the toilet?|toi + let.",
+"3|tractor|a strong farm vehicle|der Traktor|The farmer drove the tractor.|trac + tor. It ends in -or.",
+"3|traffic|cars and buses on the road|der Verkehr|The traffic was terrible.|Double f: traf-fic.",
+"3|trumpet|a loud brass instrument|die Trompete|He plays the trumpet in a band.|trum + pet.",
+"3|umbrella|you hold it over you in the rain|der Regenschirm|Take an umbrella!|um + brel + la. Double l.",
+"3|uncle|the brother of your mother or father|der Onkel|My uncle lives in Hamburg.|un + cle.",
+"3|until|up to the time when|bis|Wait until I come back.|un + til. Only one l.",
+"3|useful|helping you|nützlich|A map is very useful.|use + ful. One l.",
+"3|violin|an instrument with four strings|die Geige|My cousin plays the violin.|vi + o + lin.",
+"3|visit|to go and see someone|besuchen|We visit Grandma in summer.|vis + it.",
+"3|volcano|a mountain that can explode|der Vulkan|Mount Agung is a volcano.|vol + ca + no.",
+"3|waiter|a person who brings food in a restaurant|der Kellner|The waiter brought our drinks.|wait + er.",
+"3|wallet|a small case for money|die Brieftasche, der Geldbeutel|Dad lost his wallet.|Double l: wal-let.",
+"3|wedding|when two people get married|die Hochzeit|We went to my aunt's wedding.|Double d: wed-ding.",
+"3|winner|the person who wins|der Gewinner|The winner gets a medal.|win + n + er: double the n.",
+"3|winter|the coldest season|der Winter|It snows in winter.|win + ter.",
+"3|wizard|a man with magic powers|der Zauberer|The wizard waved his wand.|wiz + ard.",
+"3|wonderful|very good|wunderbar|We had a wonderful day.|wonder + ful.",
+"3|wooden|made of wood|hölzern, aus Holz|We sat on a wooden bench.|wood + en.",
+"3|worry|to feel nervous about something|sich Sorgen machen|Don't worry, it's okay.|Double r: wor-ry.",
+"3|yawn|to open your mouth wide when tired|gähnen|The baby yawned.|y + awn.",
 "A2|don't|do not|nicht (tun)|Please don't run near the pool.|do not → don't. The apostrophe sits where the o was.",
 "A2|can't|cannot|kann nicht|I can't find my shoes.|cannot → can't. The apostrophe replaces 'no'.",
 "A4|won't|will not|wird nicht, will nicht|The baby won't stop crying.|A strange one: will not → won't.",
@@ -1111,26 +1314,71 @@ function renderStart() {
   if (store.suggest) $("suggestLine").textContent = "Suggested start for this round: level " + store.suggest + ".";
   const todaySecs = (store.time || {})[ymd(Date.now())] || 0;
   $("lastLine").textContent = (store.last ? "Last round: " + store.last.right + " of " + store.last.total + " right. " : "") +
-    (todaySecs >= 60 ? "Practised today: " + fmtDur(todaySecs) + "." : "");
+    (todaySecs >= 60 ? "Practised today: " + fmtDur(todaySecs) + ". " : "") +
+    (dueWords(MAXL).length ? "Some words from earlier rounds come back today, so they stick." : "");
   show("vStart");
 }
 
 /* ---------- picking words ---------- */
-/* Apostrophe words are mixed in sparingly: about 1 in 10 words and at most 1 per 10 words of the round,
+/* ---------- review schedule (spaced repetition) ----------
+   Worked out from each word's history, so nothing extra is stored and old progress counts too.
+   A miss brings the word back the next day. Each right answer given when the word is due moves it on:
+   check again in 3 days, then 7, then 30. Right at the 30-day check = mastered. A miss at any point starts over.
+   Right answers before the word is due (for example twice in one evening) don't move it on. */
+const DAY = 86400000;
+const BEFORE_TRACKING = new Date(2026, 10, 5, 12).getTime();   // tries saved before tracking started have no date
+const dayNo = t => { const d = new Date(t || BEFORE_TRACKING); return Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / DAY); };
+const dayStr = n => { const d = new Date(n * DAY); return d.getUTCFullYear() + "-" + String(d.getUTCMonth() + 1).padStart(2, "0") + "-" + String(d.getUTCDate()).padStart(2, "0"); };
+const STEPS = [1, 3, 7, 30];
+function schedule(h) {
+  let stage = 0, due = null;
+  for (const [t, r] of h || []) {
+    const day = dayNo(t);
+    if (r !== 1) { stage = 0; due = day + 1; continue; }
+    if (stage === 4) continue;
+    if (due === null || day >= due) {
+      if (stage === 3) { stage = 4; due = null; continue; }
+      stage += 1; due = day + STEPS[stage];
+    }
+  }
+  return { stage, due, mastered: stage === 4 };
+}
+const isDue = s => !s.mastered && s.due !== null && dayNo(Date.now()) >= s.due;
+function dueWords(maxLevel) {
+  return Object.keys(store.hist || {}).filter(w => BYWORD[w]).map(w => ({ w, s: schedule(store.hist[w]), e: BYWORD[w] }))
+    .filter(x => isDue(x.s) && (x.e.level || x.e.mix) <= maxLevel)
+    .sort((a, b) => a.s.stage - b.s.stage || a.s.due - b.s.due);
+}
+
+/* Apostrophe words are mixed in sparingly: about 1 in 10 new words and at most 1 per 10 words of the round,
    so they don't take over a level once its regular words are learned. */
 const isApos = w => w.level === 0;
+/* Up to half of each round are words due for review (misses first, then the most overdue), spread through
+   the round; the rest are new words of the chosen level. Reviews come from the chosen level or easier, plus
+   one level up, so a hard word from an early round doesn't come back while she practises easier ones. */
 function pickWord(level, used) {
+  const b = store.batch, done = b ? b.items.length : 0, reviews = b ? b.items.filter(i => i.review).length : 0;
+  const cap = Math.floor(size() / 2);
+  if (level > 0 && reviews < cap && reviews <= done / 2) {
+    const due = dueWords(level + 1).filter(x => !used.includes(x.w));
+    if (due.length) return { w: due[0].w, review: true };
+  }
   const avail = W.filter(w => (w.level === level || (level > 0 && w.mix === level)) && !used.includes(w.word));
   const aposUsed = used.filter(u => BYWORD[u] && isApos(BYWORD[u])).length;
-  const cap = Math.max(1, Math.floor(size() / 10));
-  const regular = avail.filter(w => !isApos(w)), apos = avail.filter(isApos);
-  const wantApos = level > 0 && apos.length && aposUsed < cap && (Math.random() < 0.1 || !regular.length);
+  const acap = Math.max(1, Math.floor(size() / 10));
+  const unseen = w => !(store.hist[w.word] || []).length;
+  const regular = avail.filter(w => !isApos(w)), apos = avail.filter(w => isApos(w) && unseen(w));
+  const wantApos = level > 0 && apos.length && aposUsed < acap && (Math.random() < 0.1 || !regular.length);
   const inLevel = wantApos ? apos : (regular.length ? regular : avail);
-  let pool = inLevel.filter(w => !store.learned.includes(w.word));
-  if (!pool.length) pool = inLevel;
-  const bag = [];
-  pool.forEach(w => { const k = 1 + Math.min(store.missed[w.word] || 0, 3); for (let i = 0; i < k; i++) bag.push(w.word); });
-  return bag[Math.floor(Math.random() * bag.length)];
+  // never-practised words first; if the level has none left, words not yet mastered and not due, soonest first
+  let pool = inLevel.filter(w => !(store.hist[w.word] || []).length);
+  if (!pool.length) {
+    const rest = inLevel.map(w => ({ w, s: schedule(store.hist[w.word]) })).filter(x => !x.s.mastered)
+      .sort((a, b) => (a.s.due === null ? 0 : a.s.due) - (b.s.due === null ? 0 : b.s.due));
+    pool = (rest.length ? rest.slice(0, 10) : inLevel.map(w => ({ w }))).map(x => x.w);
+  }
+  if (!pool.length) pool = W.filter(w => w.level === level && !used.includes(w.word));
+  return { w: pool[Math.floor(Math.random() * pool.length)].word, review: false };
 }
 
 /* ---------- round ---------- */
@@ -1143,9 +1391,9 @@ function startBatch() {
 function addWord(level) {
   const b = store.batch;
   b.level = b.mode === "apos" ? 0 : Math.max(1, Math.min(MAXL, level));
-  const w = pickWord(b.level, b.items.map(i => i.w));
-  b.items.push({ w, level: b.level, skipped: false });
-  save(); renderListen(); sayTest(w);
+  const pick = pickWord(b.level, b.items.map(i => i.w));
+  b.items.push({ w: pick.w, level: b.level, skipped: false, review: pick.review });
+  save(); renderListen(); sayTest(pick.w);
 }
 function cur() { const b = store.batch; return b.items[b.items.length - 1]; }
 function renderListen() {
@@ -1282,8 +1530,10 @@ function renderParent() {
   $("pJuna").setAttribute("aria-pressed", root.player === "juna"); $("pArtus").setAttribute("aria-pressed", root.player === "artus");
   const firstPct = words.length ? Math.round(buckets[1].length / words.length * 100) : 0;
   const tm = store.time || {}, today = tm[ymd(Date.now())] || 0, total = Object.values(tm).reduce((a, b) => a + b, 0);
+  const sch = words.map(x => schedule(x.hist)), mastered = sch.filter(s => s.mastered).length, dueNow = sch.filter(isDue).length;
   $("pTiles").innerHTML = [[fmtDur(today), "practised today"], [fmtDur(total), "practised in total"], [rounds.length, "rounds"],
-    [words.length, "words practised"], [store.learned.length, "words spelled right"], [firstPct + "%", "right on the 1st try"]]
+    [words.length, "words practised"], [store.learned.length, "words spelled right"], [firstPct + "%", "right on the 1st try"],
+    [mastered, "mastered (right at the 30-day check)"], [words.length - mastered, "still in review"], [dueNow, "due for review today"]]
     .map(([v, l]) => '<div class="tile"><b>' + v + "</b><span>" + l + "</span></div>").join("");
   const days = Object.keys(tm).filter(d => tm[d] >= 30).sort().reverse().slice(0, 14);
   $("pTime").innerHTML = days.length ? '<tr><th>Day</th><th class="num">Active time</th><th class="num">Rounds</th><th class="num">Right</th></tr>' +
@@ -1291,6 +1541,13 @@ function renderParent() {
       return "<tr><td>" + fmtDay(d) + '</td><td class="num">' + fmtDur(tm[d]) + '</td><td class="num">' + rs.length + '</td><td class="num">' + (rs.length ? rs.reduce((a, r) => a + r.right, 0) + " / " + rs.reduce((a, r) => a + r.n, 0) : "–") + "</td></tr>"; }).join("") +
     '<tr><td><b>Total</b></td><td class="num"><b>' + fmtDur(total) + '</b></td><td class="num">' + rounds.length + '</td><td></td></tr>'
     : '<tr><td>No practice time recorded yet.</td></tr>';
+  const today0 = dayNo(Date.now()), groups = [
+    ["Missed, comes back next", s => s.stage === 0], ["Next check after 3 days", s => s.stage === 1],
+    ["Next check after 7 days", s => s.stage === 2], ["Next check after 30 days", s => s.stage === 3], ["Mastered", s => s.mastered]];
+  $("pSched").innerHTML = words.length ? '<tr><th>Stage</th><th class="num">Words</th><th class="num">Due today</th><th class="num">Due this week</th></tr>' +
+    groups.map(([label, f]) => { const g = sch.filter(f);
+      return "<tr><td>" + label + '</td><td class="num">' + g.length + '</td><td class="num">' + g.filter(isDue).length + '</td><td class="num">' + g.filter(s => s.due !== null && s.due <= today0 + 7).length + "</td></tr>"; }).join("")
+    : '<tr><td>No words practised yet.</td></tr>';
   const max = Math.max(1, ...Object.values(buckets).map(b => b.length));
   $("pBars").innerHTML = words.length ? [1, 2, 3, 4, 0].map(k => {
     const list = buckets[k].slice().sort((a, b) => a.e.level - b.e.level || a.w.localeCompare(b.w));
@@ -1328,6 +1585,8 @@ function exportData() {
     activeMinutesPerDay: Object.fromEntries(Object.entries(store.time || {}).sort().map(([d, s]) => [d, Math.round(s / 6) / 10])),
     activeMinutesTotal: Math.round(Object.values(store.time || {}).reduce((a, b) => a + b, 0) / 6) / 10,
     words: Object.fromEntries(words.map(x => [x.w, { level: x.e.level || "apostrophes", mixedIntoLevel: x.e.mix || undefined, firstRightOnTry: x.first,
+      reviewStage: (s => s.mastered ? "mastered" : ["missed", "3-day check", "7-day check", "30-day check"][s.stage])(schedule(x.hist)),
+      nextCheck: (s => s.due === null ? null : dayStr(s.due))(schedule(x.hist)),
       tries: x.hist.map(h => ({ date: h[0] ? ymd(h[0]) : null, result: h[1] === 1 ? "right" : h[1] === 2 ? "skipped" : "wrong" })) }])),
     rounds: (store.rounds || []).map(r => ({ date: ymd(r.t) + " " + hm(r.t), type: r.mode, right: r.right, of: r.n, levels: r.levels })) };
 }
@@ -1338,6 +1597,10 @@ function summaryText() {
       " (" + ((n) => n + (n === 1 ? " day" : " days"))(Object.keys(store.time || {}).filter(d => store.time[d] >= 30).length) + "). Per day: " +
       Object.entries(store.time || {}).filter(([, s]) => s >= 30).sort().slice(-14).map(([d, s]) => d + " " + fmtDur(s)).join(", ") + ".",
     "Rounds: " + rounds.length + ". Words practised: " + words.length + ". Spelled right at least once: " + store.learned.length + " of " + W.length + ". Current start level: " + store.level + ".", ""];
+  { const sc = words.map(x => ({ w: x.w, s: schedule(x.hist) }));
+    lines.push("Review schedule: mastered " + sc.filter(x => x.s.mastered).length + ", due today " + sc.filter(x => isDue(x.s)).length +
+      ", waiting for the 3/7/30-day check " + [1, 2, 3].map(k => sc.filter(x => x.s.stage === k).length).join("/") + ", missed and coming back " + sc.filter(x => x.s.stage === 0).length + ".");
+    lines.push("Mastered: " + (sc.filter(x => x.s.mastered).map(x => x.w).join(", ") || "none yet"), ""); }
   [1, 2, 3, 4].forEach(k => lines.push("Right on " + BUCKET_NAMES[k] + " (" + buckets[k].length + "): " + buckets[k].map(x => x.w).join(", ")));
   lines.push("Not right yet (" + buckets[0].length + "): " + buckets[0].map(x => x.w + " (" + x.attempts + " tries)").join(", "), "", "By level:");
   [1, 2, 3, 4, 5, 6, 7, 0].forEach(l => {
