@@ -1,0 +1,15 @@
+{
+ "format": "spelling-progress-v1",
+ "alg": "ECDH-P256 AES-256-GCM",
+ "gzip": true,
+ "device": "ipad-37b10fd5a7",
+ "savedAt": "2026-11-11T08:00:05.426Z",
+ "epk": {
+  "kty": "EC",
+  "crv": "P-256",
+  "x": "TZ5KIPuSCRGIjleyW3acpdi_sTK1dkqEnKEEXui0_14",
+  "y": "YjHGkmjvocK4jbIiThiTTW8iXpUtZ7G--gEsRDkpVA8"
+ },
+ "iv": "PKjrqB8RoQm4TQ5i",
+ "ct": "Dbp/iccRe+PkJS/vz08lkENj3qT+dbRbZip5fbxGWYQ1ChUT72ANOGJOpbCIdSRHzugj5aDL029LMBkfD3bqhqcP/VBuoYJ9egmB62jWjDXWzH+kTshv6pVHsizMBIBwtOf9fdv499t+eAm1IySDshTFxlB01NOfYUzW6Ul5ds/JkcGoeNVgATQlMFYIXeeW3rBmUjaPiDUBl0ckR0/Zw/TQZfngAWn/VQmlkj+vUTCvY+TNQiQEQSrqsPHV+UAKh7nsWnu8ejIVhg79D8eqc/Rkbi0vPOp1Z++jht+MqCsDLUaSDISWnRqMFSYMKCZt/nNCDoSOCg=="
+}
